@@ -55,6 +55,7 @@ jeweils am 17. & 18.10.2018 für je 3 Stunden
 | CRC-Karten              | 28.10.2018    | :x: | In Arbeit, erste Version fertig |
 | Sequenzdiagramme        | 28.10.2018    | :x: | In Arbeit, erste Version fertig |
 | Top-Level-Architektur   | 28.10.2018    | :x: | In Arbeit, erste Version fertig |
+| Anwendungsfalldiagramm  | 28.10.2018    | :x: | -  |
 | Analysediagramm         | -             | :x: | Später. -> Magic Draw funktioniert nicht |
 | Pflichtenheft           | -             | :x: | - |
 
