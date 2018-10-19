@@ -1,7 +1,6 @@
 # Protokoll - Woche 2
 
-Gruppe 34
-Schriftführer: Daniel Körsten
+Gruppe 34, Schriftführer: Daniel Körsten
 
 ## Konsultation
 
