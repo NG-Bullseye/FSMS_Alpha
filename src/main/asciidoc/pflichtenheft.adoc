@@ -36,27 +36,507 @@ Dokumentieren Sie ihre Top-Level-Architektur mit Hilfe eines Komponentendiagramm
 
 == Anwendungsfälle
 
+
 === Akteure
 
-Akteure sind die Benutzer des Software-Systems oder Nachbarsysteme, welche darauf zugreifen. Dokumentieren Sie die Akteure in einer Tabelle. Diese Tabelle gibt einen Überblick über die Akteure und beschreibt sie kurz. Die Tabelle hat also mindestens zwei Spalten (Akteur Name und Kommentar).
+
+Akteure sind die Benutzer des Software-Systems oder Nachbarsysteme, welche darauf zugreifen. Dokumentieren Sie die Akteure in einer Tabelle. 
+Diese Tabelle gibt einen Überblick über die Akteure und beschreibt sie kurz. Die Tabelle hat also mindestens zwei Spalten (Akteur Name und Kommentar).
 Weitere relevante Spalten können bei Bedarf ergänzt werden.
 
-// See http://asciidoctor.org/docs/user-manual/#tables
+
+
+
 [options="header"]
+
 [cols="1,4"]
+
 |===
+
 |Name |Beschreibung
-|...  |...
+
+|User  |Dies ist jede Person, die mit der Software interagieret
+|Authentifizierter Kunde  |Diese Personen sind im System als Kunden registriert und eingeloggt, sodass sie sich Artikel kaufen können und weitere Funktionen nutzen.
+|Nichtauthentifizierter User| Diese Person nutzt das System nur eingeschränkt, weil sie entweder nicht eingeloggt oder nicht im System registriert ist.
+|Mitarbeiter  |Diese Personen sind Mitarbeiter des Möbelgeschäfts und können die Mitarbeiterfunktionen nutzen, wie z.B. auf das Lager zugreifen oder Bestellungen entgegen nehmen.
+|Admin |Dies ist ein spezieller Mitarbeiter, der erweiterter Berechtigungen im System besitz und verschiedene Informationen bearbeiten kann.
 |===
+
 
 === Überblick Anwendungsfalldiagramm
-Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt
 
+
+Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt
 === Anwendungsfallbeschreibungen
-Dieser Unterabschnitt beschreibt die Anwendungsfälle. In dieser Beschreibung müssen noch nicht alle Sonderfälle und Varianten berücksichtigt werden. Schwerpunkt ist es, die wichtigsten Anwendungsfälle des Systems zu finden. Wichtig sind solche Anwendungsfälle, die für den Auftraggeber, den Nutzer den größten Nutzen bringen.
+
+Dieser Unterabschnitt beschreibt die Anwendungsfälle. In dieser Beschreibung müssen noch nicht alle Sonderfälle und Varianten berücksichtigt werden. 
+Schwerpunkt ist es, die wichtigsten Anwendungsfälle des Systems zu finden. Wichtig sind solche Anwendungsfälle, die für den Auftraggeber, den Nutzer den größten Nutzen bringen.
+
 Für komplexere Anwendungsfälle ein UML-Sequenzdiagramm ergänzen.
 Einfache Anwendungsfälle mit einem Absatz beschreiben.
+
 Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem einzigen zusammengefasst werden.
+
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Registrieren
+|Beschreibung|Hinzufügen eines neuen Kundens in die Datenbank
+|Akteur | Nichtauthentifizierter Kunde
+|Auslöser| Auswahl des Registrierungsbuttons auf der Website
+|Vorraussetzungen| Der User ist nicht eingeloggt.
+|Schrittfolge a|
+	1. Eingabe der Eingabedaten(Name, Adresse, E-mail, Password ...)
+	2. Überprüfung auf Vollständig-und Verfügbarkeit
+	3. Hinzufügen zum System
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+
+|ID |
+|Name | LogIn/LogOut
+|Beschreibung|LogIn ermöglicht Authentifizieren im System für weitere Funktionalitäten. Dies kann mit LogOut umgekehrt werden.
+|Akteur | User
+|Auslöser | 
+_LogIn_: Auswahl des LogIn Buttons
+
+_LogOut_: Auswahl des LogOut Buttons
+|Vorraussetzungen a| 
+ _LogIn_: Benutzer ist nicht authentifiziert.
+            
+_LogOut_: Benutzer ist bereits eingeloggt.
+|Schrittfolge a|
+_LogIn_: 
+
+1.Auswahl des LogIn Buttons
+
+2.Eingabe der Daten
+
+3.Überprüfung der Daten
+
+4.Abhängig von der Eingabe
+
+1. Wenn die Daten richtig sind, ist der User nun authentifiziert und landet auf seiner persönlichen Seite.
+
+2. Sonst wird eine Fehlermeldung ausgegeben.
+
+_LogOut_:
+
+1. Auswahl des LogOut Buttons
+
+2. Der User ist nun nicht mehr authentifiziert und landet auf der Hauptseite.
+
+
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+
+|ID |
+|Name | Kundenkonto deaktivieren
+|Beschreibung|Ein Kundenkonto kann deaktiviert werden und dann nicht mehr benutzt werden können. Dafür werden die meisten Daten entfernt. Es ist nicht möglich ein Kundenkonto komplett zu 
+|Akteur | Authentifizierter User
+|Auslöser | 
+Auswahl von Deaktivieren in der Kundenseite.
+|Vorraussetzungen a| 
+Kunde ist eingeloggt.
+|Schrittfolge a|
+1.Auswahl von Deaktivieren
+
+2.Deaktivierung des Accounts, sodass keine weiteren Aktionen durchgeführt werden können.
+
+3.Verbergen von Kundendaten, sodass diese nicht einsehbar sind.
+
+4.Rückkehr als nicht eingeloggter Kunde auf die Startseite.
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+
+|ID |
+|Name | Bestellübersicht betrachten
+|Beschreibung|Ein Benutzer sieht hier alle Bestellungen, die für ihn sind. Ein Mitarbeiter sieht alle Bestellungen des Geschäfts.
+|Akteur | Authentifizierter User, Mitarbeiter
+|Auslöser | 
+Auswahl der Bestellübersicht
+|Vorraussetzungen a| 
+Mitarbeiter bzw. Kunde ist eingeloggt.
+|Schrittfolge a|
+1.Auswahl des Bestellübersichtsbutton
+
+2.Anzeige der Bestellungen abhängig von der Rolle im System.
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+
+|ID |
+|Name | Filtern und Suchen
+|Beschreibung| Im Katalog kann nach bestimmten Namesbestandteilen(z.B. Schreibtisch) gesucht werden oder über Eigenschaften(z.B. Farbe = Fichte; Kategorie = Sofa) gesucht werden.
+|Akteur | User
+|Auslöser | 
+_Filtern_: Auswahl einer Eigenschaft zum Filtern
+
+_Suchen_: Eingabe eines Suchworts in die Suchleiste
+|Vorraussetzungen a| 
+-
+|Schrittfolge a|
+_Filtern_:
+
+1.Auswahl einer Eigenschaft nach der gefiltert werden soll und Auswahl des "Wertes" dieser Eigenschaft
+
+2.Aktualisierung der Website und Anzeige aller Artikel, die diese Eigenschaft erfüllen.
+
+_Suchen_: 
+
+1.Eingabe eines Suchwortes in die Suchleiste
+
+2.Ermittlung aller Elemente, die dieses Suchwort im Titel enthalten
+
+3.Anzeige dieser
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Daten bearbeiten
+|Beschreibung| Die Daten eines Kundens(z.B. E-Mail Adresse, Anschrift) können von ihm im Falle einer Veränderung auf der Website bearbeitet werden
+|Akteur | User
+|Auslöser | 
+Drücken des Bearbeiten-Buttons auf der persönlichen Seite des Kunden.
+|Vorraussetzungen a| 
+ Der User ist eingeloggt.
+|Schrittfolge a|
+1.Drücken des Bearbeiten-Buttons und Anzeigen der Daten
+
+2.Ersetzung von Daten durch den User
+
+3.Auswahl von Speichern und Änderung im System
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Bestellung stornieren
+|Beschreibung| Ein Benutzer kann bis zu einem gewissen Zeitlimit eine Bestellung abbrechen.
+|Akteur | Authentifizierter User
+|Auslöser | 
+Auswahl von Stornieren in der Bestellübersicht
+|Vorraussetzungen a| 
+Es existieren Bestellungen in der Übersicht|Schrittfolge a|
+1.Auswahl von Stornieren in der Bestellübersicht
+
+2.Überprüfung ob stornierbar
+
+1. Sofern möglich, Entfernung der Bestellung und Hinzufügen der Elemente zum Lager und Zurücküberweisung des Preises.
+
+2. Sofern nicht möglich, Fehlermeldung und Rückkehr in die Übersicht
+
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Artikel betrachten
+|Beschreibung| Im Katalog können einzelne Artikel ausgewählt werden und ihre Informationen wie Bild oder Beschreibung angezeigt werden.
+|Akteur | User
+|Auslöser | 
+Auswählen eines Artikels im Katalog
+|Vorraussetzungen a| 
+-
+|Schrittfolge a|
+1.Auswahl eines Artikels im Katalog
+
+2.Öffnen der Artikelübersicht und Anzeige von Beschreibung, Bild, Preis, Kommentaren und Bewertungen
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Katalog betrachten
+|Beschreibung| Im Webshop können alle Artikel im Katalog angezeigt werden
+|Akteur | User
+|Auslöser | 
+Auswahl des Katalogs auf der Website|Vorraussetzungen a| 
+-|Schrittfolge a|
+1.Auswahl des Katalogs
+
+2.Anzeige aller nicht versteckten Artikel
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Artikel kommentieren und bewerten
+|Beschreibung| Die Daten eines Kundens(z.B. E-Mail Adresse, Anschrift) können von ihm im Falle einer Veränderung auf der Website bearbeitet werden
+|Akteur | Authentifizierter User
+|Auslöser | 
+Eingabe eines Kommentars in der Artikelübersicht oder Auswahl einer Bewertung zwischen 1 bis 5
+|Vorraussetzungen a| 
+ Der User ist eingeloggt.
+|Schrittfolge a|
+1.Eingabe eines Kommentars bzw. einer Bewertung
+
+2.Auswahl zum Speichern und damit Hinzufügen zur Datenbank und damit zur Artikelübersicht
+|Erweiterungen | Mögliche Überprüfung, ob der Artikel wirklich erworben wurde.
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Artikel hinzufügen/entfernen
+|Beschreibung| Ein Mitarbeiter kann zum Warenkorb eines Kundes einen neuen Artikel hinzufügen oder auch entfernen damit dieser für ihn bestellt werden kann.
+|Akteur | Mitarbeiter
+|Auslöser | 
+_Hinzufügen_: Auswahl eines Artikels im Katalog durch den Mitarbeiter
+
+_Entfernen_: Auswahl eines Artikels im Warenkorb
+|Vorraussetzungen a| 
+_Hinzufügen_: -
+
+_Entfernen_: Vorhandensein eines Artikels im Warenkorb
+|Schrittfolge a|
+_Hinzufügen_:
+
+1.Auswahl eines Artikels im Katalog zum Hinzufügen
+
+2.Anzeige des aktualisierten Katalogs und Aktualisierung des Preises
+
+_Entfernen_:
+
+1.Auswählen des Entfernenbuttons neben dem Artikel im Warenkorb.
+
+2.Anzeige des aktualisierten Katalogs und Aktualisierung des Preises
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Bestellung abschließen
+|Beschreibung| Nachdem alle gewünschten Artikel im Warenkorb ausgewählt wurden, muss die Bestellung abgeschlossen werden, damit die Produkte versendet werden.
+|Akteur | Mitarbeiter
+|Auslöser | 
+Drücken des Abschließenbutton in der Warenübersicht
+|Vorraussetzungen a| 
+ Vorhandensein von mindestens einem Artikel im Warenkorb
+|Schrittfolge a|
+1.Auswählen des Abschließenbuttons
+
+2.Überprüfung ob alle Artikel lieferbar sind
+
+1. Wenn nicht lieferbar, Ausgabe einer Fehlermeldung und Rückkehrt in den Warenkorb
+
+2. Sonst Entfernung der Artikelbestände im Lager und Hinzufügen einer Bestellung in der Bestellungsübersicht 
+
+
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | LKW mieten
+|Beschreibung| Zu einer Bestellung kann ein Kunde einen LKW dazumieten um diese zu transportieren
+|Akteur | Mitarbeiter
+|Auslöser | 
+Auswahl des LKW-Buttons in der Bestellübersicht
+|Vorraussetzungen a| 
+Vorhandensein von Artikeln und kein verwendeter LKW
+|Schrittfolge a|
+1.Auswahl des LKW-Buttons in der Bestellübersicht
+
+2.Ermittlung des bestmöglichen LKWs(d.h. mit möglichst geringen Preis, aber ausreichender Kapazität)
+
+3.Hinzufügen der LKW-Leihe zum Warenkorb
+
+4.Reservierung des LKWs hinzufügen
+
+5.Warenkorb aktualisieren
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Artikel bearbeiten
+|Beschreibung| Die Eigenschaften eines Artikels wie Beschreibung oder Preis können durch Mitarbeiter geändert werden.
+|Akteur | Mitarbeiter
+|Auslöser | 
+Auswahl von Bearbeiten als eingeloggter Mitarbeiter in der Artikelübersicht
+|Vorraussetzungen a| 
+Der Mitarbeiter ist eingeloggt und der Artikel existiert
+|Schrittfolge a|
+1.Auswahl von Bearbeiten als eingeloggter Mitarbeiter in der Artikelübersicht
+
+2.Eingabe neuer Daten 
+
+3.Speichern neuer Informationen und Rückkehr zur Artikelübersicht
+
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Artikel nachbestellen
+|Beschreibung| Die Anzahl der Artikel im Lager kann durch einen Mitarbeiter erhöht werden, damit diese weiterhin geliefert werden können.
+|Akteur | Mitarbeiter
+|Auslöser | 
+Auswahl von Nachbestellen als eingeloggter Mitarbeiter im Artikel
+|Vorraussetzungen a| 
+Der Mitarbeiter ist eingeloggt und der Artikel existiert
+|Schrittfolge a|
+1.Auswahl von Nachbestellen
+
+2.Eingabe der Anzahl, die nachbestellt werden soll. 
+
+3.Hinzufügen einer Bestellung für das Lager
+
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Personal hinzufügen/bearbeiten/löschen
+|Beschreibung| Der Admin kann Mitarbeiter entfernen(=entlassen), hinzufügen(=einstellen) oder ihre Informationen arbeiten
+|Akteur | Admin
+|Auslöser | 
+Auswahl von Hinzufügen/Bearbeiten/Löschen in der Personalübersicht
+|Vorraussetzungen a| 
+Der Admin ist eingeloggt.
+
+_Bearbeiten/Löschen_: Der Mitarbeiter existiert.
+|Schrittfolge a|
+_Hinzufügen_:
+
+1.Auswahl von Hinzufügen
+
+2.Eingabe der Daten und Erzeugen eines Mitarbeites
+
+1. Sofern möglich, Hinzufügen zur Mitarbeiterübersicht
+
+2. Sonst Fehlermeldung und Rückkehr zur Personalübersicht
+
+_Bearbeiten_:
+
+1.Auswahl von Bearbeiten
+
+2.Eingabe der neuen Daten und Bearbeiten des Mitarbeites
+
+1. Sofern möglich, Änderung in der Mitarbeiterübersicht
+
+2. Sonst Fehlermeldung und Rückkehr zur Personalübersicht
+
+_Löschen_:
+
+1.Auswahl von Löschen
+
+2.Entfernen des Mitarbeiters aus der Personalübersicht
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+[options="header"]
+
+[cols="1,4"]
+
+|===
+|ID |
+|Name | Finanzübersicht
+|Beschreibung| Anzeigen der Ein-und Ausgaben, wie z.B. Personalkosten oder Einnahmen durch Möbelverkäufe
+|Akteur | Admin
+|Auslöser | 
+Auswahl der Finanzübersicht
+|Vorraussetzungen a| 
+Der Admin ist eingeloggt.
+|Schrittfolge a|
+1.Auswahl der Finanzübersicht auf der Website
+
+2.Anzeigen der Ein-und Ausnahmen 
+
+3.Errechnung und Ausgabe der Bilanz für diesen Monat
+|Erweiterungen | -
+|Funktionale Anforderungen|
+|===
+
+
 
 == Funktionale Anforderungen
 
