@@ -78,9 +78,7 @@ Einfache Anwendungsfälle mit einem Absatz beschreiben.
 Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem einzigen zusammengefasst werden.
 
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -98,9 +96,7 @@ Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem ein
 |===
 
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 
@@ -142,9 +138,7 @@ _LogOut_:
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 
@@ -168,9 +162,7 @@ Kunde ist eingeloggt.
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 
@@ -190,9 +182,7 @@ Mitarbeiter bzw. Kunde ist eingeloggt.
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 
@@ -224,9 +214,7 @@ _Suchen_:
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -247,9 +235,7 @@ Drücken des Bearbeiten-Buttons auf der persönlichen Seite des Kunden.
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -272,9 +258,7 @@ Es existieren Bestellungen in der Übersicht|Schrittfolge a|
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -293,9 +277,7 @@ Auswählen eines Artikels im Katalog
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -312,9 +294,7 @@ Auswahl des Katalogs auf der Website|Vorraussetzungen a|
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -333,9 +313,7 @@ Eingabe eines Kommentars in der Artikelübersicht oder Auswahl einer Bewertung z
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -366,9 +344,7 @@ _Entfernen_:
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -393,9 +369,7 @@ Drücken des Abschließenbutton in der Warenübersicht
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -420,9 +394,7 @@ Vorhandensein von Artikeln und kein verwendeter LKW
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -444,9 +416,7 @@ Der Mitarbeiter ist eingeloggt und der Artikel existiert
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -468,9 +438,6 @@ Der Mitarbeiter ist eingeloggt und der Artikel existiert
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
-
-[cols="1,4"]
 
 |===
 |ID |
@@ -513,9 +480,7 @@ _Löschen_:
 |Funktionale Anforderungen|
 |===
 
-[options="header"]
 
-[cols="1,4"]
 
 |===
 |ID |
@@ -604,9 +569,9 @@ Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumen
 |Use Case|
 ...
 |Voraussetzung|
-Kunde will sich registrieren
+Nutzer möchte sich registrieren
 |Ereignis|
-Kunde drückt "Registrieren" und gibt seine Daten ein:
+Nutzer drückt "Registrieren" und gibt seine Daten ein:
 
 - Name: Max Mustermann
 
@@ -631,10 +596,10 @@ dann drückt er "Registrieren"
 |Use Case|
 ...
 |Voraussetzung|
-Admin will Mitarbeiter anlegen
+Admin will neuen Mitarbeiter anlegen
 |Ereignis|
 Admin drückt "Login" und gibt seine persönlichen Zugangsdaten ein
-er wählt "Mitarbeiter Registrieren" und gibt Mitarbeiterdaten ein:
+er wählt "Mitarbeiter Registrieren" und gibt die Mitarbeiterdaten ein:
 
 - Name: Bob Schreiner
 
@@ -653,6 +618,81 @@ dann drückt er "Registrieren"
 - ein neuer Mitarbeiter wird angelegt mit eigener eindeutiger internen ID
 
 - Admin wird auf Startseite weitergeleitet
+|===
+
+|===
+|ID|
+...
+|Use Case|
+...
+|Voraussetzung|
+registrierter Mitarbeiter will Möbelstück anlegen
+|Ereignis|
+Mitarbeiter wählt "Lager", drückt "Möbelstück anlegen" und gibt die Daten ein:
+
+- Titel: Schrank
+
+- Kategorie: Schlafzimmer
+
+- Farbe: Kirschholz
+
+- Bestandteile: Schranktür, Schrankwand, ...
+
+- Erstbestand bestellen: 10
+
+Dann drückt er "Möbelstück erzeugen"
+|Erwartetes Ereignis|
+- ein neues Möbelstück wird dem Lager hinzugefügt
+
+- Mitarbeiter wird weitergeleitet auf Lager
+
+- innerhalb von 6 Tagen wird Stückzahl aufgefüllt
+|===
+
+|===
+|ID|
+...
+|Use Case|
+...
+|Voraussetzung|
+registrierter Mitarbeiter will Einzelteil anlegen
+|Ereignis|
+Mitarbeiter wählt "Lager", drückt "Einzelteil anlegen" und gibt die Daten ein:
+
+- Titel: Stuhlbein
+
+- Kategorie: Stuhl
+
+- Farbe: Eiche
+
+- Gewicht: 0,2
+
+- Preis: 3,50
+
+- Erstbestand bestellen: 10
+
+Dann drückt er "Einzelteil erzeugen"
+|Erwartetes Ereignis|
+- ein neues Einzelteil wird dem Lager hinzugefügt
+
+- Mitarbeiter wird weitergeleitet auf Lager
+
+- innerhalb von 6 Tagen wird Stückzahl aufgefüllt
+|===
+
+|===
+|ID|
+...
+|Use Case|
+...
+|Voraussetzung|
+registrierter Kunde will bestehende Bestellung stornieren
+|Ereignis|
+registrierter Kunde drückt "Bestellübersicht", dann die zu stornierende Bestellung und wählt "stornieren"
+|Erwartetes Ereignis|
+- Bestellung wird aus dem System genommen
+
+- Kunde wird auf Bestellübersicht weitergeleitet
 |===
 
 == Glossar
