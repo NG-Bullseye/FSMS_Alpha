@@ -607,15 +607,23 @@ Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumen
 Kunde will sich registrieren
 |Ereignis|
 Kunde drückt "Registrieren" und gibt seine Daten ein:
+
 - Name: Max Mustermann
+
 - Passwort: passwort
+
 - Adresse: Musterstraße 10 01217 Dresden
+
 - E-mail: Max.Musterman@gmx.de
+
 - Zahlinformationen: Bar
+
 dann drückt er "Registrieren"
 |Erwartetes Ereignis|
 - ein neuer Kunde wird angelegt mit intern zugewiesener eindeutigen ID
+
 - Kunde wird zur Startseite weitergeleitet
+|===
 
 == Glossar
 Sämtliche Begriffe, die innerhalb des Projektes verwendet werden und deren gemeinsames Verständnis aller beteiligten Stakeholder essentiell ist, sollten hier aufgeführt werden.
