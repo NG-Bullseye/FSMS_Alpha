@@ -599,13 +599,13 @@ Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumen
 
 
 |===
-|==ID|
+|ID|
 ...
-|==Use Case|
+|Use Case|
 ...
-|==Voraussetzung|
+|Voraussetzung|
 Kunde will sich registrieren
-|==Ereignis|
+|Ereignis|
 Kunde drückt "Registrieren" und gibt seine Daten ein:
 
 - Name: Max Mustermann
@@ -619,10 +619,40 @@ Kunde drückt "Registrieren" und gibt seine Daten ein:
 - Zahlinformationen: Bar
 
 dann drückt er "Registrieren"
-|==Erwartetes Ereignis|
+|Erwartetes Ereignis|
 - ein neuer Kunde wird angelegt mit intern zugewiesener eindeutigen ID
 
 - Kunde wird zur Startseite weitergeleitet
+|===
+
+|===
+|ID|
+...
+|Use Case|
+...
+|Voraussetzung|
+Admin will Mitarbeiter anlegen
+|Ereignis|
+Admin drückt "Login" und gibt seine persönlichen Zugangsdaten ein
+er wählt "Mitarbeiter Registrieren" und gibt Mitarbeiterdaten ein:
+
+- Name: Bob Schreiner
+
+- Passwort: Arbeitender
+
+- Adresse: Musterstraße 10 01217 Dresden
+
+- E-mail: Bob_Schreiner@gmail.com
+
+- Gehalt: 8,50
+
+dann drückt er "Registrieren"
+|Erwartetes Ereignis|
+-Admin wird angemeldet
+
+-ein neuer Mitarbeiter wird angelegt mit eigener eindeutiger internen ID
+
+-Admin wird auf Startseite weitergeleitet
 |===
 
 == Glossar
