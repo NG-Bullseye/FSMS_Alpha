@@ -648,11 +648,11 @@ er wählt "Mitarbeiter Registrieren" und gibt Mitarbeiterdaten ein:
 
 dann drückt er "Registrieren"
 |Erwartetes Ereignis|
--Admin wird angemeldet
+- Admin wird angemeldet
 
--ein neuer Mitarbeiter wird angelegt mit eigener eindeutiger internen ID
+- ein neuer Mitarbeiter wird angelegt mit eigener eindeutiger internen ID
 
--Admin wird auf Startseite weitergeleitet
+- Admin wird auf Startseite weitergeleitet
 |===
 
 == Glossar
