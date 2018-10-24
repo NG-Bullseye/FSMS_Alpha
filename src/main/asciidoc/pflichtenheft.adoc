@@ -695,6 +695,37 @@ registrierter Kunde drückt "Bestellübersicht", dann die zu stornierende Bestel
 - Kunde wird auf Bestellübersicht weitergeleitet
 |===
 
+|===
+|ID|
+...
+|Use Case|
+...
+|Voraussetzung|
+registrierter Kunde will bestehende Bestellung stornieren die innerhalb eines Tages ankommen soll
+|Ereignis|
+registrierter Kunde drückt "Bestellübersicht", dann die zu stornierende Bestellung und wählt "stornieren"
+|Erwartetes Ereignis|
+- es wird eine Fehlernachricht angezeigt die den Kunden unterrichtet das dies zu diesem Zeitpunkt
+nicht mehr möglich ist
+|===
+
+|===
+|ID|
+...
+|Use Case|
+...
+|Voraussetzung|
+es existieren Accounts
+|Ereignis|
+Nutzer drückt auf "Login" und gibt persönliche Zugangsdaten ein (Bob Schreiner, Arbeitender)
+|Erwartetes Ereignis|
+- der Nutzer wird als Bob Schreiner angemeldet
+
+- er wird weitergeleitet auf die Startseite
+
+- er hat alle Rechte des Mitarbeiters
+|===
+
 == Glossar
 Sämtliche Begriffe, die innerhalb des Projektes verwendet werden und deren gemeinsames Verständnis aller beteiligten Stakeholder essentiell ist, sollten hier aufgeführt werden.
 Insbesondere Begriffe der zu implementierenden Domäne wurden bereits beschrieben, jedoch gibt es meist mehr Begriffe, die einer Beschreibung bedürfen. +
