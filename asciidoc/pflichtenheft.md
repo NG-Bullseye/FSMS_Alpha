@@ -987,7 +987,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <p>dann drückt er &quot;Registrieren&quot;</p></td>
 </tr>
 <tr class="odd">
-<td><p>Erwartetes Ereignis</p></td>
+<td><p>Erwartetes Ergebnis</p></td>
 <td><p>- ein neuer Kunde wird angelegt mit intern zugewiesener eindeutigen ID</p>
 <p>- Kunde wird zur Startseite weitergeleitet</p></td>
 </tr>
@@ -1023,7 +1023,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <p>dann drückt er &quot;Registrieren&quot;</p></td>
 </tr>
 <tr class="odd">
-<td><p>Erwartetes Ereignis</p></td>
+<td><p>Erwartetes Ergebnis</p></td>
 <td><p>- Admin wird angemeldet</p>
 <p>- ein neuer Mitarbeiter wird angelegt mit eigener eindeutiger internen ID</p>
 <p>- Admin wird auf Startseite weitergeleitet</p></td>
@@ -1060,7 +1060,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <p>Dann drückt er &quot;Möbelstück erzeugen&quot;</p></td>
 </tr>
 <tr class="odd">
-<td><p>Erwartetes Ereignis</p></td>
+<td><p>Erwartetes Ergebnis</p></td>
 <td><p>- ein neues Möbelstück wird dem Lager hinzugefügt</p>
 <p>- Mitarbeiter wird weitergeleitet auf Lager</p>
 <p>- innerhalb von 6 Tagen wird Stückzahl aufgefüllt</p></td>
@@ -1098,7 +1098,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <p>Dann drückt er &quot;Einzelteil erzeugen&quot;</p></td>
 </tr>
 <tr class="odd">
-<td><p>Erwartetes Ereignis</p></td>
+<td><p>Erwartetes Ergebnis</p></td>
 <td><p>- ein neues Einzelteil wird dem Lager hinzugefügt</p>
 <p>- Mitarbeiter wird weitergeleitet auf Lager</p>
 <p>- innerhalb von 6 Tagen wird Stückzahl aufgefüllt</p></td>
@@ -1129,12 +1129,42 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <td><p>registrierter Kunde drückt &quot;Bestellübersicht&quot;, dann die zu stornierende Bestellung und wählt &quot;stornieren&quot;</p></td>
 </tr>
 <tr class="odd">
-<td><p>Erwartetes Ereignis</p></td>
+<td><p>Erwartetes Ergebnis</p></td>
 <td><p>- Bestellung wird aus dem System genommen</p>
 <p>- Kunde wird auf Bestellübersicht weitergeleitet</p></td>
 </tr>
 </tbody>
 </table>
+
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><p>ID</p></td>
+<td><p>…​</p></td>
+</tr>
+<tr class="even">
+<td><p>Use Case</p></td>
+<td><p>…​</p></td>
+</tr>
+<tr class="odd">
+<td><p>Voraussetzung</p></td>
+  <td><p>registrierten Mitarbeiter möchte für einen registrierten Kunden eine Bestellung aufgeben</p></td>
+  </tr>
+  <tr class="odd">
+    <td><p>Ereignis</p></td>
+    <td><p>...</p></td>
+  </tr>
+  <tr class="odd">
+    <td><p>Erwartetes Ergebnis</p></td>
+    <td><p>...</p></td>
+    </tr>
+</tbody>
+</table>
+    
 
 |                     |                                                                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
