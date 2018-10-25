@@ -4,37 +4,257 @@
 
 # Inhaltsverzeichnis
 
-Dieses Dokument benötigt ein Inhaltsverzeichnis. Es existieren mehrere Einbindungsmöglichkeiten.
+1. Zusammenfassung
 
-# Zusammenfassung
+2. Aufgabenstellung und Zielsetzung
 
-Eine kurze Beschreibung des Dokuments. Wenige Absätze.
+3. Priduktnutzung
 
-# Aufgabenstellung und Zielsetzung
+4. Stakeholders
+
+5. Systemgrenze und Top-Level-Architektur
+
+6. Anwendungsfälle
+
+    6.1 Aktuere
+  
+    6.2 Überblick Anwendungsfalldiagramm
+  
+7. Funktionale Anforderungen
+
+    7.1. Muss-Kriterien
+  
+    7.2. Kann-Kriterien
+  
+8. Nicht-Funktionale Anforderungen
+
+    8.1. Qualitätsziele
+  
+    8.2. Konkrete Nicht-Funktionale Anforderungen
+  
+9. GUI Prototyp
+
+    9.1 Überblick: Dialoglandkarte
+  
+    9.2 Dialogbeschreibung
+  
+10. Datenmodell
+
+    10.1 Überblick: Klassendiagramm
+  
+    10.2 Klassen und Enumerationen
+  
+11. Akzeptanztestfälle
+
+12. Glossar
+
+13. Offene Punkte
+
+
+# 1. Zusammenfassung
+
+Dieses Dokument stellt die <behinderte> Software-Anforderungsspezifikation (SRS, Deutsch: in der Nähe ein "Pflichtenheft") des Projekts  Videoladen. Es soll einen Überblick über das Softwareprodukt gebaut werden und Funktionen als Grundlage für die Kommunikation zwischen den Akteuren des Projekts, vor allem dem Kunden und dem Entwicklungsteam zur Verfügung zu stellen. Es sollte ist erwünscht, dieses Dokument als Grundlage für einen Vertrag zwischen dem Auftraggeber und dem Auftragnehmer zu haben und daher überprüft und auf Konsistenz geprüft werden. Die SRS wird beschrieben, was das gewünschte System zu erfüllen hat, und teilweise, wie der Auftragnehmer die Lösung umzusetzen gedenkt.
+
+In der Regel die SRS sollte korrekt sein, zu vervollständigen, und konsequente (CCC). Wie es, am Ende des Projekts verwendet wird um zu überprüfen, ob die definierte Software geliefert wurde, sollte dieses Ziel überprüfbar sein. Es wird verwendet und während des gesamten Projekts, weshalb der Inhalt im gesamten alle Artefakte rückverfolgbar sein sollte, die erstellt werden, konsultiert werden. In Verbindung mit den oben genannten ist es wünschenswert, einfach zu verändern und entwickeln sich, obwohl Änderungen auf ein Minimum reduziert werden sollte, nachdem die Akteure einmal auf den Inhalt geeinigt. Da sich Bedürfnisse und Gegebenheiten ständig während eines Projekts ändern, Anpassungen sind jedoch zu erwarten und müssen dokumentiert werden.
+
+Unser Ziel ist es, ein Beispiel für ein SRS bereitzustellen, die während des Kurses Softwaretechnologie – Projekt an der technischen Universität Dresden (TU Dresden) als Referenz verwendet werden kann. Diese SRS ist nicht vollständig und in größeren Projekten viele weitere Aspekte können und sollten berücksichtigt werden. Das angegebene Dokument ist nur für Bildungszwecke genutzt worden. Beiträge sind willkommen.
+
+# 2. Aufgabenstellung und Zielsetzung
 
 Text aus Aufgabenstellung kopieren und ggfs. präzisieren. Insbesondere ergänzen, welche Ziele mit dem Abschluss des Projektes erreicht werden sollen.
 
-# Produktnutzung
+### Möbelgeschäft
+
+Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihrer Firmamit einer neuen Kundensoftware ausgestattet.
+
+ Im Leistungsumfang sind die Bestellverwaltung, das Warenlager und der Auslieferungsservice enthalten.
+
+Besonderes Augenmerk soll auf die Warenbestellung, -zwischenlagerung und -auslieferunggelegt werden.
+
+ Den Kunden liegt ein Sortiment im Internet vor, aus dem sie telefonisch Möbel bestellen können.
+
+ Die Lieferung erfolgt entweder in das Hauptlager oder direkt an denKunden.
+
+ Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
+
+ Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
+
+ Wenn der Kunde unbedingt will, kanner die bereits gelieferte Ware in Teilen abholen, muss dann aber auch diese Teile sofortbezahlen.
+
+Ein Grundsatz des Möbelhauses heißt Modularität.
+
+ Der Kunde kann sich die meisten Möbelstücke einzeln bestellen, jedoch auch vorgefertigte Sätze, so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
+
+ Variabilität ist beispielsweise über die Farbe oder den Bezugmöglich.
+
+ Einige Möbelstücke können allerdings nur in Kombination mit anderen bestellt werden.
+
+ Ein Couchtisch besteht beispielsweise aus Gestell und Platte, wobei es von beiden Komponenten mehrere Ausfertigungen gibt.
+
+Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park.
+
+ Alternativ können sich Kundenzum Abtransport der Ware diese LKW's mieten.
+
+ Je nach Gewicht der Lieferung soll immerder nächst günstigere LKW vermietet bzw.
+
+ von der Firma genutzt werden.
+
+ Mit Bestellung derWare (und auch später) soll der Kunde die Möglichkeit haben, einen LKW für die Abholungzu mieten.
+
+Die Software soll auch die Ab- und Umbestellung der Ware berücksichtigen.
+
+ Je nach Bearbeitungsstand einer Lieferung errechnet sich eine Rücklieferungs- und Bearbeitungsgebühr.
+
+ Die Stornierung einer LKW-Rückgabe bleibt solange kostenlos, wie derLKW zu der eigentlich vermieteten Zeit entweder von der Firma genutzt oder erneutvermietet werden kann.
+
+ Andernfalls muss der Kunde eine Stornierungsgebühr von 20%bezahlen.
+
+Das Angebotsspektrum von Möbel-Hier ergibt sich aus den Katalogen der angegliederten Großlieferanten, wobei auf Wunsch aber auch Produkte ausgeblendet werden können.
+
+ Die Geschäftsbeziehungen zu diesen Firmen soll entsprechend verwaltet werden.
+
+ Die Preiskalkulation für die Waren findet gruppiert nach den Großlieferanten statt, so ergebenbspw. die Kundenpreise der Waren des Lieferanten Großmöbel 205% des Lieferpreises.
+
+Um die Attraktivität des Angebotes steigern zu können, möchte die Geschäftsführung von Möbel-Hier eine monatliche Abrechnung (mit Vergleich zum Vormonat) haben, in der die Möbelverkäufe nach Großlieferanten aufgegliedert aufgeführt sind.
+
+ Basierend auf diesen Analysen möchte Möbel-Hier Lieferanten aus dem Programm nehmen und neue einfügenkönnen.
+
+# 3. Produktnutzung
 
 In welchem Kontext soll das System später genutzt werden? Welche Rahmenbedingungen gelten? Zusätzlich kurze Einleitung für fachfremde Personen
 
-# Interessensgruppen (Stakeholders)
+# 4. Interessensgruppen (Stakeholders)
 
 Welche realen und juristischen Personen(-gruppen) haben Einfluss auf die Anforderungen im Projekt?
 
-# Systemgrenze und Top-Level-Architektur
 
-## Kontextdiagramm
+<table>
+
+
+
+
+
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Priority (1..5)</th>
+<th>Description</th>
+<th>Goals</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><p>Lehrstuhl für Software Technologie</p></td>
+<td><p>5</p></td>
+<td><p>Der Hauptauftragsgeber dieses Projektes.</p></td>
+<td><div><div>
+<ul>
+<li>
+<p>Sell more movies</p>
+</li>
+<li>
+<p>Automate processes</p>
+</li>
+<li>
+<p>Have an example application for students</p>
+</li>
+<li>
+<p>Prevent inventory differences</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td><p>Kunden</p></td>
+<td><p>4</p></td>
+<td><p>Die Kunden des Möbelgeschäfts.</p></td>
+<td><div><div>
+<ul>
+<li>
+<p>Good user experience</p>
+</li>
+<li>
+<p>Easily browsable catalog</p>
+</li>
+<li>
+<p>Fast order processing</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+  <tbody>
+<tr>
+<td><p>Mitarbeiter</p></td>
+<td><p>5</p></td>
+<td><p>Mitarbeiter des Möbelgeschäfts.</p></td>
+<td><div><div>
+<ul>
+<li>
+<p>Sell more movies</p>
+</li>
+<li>
+<p>Automate processes</p>
+</li>
+<li>
+<p>Have an example application for students</p>
+</li>
+<li>
+<p>Prevent inventory differences</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+  
+<tr>
+<td><p>Administratoren</p></td>
+<td><p>2</p></td>
+<td><p>Die berechtigten Mitarbeiter, welche die Website und Mitarbeiter managen können. (e.g. overview all orders)</p></td>
+<td><div><div>
+<ul>
+<li>
+<p>Possibility to overview all the data in the system</p>
+</li>
+<li>
+<p>Manage processes</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td><p>Entwickler(Studenten)</p></td>
+<td><p>3</p></td>
+<td><p>Die Praktikums Gruppe swt18w34.</p></td>
+<td><div><div>
+<ul>
+<li>
+<p>Easily extendable application</p>
+</li>
+<li>
+<p>Low maintenance effort</p>
+</li>
+<li>
+<p>Good debugging mechanisms</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+
+# 5. Systemgrenze und Top-Level-Architektur
+
+## 5.1. Kontextdiagramm
 
 Das Kontextdiagramm zeigt das geplante Software-System in seiner Umgebung. Zur Umgebung gehören alle Nutzergruppen des Systems und Nachbarsysteme. Die Grafik kann auch informell gehalten sein. Überlegen Sie sich dann geeignete Symbole. Die Grafik kann beispielsweise mit Visio erstellt werden. Wenn nötig, erläutern Sie diese Grafik.
 
-## Top-Level-Architektur
+## 5.2. Top-Level-Architektur
 
 Dokumentieren Sie ihre Top-Level-Architektur mit Hilfe eines Komponentendiagramm.
 
-# Anwendungsfälle
+# 6. Anwendungsfälle
 
-## Akteure
+## 6.1. Akteure
 
 Akteure sind die Benutzer des Software-Systems oder Nachbarsysteme, welche darauf zugreifen. Dokumentieren Sie die Akteure in einer Tabelle. Diese Tabelle gibt einen Überblick über die Akteure und beschreibt sie kurz. Die Tabelle hat also mindestens zwei Spalten (Akteur Name und Kommentar). Weitere relevante Spalten können bei Bedarf ergänzt werden.
 
@@ -46,7 +266,7 @@ Akteure sind die Benutzer des Software-Systems oder Nachbarsysteme, welche darau
 | Mitarbeiter                 | Diese Personen sind Mitarbeiter des Möbelgeschäfts und können die Mitarbeiterfunktionen nutzen, wie z.B. auf das Lager zugreifen oder Bestellungen entgegen nehmen. |
 | Admin                       | Dies ist ein spezieller Mitarbeiter, der erweiterter Berechtigungen im System besitz und verschiedene Informationen bearbeiten kann.                                |
 
-## Überblick Anwendungsfalldiagramm
+## 6.2. Überblick Anwendungsfalldiagramm
 
 Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt === Anwendungsfallbeschreibungen
 
@@ -900,35 +1120,35 @@ Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem ein
 </tbody>
 </table>
 
-# Funktionale Anforderungen
+# 7. Funktionale Anforderungen
 
-## Muss-Kriterien
+## 7.1. Muss-Kriterien
 
 Was das zu erstellende Programm auf alle Fälle leisten muss.
 
-## Kann-Kriterien
+## 7.2. Kann-Kriterien
 
 Anforderungen die das Programm leisten können soll, aber für den korrekten Betrieb entbehrlich sind.
 
-# Nicht-Funktionale Anforderungen
+# 8. Nicht-Funktionale Anforderungen
 
-## Qualitätsziele
+## 8.1. Qualitätsziele
 
 Dokumentieren Sie in einer Tabelle die Qualitätsziele, welche das System erreichen soll, sowie deren Priorität.
 
-## Konkrete Nicht-Funktionale Anforderungen
+## 8.2. Konkrete Nicht-Funktionale Anforderungen
 
 Beschreiben Sie Nicht-Funktionale Anforderungen, welche dazu dienen, die zuvor definierten Qualitätsziele zu erreichen. Achten Sie darauf, dass deren Erfüllung (mindestens theoretisch) messbar sein muss.
 
-# GUI Prototyp
+# 9. GUI Prototyp
 
 In diesem Kapitel soll ein Entwurf der Navigationsmöglichkeiten und Dialoge des Systems erstellt werden. Idealerweise entsteht auch ein grafischer Prototyp, welcher dem Kunden zeigt, wie sein System visuell umgesetzt werden soll. Konkrete Absprachen - beispielsweise ob der grafische Prototyp oder die Dialoglandkarte höhere Priorität hat - sind mit dem Kunden zu treffen.
 
-## Überblick: Dialoglandkarte
+## 9.1 Überblick: Dialoglandkarte
 
 Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur Laufzeit darstellt. Also mit welchen Aktionen zwischen den Masken navigiert wird.
 
-## Dialogbeschreibung
+## 9.2 Dialogbeschreibung
 
 Für jeden Dialog:
 
@@ -940,13 +1160,13 @@ Für jeden Dialog:
 
 4.  Evtl. Maskendetails, spezielle Widgets
 
-# Datenmodell
+# 10. Datenmodell
 
-## Überblick: Klassendiagramm
+## 10.1 Überblick: Klassendiagramm
 
 UML-Analyseklassendiagramm
 
-## Klassen und Enumerationen
+## 10.2 Klassen und Enumerationen
 
 Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Klassen/Enumerationen dar. Jede Klasse und Enumeration wird in Form eines Glossars textuell beschrieben. Zusätzlich werden eventuellen Konsistenz- und Formatierungsregeln aufgeführt.
 
@@ -954,7 +1174,7 @@ Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Kl
 | ------------------ | ------------ |  |
 | …                  | …            |  |
 
-# Akzeptanztestfälle
+# 11. Akzeptanztestfälle
 
 Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwartungen und Anforderungen im Gebrauch erfüllt. Diese sollen und können aus den Anwendungsfallbeschreibungen und den UML-Sequenzdiagrammen abgeleitet werden. D.h., pro (komplexen) Anwendungsfall gibt es typischerweise mindestens ein Sequenzdiagramm (welches ein Szenarium beschreibt). Für jedes Szenarium sollte es einen Akzeptanztestfall geben. Listen Sie alle Akzeptanztestfälle in tabellarischer Form auf. Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumenten (z.B. im Test-Plan) referenzieren zu können.
 
@@ -1205,11 +1425,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tbody>
 </table>
 
-# Glossar
+# 12. Glossar
 
 Sämtliche Begriffe, die innerhalb des Projektes verwendet werden und deren gemeinsames Verständnis aller beteiligten Stakeholder essentiell ist, sollten hier aufgeführt werden. Insbesondere Begriffe der zu implementierenden Domäne wurden bereits beschrieben, jedoch gibt es meist mehr Begriffe, die einer Beschreibung bedürfen.  
 Beispiel: Was bedeutet "Kunde"? Ein Nutzer des Systems? Der Kunde des Projektes (Auftraggeber)?
 
-# Offene Punkte
+# 13. Offene Punkte
 
 Offene Punkte werden entweder direkt in der Spezifikation notiert. Wenn das Pflichtenheft zum finalen Review vorgelegt wird, sollte es keine offenen Punkte mehr geben.
