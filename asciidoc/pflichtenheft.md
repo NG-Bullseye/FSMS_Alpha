@@ -138,69 +138,92 @@ Welche realen und juristischen Personen(-gruppen) haben Einfluss auf die Anforde
 <thead>
 <tr>
 <th>Name</th>
-<th>Priority (1..5)</th>
-<th>Description</th>
-<th>Goals</th>
+    
+<th>Priorität (1..5)</th>
+    
+<th>Beschreibung</th>
+    
+<th>Ziele</th>
+
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><p>Lehrstuhl für Software Technologie</p></td>
+    
+    
+    
+<td><p>Tutor</p></td>
 <td><p>5</p></td>
+    
 <td><p>Der Hauptauftragsgeber dieses Projektes.</p></td>
 <td><div><div>
 <ul>
 <li>
-<p>Sell more movies</p>
+    
+<p>Mehr Möbel verkaufen</p>
 </li>
 <li>
-<p>Automate processes</p>
+    
+<p>Prozess automatisieren</p>
 </li>
 <li>
-<p>Have an example application for students</p>
+    
+<p>Software Auftrag simulieren</p>
 </li>
 <li>
-<p>Prevent inventory differences</p>
+    
+<p>Bestellungen einsehen</p>
+</li>
+<li>
+    
+<p>Kunden verwalten</p>
 </li>
 </ul>
 </div></div></td>
 </tr>
 <tr>
+    
+    
+    
 <td><p>Kunden</p></td>
-<td><p>4</p></td>
+<td><p>3</p></td>
+    
 <td><p>Die Kunden des Möbelgeschäfts.</p></td>
 <td><div><div>
 <ul>
 <li>
-<p>Good user experience</p>
-</li>
-<li>
-<p>Easily browsable catalog</p>
-</li>
-<li>
-<p>Fast order processing</p>
+    
+<p>anrufen</p>
 </li>
 </ul>
 </div></div></td>
 </tr>
   <tbody>
 <tr>
+    
+    
+    
 <td><p>Mitarbeiter</p></td>
-<td><p>5</p></td>
-<td><p>Mitarbeiter des Möbelgeschäfts.</p></td>
+<td><p>4</p></td>
+    
+<td><p>Hauptnutzer der Seite.</p></td>
 <td><div><div>
 <ul>
 <li>
-<p>Sell more movies</p>
+    
+<p>Verwaltung des Warenkorbs und der Bestellungen </p>
 </li>
 <li>
-<p>Automate processes</p>
+    
+<p>Lieferungen managen</p>
 </li>
 <li>
-<p>Have an example application for students</p>
+    
+<p>Katalog einsehen </p>
 </li>
 <li>
-<p>Prevent inventory differences</p>
+    
+<p></p>
 </li>
 </ul>
 </div></div></td>
@@ -209,32 +232,44 @@ Welche realen und juristischen Personen(-gruppen) haben Einfluss auf die Anforde
 <tr>
 <td><p>Administratoren</p></td>
 <td><p>2</p></td>
+    
 <td><p>Die berechtigten Mitarbeiter, welche die Website und Mitarbeiter managen können. (e.g. overview all orders)</p></td>
 <td><div><div>
 <ul>
 <li>
-<p>Possibility to overview all the data in the system</p>
-</li>
-<li>
-<p>Manage processes</p>
+    
+<p>Mitarbeiter verwalten</p>
 </li>
 </ul>
 </div></div></td>
 </tr>
 <tr>
-<td><p>Entwickler(Studenten)</p></td>
-<td><p>3</p></td>
+    
+    
+    
+<td><p>Entwickler (Studenten)</p></td>
+<td><p>1</p></td>
+
 <td><p>Die Praktikums Gruppe swt18w34.</p></td>
 <td><div><div>
 <ul>
 <li>
-<p>Easily extendable application</p>
+    
+<p>Erweiterbare Software</p>
 </li>
 <li>
-<p>Low maintenance effort</p>
+    
+<p>keine Wartungsarbeiten</p>
 </li>
 <li>
-<p>Good debugging mechanisms</p>
+   
+    
+<p>Aufwand gering wie möglich</p>
+</li>
+<li>
+    
+    
+<p>Nutzen hoch wie nötig</p>
 </li>
 </ul>
 </div></div></td>
