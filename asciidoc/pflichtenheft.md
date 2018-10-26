@@ -1230,29 +1230,76 @@ Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Kl
 </tr>
 <tr class="odd">
 <td><p>Nutzer</p></td>
-<td><p>Grundlage </p></td>
+<td><p>Grundlage für die persönlichen Daten eines registrierten Nutzers der Website  </p></td>
 </tr>
-<tr class="even">
-<td><p>Ereignis</p></td>
-<td><p>Nutzer drückt &quot;Registrieren&quot; und gibt seine Daten ein:</p>
-<p>- Name: Max Mustermann</p>
-<p>- Passwort: passwort</p>
-<p>- Adresse: Musterstraße 10 01217 Dresden</p>
-<p>- E-mail: <a href="mailto:Max.Musterman@gmx.de">Max.Musterman@gmx.de</a></p>
-<p>- Zahlinformationen: Bar</p>
-<p>dann drückt er &quot;Registrieren&quot;</p></td>
+<tr>
+<td><p>Kunde</p></td>
+<td><p>erweitert die Klasse Nutzer um die gewünschte Bezahlmethode des Kunden</td>
 </tr>
-<tr class="odd">
-<td><p>Erwartetes Ergebnis</p></td>
-<td><p>- ein neuer Kunde wird angelegt mit intern zugewiesener eindeutigen ID</p>
-<p>- Kunde wird zur Startseite weitergeleitet</p></td>
+<tr>
+<td><p>Mitarbeiter</p></td>
+<td> Verwaltung der Attribute, die nur für den Mitarbeiter bzw. den Admin benötigt werden
+</td>
 </tr>
+<tr>
+<td><p>Artikel</p></td>
+<td>Superklasse für die im Webshop zu bestellenden Artikel, welche grundlegende Eigenschaften dieser bereitstellt
+</td>
+</tr>
+<tr>
+<td><p>Möbel</p></td>
+<td> ein Set bestehend aus verschiedenen Teilen
+</td>
+</tr>
+<tr>
+<td><p>Teil</p></td>
+<td> stellt die kleinste bestellbare Einheit dar und bildet die Grundlage für die Berechnung von Preis und Gewicht einer Bestellung
+</td>
+</tr>
+<tr>
+<td><p>Katalog</p></td>
+<td> dient der Organisation und Darstellung aller im Möbelhaus erhältlichen Artikel
+</td>
+</tr>
+<tr>
+<td><p>Warenkorb</p></td>
+<td> ermöglicht dem Mitarbeiter die Erstellung einer Bestellung für einen Kunden
+</td>
+</tr>
+<tr>
+<td><p>Bestellung</p></td>
+<td> stellt alle nötigen Informationen für eine Bestellung dar und bietet die Möglichkeit Änderungen am Bestellstatus vorzunehmen
+</td>
+</tr>
+<tr>
+<td><p>Bestellübersicht</p></td>
+<td> zeigt dem Kunden seine bisherigen Bestellungen an und bietet dem Mitarbeiter die Möglichkeit alle Bestellungen des Möbelhauses einzusehen
+</td>
+</tr>
+<tr>
+<td><p>Finanzübersicht</p></td>
+<td> stellt eine monatliche Übersicht von Einnahmen und Ausgaben bereit
+</td>
+</tr>
+<tr>
+<td><p>Lager</p></td>
+<td> bietet die Funktionalität alle Artikel im physischen Lager zu verwalten
+</td>
+</tr>
+<tr>
+<td><p>Fahrzeug</p></td>
+<td> speichert die Eigenschaften eines firmeneigenen Fahrzeugs
+</td>
+</tr>
+<tr>
+<td><p>Fuhrpark</p></td>
+<td> Verwaltung der firmeneigenen Fahrzeuge
+</td>
+</tr>
+
 </tbody>
 </table>
 
-| Klasse/Enumeration | Beschreibung |  |
-| ------------------ | ------------ |  |
-| …                  | …            |  |
 
 # 11. Akzeptanztestfälle
 
