@@ -1199,11 +1199,48 @@ Für jeden Dialog:
 
 ## 10.1 Überblick: Klassendiagramm
 
-UML-Analyseklassendiagramm
+![Analyseklassendiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/Analyseklassendiagramm.jpg)
 
 ## 10.2 Klassen und Enumerationen
 
 Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Klassen/Enumerationen dar. Jede Klasse und Enumeration wird in Form eines Glossars textuell beschrieben. Zusätzlich werden eventuellen Konsistenz- und Formatierungsregeln aufgeführt.
+
+
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><p><b>Klasse</b></p></td>
+<td><p><b>Beschreibung</b></p></td>
+</tr>
+<tr class="even">
+<td><p>Webshop</p></td>
+<td><p>…​</p></td>
+</tr>
+<tr class="odd">
+<td><p>Voraussetzung</p></td>
+<td><p>Nutzer möchte sich registrieren</p></td>
+</tr>
+<tr class="even">
+<td><p>Ereignis</p></td>
+<td><p>Nutzer drückt &quot;Registrieren&quot; und gibt seine Daten ein:</p>
+<p>- Name: Max Mustermann</p>
+<p>- Passwort: passwort</p>
+<p>- Adresse: Musterstraße 10 01217 Dresden</p>
+<p>- E-mail: <a href="mailto:Max.Musterman@gmx.de">Max.Musterman@gmx.de</a></p>
+<p>- Zahlinformationen: Bar</p>
+<p>dann drückt er &quot;Registrieren&quot;</p></td>
+</tr>
+<tr class="odd">
+<td><p>Erwartetes Ergebnis</p></td>
+<td><p>- ein neuer Kunde wird angelegt mit intern zugewiesener eindeutigen ID</p>
+<p>- Kunde wird zur Startseite weitergeleitet</p></td>
+</tr>
+</tbody>
+</table>
 
 | Klasse/Enumeration | Beschreibung |  |
 | ------------------ | ------------ |  |
@@ -1212,11 +1249,7 @@ Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Kl
 # 11. Akzeptanztestfälle
 
 Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwartungen und Anforderungen im Gebrauch erfüllt. Diese sollen und können aus den Anwendungsfallbeschreibungen und den UML-Sequenzdiagrammen abgeleitet werden. D.h., pro (komplexen) Anwendungsfall gibt es typischerweise mindestens ein Sequenzdiagramm (welches ein Szenarium beschreibt). Für jedes Szenarium sollte es einen Akzeptanztestfall geben. Listen Sie alle Akzeptanztestfälle in tabellarischer Form auf. Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumenten (z.B. im Test-Plan) referenzieren zu können.
-
-
-![Kunden registrieren](/asciidoc/models/analysis/SequenzdiagrammKundenRegistrieren.jpg)
-
-
+![Kunden registrieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammKundenRegistrieren.jpg)
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1254,8 +1287,6 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </table>
 
 ![Mitarbeiter hinzufügen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammMitarbeiterErstellen.jpg)
-
-
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1369,8 +1400,6 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </table>
 
 ![stornieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammStornieren.jpg)
-
-
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1402,8 +1431,6 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </table>
 
 ![Bestellung aufnehmen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammBestellungAufnehmen.jpg)
-
-
 <table>
 <colgroup>
 <col style="width: 50%" />
