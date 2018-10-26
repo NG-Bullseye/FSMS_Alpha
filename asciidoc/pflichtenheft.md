@@ -311,6 +311,8 @@ Für komplexere Anwendungsfälle ein UML-Sequenzdiagramm ergänzen. Einfache Anw
 
 Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem einzigen zusammengefasst werden.
 
+![Kunden registrieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammKundenRegistrieren.jpg)
+Kunden registrieren
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -613,6 +615,8 @@ Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem ein
 </tbody>
 </table>
 
+![stornieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammStornieren.jpg)
+Bestellung stornieren
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -801,6 +805,8 @@ Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem ein
 </tbody>
 </table>
 
+![Bestellung aufnehmen und bestellen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammBestellungAufnehmen.jpg)
+Bestellung aufnehmen und bestellen
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1046,6 +1052,8 @@ Die typischen Anwendungsfälle (Anlegen, Ändern, Löschen) können zu einem ein
 </tbody>
 </table>
 
+![Mitarbeiter hinzufügen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammMitarbeiterErstellen.jpg)
+Mitarbeiter hinzufügen
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1218,11 +1226,11 @@ Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Kl
 </tr>
 <tr class="even">
 <td><p>Webshop</p></td>
-<td><p>…​</p></td>
+<td><p>zentraler Clientüber den der Nutzer alle weiteren Funktionen bereitgestellt bekommt</p></td>
 </tr>
 <tr class="odd">
-<td><p>Voraussetzung</p></td>
-<td><p>Nutzer möchte sich registrieren</p></td>
+<td><p>Nutzer</p></td>
+<td><p>Grundlage </p></td>
 </tr>
 <tr class="even">
 <td><p>Ereignis</p></td>
@@ -1249,7 +1257,7 @@ Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Kl
 # 11. Akzeptanztestfälle
 
 Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwartungen und Anforderungen im Gebrauch erfüllt. Diese sollen und können aus den Anwendungsfallbeschreibungen und den UML-Sequenzdiagrammen abgeleitet werden. D.h., pro (komplexen) Anwendungsfall gibt es typischerweise mindestens ein Sequenzdiagramm (welches ein Szenarium beschreibt). Für jedes Szenarium sollte es einen Akzeptanztestfall geben. Listen Sie alle Akzeptanztestfälle in tabellarischer Form auf. Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumenten (z.B. im Test-Plan) referenzieren zu können.
-![Kunden registrieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammKundenRegistrieren.jpg)
+
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1286,7 +1294,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tbody>
 </table>
 
-![Mitarbeiter hinzufügen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammMitarbeiterErstellen.jpg)
+
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1399,7 +1407,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tbody>
 </table>
 
-![stornieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammStornieren.jpg)
+
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1430,7 +1438,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tbody>
 </table>
 
-![Bestellung aufnehmen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammBestellungAufnehmen.jpg)
+
 <table>
 <colgroup>
 <col style="width: 50%" />
