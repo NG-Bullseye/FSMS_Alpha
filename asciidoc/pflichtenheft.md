@@ -1213,6 +1213,10 @@ Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Kl
 
 Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwartungen und Anforderungen im Gebrauch erfüllt. Diese sollen und können aus den Anwendungsfallbeschreibungen und den UML-Sequenzdiagrammen abgeleitet werden. D.h., pro (komplexen) Anwendungsfall gibt es typischerweise mindestens ein Sequenzdiagramm (welches ein Szenarium beschreibt). Für jedes Szenarium sollte es einen Akzeptanztestfall geben. Listen Sie alle Akzeptanztestfälle in tabellarischer Form auf. Jeder Testfall soll mit einer ID versehen werde, um später zwischen den Dokumenten (z.B. im Test-Plan) referenzieren zu können.
 
+
+![Kunden registrieren](/asciidoc/models/analysis/SequenzdiagrammKundenRegistrieren.jpg)
+
+
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1248,6 +1252,9 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tr>
 </tbody>
 </table>
+
+![Mitarbeiter hinzufügen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammMitarbeiterErstellen.jpg)
+
 
 <table>
 <colgroup>
@@ -1361,6 +1368,9 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tbody>
 </table>
 
+![stornieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammStornieren.jpg)
+
+
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1391,6 +1401,9 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tbody>
 </table>
 
+![Bestellung aufnehmen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammBestellungAufnehmen.jpg)
+
+
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1407,7 +1420,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
-  <td><p>registrierten Mitarbeiter möchte für einen registrierten Kunden eine Bestellung aufgeben</p></td>
+  <td><p>registrierter Mitarbeiter möchte für einen registrierten Kunden eine Bestellung aufgeben</p></td>
   </tr>
   <tr class="odd">
     <td><p>Ereignis</p></td>
