@@ -1052,6 +1052,58 @@ Bestellung aufnehmen und bestellen
 </tbody>
 </table>
 
+
+
+![Artikel zum Lager hinzufügen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammArtikelHinzuf%C3%BCgen.jpg)
+Artikel zum Lager hinzufügen
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><p>ID</p></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><p>Name</p></td>
+<td><p>Artikel zum Lager hinzufügen</p></td>
+</tr>
+<tr class="odd">
+<td><p>Beschreibung</p></td>
+<td><p>Dem Lager können durch Mitarbeiter neue Artikel wie Teile oder Möbel hinzugefügt werden</p></td>
+</tr>
+<tr class="even">
+<td><p>Akteur</p></td>
+<td><p>Mitarbeiter</p></td>
+</tr>
+<tr class="odd">
+<td><p>Auslöser</p></td>
+<td><p>Auswahl von neuen Artikel zu Sortiment hinzufügen als angemeldeter Mitarbeiter</p></td>
+</tr>
+<tr class="even">
+<td><p>Vorraussetzungen</p></td>
+<td><p>Der Mitarbeiter ist eingeloggt</p></td>
+</tr>
+<tr class="odd">
+<td><p>Schrittfolge</p></td>
+<td><p>1.Auswahl von neuen Artikel zum Sortiment hinzufügen</p>
+<p>2.Eigenschaften des neuen Artikels eingeben.</p>
+<p>3. Artikel erstellen</p>
+<p>4. Artikel zur Liste aller Artikel hinzufügen</p></td>
+</tr>
+<tr class="even">
+<td><p>Erweiterungen</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="odd">
+<td><p>Funktionale Anforderungen</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
 ![Mitarbeiter hinzufügen](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/SequenzdiagrammMitarbeiterErstellen.jpg)
 Mitarbeiter hinzufügen
 <table>
@@ -1169,6 +1221,7 @@ Mitarbeiter hinzufügen
 
 Was das zu erstellende Programm auf alle Fälle leisten muss.
 
+
 ## 7.2. Kann-Kriterien
 
 Anforderungen die das Programm leisten können soll, aber für den korrekten Betrieb entbehrlich sind.
@@ -1179,6 +1232,16 @@ Anforderungen die das Programm leisten können soll, aber für den korrekten Bet
 
 Dokumentieren Sie in einer Tabelle die Qualitätsziele, welche das System erreichen soll, sowie deren Priorität.
 
+<table>
+<body>
+<tr>
+<td><p>einfache Benutzung</p></td>
+<td> stellt die kleinste bestellbare Einheit dar und bildet die Grundlage für die Berechnung von Preis und Gewicht einer Bestellung
+</td>
+</tr>
+</body>
+</table>
+
 ## 8.2. Konkrete Nicht-Funktionale Anforderungen
 
 Beschreiben Sie Nicht-Funktionale Anforderungen, welche dazu dienen, die zuvor definierten Qualitätsziele zu erreichen. Achten Sie darauf, dass deren Erfüllung (mindestens theoretisch) messbar sein muss.
@@ -1186,12 +1249,6 @@ Beschreiben Sie Nicht-Funktionale Anforderungen, welche dazu dienen, die zuvor d
 # 9. GUI Prototyp
 
 In diesem Kapitel soll ein Entwurf der Navigationsmöglichkeiten und Dialoge des Systems erstellt werden. Idealerweise entsteht auch ein grafischer Prototyp, welcher dem Kunden zeigt, wie sein System visuell umgesetzt werden soll. Konkrete Absprachen - beispielsweise ob der grafische Prototyp oder die Dialoglandkarte höhere Priorität hat - sind mit dem Kunden zu treffen.
-![startseite](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/startseite.png)
-![artikelansicht](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/artikelansicht.png)
-![kundenprofil](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/kundenprofil.png)
-![bestellung](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/bestellung.png)
-![kundenliste](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/kundenliste.png)
-![mitartbeiterliste](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/mitartbeiterliste.png)
 
 ## 9.1 Überblick: Dialoglandkarte
 
@@ -1232,7 +1289,7 @@ Dieser Abschnitt stellt eine Vereinigung von Glossar und der Beschreibung von Kl
 </tr>
 <tr class="even">
 <td><p>Webshop</p></td>
-<td><p>zentraler Clientüber den der Nutzer alle weiteren Funktionen bereitgestellt bekommt</p></td>
+<td><p>zentraler Client, über den der Nutzer alle weiteren Funktionen bereitgestellt bekommt</p></td>
 </tr>
 <tr class="odd">
 <td><p>Nutzer</p></td>
