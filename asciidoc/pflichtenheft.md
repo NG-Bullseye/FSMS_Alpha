@@ -848,7 +848,7 @@ Bestellung aufnehmen und bestellen
 </tr>
 <tr class="even">
 <td><p>Vorraussetzungen</p></td>
-<td><p><em>Hinzufügen</em>: -</p>
+<td><p><em>Hinzufügen</em>: Vorhandensein des Artikels</p>
 <p><em>Entfernen</em>: Vorhandensein eines Artikels im Warenkorb</p></td>
 </tr>
 <tr class="odd">
@@ -1590,7 +1590,7 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <td><p>Ereignis</p></td>
 <td><p>Mitarbeiter wählt &quot;Lager&quot;, drückt &quot;Möbelstück anlegen&quot; und gibt die Daten ein:</p>
 <p>- Titel: Schrank</p>
-<p>- Kategorie: Schlafzimmer</p>
+<p>- Kategorie: Schrank</p>
 <p>- Farbe: Kirschholz</p>
 <p>- Bestandteile: Schranktür, Schrankwand, …​</p>
 <p>- Erstbestand bestellen: 10</p>
@@ -1695,11 +1695,16 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
   </tr>
   <tr class="odd">
     <td><p>Ereignis</p></td>
-    <td><p>...</p></td>
+    <td><p>Mitarbeiter wählt &quot;neue Bestellung&quot;, gibt Kundendaten ein und drückt &quot;bestätigen&quot;.
+        Er wählt den gewünschten Artikel und klickt auf &quot;hinzufügen&quot;.
+        Dann drückt er bestellen</p></td>
   </tr>
   <tr class="odd">
     <td><p>Erwartetes Ergebnis</p></td>
-    <td><p>...</p></td>
+    <td><p>- ein Kundenbasierter Warenkorb wird erzeugt</p>
+        <p>- gewünschter Artikel wird dem Warenkorb hinzugefügt</p>
+        <p>- eine neue Bestellung wird erzeugt</p>
+        <p>- Mitarbeiter wird auf Startseite weitergeleitet</p></td>
     </tr>
 </tbody>
 </table>
