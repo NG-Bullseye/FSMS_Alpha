@@ -1235,16 +1235,102 @@ Dokumentieren Sie in einer Tabelle die Qualitätsziele, welche das System erreic
 <table>
 <body>
 <tr>
-<td><p>einfache Benutzung</p></td>
-<td> stellt die kleinste bestellbare Einheit dar und bildet die Grundlage für die Berechnung von Preis und Gewicht einer Bestellung
-</td>
+<th> Qualitätsziel </th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+<tr>
+<td><b>Erweiterbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td><b>Wartbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td><b>Benutzbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+</tr>
+<tr>
+<td><b>Zuverlässigkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td><b>Sicherheit</b></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><b>Organisierbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+</tr>
+<tr>
+<td><b>Leistungsfähigkeit</b></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </body>
 </table>
 
+zur Organisierbarkeit: dieser Punkt beschreibt die Eignung der Software die Elemente im Onlineshop und allgemein im Möbelhaus zu verwalten
+
 ## 8.2. Konkrete Nicht-Funktionale Anforderungen
 
 Beschreiben Sie Nicht-Funktionale Anforderungen, welche dazu dienen, die zuvor definierten Qualitätsziele zu erreichen. Achten Sie darauf, dass deren Erfüllung (mindestens theoretisch) messbar sein muss.
+
+<table><body>
+<tr><th> Qualitätsziel </th>
+<th> Beschreibung</th>
+<tr>
+<td><b>Erweiterbarkeit</b></td>
+<td>Das System soll sich zur Laufzeit dynamisch erweitern lassen können. Dies geschieht beispielsweise durch das Hinzufügen von Artikeln oder Kunden während der Laufzeit.</td>
+</tr>
+<tr>
+<td><b>Wartbarkeit</b></td>
+<td>Die Website kann leicht um weitere Funktionen erweitert werden und der Aufwand, um eventuelle Fehler im Programm zu beheben, wird durch seinen leicht verständlichen Programmaufbau und die Nutzung des MVC-Patterns so gering wie möglich gehalten. </td></tr>
+<td><b>Benutzbarkeit</b></td>
+<td>Das Webinterface ist so gestaltet, dass die Bedienung für Kunden wie auch Mitarbeiter einfach und intuitiv ist und es keine Schwierigkeiten oder Missverständnisse bei der Nutzung der Website gibt. </td></tr>
+<tr>
+<td><b>Zuverlässigkeit</b></td>
+<td>Die Software soll den Nutzern zu jeder Zeit die gewünschte Funktionalität bieten. </td></tr>
+<tr><td><b>Sicherheit</b></td>
+<td> Jeder Nutzer besitzt einen eigenen Account, welcher von einem Passwort geschützt wird, um sicherzustellen, dass jeder Nutzer nur die ihm zur Verfügung stehenden Funktionen benutzen kann. Die gespeicherten Nutzerdaten sind außerdem von außen nicht einzusehen, was eine Entwendung der Daten verhindern soll.</td></tr>
+<tr><td><b>Organisierbarkeit</b></td>
+<td>Die Software bietet die Möglichkeit für die Mitarbeiter den Katalog zu bearbeiten und das Lager nachzufüllen, um den flüssigen Betrieb des Möbelhauses zu gewährleisten. Der Admin kann außerdem das Personal des Möbelhauses verwalten.</td></tr>
+<tr> <td><b>Leistungsfähigkeit</b></td>
+<td>Die Software soll den Nutzern ein flüssiges navigieren auf der Website ermöglichen und die gewünschten Aktionen schnell bearbeiten. </td></tr>
+
+</body></table>
+
 
 # 9. GUI Prototyp
 
