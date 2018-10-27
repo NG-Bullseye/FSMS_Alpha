@@ -1249,12 +1249,24 @@ Beschreiben Sie Nicht-Funktionale Anforderungen, welche dazu dienen, die zuvor d
 # 9. GUI Prototyp
 
 In diesem Kapitel soll ein Entwurf der Navigationsmöglichkeiten und Dialoge des Systems erstellt werden. Idealerweise entsteht auch ein grafischer Prototyp, welcher dem Kunden zeigt, wie sein System visuell umgesetzt werden soll. Konkrete Absprachen - beispielsweise ob der grafische Prototyp oder die Dialoglandkarte höhere Priorität hat - sind mit dem Kunden zu treffen.
+
 ![startseite](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/startseite.png)
+Dies ist die Startseite von Möbel hier. Oben rechts finden sich die Buttons für den Login bzw. Registrieren und auf der linken Seite die Kategorien, um die Möbel grob sortieren zu können.
+
 ![artikelansicht](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/artikelansicht.png)
+Die Artikeldetailansicht, wenn man Beispielsweise einen Artikel aus der Kategorie "Unsere Empfehlungen" auf der Startseite auswählt. Hier finden sie Details zum Artikel, sowie die Artikel Bewertungen.
+
 ![kundenprofil](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/kundenprofil.png)
+Nach dem Login landet der Kunde Standardmäßig hier. Es lassen sich die vergangenen Bestellungen ansehen. Desweiteren hat der Kunde die Möglichkeit seine Adressdaten zu ändern.
+
 ![bestellung](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/bestellung.png)
+Bei einem Klick auf die Bestellung vom Kundenprofil kann der Kunde die Bestellung im Detail ansehen und hat die Möglichkeit die Bestellung zu stornieren, falls sie noch nicht versendet wurde.
+
 ![kundenliste](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/kundenliste.png)
+Die Mitarbeiter haben hier die Möglichkeit die Kundenliste einzusehen und bei Bedarf Kunden durch einen Klick auf den Status zu deaktivieren bzw. wieder zu aktivieren.
+
 ![mitarbeiterliste](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/mitarbeiterliste.png)
+Der Admin kann hier alle Mitarbeiter einsehen. Durch einen Klick auf den Status kann der Admin Mitarbeiter deaktivieren, wenn sie nicht mehr im Unternehmen arbeiten und das Gehalt, durch einen Klick auf das Gehalt, anpassen.
 
 ## 9.1 Überblick: Dialoglandkarte
 
