@@ -53,15 +53,11 @@
 
 # 1. Zusammenfassung
 
-Dieses Dokument stellt die <behinderte> Software-Anforderungsspezifikation (SRS, Deutsch: in der Nähe ein "Pflichtenheft") des Projekts  Videoladen. Es soll einen Überblick über das Softwareprodukt gebaut werden und Funktionen als Grundlage für die Kommunikation zwischen den Akteuren des Projekts, vor allem dem Kunden und dem Entwicklungsteam zur Verfügung zu stellen. Es sollte ist erwünscht, dieses Dokument als Grundlage für einen Vertrag zwischen dem Auftraggeber und dem Auftragnehmer zu haben und daher überprüft und auf Konsistenz geprüft werden. Die SRS wird beschrieben, was das gewünschte System zu erfüllen hat, und teilweise, wie der Auftragnehmer die Lösung umzusetzen gedenkt.
+Dieses Dokument stellt die <behinderte> Software-Anforderungsspezifikation , gennant Pflichtenheft, des Projekts  Videoladen dar. Es soll einen Überblick über das Softwareprodukt geben und als Grundlage der Kommunikation zwischen den Akteuren des Projekts funktionieren. Vor allem aber dem Kunden und dem Entwicklungsteam zur Verfügung zu stehen. Es soll für das Dokument als Grundlage für ein Vertrag zwischen dem Auftraggeber und dem Auftragnehmer gelten und somit die Konsistenz geprüft werden. Das Pflichtenheft beschreibt was das gewünschte System zu erfüllen hat, und teilweise, wie der Auftragnehmer die Lösung umzusetzen gedenkt.
 
-In der Regel die SRS sollte korrekt sein, zu vervollständigen, und konsequente (CCC). Wie es, am Ende des Projekts verwendet wird um zu überprüfen, ob die definierte Software geliefert wurde, sollte dieses Ziel überprüfbar sein. Es wird verwendet und während des gesamten Projekts, weshalb der Inhalt im gesamten alle Artefakte rückverfolgbar sein sollte, die erstellt werden, konsultiert werden. In Verbindung mit den oben genannten ist es wünschenswert, einfach zu verändern und entwickeln sich, obwohl Änderungen auf ein Minimum reduziert werden sollte, nachdem die Akteure einmal auf den Inhalt geeinigt. Da sich Bedürfnisse und Gegebenheiten ständig während eines Projekts ändern, Anpassungen sind jedoch zu erwarten und müssen dokumentiert werden.
-
-Unser Ziel ist es, ein Beispiel für ein SRS bereitzustellen, die während des Kurses Softwaretechnologie – Projekt an der technischen Universität Dresden (TU Dresden) als Referenz verwendet werden kann. Diese SRS ist nicht vollständig und in größeren Projekten viele weitere Aspekte können und sollten berücksichtigt werden. Das angegebene Dokument ist nur für Bildungszwecke genutzt worden. Beiträge sind willkommen.
+Das Pflichtenheft sollte stehts zu vervollständigen,  konsequente und korrekt sein. Am Ende des Projekts wird es verwendet um zu überprüfen, ob die definierte Software geliefert wurde. Es wird während des gesamten Projekts verwendet, weshalb der Inhalt aller Artefakte , die erstellt werden, im gesamten  rückverfolgbar sein sollte. In Verbindung mit dem oben genanntem ist es wünschenswert, einfach zu veränderlich und entwickelbar zu sein, obwohl Änderungen auf ein Minimum reduziert werden sollten, nachdem die Akteure einmal auf den Inhalt geeinigt. Da sich Bedürfnisse und Gegebenheiten ständig während eines Projekts ändern, sind Anpassungen  jedoch zu erwarten und müssen dokumentiert werden.
 
 # 2. Aufgabenstellung und Zielsetzung
-
-Text aus Aufgabenstellung kopieren und ggfs. präzisieren. Insbesondere ergänzen, welche Ziele mit dem Abschluss des Projektes erreicht werden sollen.
 
 ### Möbelgeschäft
 
@@ -205,7 +201,13 @@ Welche realen und juristischen Personen(-gruppen) haben Einfluss auf die Anforde
 <ul>
 <li>
     
-<p>anrufen</p>
+<p>bestellung von einem oder mehreren Möbelstücken</p>
+</li>
+</ul>
+<ul>
+<li>
+    
+<p>mieten eines Lkw's</p>
 </li>
 </ul>
 </div></div></td>
