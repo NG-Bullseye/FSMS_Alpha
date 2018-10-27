@@ -123,6 +123,18 @@ Um die Attraktivität des Angebotes steigern zu können, möchte die Geschäftsf
 
 In welchem Kontext soll das System später genutzt werden? Welche Rahmenbedingungen gelten? Zusätzlich kurze Einleitung für fachfremde Personen
 
+Das Produkt (im Folgenden als Website bezeichnet) für das Möbelhaus Möbel-Hier soll die Möglichkeit bieten das Sortiment des Möbelhauses auch im Internet für Kunden bereitzustellen und die interne Verwaltung für die Angestellten des Möbelhauses zu erleichtern.
+
+Den Kunden werden auf der Website verschiedene Funktionalitäten bereitgestellt. 
+Die primäre Funktion ist das betrachten des Kataloges des Möbelhauses für alle Besucher der Website. Die Website stellt für neue Kunden eine Registrierung in dem Onlineshop bereit und für bereits registrierte Nutzer gibt es eine Login-Funktion. Ein angemeldeter Kunde hat die Möglichkeit seine bisherigen Bestellungen bei dem Möbelhaus einzusehen und aktuell laufende Bestellungen bis zu einem bestimmten Zeitpunkt noch zu stornieren. Außerdem können angemeldete Kunden Artikel im Katalog bewerten und kommentieren. Ein Kunde, der bereits eine Bestellung aufgegeben hat, kann nachträglich auch noch die Lieferart verändern, beispielsweise nachträglich noch einen firmeneigenen LKW zur Abholung mieten oder die Bestellung von einem anderen Abholpunkt des Möbelhauses abzuholen.
+
+Die Website stellt für die Angestellten des Möbelhauses die folgenden Funktionalitäten zur Verfügung.
+Um eine Bestellung aufzunehmen, ruft ein registrierter Kunden bei einem Mitarbeiter des Möbelhauses an, welcher für ihn dann die Bestellung tätigt. Dazu legt der Mitarbeiter für den Kunden einen Warenkorb an, dem er Artikel aus dem Katalog hinzufügen und auch wieder entfernen kann. Ein Artikel kann dabei ein einzelnes Teil oder ein komplettes Möbelstück sein, wobei es jeden Artikel in verschiedenen Farbausführungen gibt, zwischen denen der Kunde wählen kann. Wenn sich alle gewünschten Artikel des Kunden in dem Warenkorb befinden, kann der Mitarbeiter dem Kunden den Gesamtpreis der Bestellung berechnen und die Bestellung für den Kunden abschließen. Der Mitarbeiter kann außerdem Benutzeraccounts von Kunden, die lange nicht mehr auf der Website aktiv waren, deaktivieren, jedoch nicht löschen.
+Die Website dient außerdem der Verwaltung des Lagers und des Katalogs des Möbelhauses. Ein Mitarbeiter kann Artikel dem Katalog ( und damit auch dem Lager) hinzufügen, den Preis von Artikeln ändern, Artikel aus dem Katalog nehmen, wodurch sie jedoch nur für Kunden unsichtbar gemacht und nicht gelöscht werden und den Bestand einzelner Artikel im Lager aufstocken.
+
+Der Administrator (Admin) dient als oberste Verwaltungsinstanz der Website. Er besitzt die Möglichkeit Mitarbeiter in das System hinzuzufügen und zu deaktivieren. Außerdem ist er die einzige Instanz, die die monatliche Finanzübersicht des Möbelhauses einsehen kann.
+
+
 # 4. Interessensgruppen (Stakeholders)
 
 Welche realen und juristischen Personen(-gruppen) haben Einfluss auf die Anforderungen im Projekt?
