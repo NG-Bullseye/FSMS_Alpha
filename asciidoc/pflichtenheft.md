@@ -335,7 +335,7 @@ Kunden registrieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U1</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -371,7 +371,7 @@ Kunden registrieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F2, F3</td>
 </tr>
 </tbody>
 </table>
@@ -384,7 +384,7 @@ Kunden registrieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U2</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -431,7 +431,7 @@ Kunden registrieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F1, F3</td>
 </tr>
 </tbody>
 </table>
@@ -444,7 +444,7 @@ Kunden registrieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U3</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -479,7 +479,7 @@ Kunden registrieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F3, F18</td>
 </tr>
 </tbody>
 </table>
@@ -492,7 +492,7 @@ Kunden registrieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U4</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -525,7 +525,7 @@ Kunden registrieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F3, F16</td>
 </tr>
 </tbody>
 </table>
@@ -538,7 +538,7 @@ Kunden registrieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U5</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -577,7 +577,7 @@ Kunden registrieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F7, F8</td>
 </tr>
 </tbody>
 </table>
@@ -590,7 +590,7 @@ Kunden registrieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U6</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -624,7 +624,7 @@ Kunden registrieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F16, F1</td>
 </tr>
 </tbody>
 </table>
@@ -639,7 +639,7 @@ Bestellung stornieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U7</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -676,7 +676,7 @@ Bestellung stornieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F1, F16, F20</td>
 </tr>
 </tbody>
 </table>
@@ -689,7 +689,7 @@ Bestellung stornieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U8</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -722,7 +722,7 @@ Bestellung stornieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F7, F8</td>
 </tr>
 </tbody>
 </table>
@@ -735,7 +735,7 @@ Bestellung stornieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U9</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -768,7 +768,7 @@ Bestellung stornieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F7</td>
 </tr>
 </tbody>
 </table>
@@ -781,7 +781,7 @@ Bestellung stornieren
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U10</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -814,7 +814,7 @@ Bestellung stornieren
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F7, F10, F9</td>
 </tr>
 </tbody>
 </table>
@@ -829,7 +829,7 @@ Bestellung aufnehmen und bestellen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U11</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -868,7 +868,7 @@ Bestellung aufnehmen und bestellen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F7, F21</td>
 </tr>
 </tbody>
 </table>
@@ -881,7 +881,7 @@ Bestellung aufnehmen und bestellen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U12</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -918,7 +918,7 @@ Bestellung aufnehmen und bestellen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F11, F12, F7</td>
 </tr>
 </tbody>
 </table>
@@ -931,7 +931,7 @@ Bestellung aufnehmen und bestellen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U13</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -967,7 +967,7 @@ Bestellung aufnehmen und bestellen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F14, F15, F11, F5, F4</td>
 </tr>
 </tbody>
 </table>
@@ -980,7 +980,7 @@ Bestellung aufnehmen und bestellen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U14</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -1014,7 +1014,7 @@ Bestellung aufnehmen und bestellen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F1, F5, F9</td>
 </tr>
 </tbody>
 </table>
@@ -1027,7 +1027,7 @@ Bestellung aufnehmen und bestellen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U15</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -1061,7 +1061,7 @@ Bestellung aufnehmen und bestellen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F1, F6</td>
 </tr>
 </tbody>
 </table>
@@ -1078,7 +1078,7 @@ Artikel zum Lager hinzufügen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U16</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -1113,7 +1113,7 @@ Artikel zum Lager hinzufügen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F1, F21, F6</td>
 </tr>
 </tbody>
 </table>
@@ -1128,7 +1128,7 @@ Mitarbeiter hinzufügen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U17</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -1177,7 +1177,7 @@ Mitarbeiter hinzufügen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td><F1, F2, F3, F19/td>
 </tr>
 </tbody>
 </table>
@@ -1190,7 +1190,7 @@ Mitarbeiter hinzufügen
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td></td>
+<td>U18</td>
 </tr>
 <tr class="even">
 <td><p>Name</p></td>
@@ -1224,7 +1224,7 @@ Mitarbeiter hinzufügen
 </tr>
 <tr class="odd">
 <td><p>Funktionale Anforderungen</p></td>
-<td></td>
+<td>F1, F17</td>
 </tr>
 </tbody>
 </table>
@@ -1255,6 +1255,10 @@ Was das zu erstellende Programm auf alle Fälle leisten muss.
     <tr><td>F16</td><td>Bestellübersicht<td>Das System kann jedem Kunden seine getätigten Bestellungen anzeigen oder einem Admin alle getätigten Bestellungen.</td></tr>
     <tr><td>F17</td><td>Finanzübersicht<td>Das System enthält Informationen über Einnahmen und Ausgaben und kann diese einem Admin anzeigen.</td></tr>
         <tr><td>F17</td><td>Daten bearbeiten<td>Die Daten eines Nutzers </td></tr>
+              <tr><td>F18</td><td>Daten bearbeiten<td>Die Daten eines Nutzers können von ihm oder einem Admin geändert werden.</td></tr>
+    <tr><td>F19</td><td>Userlisten<td>Ein Admin kann alle User oder auch User mit nur einer speziellen Rolle, wie Kunde oder Mitarbeiter sich anzeigen lassen.</td></tr>
+    <tr><td>F20</td><td> Bestellungen stornieren<td>Das System muss überprüfen ob Bestellungen stornierbar sind und falls dies möglich ist die Effekte der Bestellung umkehren(das heißt Rücküberweisung des Geldes und Erhöhung der Artikelanzahl)</td></tr> 
+      <tr><td>F21</td><td>Katalog bearbeiten<td>Neue Artikel können von Mitarbeitern zum Katalog hinzugefügt werden und bereits vorhandene bearbeitet bzw. versteckt werden.</td></tr>
     </body>
     </table>
 
