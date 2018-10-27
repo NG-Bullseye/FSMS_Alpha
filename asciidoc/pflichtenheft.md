@@ -1234,7 +1234,29 @@ Mitarbeiter hinzufügen
 ## 7.1. Muss-Kriterien
 
 Was das zu erstellende Programm auf alle Fälle leisten muss.
-
+<table>
+  <body>
+    <tr><th>ID</th><th>Name<th>Beschreibung</th></tr>
+   <tr><td>F1</td><td>Authentifizierung<td>Es gibt Bereiche, die um betrachtet zu werden eine Authentifizierung brauchen. User des Systems(Mitarbeiter, Registrierte Kunden, Admins) können sich mittels eines Namens und ihres Passworts anmelden. </td></tr>
+    <tr><td>F2</td><td>Registrierung<td>Um Funktion F1 zu erfüllen zu können, müssen User zum System hinzugefügt werden. Dies geschieht je nach Art der Person unterschiedlich und benötigt gewisse Daten.</td></tr>
+    <tr><td>F3</td><td>Validierung von Eingabedaten<td>Für die Funktionen F1 und F2 müssen Eingaben auf ihre Richtigkeit überprüft werden können. Dies umfasst die Überprüfung ob, dass Password zum Username passt oder ob dieser Username noch frei ist.</td></tr>
+    <tr><td>F4</td><td>Inventar<td>Das System speichert Informationen über die verschiedenen Möbel und Teil.</td></tr>
+    <tr><td>F5</td><td>Bearbeitung des Inventars<td>Das Inventar aus Funktion F4 kann von Mitarbeitern/Admins verändert und bearbeitet werden.</td></tr>
+    <tr><td>F6</td><td>Speicherung und Änderung der Anzahl<td>Zu jedem Möbel bzw.Teil gibt es Informationen über die Anzahl im Lager. Diese kann durch Nachbestellen erhöht als auch durch Kundenbestellungen verringert werden. </td></tr>
+    <tr><td>F7</td><td>Katalog<td>Es gibt eine Übersicht über die Artikel, die von authentifizierten und nicht-authentifizierten Nutzern durchsucht werden kann. </td></tr>
+    <tr><td>F8</td><td>Filtern des Katalogs<td>Der Katalog kann anhand von Kategorien(z.B. Suche nach Stühlen) gefiltert werden.</td></tr>
+    <tr><td>F9</td><td>Ansehen von Artikeln<td>Im Katalog können einzelne Artikel zusammen mit ihren Informationen und Bewertungen betrachtet werden.</td></tr>
+    <tr><td>F10</td><td>Bewerten<td>Einzelne Artikel können von authentifizierten Kunden mittels einer Bewertung und eines Kommentars versehen werden, die dann andere Kunden betrachten können.</td></tr>
+    <tr><td>F11</td><td>Warenkorb<td>Es gibt für jeden registrierten Kunden einen persönlichen Warenkorb. Dort kann ein Mitarbeiter alle bisherigen Artikel und den Preis sehen.</td></tr>
+    <tr><td>F12</td><td>Warenkorb bearbeiten<td>Ein Mitarbeiter kann zum Warenkorb Artikel aus dem Katalog hinzufügen oder auch wieder Artikel aus dem Warenkorb entfernen. Dieser wird danach aktualisiert.</td></tr>
+    <tr><td>F13</td><td>Bestellen<td>Ein Mitarbeiter kann eine Bestellung aus einem Warenkorb erstellen.</td></tr>
+    <tr><td>F14</td><td>Fuhrpark<td>Das System speichert Informationen über Fahrzeuge und diese können durch Mitarbeiter verwaltet werden.</td></tr>
+    <tr><td>F15</td><td>Fahrzeugermittlung<td>Für jeden Warenkorb muss das System ein Fahrzeug aus dem Fuhrpark ermittlen, das diese Artikel transportieren könnte, oder ausgeben, dass es kein mögliches Fahrzeug gäbe.</td></tr>
+    <tr><td>F16</td><td>Bestellübersicht<td>Das System kann jedem Kunden seine getätigten Bestellungen anzeigen oder einem Admin alle getätigten Bestellungen.</td></tr>
+    <tr><td>F17</td><td>Finanzübersicht<td>Das System enthält Informationen über Einnahmen und Ausgaben und kann diese einem Admin anzeigen.</td></tr>
+        <tr><td>F17</td><td>Daten bearbeiten<td>Die Daten eines Nutzers </td></tr>
+    </body>
+    </table>
 
 ## 7.2. Kann-Kriterien
 
