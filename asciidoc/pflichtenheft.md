@@ -1372,15 +1372,20 @@ Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur La
 
 ## 9.2 Dialogbeschreibung
 
-Für jeden Dialog:
+![login](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/login.png)
+Klickt der Kunde auf der Startseite auf Login, öffnet gelangt er zu diesem Dialog, wo er aufgefordert wird, seine Login Daten einzugeben. Danach landet er auf dem in 9. beschriebenen Kundenprofil.
 
-1.  Kurze textuelle Dialogbeschreibung eingefügt: Was soll der jeweilige Dialog? Was kann man damit tun? Überblick?
+![registrieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/registrieren.png)
+Klickt der Kunde auf der Startseite auf registrieren, kann der Kunde in dieser Maske sein Kundenprofil erstellen. Er erhält im Anschluss eine Bestätigungsmail mit seiner Kundennummer.
 
-2.  Maskenentwürfe (Screenshot, Mockup)
+![schreiben](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/schreiben.png)
+Ist der Kunde eingeloggt und befindet sich auf der Deatilansicht eines Artikels, kann gelangt er durch klicken des Buttons "Bewertung schreiben" zu dieser Eingabemaske. Hier hat der Kunde die Möglichkeit, eine eigene Bewertung zu verfassen.
 
-3.  Maskenelemente (Ein/Ausgabefelder, Aktionen wie Buttons, Listen, …)
+![aktualisieren](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/aktualisieren.png)
+Befindet sich der eingeloggte Kunde auf seinem Profil, kann er durch einen Klick auf "Daten aktualisieren" seine Adresse, Email und Passwort ändern.
 
-4.  Evtl. Maskendetails, spezielle Widgets
+![gehalt](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/gehalt.png)
+Der Admin ist berechtigt, die Mitarbeiterliste einzusehen. Durch einen Klick auf das Gehalt, ist er in der Lage dieses anzupassen.
 
 # 10. Datenmodell
 
