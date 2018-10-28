@@ -288,13 +288,13 @@ Der Administrator dient als oberste Verwaltungsinstanz der Website. Er besitzt d
 # 5. Systemgrenze und Top-Level-Architektur
 
 ## 5.1. Kontextdiagramm
+![Kontextdiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/Kontextdiagramm.jpg "Kontextdiagramm")
 
-Das Kontextdiagramm zeigt das geplante Software-System in seiner Umgebung. Zur Umgebung gehören alle Nutzergruppen des Systems und Nachbarsysteme. Die Grafik kann auch informell gehalten sein. Überlegen Sie sich dann geeignete Symbole. Die Grafik kann beispielsweise mit Visio erstellt werden. Wenn nötig, erläutern Sie diese Grafik.
+Auf das Webshopsystem greifen 4 Benutzerklassen zu. Das sind zum einen "interne" Zugriffe, das heißt von Mitarbeitern der Firma, die auf der rechten Seite stehen, und zum anderen externe Zugriffe durch (nicht)-authentifizierte Kunden. Genaueres zu diesen Rollen gibt es im Kapitel 6 "Anwendungsfälle". Welche Bereiche die einzelnen User nutzen können, kann man in der Top-Level-Architektur hier unter sehen.
 
 ## 5.2. Top-Level-Architektur
 
-Dokumentieren Sie ihre Top-Level-Architektur mit Hilfe eines Komponentendiagramm.
-
+![Top-Level-Architektur](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/TopLevelArchitektur.jpg "Top-Level-Architektur")
 # 6. Anwendungsfälle
 
 ## 6.1. Akteure
@@ -311,7 +311,10 @@ Akteure sind die Benutzer des Software-Systems oder Nachbarsysteme, welche darau
 
 ## 6.2. Überblick Anwendungsfalldiagramm
 
-Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt === Anwendungsfallbeschreibungen
+Anwendungsfall-Diagramm, das alle Anwendungsfälle und alle Akteure darstellt
+
+![Anwendungsfalldiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/analysis/UseCaseDiagramm.jpg "Anwendungsfalldiagramm")
+=== Anwendungsfallbeschreibungen
 
 Dieser Unterabschnitt beschreibt die Anwendungsfälle. In dieser Beschreibung müssen noch nicht alle Sonderfälle und Varianten berücksichtigt werden. Schwerpunkt ist es, die wichtigsten Anwendungsfälle des Systems zu finden. Wichtig sind solche Anwendungsfälle, die für den Auftraggeber, den Nutzer den größten Nutzen bringen.
 
