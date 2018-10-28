@@ -65,59 +65,56 @@ Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihre
 
  Im Leistungsumfang sind die Bestellverwaltung, das Warenlager und der Auslieferungsservice enthalten.
 
-Besonderes Augenmerk soll auf die Warenbestellung, -zwischenlagerung und -auslieferunggelegt werden.
+Besonderes Augenmerk soll auf die Warenbestellung, -zwischenlagerung und -auslieferunggelegt gelegt werden.
 
  Den Kunden liegt ein Sortiment im Internet vor, aus dem sie telefonisch Möbel bestellen können.
 
- Die Lieferung erfolgt entweder in das Hauptlager oder direkt an denKunden.
+ Die Lieferung erfolgt entweder in das Hauptlager oder direkt an den Kunden.
 
  Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
 
  Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
 
- Wenn der Kunde unbedingt will, kanner die bereits gelieferte Ware in Teilen abholen, muss dann aber auch diese Teile sofortbezahlen.
+ Wenn der Kunde unbedingt will, kann er die bereits gelieferte Ware in Teilen abholen, muss dann aber auch diese Teile sofort bezahlen.
 
 Ein Grundsatz des Möbelhauses heißt Modularität.
 
  Der Kunde kann sich die meisten Möbelstücke einzeln bestellen, jedoch auch vorgefertigte Sätze, so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
 
- Variabilität ist beispielsweise über die Farbe oder den Bezugmöglich.
+ Variabilität ist beispielsweise über die Farbe oder den Bezug möglich.
 
  Einige Möbelstücke können allerdings nur in Kombination mit anderen bestellt werden.
 
- Ein Couchtisch besteht beispielsweise aus Gestell und Platte, wobei es von beiden Komponenten mehrere Ausfertigungen gibt.
+ Ein Couchtisch besteht beispielsweise aus Gestell und Platte, wobei es von beiden Komponenten mehrere Ausführungen gibt.
 
 Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park.
 
  Alternativ können sich Kundenzum Abtransport der Ware diese LKW's mieten.
 
- Je nach Gewicht der Lieferung soll immerder nächst günstigere LKW vermietet bzw.
+ Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.
+von der Firma genutzt werden.
 
- von der Firma genutzt werden.
-
- Mit Bestellung derWare (und auch später) soll der Kunde die Möglichkeit haben, einen LKW für die Abholungzu mieten.
+ Mit Bestellung der Ware (und auch später) soll der Kunde die Möglichkeit haben, einen LKW für die Abholungzu mieten.
 
 Die Software soll auch die Ab- und Umbestellung der Ware berücksichtigen.
 
  Je nach Bearbeitungsstand einer Lieferung errechnet sich eine Rücklieferungs- und Bearbeitungsgebühr.
 
- Die Stornierung einer LKW-Rückgabe bleibt solange kostenlos, wie derLKW zu der eigentlich vermieteten Zeit entweder von der Firma genutzt oder erneutvermietet werden kann.
+ Die Stornierung einer LKW-Rückgabe bleibt solange kostenlos, wie der LKW zu der eigentlich vermieteten Zeit entweder von der Firma genutzt oder erneut vermietet werden kann.
 
- Andernfalls muss der Kunde eine Stornierungsgebühr von 20%bezahlen.
+ Andernfalls muss der Kunde eine Stornierungsgebühr von 20% bezahlen.
 
-Das Angebotsspektrum von Möbel-Hier ergibt sich aus den Katalogen der angegliederten Großlieferanten, wobei auf Wunsch aber auch Produkte ausgeblendet werden können.
+Das Angebotsspektrum von Möbel-Hier ergibt sich aus den Katalogen der angegliederten Großlieferanten, wobei auf Wunsch auch Produkte ausgeblendet werden können.
 
  Die Geschäftsbeziehungen zu diesen Firmen soll entsprechend verwaltet werden.
 
- Die Preiskalkulation für die Waren findet gruppiert nach den Großlieferanten statt, so ergebenbspw. die Kundenpreise der Waren des Lieferanten Großmöbel 205% des Lieferpreises.
+ Die Preiskalkulation für die Waren findet gruppiert nach den Großlieferanten statt, so ergeben bspw. die Kundenpreise der Waren des Lieferanten Großmöbel 205% des Lieferpreises.
 
 Um die Attraktivität des Angebotes steigern zu können, möchte die Geschäftsführung von Möbel-Hier eine monatliche Abrechnung (mit Vergleich zum Vormonat) haben, in der die Möbelverkäufe nach Großlieferanten aufgegliedert aufgeführt sind.
 
- Basierend auf diesen Analysen möchte Möbel-Hier Lieferanten aus dem Programm nehmen und neue einfügenkönnen.
+ Basierend auf diesen Analysen möchte Möbel-Hier Lieferanten aus dem Programm nehmen und neue einfügen können.
 
 # 3. Produktnutzung
-
-In welchem Kontext soll das System später genutzt werden? Welche Rahmenbedingungen gelten? Zusätzlich kurze Einleitung für fachfremde Personen
 
 Das Produkt (im Folgenden als Website bezeichnet) für das Möbelhaus Möbel-Hier soll die Möglichkeit bieten das Sortiment des Möbelhauses auch im Internet für Kunden bereitzustellen und die interne Verwaltung für die Angestellten des Möbelhauses zu erleichtern.
 
@@ -128,13 +125,10 @@ Die Website stellt für die Angestellten des Möbelhauses die folgenden Funktion
 Um eine Bestellung aufzunehmen, ruft ein registrierter Kunden bei einem Mitarbeiter des Möbelhauses an, welcher für ihn dann die Bestellung tätigt. Dazu legt der Mitarbeiter für den Kunden einen Warenkorb an, dem er Artikel aus dem Katalog hinzufügen und auch wieder entfernen kann. Ein Artikel kann dabei ein einzelnes Teil oder ein komplettes Möbelstück sein, wobei es jeden Artikel in verschiedenen Farbausführungen gibt, zwischen denen der Kunde wählen kann. Wenn sich alle gewünschten Artikel des Kunden in dem Warenkorb befinden, kann der Mitarbeiter dem Kunden den Gesamtpreis der Bestellung berechnen und die Bestellung für den Kunden abschließen. Der Mitarbeiter kann außerdem Benutzeraccounts von Kunden, die lange nicht mehr auf der Website aktiv waren, deaktivieren, jedoch nicht löschen.
 Die Website dient außerdem der Verwaltung des Lagers und des Katalogs des Möbelhauses. Ein Mitarbeiter kann Artikel dem Katalog ( und damit auch dem Lager) hinzufügen, den Preis von Artikeln ändern, Artikel aus dem Katalog nehmen, wodurch sie jedoch nur für Kunden unsichtbar gemacht und nicht gelöscht werden und den Bestand einzelner Artikel im Lager aufstocken.
 
-Der Administrator (Admin) dient als oberste Verwaltungsinstanz der Website. Er besitzt die Möglichkeit Mitarbeiter in das System hinzuzufügen und zu deaktivieren. Außerdem ist er die einzige Instanz, die die monatliche Finanzübersicht des Möbelhauses, welche monatlich automatisch erstellt wird, einsehen kann.
+Der Administrator dient als oberste Verwaltungsinstanz der Website. Er besitzt die Möglichkeit Mitarbeiter in das System hinzuzufügen und zu deaktivieren. Außerdem ist er die einzige Instanz, die die monatliche Finanzübersicht des Möbelhauses, welche monatlich automatisch erstellt wird, einsehen kann.
 
 
 # 4. Interessensgruppen (Stakeholders)
-
-Welche realen und juristischen Personen(-gruppen) haben Einfluss auf die Anforderungen im Projekt?
-
 
 <table>
 
@@ -1270,7 +1264,6 @@ Anforderungen die das Programm leisten können soll, aber für den korrekten Bet
 
 ## 8.1. Qualitätsziele
 
-Dokumentieren Sie in einer Tabelle die Qualitätsziele, welche das System erreichen soll, sowie deren Priorität.
 
 <table>
 <body>
@@ -1341,11 +1334,12 @@ Dokumentieren Sie in einer Tabelle die Qualitätsziele, welche das System erreic
 </body>
 </table>
 
+(Bewertung von 1( nicht wichtig) bis 5 (sehr wichtig))
+
 zur Organisierbarkeit: dieser Punkt beschreibt die Eignung der Software die Elemente im Onlineshop und allgemein im Möbelhaus zu verwalten
 
 ## 8.2. Konkrete Nicht-Funktionale Anforderungen
 
-Beschreiben Sie Nicht-Funktionale Anforderungen, welche dazu dienen, die zuvor definierten Qualitätsziele zu erreichen. Achten Sie darauf, dass deren Erfüllung (mindestens theoretisch) messbar sein muss.
 
 <table><body>
 <tr><th> Qualitätsziel </th>
