@@ -1,6 +1,6 @@
-| Version | Status    | Bearbeitungsdatum | Autoren(en) | Vermerk          |
-| ------- | --------- | ----------------- | ----------- | ---------------- |
-| 0.1     | In Arbeit | 10.10.2017        | Autor       | Initiale Version |
+| Version | Status    | Bearbeitungsdatum | Autoren(en)                              | Vermerk          |
+| ------- | --------- | ----------------- | ---------------------------------------- | ---------------- |
+| 1.0     | In Arbeit | 29.10.2018        | Daniel, Danliel, Ricco, Leonard, Johannes| Erste Version    |
 
 # Inhaltsverzeichnis
 
