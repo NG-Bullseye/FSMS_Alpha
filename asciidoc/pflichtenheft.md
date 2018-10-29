@@ -60,63 +60,56 @@ Das Pflichtenheft sollte stehts zu vervollständigen,  konsequente und korrekt s
 # 2. Aufgabenstellung und Zielsetzung
 
 ### Möbelgeschäft
-
 Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihrer Firma mit einer neuen Kundensoftware(WEBSHOP) ausgestattet.
 
- Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten.
+Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten.
 
-Besonderes Augenmerk soll auf die Warenbestellung, -zwischenlagerung und -auslieferunggelegt gelegt werden.
+Besonderes Augenmerk soll auf die Warenbestellung, -zwischenlagerung und -auslieferung gelegt werden.
 
- Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor,für den er sich nicht anmelden brauch.
+Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden brauch.
  
- Möbelstücke sind in Kategorien unterteilt.
+Möbelstücke sind in Kategorien unterteilt.
  
- Die Möbel dort lassen sich nach Kategorisierung filtern und Möbel ausschließlich telefonisch bestellen kann.
+Die Möbel dort lassen sich nach Kategorisierungen filtern.
+
+Möbel lassen sich vom Kunden ausschließlich telefonisch bestellen kann.
  
- Der Mitarbeiter verwaltet den Warenkorb(WARENKORB). 
+Der Mitarbeiter verwaltet den Warenkorb(WARENKORB). 
  
- Der Mitarbeiter soll auch die Bestellübersicht(BESTELLÜBERSICHT) bearbeiten können.
+Der Mitarbeiter soll auch die Bestellübersicht(BESTELLÜBERSICHT) bearbeiten können, sowie auch Produkte ausgeblenden können.
  
- Einige Mitarbeiter sind Administratoren(ADMIN).
+Einige Mitarbeiter sind Administratoren(ADMIN).
  
- Ausschließlich die Administratoren verwalten die Mitarbeiter.
+Ausschließlich die Administratoren verwalten die Mitarbeiter.
 
- Die Lieferung erfolgt entweder in das Hauptlager oder direkt an den Kunden(KUNDE).
+Die Lieferung erfolgt entweder in das Hauptlager(LAGER) oder direkt an den Kunden(KUNDE).
 
- Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
+Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
 
- Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
+Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
 
- Wenn der Kunde unbedingt will, kann er die bereits gelieferte Ware in Teilen(TEILE) abholen, muss dann aber auch diese Teile sofort bezahlen.
-<Ein Grundsatz des Möbelhauses heißt Modularität.>
+Wenn der Kunde unbedingt will, kann er die bereits gelieferte Ware in Teilen(TEILE) abholen, muss dann aber auch diese Teile sofort bezahlen.
 
- Der Kunde kann sich die meisten Möbelstücke einzeln bestellen, jedoch auch vorgefertigte Sätze(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
+Bezahlung ist nur andeutungsweise zu implementieren. Es muss ausschließlich eine Auswahl der Zahlungsoptionen geben.
 
- Variabilität ist über die Farbe möglich.
+Der Kunde kann sich die meisten Möbelstücke einzeln bestellen, jedoch auch vorgefertigte Sätze(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
 
- Einige Möbelstücke können allerdings nur in Kombination mit anderen bestellt werden.
+Variabilität ist über die Farbe möglich.
 
- Ein Couchtisch besteht beispielsweise aus Gestell und Platte, wobei es von beiden Komponenten mehrere Ausführungen gibt.
+Einige Möbelstücke können allerdings nur in Kombination mit anderen bestellt werden.
+
+Ein Couchtisch besteht beispielsweise aus Gestell und Platte, wobei es von beiden Komponenten mehrere Ausführungen gibt.
 
 Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park(FUHRPARK).
 
- Alternativ können sich Kunden zum Abtransport der Ware diese LKW's mieten.
+Alternativ können sich Kunden zum Abtransport der Ware diese LKW's mieten.
 
- Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.
+Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.
 von der Firma genutzt werden.
 
- Mit Bestellung der Ware soll der Kunde die Möglichkeit haben, einen LKW für die Abholungzu mieten.
-
-Die Software soll auch die Ab- und Umbestellung der Ware berücksichtigen.
- <Je nach Bearbeitungsstand einer Lieferung errechnet sich eine Rücklieferungs- und Bearbeitungsgebühr.>
- <Die Stornierung einer LKW-Rückgabe bleibt solange kostenlos, wie der LKW zu der eigentlich vermieteten Zeit entweder von der Firma genutzt oder erneut vermietet werden kann.>
- <Andernfalls muss der Kunde eine Stornierungsgebühr von 20% bezahlen.>
-
-Das Angebotsspektrum von Möbel-Hier ergibt sich aus den Katalogen der angegliederten Großlieferanten, wobei auf Wunsch auch Produkte ausgeblendet werden können.
- <Die Preiskalkulation für die Waren findet gruppiert nach den Großlieferanten statt, so ergeben bspw. die Kundenpreise der Waren des Lieferanten Großmöbel 205% des Lieferpreises.>
+Die Software soll auch die Ab- und Umbestellung, nach bis zu 2 Tagen, der Ware berücksichtigen.
 
 Um die Attraktivität des Angebotes steigern zu können, möchte die Geschäftsführung von Möbel-Hier eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
- <Basierend auf diesen Analysen möchte Möbel-Hier Lieferanten aus dem Programm nehmen und neue einfügen können.>
 
 # 3. Produktnutzung
 
