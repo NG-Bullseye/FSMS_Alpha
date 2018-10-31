@@ -1,45 +1,39 @@
 # Beispiel Verlinkung
 
-![Verlinkung auf Tabelle](#artikel-bearbeiten)
+[Verlinkung auf Tabelle](#artikel-bearbeiten)
 
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
+
 Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
-Text
+
 Text
 
 #### Artikel bearbeiten
