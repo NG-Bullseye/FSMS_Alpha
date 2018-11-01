@@ -1826,6 +1826,14 @@ Beispiel: Was bedeutet "Kunde"? Ein Nutzer des Systems? Der Kunde des Projektes 
         <td><p>Webshop</p></td>
         <td><p>zentrale Klasse des Systems</p></td>
     </tr>
+    <tr class="odd">
+        <td><p>System</p></td>
+        <td><p>die hier entwickelte Software</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Warenkorb</p></td>
+        <td><p>ermöglicht Mitarbeiter die Erstellung einer Bestellung für einen Kunden</p></td>
+    </tr>
     </tbody>
 </table>
     
