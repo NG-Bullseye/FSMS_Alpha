@@ -1524,11 +1524,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td><p>…​</p></td>
+<td><p>A1​</p></td>
 </tr>
 <tr class="even">
 <td><p>Use Case</p></td>
-<td><p>…​</p></td>
+<td><p>U1​</p></td>
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
@@ -1561,11 +1561,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td><p>…​</p></td>
+<td><p>A2​</p></td>
 </tr>
 <tr class="even">
 <td><p>Use Case</p></td>
-<td><p>…​</p></td>
+<td><p>U17​</p></td>
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
@@ -1598,11 +1598,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td><p>…​</p></td>
+<td><p>A3​</p></td>
 </tr>
 <tr class="even">
 <td><p>Use Case</p></td>
-<td><p>…​</p></td>
+<td><p>U16​</p></td>
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
@@ -1635,11 +1635,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td><p>…​</p></td>
+<td><p>A4​</p></td>
 </tr>
 <tr class="even">
 <td><p>Use Case</p></td>
-<td><p>…​</p></td>
+<td><p>U16​</p></td>
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
@@ -1674,11 +1674,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td><p>…​</p></td>
+<td><p>A5​</p></td>
 </tr>
 <tr class="even">
 <td><p>Use Case</p></td>
-<td><p>…​</p></td>
+<td><p>U7​</p></td>
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
@@ -1705,11 +1705,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td><p>…​</p></td>
+<td><p>A6​</p></td>
 </tr>
 <tr class="even">
 <td><p>Use Case</p></td>
-<td><p>…​</p></td>
+<td><p>U11​</p></td>
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
@@ -1734,9 +1734,9 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 
 |                     |                                                                                                                           |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| ID                  | …​                                                                                                                        |
-| Use Case            | …​                                                                                                                        |
-| Voraussetzung       | registrierter Kunde will bestehende Bestellung stornieren die innerhalb eines Tages ankommen soll                         |
+| ID                  | A7​                                                                                                                        |
+| Use Case            | U7​                                                                                                                        |
+| Voraussetzung       | registrierter Kunde will bestehende Bestellung stornieren die bereits versendet ist                         |
 | Ereignis            | registrierter Kunde drückt "Bestellübersicht", dann die zu stornierende Bestellung und wählt "stornieren"                 |
 | Erwartetes Ereignis | \- es wird eine Fehlernachricht angezeigt die den Kunden unterrichtet das dies zu diesem Zeitpunkt nicht mehr möglich ist |
 
@@ -1748,11 +1748,11 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 <tbody>
 <tr class="odd">
 <td><p>ID</p></td>
-<td><p>…​</p></td>
+<td><p>A8​</p></td>
 </tr>
 <tr class="even">
 <td><p>Use Case</p></td>
-<td><p>…​</p></td>
+<td><p>U2​</p></td>
 </tr>
 <tr class="odd">
 <td><p>Voraussetzung</p></td>
