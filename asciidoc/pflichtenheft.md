@@ -1776,6 +1776,60 @@ Mithilfe von Akzeptanztests wird geprüft, ob die Software die funktionalen Erwa
 Sämtliche Begriffe, die innerhalb des Projektes verwendet werden und deren gemeinsames Verständnis aller beteiligten Stakeholder essentiell ist, sollten hier aufgeführt werden. Insbesondere Begriffe der zu implementierenden Domäne wurden bereits beschrieben, jedoch gibt es meist mehr Begriffe, die einer Beschreibung bedürfen.  
 Beispiel: Was bedeutet "Kunde"? Ein Nutzer des Systems? Der Kunde des Projektes (Auftraggeber)?
 
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+    <td><p>Begriff</p></td>
+    <td><p>Erklärung</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Teil</p></td>
+        <td><p>kleinste bestellbare Einheit</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Möbel</p></td>
+        <td><p>Set aus Teilen</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Administrator</p></td>
+        <td><p>Synonym für Boss</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Nutzer</p></td>
+        <td><p>jeder der die Website Nutzt</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Kunde</p></td>
+        <td><p>registrierter Nutzer der nicht in der Firma arbeitet</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Mitarbeiter</p></td>
+        <td><p>Angestellter der Firma</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Fuhrpark</p></td>
+        <td><p>Anzahl der verschiedenen LKWs</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Registrieren</p></td>
+        <td><p>einen neuen Account erstellen</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Login</p></td>
+        <td><p>Nutzer wird authentifiziert</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Webshop</p></td>
+        <td><p>zentrale Klasse des Systems</p></td>
+    </tr>
+    </tbody>
+</table>
+    
+
 # 13. Offene Punkte
 
 Offene Punkte werden entweder direkt in der Spezifikation notiert. Wenn das Pflichtenheft zum finalen Review vorgelegt wird, sollte es keine offenen Punkte mehr geben.
