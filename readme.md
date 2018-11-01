@@ -1,8 +1,10 @@
-# Kickstart
+# Readme
 
 ## Link zu den Folien
 
 ![Hier klicken](https://tu-dresden.de/ing/informatik/smt/st/studium/lehrveranstaltungen?subject=381&lang=de&leaf=2&head=13&embedding_id=47eddfa7c5a54ed5be49042aff35a31b)
+
+## Kickstart
 
 The kickstart module is a template project to bootstrap the Java project in the Software Engineering lab.
 The project is supposed to be copied into the group's repository to get it started easily.
