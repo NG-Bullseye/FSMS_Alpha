@@ -2,7 +2,7 @@
 
 ## Link zu den Folien
 
-![Hier klicken](https://tu-dresden.de/ing/informatik/smt/st/studium/lehrveranstaltungen?subject=381&lang=de&leaf=2&head=13&embedding_id=47eddfa7c5a54ed5be49042aff35a31b)
+[![Hier klicken]()](https://tu-dresden.de/ing/informatik/smt/st/studium/lehrveranstaltungen?subject=381&lang=de&leaf=2&head=13&embedding_id=47eddfa7c5a54ed5be49042aff35a31b)
 
 ## Kickstart
 
