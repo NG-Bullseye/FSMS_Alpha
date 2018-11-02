@@ -64,41 +64,35 @@ Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihre
 
 Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten.
 
-Besonderes Augenmerk soll auf die Warenbestellung, -zwischenlagerung und -auslieferung gelegt werden.
+Besonderes Augenmerk soll auf die Warenbestellung,  -auslieferung gelegt werden.
 
-Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden brauch.
+Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden muss.
  
-Möbelstücke sind in Kategorien unterteilt.
+Möbelstücke und Teile sind in Kategorien unterteilt.
  
-Die Möbel dort lassen sich nach Kategorisierungen filtern.
+Die Möbel dort lassen sich nach Kategorisierungen filtern und sortieren.
 
-Möbel lassen sich vom Kunden ausschließlich telefonisch bestellen kann.
+Möbel lassen sich vom Kunden ausschließlich telefonisch bestellen.
  
 Der Mitarbeiter verwaltet den Warenkorb(WARENKORB). 
  
-Der Mitarbeiter soll auch die Bestellübersicht(BESTELLÜBERSICHT) bearbeiten können, sowie auch Produkte ausgeblenden können.
+Der Mitarbeiter soll Produkte ausblenden können.
  
 Einige Mitarbeiter sind Administratoren(ADMIN).
  
 Ausschließlich die Administratoren verwalten die Mitarbeiter.
 
-Die Lieferung erfolgt entweder in das Hauptlager(LAGER) oder direkt an den Kunden(KUNDE).
+Die Lieferung erfolgt entweder in das Nebenlager(LAGER) oder direkt an den Kunden(KUNDE).
 
 Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
 
 Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
 
-Wenn der Kunde unbedingt will, kann er die bereits gelieferte Ware in Teilen(TEILE) abholen, muss dann aber auch diese Teile sofort bezahlen.
+Bezahlung ist nur andeutungsweise zu implementieren. Es muss nur eine Auswahl der Zahlungsoptionen geben.
 
-Bezahlung ist nur andeutungsweise zu implementieren. Es muss ausschließlich eine Auswahl der Zahlungsoptionen geben.
-
-Der Kunde kann sich die meisten Möbelstücke einzeln bestellen, jedoch auch vorgefertigte Sätze(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
+Der Kunde kann sich Teile(TEILE) einzeln bestellen, jedoch auch vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
 
 Variabilität ist über die Farbe möglich.
-
-Einige Möbelstücke können allerdings nur in Kombination mit anderen bestellt werden.
-
-Ein Couchtisch besteht beispielsweise aus Gestell und Platte, wobei es von beiden Komponenten mehrere Ausführungen gibt.
 
 Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park(FUHRPARK).
 
@@ -107,9 +101,9 @@ Alternativ können sich Kunden zum Abtransport der Ware diese LKW's mieten.
 Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.
 von der Firma genutzt werden.
 
-Die Software soll auch die Ab- und Umbestellung, nach bis zu 2 Tagen, der Ware berücksichtigen.
+Die Software soll Stornieren bis zu einen Tag vor Versand berücksichtigen.
 
-Um die Attraktivität des Angebotes steigern zu können, möchte die Geschäftsführung von Möbel-Hier eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
+Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
 
 # 3. Produktnutzung
 
