@@ -1384,7 +1384,7 @@ Der Admin kann hier alle Mitarbeiter einsehen. Durch einen Klick auf den Status 
 
 ## 9.1 Überblick: Dialoglandkarte
 
-Erstellen Sie ein Übersichtsdiagramm, das das Zusammenspiel Ihrer Masken zur Laufzeit darstellt. Also mit welchen Aktionen zwischen den Masken navigiert wird.
+![Dialoglandkarte](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/GUI/Dialoglandkarte.jpg)
 
 ## 9.2 Dialogbeschreibung
 
