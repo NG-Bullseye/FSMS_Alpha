@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kickstart.controller;
+package Webshop.Accountancy;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
+/*
+	Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung haben,
+ 	in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
+ */
 @Controller
-public class WelcomeController {
+public class AccountancyController {
 
 	@RequestMapping("/")
 	public String index() {
-		return "welcome";
+		return "accountancy";
 	}
 }
