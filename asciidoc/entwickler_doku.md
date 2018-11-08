@@ -32,9 +32,22 @@ Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZ
 - Qualitätsziele
 
 ## Randbedingungen
-- Hardware-Vorgaben
-- Software-Vorgaben
-- Vorgaben zum Betrieb des Software
+
+### Hardware-Vorgaben
+Belieber Computer mit folgenden Spezifikationen:
+- Pentium 4 oder neuer
+- 1024 MB Arbeitsspeicher oder mehr
+- min. 1GB freier Speicherplatz
+
+### Software-Vorgaben
+- Modernes Betriebssystem (Mac OS X 10.8.3+, Windows Vista SP2+, Ubuntu Linux 12.04+)
+- Java 8 JDK vorinstalliert
+- Maven 3.3 oder höher vorinstalliert
+- Folgende Frameworks kommen zum Einsatz: Spring, Spring-Boot, SalesPoint, Thymeleaf
+- Von Folgenden Webbrowser kann die Webseite richtig dargestellt werden:
+  - Firefox 52 (oder neuer)
+  - Chrome 49 (oder neuer)
+  - Internet Explorer 11
 
 ## Kontextabgrenzung
 - Externe Schnittstellen
