@@ -1,9 +1,8 @@
 # Entwicklerdokumentation
 
 ## Einführung und Ziele
-- Aufgabenstellung
 
-### Möbelgeschäft
+### Aufgabenstellung - Möbelgeschäft "Möbel-Hier"
 Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihrer Firma mit einer neuen Kundensoftware(WEBSHOP) ausgestattet.
 Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten.
 Besonderes Augenmerk soll auf die Warenbestellung,  -auslieferung gelegt werden.
