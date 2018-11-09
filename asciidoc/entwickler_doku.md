@@ -150,7 +150,9 @@ Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern.
 # Verwendete Muster
 
  Model View Controller(MVC) Pattern
+ 
  /////////////////////////zu erweitern/////////////////////
+ 
 # Persistenz
 
 # Benutzeroberfläche
