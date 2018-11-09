@@ -147,10 +147,10 @@ Spring Boot takes an opinionated view of building production ready applications.
 SalePoint ist ein auf Javabasis geschriebenes Applicationsframework um Verkaufs- oder auch Einkaufsstellen (PoS) zu realisieren, welche Spring und Springboot benutzt.
 Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern. 
 
-#Verwendete Muster
+# Verwendete Muster
 
  Model View Controller(MVC) Pattern
- 
+ /////////////////////////zu erweitern/////////////////////
 # Persistenz
 
 # Benutzeroberfläche
