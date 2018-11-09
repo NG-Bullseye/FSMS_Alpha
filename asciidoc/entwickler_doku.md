@@ -2,6 +2,9 @@
 
 ## Einführung und Ziele
 
+Die Entwiklerdokumentation ist an das Entwicklungsteam gerichtet und sorgt für einen schnellen Überblick über Kontepte die 
+wärend der Entwicklung entstanden sind.
+
 ### Aufgabenstellung - Möbelgeschäft "Möbel-Hier"
 Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihrer Firma mit einer neuen Kundensoftware(WEBSHOP) ausgestattet.
 Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten.
@@ -128,9 +131,28 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 - Package-Diagramme
 
 ## Entwurfsentscheidungen
-- Architektur
-- Verwendete Muster
-- Persistenz
-- Benutzeroberfläche
+# Architektur
+
+Bei dem Projekt handelt es sich um ein Java Objekt orientiertes Design, zur modlularen und polymorph-erweiterbaren Architektur.
+ 
+Das Springframework bietet umfangreiche Programmiermöglichkeiten. Dessweiteren stellt es ein konfigurierbares Model(glossar) für Java basierende Firmensoftware, auf einer art "deployment platform"(glossar), zur Verfügung.
+ 
+Eine Schlüsseleigenschaft von Spring ist die Unterstürzung der Grundstruktur auf Implementationslevel. 
+Spring legt Wert auf schnelle produktion von Firmensoftware ohne, dass sich Entwicklerteams um unnötige Deployment-Umgebungen sorgen müssen.
+
+Spring Boot ist konziepiert worden um einen schnellen Einstieg zu ermöglichen, mit minnimalem Konfigurationsaufwand der Springsoftware.
+
+Spring Boot takes an opinionated view of building production ready applications.
+ 
+SalePoint ist ein auf Javabasis geschriebenes Applicationsframework um Verkaufs- oder auch Einkaufsstellen (PoS) zu realisieren, welche Spring und Springboot benutzt.
+Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern. 
+
+#Verwendete Muster
+
+ Model View Controller(MVC) Pattern
+ 
+# Persistenz
+
+# Benutzeroberfläche
 
 ## Glossar
