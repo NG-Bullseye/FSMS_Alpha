@@ -27,8 +27,78 @@ von der Firma genutzt werden.
 Die Software soll Stornieren bis zu einen Tag vor Versand berücksichtigen.
 Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
 
+<table>
 
-- Qualitätsziele
+<tbody><tr>
+<th> Qualitätsziel </th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+<tr>
+<td><b>Erweiterbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td><b>Wartbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td><b>Benutzbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+</tr>
+<tr>
+<td><b>Zuverlässigkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+<td></td>
+</tr>
+<tr>
+<td><b>Sicherheit</b></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><b>Organisierbarkeit</b></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X</td>
+</tr>
+<tr>
+<td><b>Leistungsfähigkeit</b></td>
+<td></td>
+<td>X</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody></table>
+
+(Bewertung von 1( nicht wichtig) bis 5 (sehr wichtig))
+
+zur Organisierbarkeit: dieser Punkt beschreibt die Eignung der Software die Elemente im Onlineshop und allgemein im Möbelhaus zu verwalten
 
 ## Randbedingungen
 
