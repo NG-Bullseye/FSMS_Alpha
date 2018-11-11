@@ -128,11 +128,13 @@ Belieber Computer mit folgenden Spezifikationen:
 Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, die jeder, der mit der Architektur zu tun hat, verstanden haben sollte.
 
 ## Bausteinsicht
-- Package-Diagramme
+![Paketdiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Paket-Diagramm.jpg)
 
 ## Entwurfsentscheidungen
 
 ## Architektur
+
+![Entwurfsklassendiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Entwurfsklassendiagramm.jpg)
 
 Bei dem Projekt handelt es sich um ein Java Objekt orientiertes Design, zur modularen und polymorph-erweiterbaren Architektur.
  
