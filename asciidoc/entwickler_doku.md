@@ -198,5 +198,17 @@ Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern.
         <td><p>Fuhrpark</p></td>
         <td><p>Anzahl der verschiedenen LKWs</p></td>
     </tr>
+      <tr class="even">
+        <td><p>Webbrowser</p></td>
+        <td><p>spezielle Computerprogramme zur Darstellung von Webseiten im World Wide Web oder allgemein von Dokumenten und Daten.</p></td>
+     </tr>
+        <tr class="odd">
+        <td><p>Pentium 4</p></td>
+        <td><p>Mikroprozessor der Firma Intel</p></td>
+    </tr>
+        <tr class="even">
+        <td><p>Konfiguration</p></td>
+        <td><p>eine bestimmte Anpassung von Programmen und/oder Hardwarebestandteilen eines Computers an das vorhandene System, sowie das System selbst in seiner Zusammenstellung</p></td>
+    </tr>
     </tbody>
 </table>
