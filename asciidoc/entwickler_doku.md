@@ -210,5 +210,9 @@ Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern.
         <td><p>Konfiguration</p></td>
         <td><p>eine bestimmte Anpassung von Programmen und/oder Hardwarebestandteilen eines Computers an das vorhandene System, sowie das System selbst in seiner Zusammenstellung</p></td>
     </tr>
+      <tr class="odd">
+        <td><p>Framework</p></td>
+        <td><p>Programmiergerüst in der Softwaretechnik</p></td>
+    </tr>
     </tbody>
 </table>
