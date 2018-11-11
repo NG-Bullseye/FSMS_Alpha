@@ -151,10 +151,22 @@ SalesPoint ist ein auf Javabasis geschriebenes Applicationsframework um Verkaufs
 Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern. 
 
 ## Verwendete Muster
+Entwurfsmuster
 
- Model View Controller(MVC) Pattern
- 
- /////////////////////////zu erweitern/////////////////////
+Model-View-Controller(MVC)
+
+Wir verwenden, dass MVC-Muster mit einer Umsetzung durch Spring und Thymeleaf. 
+Im Model sind die Daten der Objekte angeordnet nach unserem Analysemodell. Ebenso wird dort ein Teil der Geschäftslogik, das heißt die Veränderung der Daten, ausgeführt.
+Im View werden mittels Thymeleaftemplates diese Daten des Modells angezeigt. Ebenso werden darüber die Eingaben der Benutzer realisiert. Dabei bleibt der View aber vom Modell unabhängig.
+Model und View werden dann über die Controller miteinander verbunden. Dieser gibt die Daten des Models zur Anzeige an den View weiter und verarbeitet die Eingaben im View. Dazu gehört auch die Überprüfung der Eingabedaten auf Korrektheit.
+
+Composite
+
+Mithilfe des Composite-Musters stellen wir die Artikel in unserem System da. Es gibt Möbel und Teile als bestellbare Artikel. Dabei sind Teile die kleinstmöglichen Einheiten, welche als Blätter des Baumes dienen. Möbel setzen sich aus anderen Möbel und Teilen zusammen und bilden dadurch eine Baumstruktur. 
+Dies erlaubt zum einen eine einfache Bearbeitung, da neue Bestandteile einfach in dem Baum eingefügt bzw. alte Bestandteile entfern werden können. Ebenso wird über die Baumstruktur das Gewicht und der Preis bestimmt, da sich dieser aus den Preisen/Gewichten der Einzelteilen  ergibt. Außerdem ermöglicht uns dies auch zu jedem Möbelstück die Einzelteile anzubieten(wie in den Anforderungen gefordert), da sowohl Möbel als auch Teile Artikel sind, die bestellt werden können.
+
+
+
  
 ## Persistenz
 
