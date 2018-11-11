@@ -155,6 +155,8 @@ Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern.
  
 # Persistenz
 
+Die Speicherung der Daten erfolgt mittels der Java Persistence API und werden als H2 Datenbank abgelegt.
+
 # Benutzeroberfläche
 
 ## Glossar
