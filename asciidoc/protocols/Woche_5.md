@@ -24,3 +24,7 @@ Gruppe 34, Schriftführer: Daniel Körsten
 
 - Klassendiagramm grob erstellen
 - Package Diagramm grob erstellen
+
+## Gruppentreffen vom 09.11.2018
+
+- Erstellung des Klassendiagrammes
