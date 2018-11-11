@@ -133,18 +133,18 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 ## Entwurfsentscheidungen
 # Architektur
 
-Bei dem Projekt handelt es sich um ein Java Objekt orientiertes Design, zur modlularen und polymorph-erweiterbaren Architektur.
+Bei dem Projekt handelt es sich um ein Java Objekt orientiertes Design, zur modularen und polymorph-erweiterbaren Architektur.
  
 Das Springframework bietet umfangreiche Programmiermöglichkeiten. Dessweiteren stellt es ein konfigurierbares Model(glossar) für Java basierende Firmensoftware, auf einer art "deployment platform"(glossar), zur Verfügung.
  
 Eine Schlüsseleigenschaft von Spring ist die Unterstürzung der Grundstruktur auf Implementationslevel. 
-Spring legt Wert auf schnelle produktion von Firmensoftware ohne, dass sich Entwicklerteams um unnötige Deployment-Umgebungen sorgen müssen.
+Spring legt Wert auf schnelle Produktion von Firmensoftware ohne, dass sich Entwicklerteams um unnötige Deployment-Umgebungen sorgen müssen.
 
 Spring Boot ist konziepiert worden um einen schnellen Einstieg zu ermöglichen, mit minnimalem Konfigurationsaufwand der Springsoftware.
 
 Spring Boot takes an opinionated view of building production ready applications.
  
-SalePoint ist ein auf Javabasis geschriebenes Applicationsframework um Verkaufs- oder auch Einkaufsstellen (PoS) zu realisieren, welche Spring und Springboot benutzt.
+SalesPoint ist ein auf Javabasis geschriebenes Applicationsframework um Verkaufs- oder auch Einkaufsstellen (PoS) zu realisieren, welche Spring und Springboot benutzt.
 Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern. 
 
 # Verwendete Muster
@@ -158,3 +158,45 @@ Es macht dem Nutzer möglich hochentwickelte Web Applicationen zu implementiern.
 # Benutzeroberfläche
 
 ## Glossar
+
+
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+    <td><p>Begriff</p></td>
+    <td><p>Erklärung</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Teil</p></td>
+        <td><p>kleinste bestellbare Einheit</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Möbel</p></td>
+        <td><p>Set aus Teilen</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Administrator</p></td>
+        <td><p>Synonym für Boss</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Nutzer</p></td>
+        <td><p>jeder der die Website Nutzt</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Kunde</p></td>
+        <td><p>registrierter Nutzer der nicht in der Firma arbeitet</p></td>
+    </tr>
+    <tr class="even">
+        <td><p>Mitarbeiter</p></td>
+        <td><p>Angestellter der Firma</p></td>
+    </tr>
+    <tr class="odd">
+        <td><p>Fuhrpark</p></td>
+        <td><p>Anzahl der verschiedenen LKWs</p></td>
+    </tr>
+    </tbody>
+</table>
