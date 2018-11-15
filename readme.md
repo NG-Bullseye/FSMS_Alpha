@@ -11,6 +11,7 @@
 ## Git Workflow nach Treffen vom 14.11.2018
 
 - sämtliche Dokumentation auf den master pushen
+- **Immer einen Pull ausführen, bevor man pusht!**
 - Für die Programmierung gilt folgendes:
   - für jedes Features eine neue Branch mit einem treffenden Namen erstellen. **Als Grundlage dafür den beta Branch nutzen!**
   - jeder kann beliebig viele parallele Feature Branches erstellen
