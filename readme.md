@@ -1,23 +1,28 @@
-# Readme
+# Möbel-Hier
 
-## Link zu den Folien
+## Hilfreiche Links
 
-[![Hier klicken]()](https://tu-dresden.de/ing/informatik/smt/st/studium/lehrveranstaltungen?subject=381&lang=de&leaf=2&head=13&embedding_id=47eddfa7c5a54ed5be49042aff35a31b)
+[![Folien zum Projekt]()](https://tu-dresden.de/ing/informatik/smt/st/studium/lehrveranstaltungen?subject=381&lang=de&leaf=2&head=13&embedding_id=47eddfa7c5a54ed5be49042aff35a31b)
 
-## Kickstart
+[Pflichtenheft](../master/asciidoc/pflichtenheft.md)
 
-The Webshop module is a template project to bootstrap the Java project in the Software Engineering lab.
-The project is supposed to be copied into the group's repository to get it started easily.
-It contains the following features:
+[Entwicklerdokumentation](../master/asciidoc/entwickler_doku.md)
 
-- a skeleton Java 8 web application based on Spring Boot and Salespoint framework (see `src/main/java`)
-- a placeholder Asciidoc file in `src/main/asciidoc` for documentation
+## Git Workflow nach Treffen vom 14.1.2018
 
-## How to run the application?
+- sämtliche Dokumentation auf den master pushen
+- Für die Programmierung gilt folgendes:
+  - für jedes Features eine neue Branch mit einem treffenden Namen erstellen. **Als Grundlage dafür den beta Branch nutzen!**
+  - jeder kann beliebig viele parallele Feature Branches erstellen
+  - Wenn in dem Feature keine groben Fehler mehr existieren und man meint, es sei fertig: auf den beta Branch pushen
+  - Jetzt testen, ob der beta Branch ausführbar ist. Wenn nicht prüfen, ob es am eigenen Feature liegt.
+  - **Bugfixing kann auf dem beta Branch passieren.**
+- Regelmäßig (meist vor den Meilensteinen) wird der beta in den master Branch gemergt. Hier können wir über *CI* sehen, ob alles passt. Wenn nötig hier noch bugfixing betreiben.
+- **Niemals ohne Abprache den beta auf den master mergen!**
+  
 
-- In the IDE: find `Application.java`, richt-click project, select "Run As > Java Application"
-- From the command line: run `mvn spring-boot:run`
-
-## How to package the application?
-
-- Run `mvn clean package`. The packaged application (a JAR in `target/`) can be run with `java -jar $jarName`.
+## Projekt starten (manuell)
+``` bash
+mvn clean package
+mvn spring-boot:run
+```
