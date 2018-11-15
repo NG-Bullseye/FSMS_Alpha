@@ -44,9 +44,7 @@ Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park(FUHRPARK).
 
 Alternativ können sich Kunden zum Abtransport der Ware diese LKW's mieten.
 
-Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.
-
-von der Firma genutzt werden.
+Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.von der Firma genutzt werden.
 
 Die Software soll Stornieren bis zu einen Tag vor Versand berücksichtigen.
 
