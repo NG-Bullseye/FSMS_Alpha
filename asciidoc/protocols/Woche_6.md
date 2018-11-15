@@ -38,3 +38,9 @@
 - Entwursentscheidungen in ENtwicklerdoku noch schreiben
 - verfeinerte Akzptanztestfälle fehlen noch
 - alle Testfälle in ein Doc
+
+## Gruppentreffen vom 14.11.2018
+
+- Besprechung des Git Workflows
+- klären von Fragen rund um Git
+- Besprechung zukünftige Weiterentwicklung des Projekts
