@@ -8,7 +8,7 @@
 
 [Entwicklerdokumentation](../master/asciidoc/entwickler_doku.md)
 
-## Git Workflow nach Treffen vom 14.1.2018
+## Git Workflow nach Treffen vom 14.11.2018
 
 - sämtliche Dokumentation auf den master pushen
 - Für die Programmierung gilt folgendes:
