@@ -1,0 +1,60 @@
+body {
+  font-family: sans-serif;
+  background-color: #F9F9F9;
+}
+
+/*divs*/
+
+#navmenu {
+  /*Das ist für die Navbar*/
+}
+
+#title {
+  /*Title*/
+  text-align:center;
+  margin: 5em 0em 4em 0em;
+}
+
+#registration {
+  text-align:center;
+}
+
+#buttonspace {
+	margin: 2em 0em 0em 0em;
+}
+
+#textnhead {
+	padding: 1em 1em 1em 1em;
+}
+
+#leftspace {
+	padding: 0em 1em 1em 1em;
+}
+
+
+/*fonts*/
+
+t1 {
+  font-family: sans-serif;
+  font-size: 2.5em;
+  color: #494949;
+}
+
+t2 {
+  font-family: sans-serif;
+  font-size: 1.5em;
+  color: #494949;
+}
+
+t3 {
+  font-family: sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  color: #494949;
+}
+
+tnorm {
+  font-family: sans-serif;
+  font-size: 1em;
+  color: #494949;
+}
