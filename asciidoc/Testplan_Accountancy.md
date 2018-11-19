@@ -1,9 +1,7 @@
 
 # Testplan Accountancy
 
-## Registrierung
-
-### Monats Betrag
+## Monats Betrag
 
 | Wert                 | Erwartetes Ergebnis |
 |:----------------------|:----------:|
@@ -13,7 +11,7 @@
 |  |          |
 |     |    |
 
-### Summe
+## Summe
 
 | Wert                            | Erwartetes Ergebnis |
 |:---------------------------------|:---------------------:|
@@ -24,7 +22,7 @@
 |                     |               |
 |    |               |
 
-### Display
+## Display
 
 | Wert                     | Erwartetes Ergebnis |
 |:--------------------------|:---------------------:|
