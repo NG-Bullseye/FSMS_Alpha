@@ -241,6 +241,8 @@ Jede testbezogene Aufgabe muss einem Ansprechpartner zugeordnet werden.
 <td>bereits bestehende Kategorie </td>
 <td>Fehler</td>
 </tr>
+  
+</table>
 
 ## Registrierung
 
