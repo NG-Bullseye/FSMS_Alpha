@@ -16,6 +16,7 @@
 package kickstart.catalog;
 
 import kickstart.articles.Article;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -112,22 +113,20 @@ public class CatalogController {
 
 		return "catalog";
 	}
-	@GetMapping("/artikel/{article}")
-	public String detail(@PathVariable Article article, Model model){
+	@GetMapping("/artikel/{identifier}")
+	public String detail(@PathVariable ProductIdentifier identifier, Model model){
 
-		model.addAttribute("article", article);
-
+		model.addAttribute("article", manager.getArticle(identifier));
+		System.out.println(manager.getArticle(identifier).getDescription());
 
 		return "article";
 	}
-	@GetMapping("/artikel/{article}/edit")
-	public String detailEdit(@RequestParam Article article, Model model){
+	@GetMapping("edit/{identifier}")
+	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
 
-		model.addAttribute("article", article);
+		model.addAttribute("article", manager.getArticle(identifier));
 
-
-
-		return "article";
+		return "edit";
 	}
 
 }

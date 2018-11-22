@@ -4,11 +4,13 @@ import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Component;
 
 import javax.money.MonetaryAmount;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -89,5 +91,9 @@ public class CatalogManager {
 				resultingCatalog.add(article);
 		});
 		return resultingCatalog;
+	}
+	public Article getArticle(ProductIdentifier id){
+		Optional<Article> returning = catalog.findById(id);
+		return returning.get();
 	}
 }

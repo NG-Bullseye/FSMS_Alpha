@@ -1,28 +1,22 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:include="header :: head" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
-    <title th:text="${article.name}">Startseite</title>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
+
+<head th:include="header :: head">
+    <title id="pageTitle">Startseite</title>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.css'>
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
 <div class="ui container">
 
-
-    <div sec:authorize="!hasAnyRole('ADMIN','CUSTOMER','EMPLOYEE')">
-        <button class="ui button" th:href="${article/{id}/edit(id=${disc.id)})">Artikel bearbeiten</button>
-    </div>
-
-
-    <div class="ui items">
-        <div class="item">
-            <div class="content">
-                <a class="header" th:text="${article.name}">Last Action Hero</a>
-                <div class="meta">
-                    <span th:text="${article.categories}">Action</span>
-                    <span th:text="${{article.price}}">9.99 €</span>
-                </div>
-            </div>
-        </div>
+    <p th:text="${article.name}">Name</p>
+    <p th:text="${article.description}">Beschreibung</p>
+    <p th:text="${article.price}">Preis</p>
+    <p th:text="${article.getId()}">ID</p>
+    <div class="ui button">
+        <a class="item" th:href="@{http://localhost:8080/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
+        </a>
     </div>
 </div>
 
