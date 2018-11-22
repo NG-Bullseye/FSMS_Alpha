@@ -5,72 +5,36 @@
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <!-- Brand -->
-    <a class="navbar-brand" href="#">Möbel-Hier</a>
+<div class="ui sidebar inverted vertical menu">
+    <a class="item">
 
-    <!-- Links -->
-    <ul class="navbar-nav">
-
-        <!-- Dropdown -->
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="categorydrop" data-toggle="dropdown">
-                Kategorien
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{http://localhost:8080/catalog}" th:text="${'alle Artikel'}">Link 1</a>
-                <a class="dropdown-item" th:href="@{http://localhost:8080/table/everything}" th:text="${'Tische'}">Link 1</a>
-                <a class="dropdown-item" th:href="@{http://localhost:8080/chair/everything}" th:text="${'Stühle'}">Link 2</a>
-                <a class="dropdown-item" th:href="@{http://localhost:8080/cupboard/everything}" th:text="${'Regale'}">Link 3</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="filterdrop" data-toggle="dropdown">
-                Filter
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{'http://localhost:8080/' + ${urlAll}}" th:text="${'Alles'}">Link 1</a>
-                <a class="dropdown-item" th:href="@{'http://localhost:8080/' + ${urlPart}}" th:text="${'Möbelteile'}">Link 2</a>
-                <a class="dropdown-item" th:href="@{'http://localhost:8080/' + ${urlComposite}}" th:text="${'Möbel'}">Link 3</a>
-            </div>
-            </div>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="colordrop" data-toggle="dropdown">
-                Farbe
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{http://localhost:8080/show/black/everything}">schwarz</a>
-                <a class="dropdown-item" th:href="@{http://localhost:8080/show/white/everything}">weiß</a>
-                <a class="dropdown-item" th:href="@{http://localhost:8080/show/red/everything}" >rot</a>
-            </div>
-        </li>
-
-    </ul>
-</nav>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col"></div>
-        <div class="col">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Artikelname</th>
-                        <th>Beschreibung</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="article : ${catalog}">
-                        <td th:text="${article.name}">1</td>
-                        <td th:text="${article.description}"> 2</td>
-                    </tr>
-                    </tbody>
-
-                </table>
-            </div>
+        1
+    </a>
+    <a class="item">
+        2
+    </a>
+    <a class="item">
+        3
+    </a>
+</div>
+<div class="pusher">
+    <!-- Site content !-->
+</div>
+<div class="ui link cards" th:remove="all-but-first">
+    <div class="ui card" th:each="article : ${catalog}">
+        <div class="content">
+            <a class="header" th:href="@{/disc/{id}(id=${disc.id})}" th:text="${disc.name}">Last Action Hero</a>
         </div>
-        <div class="col"></div>
+        <div class="image">
+            <a th:href="@{/disc/{id}(id=${disc.id})}">
+                <img class="thumbnail" th:src="@{/resources/img/cover/{image}.jpg(image=${disc.image})}"
+                     src="../static/resources/img/cover/lac.jpg"/>
+            </a>
+        </div>
+        <div class="content">
+            <div class="description" th:text="${{disc.price}}">9.99 €</div>
+        </div>
+        <div class="extra content" th:text="${disc.genre}"> Action</div>
     </div>
 </div>
 </body>

@@ -1,9 +1,14 @@
-package kickstart.catalog.;
+package kickstart.catalog;
 
 import kickstart.articles.Article;
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
+import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Component;
 
+import javax.money.MonetaryAmount;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 
@@ -16,6 +21,10 @@ public class CatalogManager {
 	}
 
 	public Iterable<Article> getWholeCatalog() {
+
+		Part tisch = new Part("Tischbein","ein Tischbein",10,"schwarz");
+		System.out.println(tisch.getPrice());
+		catalog.save(tisch);
 
 		return catalog.findAll();
 
@@ -48,9 +57,14 @@ public class CatalogManager {
 		Iterable<Article> categoryIterable = catalog.findAll();
 		HashSet<Article> categoryCatalog = new HashSet<>();
 		categoryIterable.forEach(article -> {
-			Set<String> categories = article.getCategory();
-			if(categories.contains(category)){
-			categoryCatalog.add(article); }
+			Iterable<String> categories = article.getCategories();
+			HashSet<String> iterationSet = new HashSet<>();
+			categories.forEach(articleCategory ->{
+				iterationSet.add(articleCategory);
+			});
+			if (iterationSet.contains(category)){
+				categoryCatalog.add(article);
+			}
 		});
 		return categoryCatalog;
 	}
@@ -59,7 +73,7 @@ public class CatalogManager {
 		HashSet<Article> resultingCatalog = new HashSet<>();
 		Iterable<Article> filterIteration = catalog.findByType(type);
 		filterIteration.forEach(article -> {
-			if(article.getProductColor().equals(color))
+			if(article.getColour().contains(color))
 				resultingCatalog.add(article);}
 		);
 
@@ -71,7 +85,7 @@ public class CatalogManager {
 		HashSet<Article> resultingCatalog = new HashSet<>();
 
 		catalogIteration.forEach(article -> {
-			if(article.getProductColor().equals(color))
+			if(article.getColour().contains(color))
 				resultingCatalog.add(article);
 		});
 		return resultingCatalog;

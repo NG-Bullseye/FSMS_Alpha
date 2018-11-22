@@ -1,0 +1,30 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:include="header :: head" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+    <title th:text="${article.name}">Startseite</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+<div class="ui container">
+
+
+    <div sec:authorize="!hasAnyRole('ADMIN','CUSTOMER','EMPLOYEE')">
+        <button class="ui button" th:href="${article/{id}/edit(id=${disc.id)})">Artikel bearbeiten</button>
+    </div>
+
+
+    <div class="ui items">
+        <div class="item">
+            <div class="content">
+                <a class="header" th:text="${article.name}">Last Action Hero</a>
+                <div class="meta">
+                    <span th:text="${article.categories}">Action</span>
+                    <span th:text="${{article.price}}">9.99 €</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

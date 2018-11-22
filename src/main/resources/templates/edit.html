@@ -1,0 +1,44 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:include="header :: head" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+    <title th:text="${article.name}">Startseite</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+<div class="ui container">
+
+
+    <div>
+        <button class="ui button" th:href="${article/{id}/edit(id=${disc.id})">Artikel bearbeiten</button>
+    </div>
+
+
+    <div class="ui items">
+        <div class="item">
+            <div class="content">
+                <a class="header" th:text="${disc.name}">Last Action Hero</a>
+                <div class="meta">
+                    <span th:text="${disc.genre}">Action</span>
+                    <span th:text="${{disc.price}}">9.99 €</span>
+                </div>
+                <div class="description">
+                    <p>Vorrat:</p>
+                    <p th:text="${quantity}">10</p><br/>
+                    <form class="ui form" method="post" th:action="@{/cart}" th:if="${orderable}">
+                        <input type="hidden" name="pid" value="0" th:value="${disc.id}"/>
+                        <div class="field">
+                            <label for="number">Anzahl</label>
+                            <input id="number" type="number" name="number" min="1" max="5" step="1" value="1"/><br/>
+                        </div>
+                        <button type="submit" class="ui labeled icon button">
+                            <i class="add to cart icon"></i><span th:text="#{detail.addToBasket}"> Hinzufügen</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

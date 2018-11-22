@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kickstart.catalog.;
+package kickstart.catalog;
 
 import kickstart.articles.Article;
 import org.springframework.stereotype.Controller;
@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CatalogController {
@@ -31,13 +32,11 @@ public class CatalogController {
 	this.manager = manager;
 	}
 
-	@RequestMapping("/")
-	public String index() {
-		return "redirect:catalog";
-	}
 
 	@RequestMapping("/catalog")
 	String catalog(Model model){
+
+
 		model.addAttribute("catalog", manager.getWholeCatalog());
 
 		model.addAttribute("urlAll","catalog");
@@ -112,6 +111,23 @@ public class CatalogController {
 		model.addAttribute("urlComposite",compositeURL);
 
 		return "catalog";
+	}
+	@GetMapping("/artikel/{article}")
+	public String detail(@PathVariable Article article, Model model){
+
+		model.addAttribute("article", article);
+
+
+		return "article";
+	}
+	@GetMapping("/artikel/{article}/edit")
+	public String detailEdit(@RequestParam Article article, Model model){
+
+		model.addAttribute("article", article);
+
+
+
+		return "article";
 	}
 
 }
