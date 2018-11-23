@@ -1,9 +1,6 @@
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import kickstart.articles.Composite;
-import kickstart.articles.Form;
-import kickstart.articles.Part;
+import kickstart.articles.*;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Component;
@@ -101,5 +98,39 @@ public class CatalogManager {
 		afterEdit.setPrice(Money.of(article.getPrice(),"EUR"));
 		catalog.deleteById(identifier);
 		catalog.save(afterEdit);
+	}
+	public Iterable<Article> filteredCatalog(Filterform filterform) {
+
+	HashSet<Article> categories = new HashSet<>();
+	if (filterform.getCategory().equals("all")) {
+			Iterable<Article> rightCategories = catalog.findAll();
+			rightCategories.forEach(article -> categories.add(article));
+			} else {
+				if (filterform.getCategory().equals("part")) {
+					Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.PART);
+					rightCategories.forEach(article -> categories.add(article));
+				} else {
+					Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.COMPOSITE);
+					rightCategories.forEach(article -> categories.add(article));
+				}
+			}
+	HashSet<Article> rightColours = new HashSet<>();
+	for (Article article: categories) {
+			for (String colour : filterform.getSelectedColours()) {
+				if(article.getColour().contains(colour)){
+					rightColours.add(article);
+				}
+		}
+	}
+	HashSet<Article> rightPrice = new HashSet<>();
+		for (Article article: rightColours) {
+			if(article.getPrice().isLessThan(Money.of(filterform.getMinPrice(),"EUR"))){
+				rightPrice.remove(article);
+			}
+			if(article.getPrice().isGreaterThan(Money.of(filterform.getMaxPrice(),"EUR"))){
+				rightPrice.remove(article);
+			}
+		}
+	return rightPrice;
 	}
 }

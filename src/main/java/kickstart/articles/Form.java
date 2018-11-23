@@ -1,7 +1,5 @@
 package kickstart.articles;
 
-
-
 public class Form {
 	private String name;
 	private String description;

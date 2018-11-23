@@ -5,31 +5,63 @@
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
+<form method="post" th:action="@{/catalog}" th:object="${filterform}">
 <div class="ui attached stackable menu">
+
     <div class="ui container">
-        <a class="item">
-            Home
-        </a>
-        <a class="item">
-            Browse
-        </a>
+        <div class="ui simple dropdown item">
+            Kategorien
+            <div class="menu">
+            <a class="item">
+                <input type="checkbox" th:field="*{category}" value="all">
+                <label>Alle Artikel</label>
+            </a>
+            <a class="item">
+                <input type="checkbox" th:field="*{category}" value="part">
+                <label>Möbelteile</label>
+            </a>
+            <a class="item">
+                <input type="checkbox" th:field="*{category}" value="composite">
+                <label>Möbel</label>
+            </a>
+            </div>
+        </div>
         <a class="item">
              Messages
         </a>
-        <div class="ui simple dropdown item">
-            Farbe
-            <i class="dropdown icon"></i>
-            <div class="menu">
-                <a class="item"><i class="edit icon"></i> Edit Profile</a>
-                <a class="item"><i class="globe icon"></i> Choose Language</a>
-                <a class="item"><i class="settings icon"></i> Account Settings</a>
+            <div class="ui simple dropdown item">
+                Farbe
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <ul>
+                        <a th:each="colour: ${colours}">
+                            <a class="item"> <input type="checkbox"
+                                   th:field="*{selectedColours}"
+                                   th:value="${colour}" />
+                            <label
+                                    th:text="${colour}"></label>
+                            </a>
+                        </a>
+                    </ul>
+                </div>
             </div>
+        <div class="ui simple dropdown item">
+                Preis
+                <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item">
+                        <input type="number" th:field="*{minPrice}" value="Mindestpreis">
+                        <input type="number" th:field="*{maxPrice}" value="Maximalpreis">
+                        </a>
+                    </div>
         </div>
-        <div class="right item">
-            <div class="ui input"><input type="text" placeholder="Search..."></div>
-        </div>
+        <a class="item">
+            <input type="submit" value="Filtern">
+        </a>
     </div>
+
 </div>
+</form>
 <div class="ui segment pushable">
 <div class="pusher">
     <div class="ui link cards" th:remove="all-but-first">
@@ -39,6 +71,7 @@
             </div>
             <div class="content">
                 <div class="description" th:text="${{article.price}}">9.99 €</div>
+                <div class="description" th:text="${article.colour}">schwarz</div>
             </div>
         </div>
     </div>

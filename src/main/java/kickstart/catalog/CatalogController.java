@@ -16,12 +16,15 @@
 package kickstart.catalog;
 
 import kickstart.articles.Article;
+import kickstart.articles.Filterform;
 import kickstart.articles.Form;
 import kickstart.articles.Part;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @Controller
 public class CatalogController {
@@ -32,6 +35,12 @@ public class CatalogController {
 	this.manager = manager;
 	}
 
+	@ModelAttribute("colours")
+	public String[] colours() {
+		return new String[] {
+				"schwarz","blau","weiß","rot"
+		};
+	}
 
 	@RequestMapping("/catalog")
 	String catalog(Model model){
@@ -42,7 +51,13 @@ public class CatalogController {
 		model.addAttribute("urlAll","catalog");
 		model.addAttribute("urlPart","part");
 		model.addAttribute("urlComposite","composite");
+		model.addAttribute("filterform", new Filterform());
 
+		return "catalog";
+	}
+	@PostMapping("/catalog")
+	String catalogFiltered (@ModelAttribute("filterform") Filterform filterform, Model model){
+		model.addAttribute("catalog", manager.filteredCatalog(filterform));
 		return "catalog";
 	}
 	@RequestMapping("/part")
@@ -111,6 +126,10 @@ public class CatalogController {
 		model.addAttribute("urlComposite",compositeURL);
 
 		return "catalog";
+	}
+	@GetMapping("katalog/filtered")
+	public String filtered(){
+		return "katalog/filtered";
 	}
 	@GetMapping("artikel/{identifier}")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model){
