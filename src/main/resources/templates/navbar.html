@@ -1,6 +1,6 @@
 <nav id="navmenu" th:fragment="navbar">
 	<div class="ui secondary  menu">
-	  <a class="active item" th:text="Startseite">
+	  <a class="item" th:text="Startseite">
 		Startseite
 	  </a>
 	  <a class="item" th:text="Katalog">
@@ -9,6 +9,10 @@
 	  <a class="item" href="customeraccount.html" th:href="@{/customeraccount}"
 		sec:authorize="hasRole('ROLE_CUSTOMER')"
 		th:text="Kundenkonto">Kundenkonto
+	  </a>
+	  <a class="item" href="customermanagement.html" th:href="@{/customermanagement}"
+		sec:authorize="hasRole('ROLE_EMPLOYEE')"
+		th:text="Kundenübersicht">Kundenübersicht
 	  </a>
 	  <div class="right menu">
 		<div class="item">
