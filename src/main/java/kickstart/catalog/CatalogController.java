@@ -16,13 +16,12 @@
 package kickstart.catalog;
 
 import kickstart.articles.Article;
+import kickstart.articles.Form;
+import kickstart.articles.Part;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class CatalogController {
@@ -113,7 +112,7 @@ public class CatalogController {
 
 		return "catalog";
 	}
-	@GetMapping("/artikel/{identifier}")
+	@GetMapping("artikel/{identifier}")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
@@ -125,8 +124,15 @@ public class CatalogController {
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
-
+		model.addAttribute("form",new Form()); //Damit man im folgenden form bearbeiten kann
 		return "edit";
+	}
+
+	@PostMapping("edit/{identifier}")
+	public String editArticle(@PathVariable ProductIdentifier identifier, @ModelAttribute("form") Form form, Model model){
+		manager.editArticle(form, identifier);
+		model.addAttribute("article",manager.getArticle(identifier));
+		return "article";
 	}
 
 }

@@ -2,6 +2,7 @@ package kickstart.catalog;
 
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
+import kickstart.articles.Form;
 import kickstart.articles.Part;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
@@ -23,10 +24,6 @@ public class CatalogManager {
 	}
 
 	public Iterable<Article> getWholeCatalog() {
-
-		Part tisch = new Part("Tischbein","ein Tischbein",10,"schwarz");
-		System.out.println(tisch.getPrice());
-		catalog.save(tisch);
 
 		return catalog.findAll();
 
@@ -95,5 +92,14 @@ public class CatalogManager {
 	public Article getArticle(ProductIdentifier id){
 		Optional<Article> returning = catalog.findById(id);
 		return returning.get();
+	}
+	public void editArticle(Form article, ProductIdentifier identifier){
+		Optional<Article> toEdit =catalog.findById(identifier);
+		Article afterEdit = toEdit.get();
+		afterEdit.setName(article.getName());
+		afterEdit.setDescription(article.getDescription());
+		afterEdit.setPrice(Money.of(article.getPrice(),"EUR"));
+		catalog.deleteById(identifier);
+		catalog.save(afterEdit);
 	}
 }

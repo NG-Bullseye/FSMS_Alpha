@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
 
 <!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
 
@@ -8,6 +8,14 @@
 <body>
 <nav th:include="navbar :: navbar"></nav>
 <p>Hallo!</p>
+<form method="post" th:action="@{/edit/{id}(id=${article.getId()})}" th:object="${form}">
+    <input type="text" th:field="*{name}"/>
+    <input type="text" th:field="*{description}"/>
+    <input type="number" th:field="*{price}"/>
+    <input type="number" th:field="*{weight}"/>
+    <input type="text" th:field="*{colour}"/>
+    <input type="submit" value="Submit" />
+    </form>
 
 </body>
 </html>

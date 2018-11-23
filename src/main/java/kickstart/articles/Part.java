@@ -26,7 +26,7 @@ public class Part extends Article {
 	private Part(){
 		super("a","b");
 	}
-	public Part(String name, String description, double weight, String colour)
+	public Part(String name, String description, double weight,double price, String colour)
 		throws IllegalArgumentException, NullPointerException
 	{
 		super(name, description);
@@ -50,7 +50,7 @@ public class Part extends Article {
 		
 		this.colour = colour;
 
-		this.setPrice(Money.of(10, "EUR"));
+		this.setPrice(Money.of(price, "EUR"));
 		
 		this.quantity = Quantity.of(weight, Metric.KILOGRAM);
 	}
