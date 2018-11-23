@@ -32,15 +32,15 @@ public class CustomerManagement {
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
 		return customers.save(new Customer(userAccount, form.getName(), form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
-
-	public Streamable<Customer> findAll() {
-		return Streamable.of(customers.findAll());
-	}
 	
 	public Customer findCustomer (UserAccount userAccount) {
 		
 		Customer customer = customers.findByUserAccount(userAccount);
 		return customer;
 	}
-
+	
+	public Streamable<Customer> findAll() {
+		return Streamable.of(customers.findAll());
+	}
+	
 }
