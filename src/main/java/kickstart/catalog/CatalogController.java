@@ -16,15 +16,12 @@
 package kickstart.catalog;
 
 import kickstart.articles.Article;
-import kickstart.articles.Filterform;
-import kickstart.articles.Form;
-import kickstart.articles.Part;
+import forms.Filterform;
+import forms.Form;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 
 @Controller
 public class CatalogController {
@@ -38,7 +35,13 @@ public class CatalogController {
 	@ModelAttribute("colours")
 	public String[] colours() {
 		return new String[] {
-				"schwarz","blau","weiß","rot"
+				"schwarz","blau","weiß","rot","braun","grün"
+		};
+	}
+	@ModelAttribute("categories")
+	public String[] categories() {
+		return new String[] {
+				"Tisch","Schrank","Stuhl","Regal","Bett"
 		};
 	}
 
@@ -152,6 +155,22 @@ public class CatalogController {
 		manager.editArticle(form, identifier);
 		model.addAttribute("article",manager.getArticle(identifier));
 		return "article";
+	}
+	@GetMapping("catalog/part/new")
+	public String showNew(Model model){
+		model.addAttribute("form",new Form());
+		return"newPart";
+	}
+	@PostMapping("catalog/part/new")
+	public String editNew(@ModelAttribute("form") Form form, Model model){
+		manager.newPart(form);
+		model.addAttribute("catalog", manager.getWholeCatalog());
+		return"redirect:/catalog";
+	}
+	@GetMapping("catalog/composite/new")
+	public String newSelection(Model model){
+		model.addAttribute("form",new Form());
+		return"newPart";
 	}
 
 }

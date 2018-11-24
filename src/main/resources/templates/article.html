@@ -8,16 +8,32 @@
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
-<div class="ui container">
+<div class="ui container center aligned">
 
-    <p th:text="${article.name}">Name</p>
+    <p class="description" th:text="${article.name}">Name</p>
     <p th:text="${article.description}">Beschreibung</p>
     <p th:text="${article.price}">Preis</p>
     <p th:text="${article.getId()}">ID</p>
+    <p th:text="${article.type}"></p>
     <div class="ui button">
         <a class="item" th:href="@{http://localhost:8080/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
         </a>
     </div>
+</div>
+<div th:switch="${article.type}">
+    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
+        <label class="ui label">Anzahl:</label>
+        <input name="count" type="number" min="1" max="10" value="1">
+        <input name="article" type="hidden" th:value="${article.id}">
+        <input class="ui button" type="submit" th:text="Hinzufügen">
+    </form>
+    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
+        <label class="ui label">Anzahl:</label>
+        <input name="count" type="number" min="1" max="10" value="1">
+        <input name="article" type="hidden" th:value="${article.id}">
+        <input class="ui button" type="submit" name="in den Warenkorb">
+    </form>
+
 </div>
 
 </body>

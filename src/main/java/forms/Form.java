@@ -1,11 +1,15 @@
-package kickstart.articles;
+package forms;
+
+import java.util.HashSet;
 
 public class Form {
 	private String name;
 	private String description;
-	private String colour;
+	private HashSet<String> selectedColours;
 	private double price;
 	private double weight;
+	private String type;
+	private HashSet<String> selectedCategories;
 
 
 	public Form(){ }
@@ -42,11 +46,27 @@ public class Form {
 		this.weight = weight;
 	}
 
-	public String getColour() {
-		return colour;
+	public HashSet<String> getSelectedColours() {
+		return selectedColours;
 	}
 
-	public void setColour(String colour) {
-		this.colour = colour;
+	public void setSelectedColours(HashSet<String> colour) {
+		this.selectedColours = colour;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public HashSet<String> getSelectedCategories() {
+		return selectedCategories;
+	}
+
+	public void setSelectedCategories(HashSet<String> selectedCategories) {
+		this.selectedCategories = selectedCategories;
 	}
 }

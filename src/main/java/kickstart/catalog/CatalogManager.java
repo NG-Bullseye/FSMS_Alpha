@@ -1,15 +1,17 @@
 package kickstart.catalog;
 
+import forms.CompositeForm;
+import forms.Filterform;
+import forms.Form;
 import kickstart.articles.*;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Component;
 
-import javax.money.MonetaryAmount;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 @Component
@@ -21,7 +23,6 @@ public class CatalogManager {
 	}
 
 	public Iterable<Article> getWholeCatalog() {
-
 		return catalog.findAll();
 
 	}
@@ -101,6 +102,10 @@ public class CatalogManager {
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
 		afterEdit.setPrice(Money.of(article.getPrice(), "EUR"));
+		afterEdit.setWeight(article.getWeight());
+		article.getSelectedCategories().forEach(afterEdit::addCategory);
+		article.getSelectedColours().forEach(afterEdit::setColour);
+
 		catalog.deleteById(identifier);
 		catalog.save(afterEdit);
 	}
@@ -141,5 +146,17 @@ public class CatalogManager {
 
 
 		return rightPrice;
+	}
+	public void newPart(Form form){
+			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
+			catalog.save(newArticle);
+	}
+	public void newComposite(CompositeForm form){
+		LinkedList<Article> articles = new LinkedList<>();
+		for (ProductIdentifier identifier: form.getParts()) {
+			articles.add(catalog.findById(identifier).get());
+		}
+
+		Composite newArticle = new Composite(form.getName(),form.getDescription(),articles);
 	}
 }

@@ -11,6 +11,7 @@
     <div class="ui container">
         <div class="ui simple dropdown item">
             Kategorien
+            <i class="dropdown icon"></i>
             <div class="menu">
             <a class="item">
                 <input type="checkbox" th:field="*{category}" value="all">
@@ -26,10 +27,7 @@
             </a>
             </div>
         </div>
-        <a class="item">
-             Messages
-        </a>
-            <div class="ui simple dropdown item">
+        <div class="ui simple dropdown item">
                 Farbe
                 <i class="dropdown icon"></i>
                 <div class="menu">
@@ -56,8 +54,16 @@
                     </div>
         </div>
         <a class="item">
-            <input type="submit" value="Filtern">
+            <input class="ui button" type="submit" value="Filtern">
         </a>
+        <div class="ui right attached simple dropdown item">
+            neues Möbelstück
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                    <a class="item" th:href="@{catalog/part/new}">neues Möbelteil</a>
+                    <a class="item" th:href="@{catalog/composite/new}">neues Möbelstück</a>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -70,8 +76,9 @@
                 <a class="header" th:href="@{/artikel/{id}(id=${article.id})}" th:text="${article.name}">Last Action Hero</a>
             </div>
             <div class="content">
-                <div class="description" th:text="${{article.price}}">9.99 €</div>
+                <div class="description" th:text="${article.price}">9.99 €</div>
                 <div class="description" th:text="${article.colour}">schwarz</div>
+                <div class="description" th:text="${article.getAllCategories()}">Kategorie</div>
             </div>
         </div>
     </div>

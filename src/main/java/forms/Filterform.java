@@ -1,4 +1,4 @@
-package kickstart.articles;
+package forms;
 
 import java.util.ArrayList;
 

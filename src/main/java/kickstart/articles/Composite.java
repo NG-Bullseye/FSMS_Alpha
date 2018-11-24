@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.javamoney.moneta.Money;
 import org.salespointframework.quantity.Quantity;
 
 import javax.money.MonetaryAmount;
@@ -49,6 +48,10 @@ public class Composite extends Article {
 		this.parts = parts;
 
 		this.type = ArticleType.COMPOSITE;
+
+		for (Article article: parts) {
+			article.getCategories().forEach(this::addCategory);
+		}
 	}
 	
 	/**
@@ -148,5 +151,15 @@ public class Composite extends Article {
 	public ArticleType getType()
 	{
 		return type;
+	}
+
+	@Override
+	public void setColour(String colour) {
+
+	}
+
+	@Override
+	public void setWeight(double weight) {
+
 	}
 }

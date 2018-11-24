@@ -7,74 +7,74 @@
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
-<div class="ui page grid">
+<div class="ui  center aligned page grid">
     <div class=" ui segment">
 
 
-        <form method="post" th:action="@{/edit/{id}(id=${article.getId()})}" th:object="${form}">
+        <form method="post" th:action="@{/catalog/part/new}" th:object="${form}">
             <div class=" ui vertical segment">
                 <div class="ui labeled input">
-                <div class="ui label">Produktname</div>
-                <input type="text" th:field="*{name}" th:placeholder="${article.name}"/>
+                    <div class="ui label">Produktname</div>
+                    <input type="text" th:field="*{name}" />
                 </div>
             </div>
             <div class="ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Beschreibung</div>
-                <input type="text" th:field="*{description}" th:placeholder="${article.description}"/>
+                    <input type="text" th:field="*{description}" />
                 </div>
             </div>
             <div class="ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Preis</div>
-                <input type="number" th:field="*{price}" th:placeholder="${article.price}"/>
+                    <input type="number" th:field="*{price}" />
                 </div>
             </div>
             <div class="ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Gewicht</div>
-                <input type="number" th:field="*{weight}" th:placeholder="${article.weight}"/>
+                    <input type="number" th:field="*{weight}" />
                 </div>
             </div>
             <div class="ui vertical item">
-                <div class="ui simple dropdown item">
-                    Farben
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div th:each="colour: ${colours}">
-                            <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
-                                                                  th:field="*{selectedColours}"
-                                                                  th:value="${colour}" />
-                                <label
-                                        th:text="${colour}"></label>
-                            </div>
-
+            <div class="ui simple dropdown item">
+                Farben
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div th:each="colour: ${colours}">
+                        <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
+                                                              th:field="*{selectedColours}"
+                                                              th:value="${colour}" />
+                            <label
+                                    th:text="${colour}"></label>
                         </div>
+
                     </div>
                 </div>
             </div>
+            </div>
             <div class="ui vertical item">
-                <div class="ui simple dropdown item">
-                    Kategorien
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
+            <div class="ui simple dropdown item">
+                Kategorien
+                <i class="dropdown icon"></i>
+                <div class="menu">
                         <div th:each="category: ${categories}">
                             <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
-                                                                  th:field="*{selectedCategories}"
-                                                                  th:value="${category}" />
+                                                    th:field="*{selectedCategories}"
+                                                    th:value="${category}" />
                                 <label
                                         th:text="${category}"></label>
                             </div>
 
                         </div>
-                    </div>
                 </div>
+            </div>
             </div>
             <div class="ui vertical segment">
 
-                    <a class="item">
-                        <input type="submit" value="Ändern" class="ui button"/>
-                    </a>
+                <a class="item">
+                    <input type="submit" value="Artikel erstellen" class="ui button"/>
+                </a>
 
             </div>
         </form>
