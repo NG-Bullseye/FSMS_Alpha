@@ -283,3 +283,25 @@ Nicht Registrierter Kunde möchte sich registrieren und befindet sich auf der Se
 | 29 | Registrierung - Passwort | User noch nicht registriert | buchstaben                         | okay    |
 | 30 | Registrierung - Passwort | User noch nicht registriert | zahlen                             | okay    |
 | 31 | Registrierung - Passwort | User noch nicht registriert | sonderzeichen                      | okay    |
+
+## Artikel nachbestellen
+
+| ID | Anwendungsfall           | Vorbedingung                | Eingabe                            | Ausgabe |
+|:----:|:--------------------------|:-----------------------------|:------------------------------------:|:---------:|
+| 1 | Artikel nachbestellen |User ist eingeloggt als Mitarbeiter bzw. Admin|Auswahl von Nachbestellen|Anzeige einer Website mit Auswahlmöglichkeiten der Artikel und der Eingabe der Anzahl|
+| 1 | Artikel nachbestellen |User ist nicht Mitarbeiter oder Admin|Auswahl von Nachbestellen|Weiterleitung auf Fehlerseite
+| 1 | Artikel nachbestellen |Daten sind unvollständig eingegeben|Bestätigung des Nachbestellens|Rückkehr auf Nachbestellbestellseite mit Fehlermeldung|
+| 1 | Artikel nachbestellen |Negative Anzahl eingegeben|Bestätigung des Nachbestellens|Rückkehr auf Nachbestellbestellseite mit Fehlermeldung|
+| 1 | Artikel nachbestellen | korrekte Eingabe von Daten |Bestätigung des Nachbestellens| Erhöhung der Artikelanzahl um eingegebene Menge nach Nachbestellzeit|
+| 1 | Artikel nachbestellen |Artikel wurde nachbestellt|Entfernung eines Artikels aus dem Sortiment|Entfernung der Nachbestellung und Entfernung der Ausgaben
+
+## Artikel bearbeiten
+
+| ID | Anwendungsfall           | Vorbedingung                | Eingabe                            | Ausgabe |
+|:----:|:--------------------------|:-----------------------------|:------------------------------------:|:---------:|
+| 1 | Artikel bearbeiten|User ist eingeloggt als Mitarbeiter bzw. Admin|Auswahl von Bearbeiten|Anzeige einer Website mit Bearbeitungsmöglichkeiten|
+| 1 | Artikel bearbeiten|User ist nicht Mitarbeiter oder Admin|Auswahl von Bearbeiten|Weiterleitung auf Fehlerseite
+| 1 | Artikel bearbeiten|-|Auswahl des zubearbeitenden Artikels|Füllung des Bearbeitungsformular mit den aktuellen Daten
+| 1 | Artikel bearbeiten|Daten sind unvollständig eingegeben|Bestätigung des Bearbeitens|Rückkehr auf Bearbeitungsseite mit Fehlermeldungen|
+| 1 | Artikel bearbeiten|Daten entsprechen nicht dem gewünschten Format(z.B. Buchstaben im Preisfeld)|Bestätigung des Bearbeitens| Rückkehr auf Bearbeitungsseite mit Fehlermeldung|
+| 1 | Artikel bearbeiten|Daten sind vollständig eingegeben und entsprechen dem gewünschten Format|Bestätigung des Bearbeitens| Änderung der Daten und Rückkehr auf Hauptseite|
