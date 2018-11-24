@@ -2,12 +2,13 @@ package forms;
 
 import org.salespointframework.catalog.ProductIdentifier;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class CompositeForm {
 	private String name;
 	private String description;
-	private LinkedList<ProductIdentifier> parts;
+	private HashMap<ProductIdentifier,Integer> parts;
 
 	public void setName(String name) {
 		this.name = name;
@@ -25,11 +26,11 @@ public class CompositeForm {
 		this.description = description;
 	}
 
-	public LinkedList<ProductIdentifier> getParts() {
-		return parts;
+	public void setParts(HashMap<ProductIdentifier, Integer> parts) {
+		this.parts = parts;
 	}
 
-	public void setParts(LinkedList<ProductIdentifier> parts) {
-		this.parts = parts;
+	public HashMap<ProductIdentifier, Integer> getParts() {
+		return parts;
 	}
 }

@@ -15,6 +15,7 @@
  */
 package kickstart.catalog;
 
+import forms.CompositeForm;
 import kickstart.articles.Article;
 import forms.Filterform;
 import forms.Form;
@@ -130,7 +131,7 @@ public class CatalogController {
 
 		return "catalog";
 	}
-	@GetMapping("katalog/filtered")
+	@GetMapping("catalog/filtered")
 	public String filtered(){
 		return "katalog/filtered";
 	}
@@ -169,7 +170,7 @@ public class CatalogController {
 	}
 	@GetMapping("catalog/composite/new")
 	public String newSelection(Model model){
-		model.addAttribute("form",new Form());
+		model.addAttribute("compositeForm",new CompositeForm());
 		return"newPart";
 	}
 

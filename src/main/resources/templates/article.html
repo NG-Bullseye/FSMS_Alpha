@@ -28,10 +28,11 @@
         <input class="ui button" type="submit" th:text="Hinzufügen">
     </form>
     <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
-        <label class="ui label">Anzahl:</label>
+        <label class="ui label">Anzahl</label>
         <input name="count" type="number" min="1" max="10" value="1">
         <input name="article" type="hidden" th:value="${article.id}">
-        <input class="ui button" type="submit" name="in den Warenkorb">
+        <div class="ui label">in den Warenkorb</div>
+        <input class="ui labeled button" type="submit" name="in den Warenkorb">
     </form>
 
 </div>

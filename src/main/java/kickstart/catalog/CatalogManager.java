@@ -113,20 +113,21 @@ public class CatalogManager {
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
 		HashSet<Article> categories = new HashSet<>();
-		System.out.println(filterform.getCategory());
-		System.out.println(filterform.getMaxPrice());
-		System.out.println(filterform.getMinPrice());
-		System.out.println(filterform.getSelectedColours());
+
 		if (filterform.getCategory().equals("all")) {
 			Iterable<Article> rightCategories = catalog.findAll();
 			rightCategories.forEach(categories::add);
 		} else {
 			if (filterform.getCategory().equals("part")) {
-				Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.PART);
-				rightCategories.forEach(categories::add);
+				Iterable<Article> rightCategories = catalog.findAll();
+				rightCategories.forEach(article -> {
+					if(article.getType()==Article.ArticleType.PART) categories.add(article);
+				});
 			} else {
-				Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.COMPOSITE);
-				rightCategories.forEach(categories::add);
+				Iterable<Article> rightCategories = catalog.findAll();
+				rightCategories.forEach(article -> {
+					if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);
+				});
 			}
 		}
 		HashSet<Article> rightColours = new HashSet<>();

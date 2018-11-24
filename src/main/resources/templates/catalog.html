@@ -48,8 +48,16 @@
                 <i class="dropdown icon"></i>
                     <div class="menu">
                         <a class="item">
-                        <input type="number" th:field="*{minPrice}" value="Mindestpreis">
-                        <input type="number" th:field="*{maxPrice}" value="Maximalpreis">
+                            <div class="ui labeled input">
+                                <div class="ui label">Mindestpreis</div>
+                                <input type="number" th:field="*{minPrice}">
+                            </div>
+                        </a>
+                        <a class="item">
+                            <div class="ui labeled input">
+                                <div class="ui label">Maximalpreis</div>
+                                <input type="number" th:field="*{maxPrice}">
+                            </div>
                         </a>
                     </div>
         </div>
