@@ -17,6 +17,7 @@ public class Part extends Article {
 	private Quantity quantity;
 
 	private String colour;
+	private ArticleType type;
 	
 	/**
 	 * 
@@ -53,6 +54,8 @@ public class Part extends Article {
 		this.setPrice(Money.of(price, "EUR"));
 		
 		this.quantity = Quantity.of(weight, Metric.KILOGRAM);
+
+		this.type = ArticleType.PART;
 	}
 
 	@Override
@@ -113,7 +116,7 @@ public class Part extends Article {
 	 */
 	@Override
 	public ArticleType getType() {
-		return ArticleType.PART;
+		return type;
 	}
 	
 	

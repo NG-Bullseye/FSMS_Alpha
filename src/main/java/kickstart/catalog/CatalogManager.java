@@ -40,97 +40,106 @@ public class CatalogManager {
 		HashSet<Article> resultingCatalog = new HashSet<>();
 
 		categoryCatalog.forEach(article -> {
-			if(article.getType() == type){
-			resultingCatalog.add(article);
+			if (article.getType() == type) {
+				resultingCatalog.add(article);
 			}
 		});
-			return resultingCatalog;
+		return resultingCatalog;
 
 
 	}
 
-	public Iterable<Article> getCategoryCatalog(String category){
+	public Iterable<Article> getCategoryCatalog(String category) {
 		Iterable<Article> categoryIterable = catalog.findAll();
 		HashSet<Article> categoryCatalog = new HashSet<>();
 		categoryIterable.forEach(article -> {
 			Iterable<String> categories = article.getCategories();
 			HashSet<String> iterationSet = new HashSet<>();
-			categories.forEach(articleCategory ->{
+			categories.forEach(articleCategory -> {
 				iterationSet.add(articleCategory);
 			});
-			if (iterationSet.contains(category)){
+			if (iterationSet.contains(category)) {
 				categoryCatalog.add(article);
 			}
 		});
 		return categoryCatalog;
 	}
-	public Iterable<Article> getFilteredColors(Article.ArticleType type, String color){
+
+	public Iterable<Article> getFilteredColors(Article.ArticleType type, String color) {
 
 		HashSet<Article> resultingCatalog = new HashSet<>();
 		Iterable<Article> filterIteration = catalog.findByType(type);
 		filterIteration.forEach(article -> {
-			if(article.getColour().contains(color))
-				resultingCatalog.add(article);}
+					if (article.getColour().contains(color))
+						resultingCatalog.add(article);
+				}
 		);
 
 
 		return resultingCatalog;
 	}
-	public Iterable<Article> getColors(String color){
+
+	public Iterable<Article> getColors(String color) {
 		Iterable<Article> catalogIteration = catalog.findAll();
 		HashSet<Article> resultingCatalog = new HashSet<>();
 
 		catalogIteration.forEach(article -> {
-			if(article.getColour().contains(color))
+			if (article.getColour().contains(color))
 				resultingCatalog.add(article);
 		});
 		return resultingCatalog;
 	}
-	public Article getArticle(ProductIdentifier id){
+
+	public Article getArticle(ProductIdentifier id) {
 		Optional<Article> returning = catalog.findById(id);
 		return returning.get();
 	}
-	public void editArticle(Form article, ProductIdentifier identifier){
-		Optional<Article> toEdit =catalog.findById(identifier);
+
+	public void editArticle(Form article, ProductIdentifier identifier) {
+		Optional<Article> toEdit = catalog.findById(identifier);
 		Article afterEdit = toEdit.get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
-		afterEdit.setPrice(Money.of(article.getPrice(),"EUR"));
+		afterEdit.setPrice(Money.of(article.getPrice(), "EUR"));
 		catalog.deleteById(identifier);
 		catalog.save(afterEdit);
 	}
+
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
-	HashSet<Article> categories = new HashSet<>();
-	if (filterform.getCategory().equals("all")) {
+		HashSet<Article> categories = new HashSet<>();
+		System.out.println(filterform.getCategory());
+		System.out.println(filterform.getMaxPrice());
+		System.out.println(filterform.getMinPrice());
+		System.out.println(filterform.getSelectedColours());
+		if (filterform.getCategory().equals("all")) {
 			Iterable<Article> rightCategories = catalog.findAll();
-			rightCategories.forEach(article -> categories.add(article));
+			rightCategories.forEach(categories::add);
+		} else {
+			if (filterform.getCategory().equals("part")) {
+				Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.PART);
+				rightCategories.forEach(categories::add);
 			} else {
-				if (filterform.getCategory().equals("part")) {
-					Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.PART);
-					rightCategories.forEach(article -> categories.add(article));
-				} else {
-					Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.COMPOSITE);
-					rightCategories.forEach(article -> categories.add(article));
-				}
+				Iterable<Article> rightCategories = catalog.findByType(Article.ArticleType.COMPOSITE);
+				rightCategories.forEach(categories::add);
 			}
-	HashSet<Article> rightColours = new HashSet<>();
-	for (Article article: categories) {
+		}
+		HashSet<Article> rightColours = new HashSet<>();
+		for (Article article : categories) {
 			for (String colour : filterform.getSelectedColours()) {
-				if(article.getColour().contains(colour)){
+				if (article.getColour().contains(colour)) {
 					rightColours.add(article);
 				}
-		}
-	}
-	HashSet<Article> rightPrice = new HashSet<>();
-		for (Article article: rightColours) {
-			if(article.getPrice().isLessThan(Money.of(filterform.getMinPrice(),"EUR"))){
-				rightPrice.remove(article);
-			}
-			if(article.getPrice().isGreaterThan(Money.of(filterform.getMaxPrice(),"EUR"))){
-				rightPrice.remove(article);
 			}
 		}
-	return rightPrice;
+		HashSet<Article> rightPrice = new HashSet<>();
+		for (Article article : rightColours) {
+			if (!article.getPrice().isLessThan(Money.of(filterform.getMinPrice(), "EUR")) && !article.getPrice().isGreaterThan(Money.of(filterform.getMaxPrice(),"EUR"))) {
+				rightPrice.add(article);
+			}
+		}
+
+
+		return rightPrice;
 	}
 }
