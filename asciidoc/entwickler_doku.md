@@ -142,6 +142,24 @@ Belieber Computer mit folgenden Spezifikationen:
   - Internet Explorer 11
 
 ## Lösungsstrategie
+
+Das Programm ist in mehrere Packages aufgeteilt, die die Funktionalität für die 
+entsprechenden Aufgabenbereiche des Programms bereitstellen:
+
+| Package              | Beschreibung                                                                                                                                                     |
+|:---------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Order Management     | Hier wird der Warenkorb des Kunden erstellt, bearbeitet und abgeschlossen. Dies geschieht ausschließlich durch den Mitarbeiter.                                  |
+| Car Management       | Verwaltung des Fuhrparks. Hier können Fahrzeuge gemietet werden, falls der Kunde zur Abholung seiner Ware einen LKW benötigt.                                    |
+| Customer Management  | Das Herzstück: Unsere Kunden. Kunden können mithilfe dieses Packages verwaltet werden. Außerdem ermöglicht es die Registrierung.                                 |
+| Inventory Management | Dies ist die lagerverwaltung. Artikel können hier beispielsweise Nachbestellt werden.                                                                            |
+| Catalog Management   | Die Katalogverwaltung. Der Kunde kann auf unsere Webseite den Katalog einsehen und ihn filtern. Außerdem ist es möglich, Artikel vor dem Kunden zu "verstecken". |
+
+Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben.
+
+
+
+
+
 Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, die jeder, der mit der Architektur zu tun hat, verstanden haben sollte.
 
 ## Bausteinsicht
