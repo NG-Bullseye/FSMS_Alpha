@@ -141,9 +141,6 @@ Belieber Computer mit folgenden Spezifikationen:
   - Chrome 49 (oder neuer)
   - Internet Explorer 11
 
-## Kontextabgrenzung
-- Externe Schnittstellen
-
 ## Lösungsstrategie
 Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, die jeder, der mit der Architektur zu tun hat, verstanden haben sollte.
 
