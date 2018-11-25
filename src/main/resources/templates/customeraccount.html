@@ -1,0 +1,45 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+	<head th:include="header :: head">
+		<title id="pageTitle">Kundenkonto</title>
+	</head>
+	<body>
+		<nav th:include="navbar :: navbar"></nav>	
+	
+		<div id="title">
+			<t1 sec:authorize="isAuthenticated()" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t1>
+		</div>
+		
+		
+		<div class="ui grid">
+  			<div class="four wide column">
+  				<div id="leftspace">
+  					<t2>Ihre Daten bei uns:</t2>
+  				</div>
+  				<div id="textnhead">
+  					<t3>Name</t3>
+  					<br>
+  					<tnorm th:text="${name}">Name</tnorm>
+  				</div>
+  				<div id="textnhead">
+  					<t3>E-Mail Adresse:</t3>
+  					<br>
+  					<tnorm th:text="${email}">E-Mail</tnorm>
+  				</div>
+  				<div id="textnhead">
+  					<t3>Anschrift:</t3>
+  					<br>
+  					<tnorm th:text="${address}">Addresse</tnorm>
+  				</div>
+  				<div id="textnhead">
+  					<button class="ui button">Daten ändern</button>
+  				</div>
+  			</div>
+  			<div class="twelve wide column">
+  				<t2>Hier stehen später die Bestellungen</t2>
+  			</div>
+		</div>
+	</body>
+
+</html>

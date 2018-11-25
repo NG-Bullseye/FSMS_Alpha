@@ -1,0 +1,30 @@
+<nav id="navmenu" th:fragment="navbar">
+	<div class="ui secondary  menu">
+	  <a class="item" th:text="Startseite">
+		Startseite
+	  </a>
+	  <a class="item" th:text="Katalog">
+		Katalog
+	  </a>
+	  <a class="item" href="customeraccount.html" th:href="@{/customeraccount}"
+		sec:authorize="hasRole('ROLE_CUSTOMER')"
+		th:text="Kundenkonto">Kundenkonto
+	  </a>
+	  <a class="item" href="customermanagement.html" th:href="@{/customermanagement}"
+		sec:authorize="hasRole('ROLE_EMPLOYEE')"
+		th:text="Kundenübersicht">Kundenübersicht
+	  </a>
+	  <div class="right menu">
+		<div class="item">
+		  <div class="ui icon input">
+			<input type="text" placeholder="Search...">
+			<i class="search link icon"></i>
+		  </div>
+		</div>
+		  <a class="item" th:href="@{/login}" sec:authorize="!isAuthenticated()" th:text="Login">Login</a>
+		  <form class="item" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+				<button type="submit" class="ui button" th:text="Logout">Logout</button>
+		  </form>
+	  </div>
+	</div>
+</nav>
