@@ -89,5 +89,22 @@ public class CatalogManager {
 			catalog.save(newArticle);
 	}
 	public void newComposite(CompositeForm form) {//-----------------------WEITERMACHEN----------------------------------
+		catalog.findAll().forEach(article -> {
+			System.out.println("Die ID: "+ article.getId());});
+
+		System.out.println(form.getDescription());
+		System.out.println(form.getLastArticle());
+		System.out.println(form.getName());
+		System.out.println(form.getParts());
+		System.out.println(form.getCount());
+
+		LinkedList<Article> parts = new LinkedList<>();
+
+		form.getParts().forEach(((identifier, count) -> {
+			for(int i = count; i<1; i--){
+				parts.add(catalog.findById(identifier).get());
+			}
+		}));
+		catalog.save(new Composite(form.getName(),form.getDescription(),parts));
 	}
 }

@@ -98,9 +98,18 @@ public class CatalogController {
 		return"redirect:/catalog";
 	}
 	@GetMapping("catalog/composite/new")
-	public String newSelection(Model model){
+	public String newComposite(Model model){
 		model.addAttribute("compositeForm",new CompositeForm());
-		return"newPart";
+		model.addAttribute("catalog", manager.getWholeCatalog());
+		return"newComposite";
+	}
+	@PostMapping("catalog/composite/new")
+	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model){
+
+		model.addAttribute("compositeForm",new CompositeForm());
+		manager.newComposite(form);
+		model.addAttribute("catalog", manager.getWholeCatalog());
+		return"redirect:/catalog";
 	}
 
 }
