@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.javamoney.moneta.Money;
 
+import javax.persistence.Entity;
+
 
 /** 
  *  This class represents the elements that can be bought at the shop. It serves as the base class
@@ -17,6 +19,7 @@ import org.javamoney.moneta.Money;
  *  for name, categories and id. The price attribute from Product isn't used.
  * 
  */
+@Entity
 public abstract class Article extends Product{
 	
 	/**
@@ -101,8 +104,6 @@ public abstract class Article extends Product{
 	// TODO:  Add comments and rating.
 	
 	public abstract Quantity getWeight();
-	
-	public abstract Money getPrice();
 	
 	public abstract Set<String> getColour();
 	
