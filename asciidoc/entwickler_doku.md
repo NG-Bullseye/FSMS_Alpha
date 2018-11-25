@@ -158,10 +158,6 @@ Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (si
 
 
 
-
-
-Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, die jeder, der mit der Architektur zu tun hat, verstanden haben sollte.
-
 ## Bausteinsicht
 ![Paketdiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Paket-Diagramm.jpg)
 
@@ -171,31 +167,26 @@ Kurzer Überblick über Ihre grundlegenden Entscheidungen und Lösungsansätze, 
 
 ![Entwurfsklassendiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Entwurfsklassendiagramm.jpg)
 
-Bei dem Projekt handelt es sich um ein Java Objekt orientiertes Design, um modulare und polymorph-erweiterbare Architektur zu realisieren.
+Das gesamte Projekt basiert auf der Objekt-orientierten Programmiersprache Java,um eine modulare und polymorph-erweiterbare Architektur zu verwirklichen.
  
-Das Springframework stellt ein konfigurierbares Model(glossar) für Java basierende Firmensoftware, auf einer art "deployment platform"(glossar), zur Verfügung.
+Das Springframework, welches einen sehr großen Teil dieser Software ausmacht, ermöglicht in Verbindung mit Thymeleaf eine dynamische Verwendbarkeit und Erweiterbarkeit der zu betreibenden Website.
  
-Eine Schlüsseleigenschaft von Spring ist die Unterstürzung der Grundstruktur auf Implementationslevel. 
-Spring legt Wert auf schnelle Produktion ohne, dass sich Entwicklerteams um unnötige Deployment-Umgebungen sorgen müssen.
+Als spezieller Teil von Spring wird in dieser Software Spring-Boot verwendet.
 
-Spring Boot ist konziepiert worden um einen schnellen Einstieg  mit minnimalem Konfigurationsaufwand zu ermöglichen.
- 
-SalesPoint ist ein auf Javabasis geschriebenes Applicationsframework, um Verkaufs- oder auch Einkaufsstellen (PoS) zu realisieren. Salespoint benutzt Spring und Springboot.
-Es ermöglicht dem Nutzer schnell Web Applicationen mit dem Ziel Verkauf zu implementiern. 
+Des weiteren ist Salespoint ein sehr wichtiges Framework für diese Software, da es bereits sehr viele Funktionalitäten und Verwaltungsstrukturen für den Betrieb einer Verkaufswebsite bietet.
 
 ## Verwendete Muster
 Entwurfsmuster
 
 Model-View-Controller(MVC)
 
-Wir verwenden das MVC-Muster mit einer Umsetzung durch Spring und Thymeleaf. 
-Im Model sind die Daten der Objekte angeordnet nach unserem Analysemodell. Ebenso wird dort ein Teil der Geschäftslogik (Veränderung der Daten) ausgeführt.
-Im View werden mittels Thymeleaftemplates diese Daten des Modells angezeigt. Ebenso werden darüber die Eingaben der Benutzer realisiert. Dabei bleibt die View aber vom Modell unabhängig.
-Model und View werden dann über die Controller miteinander verbunden. Dieser gibt die Daten des Models zur Anzeige an den View weiter und verarbeitet die Eingaben in der View. Dazu gehört auch die Überprüfung der Eingabedaten auf Korrektheit.
+Wir verwenden das MVC-Muster (Model-View-Controller) mit einer Umsetzung durch Spring und Thymeleaf. 
+Die Controller und Manager bilden das Java-basierte Backend des Programms und sind für die Verwaltung und Verarbeitung der Daten verantwortlich, außerdem dient der Controller als Verbindung zwischen View und Model, da er die Eingaben des Views verarbeitet und auf Fehler prüft und anschließend das Model dementsprechend modifiziert. 
+Im View werden mittels Thymeleaftemplates die Daten des Modells angezeigt. Ebenso werden darüber die Eingaben der Benutzer getätigt. Dabei bleibt die View aber vom Modell unabhängig.
 
 Composite
 
-Mithilfe des Composite-Musters stellen wir die Artikel in unserem System da. Es gibt Möbel und Teile als bestellbare Artikel. Dabei sind Teile die kleinstmöglichen Einheiten, welche als Blätter des Baumes dienen. Möbel setzen sich aus anderen Möbel und Teilen zusammen und bilden dadurch eine Baumstruktur. 
+Mithilfe des Composite-Musters stellen wir die Artikel in unserem System dar. Es gibt Möbel und Teile als bestellbare Artikel. Dabei sind Teile die kleinstmöglichen Einheiten, welche als Blätter des Baumes dienen. Möbel setzen sich aus anderen Möbeln und Teilen zusammen und bilden dadurch eine Baumstruktur. 
 Dies erlaubt zum einen eine einfache Bearbeitung, da neue Bestandteile einfach in dem Baum eingefügt bzw. alte Bestandteile entfernt werden können. Ebenso wird über die Baumstruktur das Gewicht und der Preis bestimmt, da sich dieser aus den Preisen/Gewichten der Einzelteilen ergibt. Außerdem ermöglicht uns das auch zu jedem Möbelstück die Einzelteile anzubieten(wie in den Anforderungen gefordert), da sowohl Möbel als auch Teile Artikel sind, die bestellt werden können.
 
 
