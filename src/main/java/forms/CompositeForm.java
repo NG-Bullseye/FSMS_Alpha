@@ -11,7 +11,6 @@ public class CompositeForm {
 	private HashMap<ProductIdentifier,Integer> parts = new HashMap<>();
 	private ProductIdentifier lastArticle;
 	private Integer count;
-	private boolean entered = false;
 
 	public void setName(String name) {
 		this.name = name;
@@ -39,9 +38,9 @@ public class CompositeForm {
 
 	public void setCount(Integer count){
 		this.count=count;
-		if(entered==true){
-		parts.replace(getLastArticle(),count);}
-		entered=false;
+
+		parts.replace(getLastArticle(),count);
+
 	}
 
 	public Integer getCount() {
@@ -56,6 +55,6 @@ public class CompositeForm {
 
 		this.lastArticle = lastArticle;
 		parts.put(lastArticle,1);
-		entered=true;
+
 	}
 }
