@@ -16,7 +16,8 @@ public class Part extends Article {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity quantity;
 
-	private String colour;
+	private HashSet<String> colour;
+	private ArticleType type;
 	
 	/**
 	 * 
@@ -26,6 +27,15 @@ public class Part extends Article {
 	private Part(){
 		super("a","b");
 	}
+
+	public Part(String name, String description, double weight,double price, HashSet<String> colour, Set<String> categories)
+		throws IllegalArgumentException, NullPointerException
+	{
+		super(name, description);
+		
+
+		
+/* Version vor Merge. Bitte Übergabeparameter Reihenfolge beachten!
 	public Part(String name, String description, double price, double weight, String colour)
 		throws IllegalArgumentException, NullPointerException
 	{
@@ -34,6 +44,7 @@ public class Part extends Article {
 		{
 			throw new IllegalArgumentException("Part.price should be positive.");
 		}
+*/
 		if(weight <= 0)
 		{
 			throw new IllegalArgumentException("Part.weight should be positive");
@@ -54,6 +65,12 @@ public class Part extends Article {
 		this.setPrice(Money.of(price, "EUR"));
 		
 		this.quantity = Quantity.of(weight, Metric.KILOGRAM);
+
+		this.type = ArticleType.PART;
+
+		for (String category: categories) {
+			this.addCategory(category);
+		}
 	}
 
 	@Override
@@ -77,15 +94,18 @@ public class Part extends Article {
 	}
 	
 	/**
-	 * @return This returns a Set of size 1. Every part just has 1 colour. It's a set for the composite structure. See {@link Furniture}
+	 * @return This returns a Set of size 1. Every part just has 1 colour. It's a set for the composite structure.
 	 */
 	@Override
 	public Set<String> getColour() {
+		return colour;
+/* Merge Fehler
 		Set<String> out = new HashSet<>();
 		
 		out.add(colour);
 		
 		return out;
+*/
 	}
 	
 	/**
@@ -106,7 +126,7 @@ public class Part extends Article {
 			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");
 		}
 		
-		this.colour = colour;
+		this.colour.add(colour);
 	}
 
 	/**
@@ -114,8 +134,12 @@ public class Part extends Article {
 	 */
 	@Override
 	public ArticleType getType() {
-		return ArticleType.PART;
+		return type;
 	}
 	
-	
+	public HashSet<String> getAllCategories(){
+		HashSet<String> returning = new HashSet<>();
+		this.getCategories().forEach(returning::add);
+		return returning;
+	}
 }

@@ -20,6 +20,7 @@ import javax.persistence.Entity;
 public class Composite extends Article {
 
 	private LinkedList<Article> parts;
+	private ArticleType type;
 	
 	/**
 	 * Standard constructor for Composite. See {@link Article} for more information as it's the base class
@@ -45,6 +46,12 @@ public class Composite extends Article {
 		}
 		
 		this.parts = parts;
+
+		this.type = ArticleType.COMPOSITE;
+
+		for (Article article: parts) {
+			article.getCategories().forEach(this::addCategory);
+		}
 	}
 	
 	/**
@@ -143,6 +150,16 @@ public class Composite extends Article {
 	
 	public ArticleType getType()
 	{
-		return ArticleType.COMPOSITE;
+		return type;
+	}
+
+	@Override
+	public void setColour(String colour) {
+
+	}
+
+	@Override
+	public void setWeight(double weight) {
+
 	}
 }

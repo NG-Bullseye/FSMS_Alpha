@@ -108,4 +108,7 @@ public abstract class Article extends Product{
 	public abstract Set<String> getColour();
 	
 	public abstract ArticleType getType();
+
+	public abstract void setWeight(double weight);
+	public abstract void setColour(String colour);
 }
