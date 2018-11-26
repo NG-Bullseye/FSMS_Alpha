@@ -33,8 +33,7 @@ public class CatalogManager {
 	}
 
 	public void editArticle(Form article, ProductIdentifier identifier) {
-		Optional<Article> toEdit = catalog.findById(identifier);
-		Article afterEdit = toEdit.get();
+		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
 		afterEdit.setPrice(Money.of(article.getPrice(), "EUR"));
