@@ -15,14 +15,17 @@
  */
 package kickstart.catalog;
 
-import forms.CompositeForm;
 import kickstart.articles.Article;
-import forms.Filterform;
-import forms.Form;
+import kickstart.forms.CompositeForm;
+import kickstart.forms.Filterform;
+import kickstart.forms.Form;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class CatalogController {
@@ -99,13 +102,18 @@ public class CatalogController {
 	}
 	@GetMapping("catalog/composite/new")
 	public String newComposite(Model model){
-		model.addAttribute("compositeForm",new CompositeForm());
+		CompositeForm composite = new CompositeForm();
+		composite.setParts(manager.getCatalogMap());
+		System.out.println("Vorher: " + composite.getParts());
+		model.addAttribute("compositeForm",composite);
 		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("map",manager.getCatalogMap());
+		model.addAttribute("foo",new HashMap<Article,Integer>());
 		return"newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model){
-
+	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, @RequestParam("foo") Map<Article,Integer> map, Model model){
+		System.out.println(map);
 		model.addAttribute("compositeForm",new CompositeForm());
 		manager.newComposite(form);
 		model.addAttribute("catalog", manager.getWholeCatalog());

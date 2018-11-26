@@ -1,4 +1,4 @@
-package forms;
+package kickstart.forms;
 
 import java.util.HashSet;
 

@@ -1,17 +1,14 @@
 package kickstart.catalog;
 
-import forms.CompositeForm;
-import forms.Filterform;
-import forms.Form;
+import kickstart.forms.CompositeForm;
+import kickstart.forms.Filterform;
+import kickstart.forms.Form;
 import kickstart.articles.*;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Component
@@ -25,6 +22,11 @@ public class CatalogManager {
 	public Iterable<Article> getWholeCatalog() {
 		return catalog.findAll();
 
+	}
+	public HashMap<Article,Integer> getCatalogMap(){
+		HashMap<Article,Integer> map = new HashMap<>();
+		catalog.findAll().forEach(article -> map.put(article,0));
+		return map;
 	}
 
 	public Article getArticle(ProductIdentifier id) {
@@ -88,22 +90,17 @@ public class CatalogManager {
 			catalog.save(newArticle);
 	}
 	public void newComposite(CompositeForm form) {//-----------------------WEITERMACHEN----------------------------------
-		catalog.findAll().forEach(article -> {
-			System.out.println("Die ID: "+ article.getId());});
 
 		System.out.println(form.getDescription());
-		System.out.println(form.getLastArticle());
 		System.out.println(form.getName());
-		System.out.println(form.getParts());
-		System.out.println(form.getCount());
-
+		System.out.println("Nachher: " + form.getParts());
 		LinkedList<Article> parts = new LinkedList<>();
-
-		form.getParts().forEach(((identifier, count) -> {
-			for(int i = count; i<1; i--){
-				parts.add(catalog.findById(identifier).get());
+		form.getParts().forEach((article, integer) -> {
+			for (int i=integer;i<1; i--){
+				parts.add(article);
 			}
-		}));
+		});
+
 		catalog.save(new Composite(form.getName(),form.getDescription(),parts));
 	}
 }

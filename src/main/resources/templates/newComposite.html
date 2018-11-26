@@ -24,35 +24,21 @@
                     <input type="text" th:field="*{description}" />
                 </div>
             </div>
-
-            <div class="ui vertical segment">
-                <table class="ui compact celled definition table">
-                    <thead>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Anzahl</th>
-                    </thead>
-                    <tbody th:each="article : ${catalog}">
-                    <td class="collapsing">
-                        <div>
-                            <input type="checkbox" th:value="${article.id}" th:field="*{lastArticle}">
-                        </div>
-                    </td>
-                    <td th:text="${article.name}">Name</td>
-                    <td class="ui number-button">
-                        <input type="number" th:field="*{count}">
-                    </td>
-                    </tbody>
-
-                </table>
-
+                <div th:each="article : ${map}">
+                    <div class="ui label" th:text="${article.key}"></div>
+                    <div class="ui label" th:text="${compositeForm.parts}"></div>
+                    <div class="ui labeled input">
+                        <div class="ui label" th:text="${article.key.name}"></div>
+                        <input type="hidden" th:field="*{parts[__${article.key}__]}" th:value="${article.key}">
+                        <input type="number" th:field="*{parts[__${article.value}__]}" th:placeholder="${article.value}">
+                    </div>
+                </div>
 
                 <a class="item">
                     <input type="submit" value="Artikel erstellen" class="ui button"/>
                 </a>
 
 
-            </div>
         </form>
 </div>
 </div>
