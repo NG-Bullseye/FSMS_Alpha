@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.javamoney.moneta.Money;
+import javax.money.MonetaryAmount;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.salespointframework.quantity.Quantity;
@@ -21,8 +23,8 @@ public class CompositeTest {
 	private Part part2;
 	private Composite composite1;
 	private Composite composite2;
-	List<Article> parts1;
-	List<Article> parts2;
+	LinkedList<Article> parts1;
+	LinkedList<Article> parts2;
 	
 	@BeforeEach
 	public void setUp()
@@ -30,11 +32,11 @@ public class CompositeTest {
 		part1 = new Part("Frame", "Frame for a book shelf", 25.75, 6, "brown");
 		part2 = new Part("Board", "Board for a book shelf", 14.33, 2, "black");
 		
-		parts1 = new ArrayList<Article>();
+		parts1 = new LinkedList<Article>();
 		parts1.add(part1);
 		parts1.add(part2);
 		
-		parts2 = new ArrayList<Article>();
+		parts2 = new LinkedList<Article>();
 		parts2.addAll(parts1);
 		parts2.addAll(parts2);
 		
@@ -60,7 +62,7 @@ public class CompositeTest {
 		try
 		{
 			@SuppressWarnings("unused")
-			Composite c = new Composite("Name", "Description", new ArrayList<Article>());
+			Composite c = new Composite("Name", "Description", new LinkedList<Article>());
 			fail("Composite should throw an IllegalArgumentException when parts is a empty list");
 		}catch(IllegalArgumentException e) {}
 	}
@@ -102,7 +104,7 @@ public class CompositeTest {
 	@Test
 	public void testRemove()
 	{
-		List<Article> partList = new ArrayList<Article>();
+		LinkedList<Article> partList = new LinkedList<Article>();
 		partList.add(part1);
 		
 		composite1.removePart(part2);
@@ -115,7 +117,7 @@ public class CompositeTest {
 		
 		assertEquals(partList, c.getParts(), "Composite should never remove it's only part");
 		
-		List<Article> partList2 = new ArrayList<Article>();
+		LinkedList<Article> partList2 = new LinkedList<Article>();
 		
 		partList2.add(part2);
 		partList2.add(part2);
@@ -166,7 +168,7 @@ public class CompositeTest {
 	@Test
 	public void testGetPrice()
 	{
-		Money price1 = parts1.get(0).getPrice();
+		MonetaryAmount price1 = parts1.get(0).getPrice();
 		
 		for(Article part: parts1)
 		{
@@ -175,7 +177,7 @@ public class CompositeTest {
 		
 		assertEquals(price1, composite1.getPrice(), "Composite should return the right price");
 		
-		Money price2 = parts2.get(0).getPrice();
+		MonetaryAmount price2 = parts2.get(0).getPrice();
 		
 		for(Article part: parts2)
 		{
@@ -202,7 +204,7 @@ public class CompositeTest {
 		Set<String> colour2 = new HashSet<String>();
 		colour2.add("brown");
 		
-		List<Article> parts = new ArrayList<Article>();
+		LinkedList<Article> parts = new LinkedList<Article>();
 		parts.add(part1);
 		parts.add(part1);
 		

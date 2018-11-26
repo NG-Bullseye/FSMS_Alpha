@@ -13,7 +13,7 @@
 		<div id="registration" sec:authorize="!hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')">
 			<t2>Sie haben noch kein Kundenkonto?</t2>
 			<div id="buttonspace">
-				<a class="ui button" href="register.html" th:href="@{/register}" th:text="#{nav.register}">Registrierung</a>
+				<a class="ui button" href="register.html" th:href="@{/register}" th:text="Registrieren">Registrierung</a>
 			</div>
 		</div>
 </body>

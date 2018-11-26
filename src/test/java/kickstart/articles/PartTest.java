@@ -119,26 +119,7 @@ public class PartTest {
 		assertEquals(part3.getPrice(), Money.of(30.0, "EUR"), "Part should return the price it was set to");
 	}
 
-	@Test
-	public void testSetPrice()
-	{
-		try
-		{
-			part1.setPrice(-2);
-			fail("Part should throw an IllegalArgumentException when trying to set a negative price");
-		}catch(IllegalArgumentException e) {}
-		
-		try
-		{
-			part1.setPrice(0);
-			fail("Part should throw an IllegalArgumentException when trying to set price to zero");
-		}catch(IllegalArgumentException e) {}
-		
-		part1.setPrice(25.55);
-		
-		assertEquals(part1.getPrice(), Money.of(25.55, "EUR") ,"Part should set the price correctly.");
-	}
-	
+
 	@Test
 	public void testGetColour()
 	{

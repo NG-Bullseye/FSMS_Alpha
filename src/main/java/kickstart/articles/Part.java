@@ -27,6 +27,7 @@ public class Part extends Article {
 	private Part(){
 		super("a","b");
 	}
+
 	public Part(String name, String description, double weight,double price, HashSet<String> colour, Set<String> categories)
 		throws IllegalArgumentException, NullPointerException
 	{
@@ -34,6 +35,16 @@ public class Part extends Article {
 		
 
 		
+/* Version vor Merge. Bitte Übergabeparameter Reihenfolge beachten!
+	public Part(String name, String description, double price, double weight, String colour)
+		throws IllegalArgumentException, NullPointerException
+	{
+		super(name, description);
+		if(price <= 0)
+		{
+			throw new IllegalArgumentException("Part.price should be positive.");
+		}
+*/
 		if(weight <= 0)
 		{
 			throw new IllegalArgumentException("Part.weight should be positive");
@@ -60,7 +71,6 @@ public class Part extends Article {
 		for (String category: categories) {
 			this.addCategory(category);
 		}
-
 	}
 
 	@Override
@@ -89,6 +99,13 @@ public class Part extends Article {
 	@Override
 	public Set<String> getColour() {
 		return colour;
+/* Merge Fehler
+		Set<String> out = new HashSet<>();
+		
+		out.add(colour);
+		
+		return out;
+*/
 	}
 	
 	/**
