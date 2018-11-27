@@ -14,6 +14,10 @@
 		sec:authorize="hasRole('ROLE_EMPLOYEE')"
 		th:text="Kundenübersicht">Kundenübersicht
 	  </a>
+        <a class="item" href="cart.html" th:href="@{/cart}"
+		   sec:authorize="hasRole('ROLE_EMPLOYEE')"
+		   th:text="Warenkorb">Warenkorb
+		</a>
 	  <div class="right menu">
 		<div class="item">
 		  <div class="ui icon input">

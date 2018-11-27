@@ -73,4 +73,11 @@ public class OrderController {
 
 	return cartOrderManager.newOrder(cart, model, account);
 	}
+
+	@RequestMapping("/showcustomerorders")
+	String showcostumerorder(@LoggedIn UserAccount userAccount, Model model){
+
+		model.addAttribute("ordersofthedude",cartOrderManager.getOrderManager().findBy(userAccount));
+		return "/customeraccount";
+	}
 }
