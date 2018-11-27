@@ -35,6 +35,7 @@ public class CatalogManager {
 	}
 
 	public void editArticle(Form article, ProductIdentifier identifier) {
+		System.out.println("wird aufgerufen");
 		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
@@ -51,10 +52,11 @@ public class CatalogManager {
 
 		HashSet<Article> categories = new HashSet<>();
 
-		if (filterform.getCategory().equals("all")) {
+		if (filterform.getCategory().equals("composite")) {
 			Iterable<Article> rightCategories = catalog.findAll();
-			rightCategories.forEach(categories::add);
-		} else {
+			rightCategories.forEach(article -> {
+				if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);});}
+		 else {
 			if (filterform.getCategory().equals("part")) {
 				Iterable<Article> rightCategories = catalog.findAll();
 				rightCategories.forEach(article -> {
@@ -62,9 +64,8 @@ public class CatalogManager {
 				});
 			} else {
 				Iterable<Article> rightCategories = catalog.findAll();
-				rightCategories.forEach(article -> {
-					if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);
-				});
+				rightCategories.forEach(categories::add);
+
 			}
 		}
 		HashSet<Article> rightColours = new HashSet<>();

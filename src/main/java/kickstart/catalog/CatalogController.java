@@ -22,8 +22,10 @@ import kickstart.forms.Form;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,12 +81,16 @@ public class CatalogController {
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
+		System.out.println(manager.getArticle(identifier));
 		model.addAttribute("form",new Form()); //Damit man im folgenden form bearbeiten kann
 		return "edit";
 	}
 
 	@PostMapping("edit/{identifier}")
-	public String editArticle(@PathVariable ProductIdentifier identifier, @ModelAttribute("form") Form form, Model model){
+	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form, BindingResult bindingResult, Model model){
+		if(bindingResult.hasErrors()){
+			return "edit";
+		}
 		manager.editArticle(form, identifier);
 		model.addAttribute("article",manager.getArticle(identifier));
 		return "article";
@@ -107,13 +113,10 @@ public class CatalogController {
 		System.out.println("Vorher: " + composite.getParts());
 		model.addAttribute("compositeForm",composite);
 		model.addAttribute("catalog", manager.getWholeCatalog());
-		model.addAttribute("map",manager.getCatalogMap());
-		model.addAttribute("foo",new HashMap<Article,Integer>());
 		return"newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, @RequestParam("foo") Map<Article,Integer> map, Model model){
-		System.out.println(map);
+	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model){
 		model.addAttribute("compositeForm",new CompositeForm());
 		manager.newComposite(form);
 		model.addAttribute("catalog", manager.getWholeCatalog());
