@@ -1,15 +1,10 @@
 package kickstart.inventory;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 
-
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -65,36 +60,14 @@ public class InventoryManagerTest {
 		manager = new InventoryManager(inventory, time);
 	}
 	
-	@SuppressWarnings("unused")
-	@Test
-	@Transient
-	public void testConstructorNullArgument()
-	{
-		
-		try
-		{
-			InventoryManager manager = new InventoryManager(null, time);
-			fail("Inventory manager should throw a NullPointerException when inventory is null");
-		}catch(NullPointerException e) {}
-		
-
-				
-		try
-		{
-			InventoryManager manager = new InventoryManager(inventory, null);
-			fail("Inventory manager should throw a NullPointerException when time is null");
-		}catch(NullPointerException e) {}
-		
-	}
-	
 	@Test
 	@Transient
 	public void testAddArticle()
 	{		
 		manager.addArticle(p);
 		
-		assertTrue("InventoryManager should add an article to the inventory in method addArticle",
-				manager.getInventory().findByProduct(p).isPresent());
+		assertThat( manager.getInventory().findByProduct(p).isPresent()).as("InventoryManager" +
+		"should add an article to the inventory in method addArticle").isTrue();
 	}
 	
 	@Test
@@ -107,40 +80,38 @@ public class InventoryManagerTest {
 			item.get().increaseQuantity(Quantity.of(10, Metric.UNIT));
 			manager.getInventory().save(item.get());
 		}
+				
+		assertThat(manager.hasSufficientQuantity(p, Quantity.of(2, Metric.UNIT))).as("InventoryManager" + 
+		"should return true when  the asked amount is lower than the current amount").isTrue();
 		
-		manager.hasSufficientQuantity(p, Quantity.of(2, Metric.UNIT));
+		assertThat(manager.hasSufficientQuantity(p, Quantity.of(50, Metric.UNIT))).as("InventoryManager" + 
+				"should return false when  the asked amount is higher than the current amount").isFalse();
 		
-		assertTrue("InventoryManager should return true when  the asked amount is lower than the current amount",
-				manager.hasSufficientQuantity(p, Quantity.of(2, Metric.UNIT)));
+		assertThat(manager.hasSufficientQuantity(q, Quantity.of(10, Metric.UNIT))).as("InventoryManager" + 
+				"should return false when the article isn't present").isFalse();
 		
-		assertFalse("InventoryManager should return false when  the asked amount is higher than the current amount",
-				manager.hasSufficientQuantity(p, Quantity.of(50, Metric.UNIT)));
-		
-		assertFalse("InventoryManager should return false when the article isn't present",
-				manager.hasSufficientQuantity(q, Quantity.of(10, Metric.UNIT)));
-		
-		try{
+		try {
 			manager.hasSufficientQuantity(p, Quantity.of(2, Metric.LITER));
-			fail("Manager should throw an IllegalArgumentException when the metric isn't Metric.Unit");
-		}catch(IllegalArgumentException e){}
+		}catch(Exception e) {
+			assertThat(e).as("Manager should throw an IllegalArgumentException" +
+		" when the metric isn't Metric.Unit").isInstanceOf(IllegalArgumentException.class);
+		}
 	}
 	
 	@Test
 	@Transient
-	public void testReorder()
-	{
+	public void testReorder() {
 		int size = manager.getInventory().findByProduct(p).get().getReorders().size();
 		
 		manager.reorder(p, Quantity.of(1, Metric.UNIT));
-				
-		assertTrue("InventoryManager should add a reorder after reordering",
-				manager.getInventory().findByProduct(p).get().getReorders().keySet().size() == size + 1);
+		
+		assertThat(manager.getInventory().findByProduct(p).get().getReorders().keySet().size() == size + 1)
+		.as("InventoryManager should add a reorder after reordering").isTrue();
 	}
 	
 	@Test
 	@Transient
-	public void testDecreaseQuantity()
-	{
+	public void testDecreaseQuantity() {
 		Part newPart = new Part("Table", "KitchenTable", 10, 10, new HashSet<String>(), new HashSet<String>());
 		
 		catalog.save(newPart);
@@ -155,28 +126,29 @@ public class InventoryManagerTest {
 		Quantity before = item.getQuantity();
 		
 		manager.decreaseQuantity(newPart,before.add(Quantity.of(10, Metric.UNIT)));
-		assertTrue("InventoryManager shouldn't decrease the quantity if the asked quantity is greater than the current quantity ",
-				manager.getInventory().findByProduct(newPart).get().getQuantity().getAmount().equals(before.getAmount()));
+		
+		assertThat(manager.getInventory().findByProduct(newPart).get().getQuantity().getAmount().equals(before.getAmount()))
+		.as("InventoryManager shouldn't decrease the quantity if the asked quantity is greater than the current quantity ")
+		.isTrue();
 		
 		manager.decreaseQuantity(newPart, before.subtract(Quantity.of(1, Metric.UNIT)) );
-		assertTrue("InventoryManager should decrease the quantity if the asked quantity is less to the current quantity. Actual "
-				+ manager.getInventory().findByProduct(newPart).get().getQuantity().toString() + "Expected " + Quantity.of(1, Metric.UNIT).toString(),
-				manager.getInventory().findByProduct(newPart).get().getQuantity().getAmount().compareTo(Quantity.of(1, Metric.UNIT).getAmount()) == 0);
-	}
-	
-	@Test
-	@Transient
-	public void testIsPresent()
-	{
-		assertTrue("InventoryManager should return true if an article is present", manager.isPresent(p));
 		
-		assertFalse("InventoryManager should return false if an article isn't present ", manager.isPresent(q));
+		assertThat(manager.getInventory().findByProduct(newPart).get().getQuantity().getAmount().compareTo(Quantity.of(1, Metric.UNIT).getAmount()) == 0)
+		.as("InventoryManager should decrease the quantity if the asked quantity is less to the current quantity.")
+		.isTrue();
 	}
 	
 	@Test
 	@Transient
-	public void testUpdate()
-	{
+	public void testIsPresent() {
+		assertThat(manager.isPresent(p)).as("InventoryManager should return true if an article is present").isTrue();
+		
+		assertThat(manager.isPresent(q)).as("InventoryManager should return false if an article isn't present ").isFalse();
+	}
+	
+	@Test
+	@Transient
+	public void testUpdate() {
 		manager.reorder(p, Quantity.of(5, Metric.UNIT));
 		
 		Quantity before = manager.getInventory().findByProduct(p).get().getQuantity();
@@ -185,8 +157,8 @@ public class InventoryManagerTest {
 		
 		manager.update();
 		
-		assertTrue("InventoryManager should increase the amount after the reordertime has passed",
-				before.add(Quantity.of(5, Metric.UNIT)).getAmount().compareTo(manager.getInventory().findByProduct(p).get().getQuantity().getAmount()) == 0);
+		assertThat(before.add(Quantity.of(5, Metric.UNIT)).getAmount().compareTo(manager.getInventory().findByProduct(p).get().getQuantity().getAmount()) == 0)
+		.as("InventoryManager should increase the amount after the reordertime has passed").isTrue();
 		
 		time.reset();
 	}	

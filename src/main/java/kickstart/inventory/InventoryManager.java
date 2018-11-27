@@ -1,6 +1,6 @@
 package kickstart.inventory;
 
-import java.util.NoSuchElementException;
+
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
@@ -35,19 +35,11 @@ public class InventoryManager {
 	/**
 	 * 
 	 * @param inventory The repository where InventoryItems are saved
-	 * @param reorders The repository where {@link Reorder} items are saved.
+	 * @param reorders The repository where {@link ReorderableInventoryItem}  is saved.
 	 * @param time An interface to determine the time
-	 * @throws NullPointerException: If any parameter is null
 	 */
-	public InventoryManager(Inventory<ReorderableInventoryItem> inventory,
-			 BusinessTime time )
-			throws NullPointerException
-	{
-		if(inventory == null || time == null)
-		{
-			throw new NullPointerException();
-		}
-		
+	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory,
+			@NotNull BusinessTime time ) {
 		this.inventory = inventory;
 		this.time = time;
 	}
@@ -56,18 +48,15 @@ public class InventoryManager {
 	 * 
 	 * @return time until a reorder arrives at the inventory in days.
 	 */
-	public long getReorderTime()
-	{
+	public long getReorderTime() {
 		return reorderTime;
 	}
 	
-	public Inventory<ReorderableInventoryItem> getInventory()
-	{
+	public Inventory<ReorderableInventoryItem> getInventory() {
 		return inventory;
 	}
 	
-	public BusinessTime getTime()
-	{
+	public BusinessTime getTime() {
 		return time;
 	}
 	
@@ -79,15 +68,12 @@ public class InventoryManager {
 	 *  before using this method.
 	 * @throws NullPointerException If newArticle is null
 	 */
-	public void addArticle(@NotNull Article newArticle)
-	{
-		if(!inventory.findByProductIdentifier(newArticle.getId()).isPresent())
-		{
+	public void addArticle(@NotNull Article newArticle) {
+		if(!inventory.findByProductIdentifier(newArticle.getId()).isPresent()) {
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 		}
-		else
-		{
-			
+		else {
+
 		}
 	}
 	
@@ -100,21 +86,17 @@ public class InventoryManager {
 	 * @throws IllegalArgumentException If Quantity hasn't the Metric {@literal Metric.UNIT} 
 	 */
 	public boolean hasSufficientQuantity(@NotNull Article article,@NotNull Quantity quantity)
-		throws NullPointerException, IllegalArgumentException, NoSuchElementException
-	{	
-		if(quantity.getMetric() != Metric.UNIT )
-		{
+		throws IllegalArgumentException {	
+		if(quantity.getMetric() != Metric.UNIT ) {
 			throw new IllegalArgumentException();
 		}
 		
 		Optional<ReorderableInventoryItem> item = inventory.findByProduct(article);
 		
-		if(item.isPresent())
-		{
+		if(item.isPresent()) {
 			return item.get().hasSufficientQuantity(quantity);
 		}
-		else
-		{
+		else {
 			return false;
 		}
 	}
@@ -122,15 +104,13 @@ public class InventoryManager {
 	/**
 	 * 
 	 * 
-	 * @param article The article that should get reorderd.
+	 * @param article The article that should get reordered.
 	 * @param quantity The desired quantity
 	 */
-	public void reorder(@NotNull Article article, @NotNull Quantity quantity)
-	{
+	public void reorder(@NotNull Article article, @NotNull Quantity quantity) {
 		Optional<ReorderableInventoryItem> item = inventory.findByProduct(article);
 		
-		if(item.isPresent())
-		{
+		if(item.isPresent()) {
 			item.get().addReorder(Interval.from(time.getTime()).to(time.getTime().plusDays(reorderTime)).getEnd(), quantity);
 			inventory.save(item.get());
 		}
@@ -145,18 +125,14 @@ public class InventoryManager {
 	 * @throws IllegalArgumentException If Quantity hasn't the Metric {@literal Metric.UNIT} the article exists and if not add it with {@link addArticle}
 	 */
 	public void decreaseQuantity(@NotNull Article article, @NotNull Quantity quantity)
-		throws IllegalArgumentException
-	{
-		if(inventory.findByProduct(article).isPresent() == false)
-		{
+		throws IllegalArgumentException {
+		if(inventory.findByProduct(article).isPresent() == false) {
 			throw new IllegalArgumentException();
 		}
-		if(!quantity.isCompatibleWith(Metric.UNIT))
-		{
+		if(!quantity.isCompatibleWith(Metric.UNIT)) {
 			throw new IllegalArgumentException();
 		}
-		if(quantity.isGreaterThan(inventory.findByProduct(article).get().getQuantity()))
-		{
+		if(quantity.isGreaterThan(inventory.findByProduct(article).get().getQuantity())) {
 			return;
 		}
 		
@@ -169,8 +145,7 @@ public class InventoryManager {
 	 * @param article
 	 * @return Returns if there exists an InventoryItem for this article. Otherwise false
 	 */
-	public boolean isPresent(@NotNull Article article)
-	{	
+	public boolean isPresent(@NotNull Article article) {	
 		return inventory.findByProduct(article).isPresent();
 	}
 	
@@ -178,12 +153,10 @@ public class InventoryManager {
 	 * This functions runs the update method of the class {@link Reorder} for all currently stored reorders.
 	 * If update on a reorders returns true, the reorder is deleted from the repository.
 	 */
-	public void update()
-	{
+	public void update() {
 		Iterable<ReorderableInventoryItem> items = inventory.findAll();
 		
-		for(ReorderableInventoryItem item : items)
-		{
+		for(ReorderableInventoryItem item : items) {
 			item.update(time.getTime());
 		}
 	}
