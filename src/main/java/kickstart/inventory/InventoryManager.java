@@ -3,13 +3,13 @@ package kickstart.inventory;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
+
 import org.salespointframework.inventory.Inventory;
-import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import kickstart.articles.Article;
@@ -52,6 +52,15 @@ public class InventoryManager {
 		this.time = time;
 	}
 	
+	/**
+	 * 
+	 * @return time until a reorder arrives at the inventory in days.
+	 */
+	public long getReorderTime()
+	{
+		return reorderTime;
+	}
+	
 	public Inventory<ReorderableInventoryItem> getInventory()
 	{
 		return inventory;
@@ -70,17 +79,15 @@ public class InventoryManager {
 	 *  before using this method.
 	 * @throws NullPointerException If newArticle is null
 	 */
-	public void addArticle(Article newArticle)
-		throws NullPointerException
+	public void addArticle(@NotNull Article newArticle)
 	{
-		if(newArticle == null)
-		{
-			throw new NullPointerException();
-		}
-		
-		if(!inventory.findByProduct(newArticle).isPresent())
+		if(!inventory.findByProductIdentifier(newArticle.getId()).isPresent())
 		{
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
+		}
+		else
+		{
+			
 		}
 	}
 	
@@ -88,28 +95,28 @@ public class InventoryManager {
 	 * 
 	 * @param article The article whose amount should be checked.
 	 * @param quantity The desired quantity
-	 * @return True, if the quantity in the inventory is greater or equal to the desired quantity. False otherwise
-	 * @throws NullPointerException If Quantity or article are {@literal null}
-	 * @throws IllegalArgumentException If Quantity hasn't the Metric {@literal Metric.UNIT} or is negative.
-	 * @throws NoSuchElementException If the article is not present. First test with {@link isPresent} whether
-	 * the article exists and if not add it with {@link addArticle}
+	 * @return True, if the quantity in the inventory is greater or equal to the desired quantity. 
+	 * 	false if the article is not present or if the quantity in the inventory is less then the desired quantity
+	 * @throws IllegalArgumentException If Quantity hasn't the Metric {@literal Metric.UNIT} 
 	 */
-	public boolean hasSufficientQuantity(Article article, Quantity quantity)
+	public boolean hasSufficientQuantity(@NotNull Article article,@NotNull Quantity quantity)
 		throws NullPointerException, IllegalArgumentException, NoSuchElementException
-	{
-		if(article == null || quantity == null)
-		{
-			throw new NullPointerException();
-		}
-		
-		if(quantity.getMetric() != Metric.UNIT || quantity.isLessThan(Quantity.of(0, Metric.UNIT)))
+	{	
+		if(quantity.getMetric() != Metric.UNIT )
 		{
 			throw new IllegalArgumentException();
 		}
 		
 		Optional<ReorderableInventoryItem> item = inventory.findByProduct(article);
 		
-		return item.get().hasSufficientQuantity(quantity);
+		if(item.isPresent())
+		{
+			return item.get().hasSufficientQuantity(quantity);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -118,7 +125,7 @@ public class InventoryManager {
 	 * @param article The article that should get reorderd.
 	 * @param quantity The desired quantity
 	 */
-	public void reorder(Article article, Quantity quantity)
+	public void reorder(@NotNull Article article, @NotNull Quantity quantity)
 	{
 		Optional<ReorderableInventoryItem> item = inventory.findByProduct(article);
 		
@@ -135,39 +142,35 @@ public class InventoryManager {
 	 * 
 	 * @param article The article whose amount should be decreased.
 	 * @param quantity The desired quantity
-	 * @throws NullPointerException If Quantity or article are {@literal null}
-	 * @throws IllegalArgumentException If Quantity hasn't the Metric {@literal Metric.UNIT} or is greater than the available quantity.
-	 * @throws NoSuchElementException If the article is not present. First test with {@link isPresent} whether
-	 * the article exists and if not add it with {@link addArticle}
+	 * @throws IllegalArgumentException If Quantity hasn't the Metric {@literal Metric.UNIT} the article exists and if not add it with {@link addArticle}
 	 */
-	public void decreaseQuantity(Article article, Quantity quantity)
-		throws NullPointerException, IllegalArgumentException, NoSuchElementException
+	public void decreaseQuantity(@NotNull Article article, @NotNull Quantity quantity)
+		throws IllegalArgumentException
 	{
-		if(article == null)
-		{
-			throw new NullPointerException();
-		}
-		
-		if(quantity.isGreaterThan(inventory.findByProduct(article).get().getQuantity()) || !quantity.isCompatibleWith(Metric.UNIT))
+		if(inventory.findByProduct(article).isPresent() == false)
 		{
 			throw new IllegalArgumentException();
 		}
+		if(!quantity.isCompatibleWith(Metric.UNIT))
+		{
+			throw new IllegalArgumentException();
+		}
+		if(quantity.isGreaterThan(inventory.findByProduct(article).get().getQuantity()))
+		{
+			return;
+		}
 		
-		inventory.findByProduct(article).get().decreaseQuantity(quantity);
+		ReorderableInventoryItem item = inventory.findByProduct(article).get();
+		item.decreaseQuantity(quantity);
+		inventory.save(item);
 	}
 	
 	/**
-	 * 
+	 * @param article
 	 * @return Returns if there exists an InventoryItem for this article. Otherwise false
-	 * @throws NullPointerException If article is null
 	 */
-	public boolean isPresent(Article article)
-		throws NullPointerException
+	public boolean isPresent(@NotNull Article article)
 	{	
-		if(article == null)
-		{
-			throw new NullPointerException();
-		}
 		return inventory.findByProduct(article).isPresent();
 	}
 	
