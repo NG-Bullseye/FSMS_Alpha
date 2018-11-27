@@ -1,9 +1,9 @@
 <nav id="navmenu" th:fragment="navbar">
 	<div class="ui secondary  menu">
-	  <a class="item" th:text="Startseite">
+	  <a class="item" href="index.html" th:href="@{/}" th:text="Startseite">
 		Startseite
 	  </a>
-	  <a class="item" th:text="Katalog">
+	  <a class="item" href="catalog.html" th:href="@{/catalog}" th:text="Katalog">
 		Katalog
 	  </a>
 	  <a class="item" href="customeraccount.html" th:href="@{/customeraccount}"

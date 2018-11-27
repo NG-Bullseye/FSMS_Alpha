@@ -1,20 +1,26 @@
 package kickstart.articles;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Set;
 
-import org.javamoney.moneta.Money;
 import org.salespointframework.quantity.Quantity;
+
+import javax.money.MonetaryAmount;
+import javax.persistence.Entity;
 
 /**
  * This class represents the furniture that is made of many {@link Part}. In our example that
  * would be a table made of 4 chair legs and 1 table top. See the composite pattern for information
  * about the design.
  */
+@Entity
 public class Composite extends Article {
 
-	private List<Article> parts;
+	private LinkedList<Article> parts;
+	private ArticleType type;
 	
 	/**
 	 * Standard constructor for Composite. See {@link Article} for more information as it's the base class
@@ -24,7 +30,7 @@ public class Composite extends Article {
 	 * @throws NullPointerException If parts is null
 	 * @throws IllegalArgumentException If the size of parts is zero.
 	 */
-	public Composite(String name, String description, List<Article> parts)
+	public Composite(String name, String description, LinkedList<Article> parts)
 		throws NullPointerException, IllegalArgumentException
 	{
 		super(name, description);
@@ -40,6 +46,12 @@ public class Composite extends Article {
 		}
 		
 		this.parts = parts;
+
+		this.type = ArticleType.COMPOSITE;
+
+		for (Article article: parts) {
+			article.getCategories().forEach(this::addCategory);
+		}
 	}
 	
 	/**
@@ -103,15 +115,15 @@ public class Composite extends Article {
 		
 		return weight;
 	}
-	
+
 	/**
 	 * 
 	 * @return Returns the price of this composite. The price is received by adding the prices of the parts.
 	 */
-	public Money getPrice()
+	public javax.money.MonetaryAmount getPrice()
 	{
 		// This doesn't lead to errors since every change ensures that the list has at least one element.
-		Money price = parts.get(0).getPrice();
+		MonetaryAmount price = parts.get(0).getPrice();
 		
 		for(int i = 0; i < parts.size(); i++)
 		{
@@ -138,6 +150,16 @@ public class Composite extends Article {
 	
 	public ArticleType getType()
 	{
-		return ArticleType.COMPOSITE;
+		return type;
+	}
+
+	@Override
+	public void setColour(String colour) {
+
+	}
+
+	@Override
+	public void setWeight(double weight) {
+
 	}
 }
