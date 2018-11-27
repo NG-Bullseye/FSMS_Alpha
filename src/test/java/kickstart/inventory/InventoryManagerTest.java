@@ -3,27 +3,26 @@ package kickstart.inventory;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.HashSet;
+
 import org.junit.jupiter.api.Test;
-import org.salespointframework.Salespoint;
 import org.salespointframework.catalog.Catalog;
 import org.salespointframework.inventory.Inventory;
-import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 
-@SpringBootTest(classes= {Salespoint.class},webEnvironment = WebEnvironment.NONE)
+@SpringBootTest
 public class InventoryManagerTest {
 	
 	private  @Autowired Catalog<Article> catalog;
 
-	private  @Autowired Inventory<InventoryItem> inventory;
+	private  @Autowired Inventory<ReorderableInventoryItem> inventory;
 		
 	private  @Autowired BusinessTime time;
 	
@@ -43,7 +42,7 @@ public class InventoryManagerTest {
 				
 		try
 		{
-			//InventoryManager manager = new InventoryManager(inventory, null);
+			InventoryManager manager = new InventoryManager(inventory, null);
 			fail("Inventory manager should throw a NullPointerException when time is null");
 		}catch(NullPointerException e) {}
 		
@@ -52,18 +51,27 @@ public class InventoryManagerTest {
 	@Test
 	public void testAddArticle()
 	{
-		//Part p = new Part("Name", "Description", 10, 10, "Colour");
+		HashSet<String> colours = new HashSet<String>();
+		colours.add("blue");
 		
-		//catalog.save(p);
+		Part p = new Part("Name", "Description", 10, 10, colours, new HashSet<String>());
 		
-		//inventory.save(new InventoryItem(p, Quantity.of(0)));
+		catalog.save(p);
 		
-		//InventoryManager manager = new InventoryManager(inventory, time);
+		inventory.save(new ReorderableInventoryItem(p, Quantity.of(0)));
 		
-		//manager.addArticle(p);
+		InventoryManager manager = new InventoryManager(inventory, time);
 		
-		//assertTrue("InventoryManager should add an article to the inventory in method addArticle",
-		//		manager.getInventory().findByProduct(p).isPresent());
+		manager.addArticle(p);
+		
+		assertTrue("InventoryManager should add an article to the inventory in method addArticle",
+				manager.getInventory().findByProduct(p).isPresent());
+	}
+	
+	@Test
+	public void testHasSufficientQuantity()
+	{
+		
 	}
 	
 }

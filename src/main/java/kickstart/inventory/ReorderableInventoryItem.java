@@ -24,6 +24,11 @@ public class ReorderableInventoryItem extends InventoryItem{
 		reorders = new TreeMap<LocalDateTime, Quantity>();
 	}
 	
+	public ReorderableInventoryItem()
+	{
+		
+	}
+	
 	public void addReorder(LocalDateTime time, Quantity quantity)
 	{
 		if(time == null || quantity == null)
