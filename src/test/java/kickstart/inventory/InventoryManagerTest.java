@@ -4,10 +4,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -46,8 +48,9 @@ public class InventoryManagerTest {
 	private InventoryManager manager;
 	
 	@BeforeAll
+	@Transient
 	public void beforeEach()
-	{
+	{		
 		HashSet<String> colours = new HashSet<String>();
 		colours.add("blue");
 		
@@ -64,6 +67,7 @@ public class InventoryManagerTest {
 	
 	@SuppressWarnings("unused")
 	@Test
+	@Transient
 	public void testConstructorNullArgument()
 	{
 		
@@ -84,6 +88,7 @@ public class InventoryManagerTest {
 	}
 	
 	@Test
+	@Transient
 	public void testAddArticle()
 	{		
 		manager.addArticle(p);
@@ -160,6 +165,7 @@ public class InventoryManagerTest {
 	}
 	
 	@Test
+	@Transient
 	public void testIsPresent()
 	{
 		assertTrue("InventoryManager should return true if an article is present", manager.isPresent(p));
@@ -183,6 +189,5 @@ public class InventoryManagerTest {
 				before.add(Quantity.of(5, Metric.UNIT)).getAmount().compareTo(manager.getInventory().findByProduct(p).get().getQuantity().getAmount()) == 0);
 		
 		time.reset();
-	}
-	
+	}	
 }
