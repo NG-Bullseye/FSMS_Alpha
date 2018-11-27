@@ -55,10 +55,10 @@ public class Part extends Article {
 			throw new NullPointerException("Part.colour shouldn't be null");
 		}
 		
-		if(colour.equals(""))
+		/*if(colour.equals(""))
 		{
 			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");
-		}
+		}*/
 		
 		this.colour = colour;
 

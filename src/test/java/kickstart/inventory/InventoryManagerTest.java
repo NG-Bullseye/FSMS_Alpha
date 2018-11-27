@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
-
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
@@ -53,11 +52,11 @@ public class InventoryManagerTest {
 	@Test
 	public void testAddArticle()
 	{
-		Part p = new Part("Name", "Description", 10, 10, "Colour");
+		//Part p = new Part("Name", "Description", 10, 10, "Colour");
 		
 		//catalog.save(p);
 		
-		inventory.save(new InventoryItem(p, Quantity.of(0)));
+		//inventory.save(new InventoryItem(p, Quantity.of(0)));
 		
 		//InventoryManager manager = new InventoryManager(inventory, time);
 		

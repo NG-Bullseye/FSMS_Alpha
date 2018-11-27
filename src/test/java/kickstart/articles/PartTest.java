@@ -3,6 +3,8 @@ package kickstart.articles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.HashSet;
+
 import org.junit.jupiter.api.Test;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,13 +18,25 @@ public class PartTest {
 	private Part part1;
 	private Part part2;
 	private Part part3;
+	private HashSet<String> categories;
 	
 	@BeforeEach
 	public void setUp()
 	{
-		part1 = new Part("wall", "wall for a wardrobe", 100, 5, "brown");
-		part2 = new Part("chair leg", "for a kitchen chair", 20, 2, "black");
-		part3 = new Part("shelf", "for a book shelf", 30, 1, "grey");
+		HashSet<String> colours1 = new HashSet<String>();
+		colours1.add("brown");
+		
+		HashSet<String> colours2 = new HashSet<String>();
+		colours1.add("black");
+		
+		HashSet<String> colours3 = new HashSet<String>();
+		colours1.add("grey");
+		
+		categories= new HashSet<String>();
+		
+		part1 = new Part("wall", "wall for a wardrobe", 100, 5, colours1, categories);
+		part2 = new Part("chair leg", "for a kitchen chair", 20, 2, colours2, categories);
+		part3 = new Part("shelf", "for a book shelf", 30, 1, colours3, categories);
 	}
 
 	@Test
@@ -31,7 +45,7 @@ public class PartTest {
 		try
 		{
 			@SuppressWarnings("unused")
-			Part p = new Part("Name","description", 100, 100,null);
+			Part p = new Part("Name","description", 100, 100,null, categories);
 			fail("Part should throw a NullPointerException when colour is null");
 		}catch(NullPointerException e) {}
 	}
@@ -39,38 +53,41 @@ public class PartTest {
 	@Test
 	public void testConstructorIllegalArgument()
 	{
-		try 
+		HashSet<String> colours = new HashSet<String>();
+		colours.add("Colour");
+		
+		/*try 
 		{
 			@SuppressWarnings("unused")
 			Part p = new Part("Name", "Description", 100, 100, "");
 			fail("Part should throw an IllegalArgumentException when colour equals the empty String");
-		}catch(IllegalArgumentException e) {}
+		}catch(IllegalArgumentException e) {}*/
 		
 		try
 		{
 			@SuppressWarnings("unused")
-			Part p = new Part("Name", "Description", -15, 100, "Colour");
+			Part p = new Part("Name", "Description", -15, 100, colours, categories);
 			fail("Part should throw an IllegalArgumentException when price is negative");
 		}catch(IllegalArgumentException e) {}
 		
 		try
 		{
 			@SuppressWarnings("unused")
-			Part p = new Part("Name", "Description", 0, 100, "Colour");
+			Part p = new Part("Name", "Description", 0, 100, colours, categories);
 			fail("Part should throw an IllegalArgumentException when price is 0");
 		}catch(IllegalArgumentException e) {}
 		
 		try
 		{
 			@SuppressWarnings("unused")
-			Part p = new Part("Name", "Description", 100, -15, "Colour");
+			Part p = new Part("Name", "Description", 100, -15, colours, categories);
 			fail("Part should throw an IllegalArgumentException when weight is negative");
 		}catch(IllegalArgumentException e) {}
 		
 		try
 		{
 			@SuppressWarnings("unused")
-			Part p = new Part("Name", "Description", 100, 0, "Colour");
+			Part p = new Part("Name", "Description", 100, 0,colours, categories);
 			fail("Part should throw an IllegalArgumentException when weight is 0");
 		}catch(IllegalArgumentException e) {}
 	}
@@ -78,7 +95,10 @@ public class PartTest {
 	@Test
 	public void testGetWeight()
 	{
-		Part p = new Part("Name", "Description", 100, 15, "Colour");
+		HashSet<String> colours = new HashSet<String>();
+		colours.add("Colour");
+		
+		Part p = new Part("Name", "Description", 100, 15, colours, categories);
 		
 		assertEquals(p.getWeight().getMetric(), Metric.KILOGRAM, "The weight of a part should be in kilograms");
 				
@@ -167,9 +187,13 @@ public class PartTest {
 	@Test
 	public void testType()
 	{
+		
+		HashSet<String> colours = new HashSet<String>();
+		colours.add("Colour");
+		
 		assertEquals(part1.getType(), ArticleType.PART, "Parts should always have the type PART");
 		
-		assertEquals(new Part("name", "description", 1, 1, "colour").getType(), ArticleType.PART, "Parts should always have the type PART");
+		assertEquals(new Part("name", "description", 1, 1, colours, categories).getType(), ArticleType.PART, "Parts should always have the type PART");
 	}
 }
 

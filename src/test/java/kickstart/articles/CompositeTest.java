@@ -29,8 +29,14 @@ public class CompositeTest {
 	@BeforeEach
 	public void setUp()
 	{
-		part1 = new Part("Frame", "Frame for a book shelf", 25.75, 6, "brown");
-		part2 = new Part("Board", "Board for a book shelf", 14.33, 2, "black");
+		HashSet<String> colours1 = new HashSet<String>();
+		colours1.add("brown");
+		
+		HashSet<String> colours2 = new HashSet<String>();
+		colours2.add("black");
+		
+		part1 = new Part("Frame", "Frame for a book shelf", 25.75, 6, colours1, new HashSet<String>());
+		part2 = new Part("Board", "Board for a book shelf", 14.33, 2, colours2,  new HashSet<String>());
 		
 		parts1 = new LinkedList<Article>();
 		parts1.add(part1);
