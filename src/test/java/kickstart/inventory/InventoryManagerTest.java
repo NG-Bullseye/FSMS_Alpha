@@ -21,12 +21,14 @@ import org.salespointframework.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.annotation.Transient;
+import org.springframework.transaction.annotation.Transactional;
 
 import kickstart.articles.Article;
 import kickstart.articles.Part;
 
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
+@Transactional
 public class InventoryManagerTest {
 	
 	private  @Autowired Catalog<Article> catalog;
@@ -84,8 +86,6 @@ public class InventoryManagerTest {
 	@Test
 	public void testAddArticle()
 	{		
-		Part newPart = new Part("name", "description", 10, 10, new HashSet<String>(),new HashSet<String>());
-		
 		manager.addArticle(p);
 		
 		assertTrue("InventoryManager should add an article to the inventory in method addArticle",
@@ -151,12 +151,12 @@ public class InventoryManagerTest {
 		
 		manager.decreaseQuantity(newPart,before.add(Quantity.of(10, Metric.UNIT)));
 		assertTrue("InventoryManager shouldn't decrease the quantity if the asked quantity is greater than the current quantity ",
-				manager.getInventory().findByProduct(newPart).get().getQuantity().equals(before));
+				manager.getInventory().findByProduct(newPart).get().getQuantity().getAmount().equals(before.getAmount()));
 		
 		manager.decreaseQuantity(newPart, before.subtract(Quantity.of(1, Metric.UNIT)) );
 		assertTrue("InventoryManager should decrease the quantity if the asked quantity is less to the current quantity. Actual "
 				+ manager.getInventory().findByProduct(newPart).get().getQuantity().toString() + "Expected " + Quantity.of(1, Metric.UNIT).toString(),
-				manager.getInventory().findByProduct(newPart).get().getQuantity().equals(Quantity.of(1, Metric.UNIT)));
+				manager.getInventory().findByProduct(newPart).get().getQuantity().getAmount().compareTo(Quantity.of(1, Metric.UNIT).getAmount()) == 0);
 	}
 	
 	@Test
@@ -180,7 +180,7 @@ public class InventoryManagerTest {
 		manager.update();
 		
 		assertTrue("InventoryManager should increase the amount after the reordertime has passed",
-				before.add(Quantity.of(5, Metric.UNIT)).equals(manager.getInventory().findByProduct(p).get().getQuantity()));
+				before.add(Quantity.of(5, Metric.UNIT)).getAmount().compareTo(manager.getInventory().findByProduct(p).get().getQuantity().getAmount()) == 0);
 		
 		time.reset();
 	}

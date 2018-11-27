@@ -11,6 +11,8 @@ import java.util.TreeMap;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
+
+// Timer class
 @Entity
 public class ReorderableInventoryItem extends InventoryItem{
 	
