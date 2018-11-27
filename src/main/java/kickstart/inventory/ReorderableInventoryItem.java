@@ -5,9 +5,9 @@ import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
-
+import java.util.TreeMap;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
@@ -15,13 +15,13 @@ import javax.persistence.Entity;
 public class ReorderableInventoryItem extends InventoryItem{
 	
 	@ElementCollection
-	private HashMap<LocalDateTime, Quantity> reorders;
+	private Map<LocalDateTime, Quantity> reorders;
 	
 	public ReorderableInventoryItem(Product product, Quantity quantity)
 	{
 		super(product, quantity);
 		
-		reorders = new HashMap<LocalDateTime, Quantity>();
+		reorders = new TreeMap<LocalDateTime, Quantity>();
 	}
 	
 	public void addReorder(LocalDateTime time, Quantity quantity)
@@ -53,7 +53,7 @@ public class ReorderableInventoryItem extends InventoryItem{
 		}
 	}
 	
-	public HashMap<LocalDateTime, Quantity> getReorders()
+	public Map<LocalDateTime, Quantity> getReorders()
 	{
 		return reorders;
 	}

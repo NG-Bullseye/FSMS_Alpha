@@ -10,6 +10,7 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Service;
 
 import kickstart.articles.Article;
 
@@ -18,6 +19,7 @@ import kickstart.articles.Article;
  *  This class manages all aspects of the inventory/stock. It stores the amount and can change the 
  *  amount by reorders to the stock or by orders of a customer. 
  */
+@Service
 public class InventoryManager {
 
 	// Stores the amount of each article.
