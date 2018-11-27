@@ -64,6 +64,8 @@
 				<form th:action="@{/showcustomerorders}">
 					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
 					<input name="nameoftheorderer" type="hidden" th:value="${name}">
+					<input name="emailoftheorderer" type="hidden" th:value="${email}">
+					<input name="addressoftheorderer" type="hidden" th:value="${address}">
 				</form>
 
   			</div>

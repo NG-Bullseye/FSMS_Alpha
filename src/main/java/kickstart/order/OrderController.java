@@ -75,8 +75,12 @@ public class OrderController {
 	}
 
 	@RequestMapping("/showcustomerorders")
-	String showcostumerorder(@LoggedIn UserAccount userAccount, Model model){
+	String showcostumerorder(@RequestParam("nameoftheorderer") String completeName, @RequestParam("addressoftheorderer") String addressoforderer, @RequestParam("emailoftheorderer") String emailoforderer, @LoggedIn UserAccount userAccount, Model model){
 
+
+		model.addAttribute("name", completeName);
+		model.addAttribute("email", emailoforderer);
+		model.addAttribute("address", addressoforderer);
 		model.addAttribute("ordersofthedude",cartOrderManager.getOrderManager().findBy(userAccount));
 		return "/customeraccount";
 	}
