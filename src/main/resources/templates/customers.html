@@ -7,21 +7,34 @@
 <body>
     <nav th:include="navbar :: navbar"></nav>
 
-
-    <table class="ui celled table">
-        <thead>
-        <tr>
-            <th th:text="#{customers.name}">Name</th>
-            <th th:text="#{customers.address}">Anschrift</th>
-        </tr>
-        </thead>
-        <tbody th:remove="all-but-first">
-        <tr th:each=" customer : ${customerList}">
-            <td th:text="${customer.userAccount.id}">Paul</td>
-            <td th:text="${customer.address}">Nöthnitzer Straße 46</td>
-        </tr>
-        </tbody>
-    </table>
+	<div id="tablespace">
+	    <table class="ui celled table">
+	        <thead>
+	        <tr>
+	            <th th:text="Nutzername">Nutzername</th>
+	            <th th:text="Vorname">Vorname</th>
+	            <th th:text="Nachname">Nachname</th>
+	            <th th:text="E-Mail">E-Mail</th>
+	            <th th:text="Anschrift">Anschrift</th>
+	            <th th:text="'Link ' + 'zum ' + 'Kundenkonto'">Link zum Kundenkonto</th>
+	        </tr>
+	        </thead>
+	        <tbody th:remove="all-but-first">
+	        <tr th:each=" customer : ${customerList}">
+	            <td th:text="${customer.userAccount.id}">Nutzername</td>
+	            <td th:text="${customer.firstname}">Vorname</td>
+	            <td th:text="${customer.lastname}">Nachname</td>
+	            <td th:text="${customer.email}">E-Mail</td>
+	            <td th:text="${customer.address}">Anschrift</td>
+	  			<td>
+		  			<form class="item" th:action="@{'/managecustomer'(user=${customer.id})}" method="get">
+						<button type="submit" class="ui button" th:text="Kundenkonto">Kundenkonto</button>
+			  		</form><br><a th:href="@{'/managecustomer'(user=${customer.id})}"th:text="Kundenkonto">Kundenkonto</a>
+		  		</td>
+	        </tr>
+	        </tbody>
+	    </table>
+    </div>
 
 </body>
 </html>
