@@ -1,23 +1,25 @@
 package kickstart.catalog;
 
-import forms.CompositeForm;
-import forms.Filterform;
-import forms.Form;
+import kickstart.forms.CompositeForm;
+import kickstart.forms.Filterform;
+import kickstart.forms.Form;
 import kickstart.articles.*;
+import kickstart.inventory.InventoryManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.quantity.Quantity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import javax.money.MonetaryAmount;
+import java.util.*;
 
 
 @Component
 public class CatalogManager {
 	private final WebshopCatalog catalog;
-
+	@Autowired
+	InventoryManager inventory;
 	public CatalogManager(WebshopCatalog catalog) {
 		this.catalog = catalog;
 	}
@@ -33,8 +35,8 @@ public class CatalogManager {
 	}
 
 	public void editArticle(Form article, ProductIdentifier identifier) {
-		Optional<Article> toEdit = catalog.findById(identifier);
-		Article afterEdit = toEdit.get();
+		System.out.println("wird aufgerufen");
+		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
 		afterEdit.setPrice(Money.of(article.getPrice(), "EUR"));
@@ -50,10 +52,11 @@ public class CatalogManager {
 
 		HashSet<Article> categories = new HashSet<>();
 
-		if (filterform.getCategory().equals("all")) {
+		if (filterform.getCategory().equals("composite")) {
 			Iterable<Article> rightCategories = catalog.findAll();
-			rightCategories.forEach(categories::add);
-		} else {
+			rightCategories.forEach(article -> {
+				if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);});}
+		 else {
 			if (filterform.getCategory().equals("part")) {
 				Iterable<Article> rightCategories = catalog.findAll();
 				rightCategories.forEach(article -> {
@@ -61,9 +64,8 @@ public class CatalogManager {
 				});
 			} else {
 				Iterable<Article> rightCategories = catalog.findAll();
-				rightCategories.forEach(article -> {
-					if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);
-				});
+				rightCategories.forEach(categories::add);
+
 			}
 		}
 		HashSet<Article> rightColours = new HashSet<>();
@@ -87,24 +89,33 @@ public class CatalogManager {
 	public void newPart(Form form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
+			inventory.addArticle(newArticle);
 	}
-	public void newComposite(CompositeForm form) {//-----------------------WEITERMACHEN----------------------------------
-		catalog.findAll().forEach(article -> {
-			System.out.println("Die ID: "+ article.getId());});
+	public void newComposite(CompositeForm form, Map<String,String> partsCount) {//-----------------------WEITERMACHEN----------------------------------
 
 		System.out.println(form.getDescription());
-		System.out.println(form.getLastArticle());
 		System.out.println(form.getName());
-		System.out.println(form.getParts());
-		System.out.println(form.getCount());
-
+		HashMap<String,Integer> rightMap = new HashMap<>();
+		partsCount.forEach((article,id)->{
+			if(article.contains("article_"))
+			rightMap.put(article.replace("article_",""),Integer.parseInt(id));
+		});
+		HashMap<String, Article> ids = new HashMap<>();
+		catalog.findAll().forEach(article -> {
+				if(rightMap.containsKey(article.getId().toString()))
+				ids.put(article.getId().toString(),article);
+		});
 		LinkedList<Article> parts = new LinkedList<>();
+		rightMap.forEach((article,count)->{
+				int i = count;
+				while (i>0){
+					parts.add(catalog.findById(ids.get(article).getId()).get()); //Sucht den Article,der zu dem String gemappt ist und übergibt diesen
+					i--;
+				}
 
-		form.getParts().forEach(((identifier, count) -> {
-			for(int i = count; i<1; i--){
-				parts.add(catalog.findById(identifier).get());
-			}
-		}));
-		catalog.save(new Composite(form.getName(),form.getDescription(),parts));
+		} );
+		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
+		catalog.save(newArticle);
+		inventory.addArticle(newArticle);
 	}
 }
