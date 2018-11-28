@@ -4,11 +4,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import forms.ReorderForm;
 import kickstart.inventory.InventoryManager;
 import kickstart.inventory.ReorderableInventoryItem;
 
@@ -85,9 +91,12 @@ public class InventoryController {
 		return "reorder";
 	}
 	
-	@PostMapping("/article")
-	public String reorder()
-	{
+	@PostMapping("reorder/{identifier}")
+	public String reorder(@PathVariable ProductIdentifier identifier,
+			@ModelAttribute("form")ReorderForm form, Model model) {
+		
+		manager.reorder(identifier, Quantity.of(form.getAmount(), Metric.UNIT));
+		
 		return "redirect:/";
 	}
 }
