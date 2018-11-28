@@ -4,9 +4,11 @@ import kickstart.forms.CompositeForm;
 import kickstart.forms.Filterform;
 import kickstart.forms.Form;
 import kickstart.articles.*;
+import kickstart.inventory.InventoryManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Quantity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.money.MonetaryAmount;
@@ -16,7 +18,8 @@ import java.util.*;
 @Component
 public class CatalogManager {
 	private final WebshopCatalog catalog;
-
+	@Autowired
+	InventoryManager inventory;
 	public CatalogManager(WebshopCatalog catalog) {
 		this.catalog = catalog;
 	}
@@ -86,6 +89,7 @@ public class CatalogManager {
 	public void newPart(Form form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
+			inventory.addArticle(newArticle);
 	}
 	public void newComposite(CompositeForm form, Map<String,String> partsCount) {//-----------------------WEITERMACHEN----------------------------------
 
@@ -110,7 +114,8 @@ public class CatalogManager {
 				}
 
 		} );
-
-		catalog.save(new Composite(form.getName(),form.getDescription(),parts));
+		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
+		catalog.save(newArticle);
+		inventory.addArticle(newArticle);
 	}
 }
