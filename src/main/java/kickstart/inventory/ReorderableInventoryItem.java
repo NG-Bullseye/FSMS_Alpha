@@ -11,6 +11,8 @@ import java.util.TreeMap;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 
+
+// Timer class
 @Entity
 public class ReorderableInventoryItem extends InventoryItem{
 	
@@ -22,6 +24,11 @@ public class ReorderableInventoryItem extends InventoryItem{
 		super(product, quantity);
 		
 		reorders = new TreeMap<LocalDateTime, Quantity>();
+	}
+	
+	public ReorderableInventoryItem()
+	{
+		reorders = new TreeMap<LocalDateTime, Quantity>(); 
 	}
 	
 	public void addReorder(LocalDateTime time, Quantity quantity)
