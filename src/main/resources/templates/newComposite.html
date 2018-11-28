@@ -24,11 +24,10 @@
                     <input type="text" th:field="*{description}" />
                 </div>
             </div>
-                <div th:each="article : *{parts}">
-                    <div class="ui label" th:text="${article}"></div>
+                <div th:each="article : ${catalog}">
                     <div class="ui labeled input">
-                        <div class="ui label" th:text="${article.key.name}"></div>
-                        <input type="number" th:field="*{parts[__${article.key}__]}">
+                        <div class="ui label" th:text="${article.name}"></div>
+                        <input type="number" value="0" th:name="article_+${article.id}" >
                     </div>
                 </div>
 

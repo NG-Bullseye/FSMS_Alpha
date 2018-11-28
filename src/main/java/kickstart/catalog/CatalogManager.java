@@ -6,8 +6,10 @@ import kickstart.forms.Form;
 import kickstart.articles.*;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.quantity.Quantity;
 import org.springframework.stereotype.Component;
 
+import javax.money.MonetaryAmount;
 import java.util.*;
 
 
@@ -22,11 +24,6 @@ public class CatalogManager {
 	public Iterable<Article> getWholeCatalog() {
 		return catalog.findAll();
 
-	}
-	public HashMap<Article,Integer> getCatalogMap(){
-		HashMap<Article,Integer> map = new HashMap<>();
-		catalog.findAll().forEach(article -> map.put(article,0));
-		return map;
 	}
 
 	public Article getArticle(ProductIdentifier id) {
@@ -90,17 +87,29 @@ public class CatalogManager {
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
 	}
-	public void newComposite(CompositeForm form) {//-----------------------WEITERMACHEN----------------------------------
+	public void newComposite(CompositeForm form, Map<String,String> partsCount) {//-----------------------WEITERMACHEN----------------------------------
 
 		System.out.println(form.getDescription());
 		System.out.println(form.getName());
-		System.out.println("Nachher: " + form.getParts());
-		LinkedList<Article> parts = new LinkedList<>();
-		form.getParts().forEach((article, integer) -> {
-			for (int i=integer;i<1; i--){
-				parts.add(article);
-			}
+		HashMap<String,Integer> rightMap = new HashMap<>();
+		partsCount.forEach((article,id)->{
+			if(article.contains("article_"))
+			rightMap.put(article.replace("article_",""),Integer.parseInt(id));
 		});
+		HashMap<String, Article> ids = new HashMap<>();
+		catalog.findAll().forEach(article -> {
+				if(rightMap.containsKey(article.getId().toString()))
+				ids.put(article.getId().toString(),article);
+		});
+		LinkedList<Article> parts = new LinkedList<>();
+		rightMap.forEach((article,count)->{
+				int i = count;
+				while (i>0){
+					parts.add(catalog.findById(ids.get(article).getId()).get()); //Sucht den Article,der zu dem String gemappt ist und übergibt diesen
+					i--;
+				}
+
+		} );
 
 		catalog.save(new Composite(form.getName(),form.getDescription(),parts));
 	}

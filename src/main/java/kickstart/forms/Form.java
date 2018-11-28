@@ -16,7 +16,7 @@ public class Form {
 	private double price;
 	@NotNull
 	private double weight;
-	@NotEmpty(message = "Bitte wählen sie eine Kategorie für den Artikel aus.")
+	@NotNull(message = "Bitte wählen sie eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
 
 

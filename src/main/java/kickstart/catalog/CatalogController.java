@@ -20,12 +20,15 @@ import kickstart.forms.CompositeForm;
 import kickstart.forms.Filterform;
 import kickstart.forms.Form;
 import org.salespointframework.catalog.ProductIdentifier;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,12 +91,13 @@ public class CatalogController {
 
 	@PostMapping("edit/{identifier}")
 	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form, BindingResult bindingResult, Model model){
+		model.addAttribute("article",manager.getArticle(identifier));
 		if(bindingResult.hasErrors()){
 			return "edit";
 		}
 		manager.editArticle(form, identifier);
-		model.addAttribute("article",manager.getArticle(identifier));
-		return "article";
+
+		return "redirect:/article/"+manager.getArticle(identifier);
 	}
 	@GetMapping("catalog/part/new")
 	public String showNew(Model model){
@@ -108,18 +112,21 @@ public class CatalogController {
 	}
 	@GetMapping("catalog/composite/new")
 	public String newComposite(Model model){
+
 		CompositeForm composite = new CompositeForm();
-		composite.setParts(manager.getCatalogMap());
-		System.out.println("Vorher: " + composite.getParts());
 		model.addAttribute("compositeForm",composite);
 		model.addAttribute("catalog", manager.getWholeCatalog());
 		return"newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model){
+	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model,@NotNull @RequestParam Map<String,String> partsMapping){
+
 		model.addAttribute("compositeForm",new CompositeForm());
-		manager.newComposite(form);
+
+		manager.newComposite(form,partsMapping);
+
 		model.addAttribute("catalog", manager.getWholeCatalog());
+
 		return"redirect:/catalog";
 	}
 
