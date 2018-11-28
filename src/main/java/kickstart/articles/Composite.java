@@ -9,7 +9,9 @@ import java.util.Set;
 import org.salespointframework.quantity.Quantity;
 
 import javax.money.MonetaryAmount;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 /**
  * This class represents the furniture that is made of many {@link Part}. In our example that
@@ -18,10 +20,15 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Composite extends Article {
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Article> parts;
 
-	private LinkedList<Article> parts;
 	private ArticleType type;
-	
+
+
+	private Composite(){
+		super("a","b");
+	}
 	/**
 	 * Standard constructor for Composite. See {@link Article} for more information as it's the base class
 	 * @param name
@@ -44,7 +51,7 @@ public class Composite extends Article {
 		{
 			throw new IllegalArgumentException();
 		}
-		
+
 		this.parts = parts;
 
 		this.type = ArticleType.COMPOSITE;
@@ -66,10 +73,10 @@ public class Composite extends Article {
 		{
 			throw new NullPointerException();
 		}
-		
+
 		parts.add(article);
 	}
-	
+
 	/**
 	 *  Removes one appearance of a part if the part is present. If the part isn't present, nothing happens.
 	 *  The method ensures that the number of parts is always greater than zero. If this operation would lead
@@ -84,7 +91,7 @@ public class Composite extends Article {
 		{
 			throw new NullPointerException();
 		}
-		
+
 		// The parts list should never be empty!
 		if(parts.size() > 1)
 		{
@@ -107,12 +114,12 @@ public class Composite extends Article {
 	{
 		// This doesn't lead to errors since every change ensures that the list has at least one element.
 		Quantity weight = parts.get(0).getWeight();
-		
+
 		for(int i = 0; i < parts.size(); i++)
 		{
 			weight = weight.add(parts.get(i).getWeight());
 		}
-		
+
 		return weight;
 	}
 
@@ -124,12 +131,12 @@ public class Composite extends Article {
 	{
 		// This doesn't lead to errors since every change ensures that the list has at least one element.
 		MonetaryAmount price = parts.get(0).getPrice();
-		
+
 		for(int i = 0; i < parts.size(); i++)
 		{
 			price = price.add(parts.get(i).getPrice());
 		}
-		
+
 		return price;
 	}
 	
@@ -139,12 +146,12 @@ public class Composite extends Article {
 	public Set<String> getColour()
 	{
 		Set<String> colours = new HashSet<String>();
-		
+
 		for(int i = 0; i < parts.size(); i++)
 		{
 			colours.addAll(parts.get(i).getColour());
 		}
-		
+
 		return colours;
 	}
 	
@@ -161,5 +168,12 @@ public class Composite extends Article {
 	@Override
 	public void setWeight(double weight) {
 
+	}
+	public Set<String> getAllCategories(){					//Hat ohne die Funktion einen Fehler ausgegeben
+		HashSet<String> categories = new HashSet<>();
+		this.getCategories().forEach(category->{
+			categories.add(category);
+		});
+		return categories;
 	}
 }
