@@ -1,11 +1,13 @@
 package kickstart.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import kickstart.inventory.InventoryManager;
 import kickstart.inventory.ReorderableInventoryItem;
@@ -19,11 +21,13 @@ public class InventoryController {
 	{
 		private String name;
 		private String amount;
+		private String time;
 		
-		TableElement(String name, String amount)
+		TableElement(String name, String amount, String time)
 		{
 			this.name = name;
 			this.amount = amount;
+			this.time = time;
 		}
 		
 		public String getName()
@@ -34,6 +38,11 @@ public class InventoryController {
 		public String getAmount()
 		{
 			return amount;
+		}
+		
+		public String getTime()
+		{
+			return time;
 		}
 	}
 	
@@ -49,7 +58,7 @@ public class InventoryController {
 		
 		for(ReorderableInventoryItem item : manager.getInventory().findAll())
 		{
-			tableElements.add(new TableElement(item.getProduct().getName(), item.getQuantity().getAmount().toString()));
+			tableElements.add(new TableElement(item.getProduct().getName(), item.getQuantity().getAmount().toString(), " "));
 		}
 		
 		model.addAttribute("inventoryItems", tableElements);
@@ -57,12 +66,28 @@ public class InventoryController {
 		return "inventory";
 	}
 	
-	// Need to connect this with the catalog interface to 
-	// reorder articles
+	@GetMapping("/reorders")
+	public String reorderView(Model model)
+	{
+		List<TableElement> tableElements = new ArrayList<TableElement>();
+		
+		for(ReorderableInventoryItem item : manager.getInventory().findAll())
+		{
+			for(LocalDateTime ldt: item.getReorders().keySet())
+			{
+				tableElements.add(new TableElement(item.getProduct().getName(), 
+						item.getQuantity().getAmount().toString(), ldt.toString()));
+			}
+		}
+		
+		model.addAttribute("reorders", tableElements);
+		
+		return "reorder";
+	}
+	
+	@PostMapping("/article")
 	public String reorder()
 	{
-		
-		
-		return "/ ";
+		return "redirect:/";
 	}
 }
