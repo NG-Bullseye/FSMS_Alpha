@@ -26,5 +26,13 @@ class EmployeeController {
 
 		return "customers";
 }
+	@GetMapping("/employees")
+	//@PreAuthorize("hasRole('ROLE_BOSS')")
+	String employees(Model model) {
+
+		model.addAttribute("customerList", customerManagement.findAllEmployees());
+
+		return "employees";
+}
 
 }
