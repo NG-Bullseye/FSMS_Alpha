@@ -10,10 +10,6 @@
 		sec:authorize="hasRole('ROLE_CUSTOMER')"
 		th:text="Kundenkonto">Kundenkonto
 	  </a>
-	  <a class="item" href="customermanagement.html" th:href="@{/customermanagement}"
-		sec:authorize="hasRole('ROLE_EMPLOYEE')"
-		th:text="Kundenübersicht">Kundenübersicht
-	  </a>
 	  <!--sec:authorize="hasRole('ROLE_EMPLOYEE')"-->
 	  <a class="item" href="customers.html" th:href="@{/customers}"
 		th:text="Kundenübersicht">Kundenübersicht

@@ -1,165 +1,162 @@
-<!doctype html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 	<head th:include="header :: head">
 		<title id="pageTitle">Finanzübersicht</title>
+	</head>
 
-</head>
-<body>
-
-<nav th:include="navbar :: navbar"></nav>
-
-<div class="container-fluid">
-	<div class="row">
-
-		<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-			<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-				<h1 class="h2" th:text="#{db.accountancy}"> accountany </h1>
-				<div class="time-display">
-					<td class="h2" th:text="#{db.today}">Today:  </td>
-					<td th:text="${#temporals.format(time, 'dd.MM.yyyy HH:mm')}"></td>
+	<body>
+	
+	<nav th:include="navbar :: navbar"></nav>
+	
+	<div class="container-fluid">
+		<div class="row">
+	
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					<h1 class="h2" th:text="#{db.accountancy}"> accountany </h1>
+					<div class="time-display">
+						<td class="h2" th:text="#{db.today}">Today:  </td>
+						<td th:text="${#temporals.format(time, 'dd.MM.yyyy HH:mm')}"></td>
+					</div>
+					<div class="btn-toolbar mb-2 mb-md-0">
+	
+						<form class="item" th:action="@{/skippDay}" method="post">
+						<button class="btn btn-sm btn-outline-secondary" th:text="#{db.skippDay}">
+							travel 1 Day in time
+						</button>
+						</form>
+	
+						<form class="item" th:action="@{/skippMonth}" method="post">
+							<button class="btn btn-sm btn-outline-secondary" th:text="#{db.skippMonth}">
+								travel 1 month in time
+							</button>
+						</form>
+	
+						<form class="item" th:action="@{/plus}" method="post">
+							<button class="btn btn-sm btn-outline-secondary" th:text="#{db.plus}">
+								make standard order
+							</button>
+						</form>
+	
+						<form class="item" th:action="@{/minus}" method="post">
+							<button class="btn btn-sm btn-outline-secondary" th:text="#{db.minus}">
+								make standard order
+							</button>
+						</form>
+					</div>
 				</div>
-				<div class="btn-toolbar mb-2 mb-md-0">
-
-					<form class="item" th:action="@{/skippDay}" method="post">
-					<button class="btn btn-sm btn-outline-secondary" th:text="#{db.skippDay}">
-						travel 1 Day in time
-					</button>
-					</form>
-
-					<form class="item" th:action="@{/skippMonth}" method="post">
-						<button class="btn btn-sm btn-outline-secondary" th:text="#{db.skippMonth}">
-							travel 1 month in time
-						</button>
-					</form>
-
-					<form class="item" th:action="@{/plus}" method="post">
-						<button class="btn btn-sm btn-outline-secondary" th:text="#{db.plus}">
-							make standard order
-						</button>
-					</form>
-
-					<form class="item" th:action="@{/minus}" method="post">
-						<button class="btn btn-sm btn-outline-secondary" th:text="#{db.minus}">
-							make standard order
-						</button>
-					</form>
+	
+				<!-- Chart -->
+				<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+	
+				<!-- Table -->
+				<div class="ui container">
+					<h2 th:text="#{orders.completed}"></h2>
+					<table class="ui celled table">
+						<thead>
+							<tr>
+								<th th:text="#{db.ammount}">Betrag</th>
+								<!--<th th:text="#{orders.customer}">Kunde</th>-->
+								<th th:text="#{db.date}">Datum</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="entry:${monthlyAccountancy}">
+								<td th:text="${entry.getValue().getNumber().longValue()}"></td>
+								<td th:text="${#temporals.format(entry.getDate().get(),'dd.MM.yyyy HH:mm')}"></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-			</div>
-
-			<!-- Chart -->
-			<canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
-
-			<!-- Table -->
-			<div class="ui container">
-				<h2 th:text="#{orders.completed}"></h2>
-				<table class="ui celled table">
-					<thead>
-						<tr>
-							<th th:text="#{db.ammount}">Betrag</th>
-							<!--<th th:text="#{orders.customer}">Kunde</th>-->
-							<th th:text="#{db.date}">Datum</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="entry:${monthlyAccountancy}">
-							<td th:text="${entry.getValue().getNumber().longValue()}"></td>
-							<td th:text="${#temporals.format(entry.getDate().get(),'dd.MM.yyyy HH:mm')}"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</main>
+			</main>
+		</div>
 	</div>
-</div>
-
-<!-- Graphs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-<script th:inline="javascript">
-	/*<![CDATA[*/
-    var ctx = document.getElementById("myChart");
-    var jan = /*[[${janValue}]]*/ 'Januar';
-    var feb = /*[[${febValue}]]*/ 'Februar';
-    var mar = /*[[${marValue}]]*/ 'März';
-    var apr = /*[[${aprValue}]]*/ 'April';
-    var mai = /*[[${maiValue}]]*/ 'Mai';
-    var jun = /*[[${junValue}]]*/ 'Juni';
-    var jul = /*[[${julValue}]]*/ 'Juli';
-    var aug = /*[[${augValue}]]*/ 'August';
-    var sep = /*[[${sepValue}]]*/ 'September';
-    var okt = /*[[${oktValue}]]*/ 'Oktober';
-    var nov = /*[[${novValue}]]*/ 'November';
-    var dez = /*[[${dezValue}]]*/ 'Dezember';
-
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
-            datasets: [{
-                data: [jan, feb, mar, apr, mai, jun, jul,aug,sep,okt,nov,dez],
-                lineTension: 0,
-                backgroundColor: 'transparent',
-                borderColor: '#007bff',
-                borderWidth: 4,
-                pointBackgroundColor: '#007bff'
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: false
-                    }
-                }]
-            },
-            legend: {
-                display: false
-            }
-        }
-    });
-    /*]]>*/
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Icons -->
-<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-<script>
-    feather.replace()
-</script>
-
-
-
-
-
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="../../assets/js/vendor/popper.min.js"></script>
-<script src="../../dist/js/bootstrap.min.js"></script>
-</body>
+	
+	<!-- Graphs -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+	    var ctx = document.getElementById("myChart");
+	    var jan = /*[[${janValue}]]*/ 'Januar';
+	    var feb = /*[[${febValue}]]*/ 'Februar';
+	    var mar = /*[[${marValue}]]*/ 'März';
+	    var apr = /*[[${aprValue}]]*/ 'April';
+	    var mai = /*[[${maiValue}]]*/ 'Mai';
+	    var jun = /*[[${junValue}]]*/ 'Juni';
+	    var jul = /*[[${julValue}]]*/ 'Juli';
+	    var aug = /*[[${augValue}]]*/ 'August';
+	    var sep = /*[[${sepValue}]]*/ 'September';
+	    var okt = /*[[${oktValue}]]*/ 'Oktober';
+	    var nov = /*[[${novValue}]]*/ 'November';
+	    var dez = /*[[${dezValue}]]*/ 'Dezember';
+	
+	    var myChart = new Chart(ctx, {
+	        type: 'line',
+	        data: {
+	            labels: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+	            datasets: [{
+	                data: [jan, feb, mar, apr, mai, jun, jul,aug,sep,okt,nov,dez],
+	                lineTension: 0,
+	                backgroundColor: 'transparent',
+	                borderColor: '#007bff',
+	                borderWidth: 4,
+	                pointBackgroundColor: '#007bff'
+	            }]
+	        },
+	        options: {
+	            scales: {
+	                yAxes: [{
+	                    ticks: {
+	                        beginAtZero: false
+	                    }
+	                }]
+	            },
+	            legend: {
+	                display: false
+	            }
+	        }
+	    });
+	    /*]]>*/
+	</script>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- Icons -->
+	<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+	<script>
+	    feather.replace()
+	</script>
+	
+	
+	
+	
+	
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+	<script src="../../assets/js/vendor/popper.min.js"></script>
+	<script src="../../dist/js/bootstrap.min.js"></script>
+	</body>
 
 </html>
