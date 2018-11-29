@@ -1,12 +1,8 @@
-package kickstart.customer;
+package kickstart.user;
 
-//import org.salespointframework.useraccount.UserAccountIdentifier;
-//import java.util.Optional;
 import org.salespointframework.useraccount.web.LoggedIn;
-//import org.salespointframework.useraccount.AuthenticationManager;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.security.access.prepost.PreAuthorize;
-//import org.springframework.security.core.Authentication;
 
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -20,23 +16,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-class CustomerController {
+class UserController {
 
-	private final CustomerManagement customerManagement;
+	private final UserManagement userManagement;
 	//private final AuthenticationManager manager;
 	
 	//CRAZY
-	//private final CustomerRepository customers;
+	//private final UserRepository users;
 
-	CustomerController(CustomerManagement customerManagement) {
+	UserController(UserManagement userManagement) {
 
-		Assert.notNull(customerManagement, "CustomerManagement must not be null!");
+		Assert.notNull(userManagement, "UserManagement must not be null!");
 
-		this.customerManagement = customerManagement;
+		this.userManagement = userManagement;
 		//this.manager = manager;
-		//this.customers = customers;
+		//this.users = users;
 	}
 
+	//register
 	@PostMapping("/register")
 	String registerNew(@Valid @ModelAttribute("form") RegistrationForm form, BindingResult bindingResult, Model model, Errors result) {
 
@@ -45,7 +42,7 @@ class CustomerController {
 			return "register";
 		}
 
-		customerManagement.createCustomer(form);
+		userManagement.createUser(form);
 
 		return "redirect:/";
 	}
@@ -58,19 +55,36 @@ class CustomerController {
 
 	@GetMapping("/customeraccount")
 	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
-	String customerAccount(@LoggedIn UserAccount loggedInUser, Model model){
-		Customer loggedInCustomer = customerManagement.findCustomer(loggedInUser);
-		String completeName = loggedInCustomer.getFirstname() + " " + loggedInCustomer.getLastname();
+	String userAccount(@LoggedIn UserAccount loggedInUserWeb, Model model){
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		String completeName = loggedInUser.getFirstname() + " " + loggedInUser.getLastname();
 		model.addAttribute("name", completeName);
-		model.addAttribute("email", loggedInCustomer.getEmail());
-		model.addAttribute("address", loggedInCustomer.getAddress());
+		model.addAttribute("email", loggedInUser.getEmail());
+		model.addAttribute("address", loggedInUser.getAddress());
 		return "customeraccount";
 	}
 	
-	@GetMapping("/managecustomer")
-	String customerAccount(@RequestParam(value = "user") long requestId, Model model){
+	@GetMapping("/manageuser")
+	String userAccount(@RequestParam(value = "user") long requestId, Model model){
 		System.out.println(requestId); //YEAH
 		return "customeraccount";
 	}
+	
+	@GetMapping("/customers")
+	//@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	String customers(Model model) {
+
+		model.addAttribute("customerList", userManagement.findAll());
+
+		return "customers";
+}
+	@GetMapping("/employees")
+	//@PreAuthorize("hasRole('ROLE_BOSS')")
+	String employees(Model model) {
+
+		model.addAttribute("customerList", userManagement.findAllEmployees());
+
+		return "employees";
+}
 
 }
