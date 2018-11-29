@@ -33,7 +33,7 @@ public class CustomerManagement {
 		Assert.notNull(form, "Registration form must not be null!");
 
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
-		return customers.save(new Customer(userAccount, form.getName(), form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
+		return customers.save(new Customer(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
 	
 	public Customer findCustomer (UserAccount userAccount) {
