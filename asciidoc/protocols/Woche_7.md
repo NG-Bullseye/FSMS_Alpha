@@ -1,6 +1,6 @@
 # Protokoll Woche 7
 
-Gruppe...
+Gruppe 34, Schriftführer: Daniel Körsten
 
 ## Konsultation
 
