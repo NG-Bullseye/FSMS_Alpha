@@ -1,6 +1,9 @@
 package kickstart.customer;
 
 import org.springframework.data.util.Streamable;
+
+import java.util.List;
+
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
@@ -32,15 +35,29 @@ public class CustomerManagement {
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
 		return customers.save(new Customer(userAccount, form.getName(), form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
-
-	public Streamable<Customer> findAll() {
-		return Streamable.of(customers.findAll());
-	}
 	
 	public Customer findCustomer (UserAccount userAccount) {
 		
 		Customer customer = customers.findByUserAccount(userAccount);
 		return customer;
 	}
-
+	
+	public Streamable<Customer> findAll() {
+		return Streamable.of(customers.findAll());
+	}
+	
+	public Streamable<Customer> findAllEmployees() {
+		Iterable<Customer> users = customers.findAll();
+		List<Customer> employeesList = null;
+		
+		for (Customer customer : users) {
+		    if (customer.getUserAccount().hasRole(Role.of("ROLE_EMPLOYEE"))) {
+		        employeesList.add(customer);
+		    }
+		}
+		
+		Iterable<Customer> employees = employeesList; 
+		return Streamable.of(employees);
+	}
+	
 }

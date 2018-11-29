@@ -17,6 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 class CustomerController {
@@ -63,6 +64,12 @@ class CustomerController {
 		model.addAttribute("name", completeName);
 		model.addAttribute("email", loggedInCustomer.getEmail());
 		model.addAttribute("address", loggedInCustomer.getAddress());
+		return "customeraccount";
+	}
+	
+	@GetMapping("/managecustomer")
+	String customerAccount(@RequestParam(value = "user") long requestId, Model model){
+		System.out.println(requestId); //YEAH
 		return "customeraccount";
 	}
 
