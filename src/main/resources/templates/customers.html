@@ -27,9 +27,9 @@
 	            <td th:text="${customer.email}">E-Mail</td>
 	            <td th:text="${customer.address}">Anschrift</td>
 	  			<td>
-		  			<form class="item" th:action="@{'/managecustomer'(user=${customer.id})}" method="get">
-						<button type="submit" class="ui button" th:text="Kundenkonto">Kundenkonto</button>
-			  		</form><br><a th:href="@{'/managecustomer'(user=${customer.id})}"th:text="Kundenkonto">Kundenkonto</a>
+		  			<div class="ui button">
+		  				<a th:href="@{'/managecustomer'(user=${customer.id})}"th:text="Kundenkonto">Kundenkonto</a>
+		  			</div>
 		  		</td>
 	        </tr>
 	        </tbody>

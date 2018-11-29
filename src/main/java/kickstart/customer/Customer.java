@@ -17,18 +17,16 @@ public class Customer {
 
 	private String address;
 	private String email;
-	private String name;
 	private String firstname;
 	private String lastname;
 
 	@SuppressWarnings("unused")
 	public Customer() {}
 
-	public Customer(UserAccount userAccount, String name, String firstname, String lastname, String email, String address) {
+	public Customer(UserAccount userAccount, String firstname, String lastname, String email, String address) {
 		this.userAccount = userAccount;
 		this.firstname = firstname;
 		this.lastname =lastname;
-		this.name = name;
 		this.email = email;
 		this.address = address;
 	}
