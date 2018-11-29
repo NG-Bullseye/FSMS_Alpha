@@ -34,6 +34,18 @@ public class ArticleTest {
 		@Override
 		public ArticleType getType() {
 			return ArticleType.PART;
+		}
+
+		@Override
+		public void setWeight(double weight) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void setColour(String colour) {
+			// TODO Auto-generated method stub
+			
 		}		
 	}
 	

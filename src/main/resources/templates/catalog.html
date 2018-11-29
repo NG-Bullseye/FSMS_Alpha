@@ -1,0 +1,88 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:include="header :: head">
+    <title id="pageTitle">Katalog</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+<form method="post" th:action="@{/catalog}" th:object="${filterform}">
+<div class="ui attached stackable menu">
+
+    <div class="ui container left attached">
+        <select class="ui simple search dropdown item" th:field="*{category}">
+                <option th:value="all" >Alle Artikel</option>
+                <option th:value="part" >Möbelteile</option>
+                <option th:value="composite">Möbel</option>
+        </select>
+
+        <div class="ui simple dropdown item">
+                Farbe
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <ul>
+                        <a th:each="colour: ${colours}">
+                            <a class="item"> <input type="checkbox"
+                                   th:field="*{selectedColours}"
+                                   th:value="${colour}" />
+                            <label
+                                    th:text="${colour}"></label>
+                            </a>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+        <div class="ui simple dropdown item">
+                Preis
+                <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item">
+                            <div class="ui labeled input">
+                                <div class="ui label">Mindestpreis</div>
+                                <input type="number" th:field="*{minPrice}">
+                            </div>
+                        </a>
+                        <a class="item">
+                            <div class="ui labeled input">
+                                <div class="ui label">Maximalpreis</div>
+                                <input type="number" th:field="*{maxPrice}">
+                            </div>
+                        </a>
+                    </div>
+        </div>
+        <a class="item">
+            <input class="ui button" type="submit" value="Filtern">
+        </a>
+    </div>
+        <div class="ui right attached simple dropdown item">
+            neues Möbelstück
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                    <a class="item" th:href="@{catalog/part/new}">neues Möbelteil</a>
+                    <a class="item" th:href="@{catalog/composite/new}">neues Möbelstück</a>
+            </div>
+        </div>
+
+
+</div>
+</form>
+<br>
+<br>
+<div class="ui segment pushable">
+<div class="pusher">
+    <div class="ui link cards" th:remove="all-but-first">
+        <div class="ui card" th:each="article : ${catalog}">
+            <div class="content">
+                <a class="header" th:href="@{/artikel/{id}(id=${article.id})}" th:text="${article.name}">Artikel</a>
+            </div>
+            <div class="content">
+                <div class="description" th:text="${article.price}">9.99 €</div>
+                <div class="description" th:text="${article.colour}">schwarz</div>
+                <div class="description" th:text="${article.getAllCategories()}">Kategorie</div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

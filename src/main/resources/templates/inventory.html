@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+    <title id="pageTitle">Lager</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+<h2 th:text="#{articletable.title}">Lagerübersicht</h2>
+<table id="articletable" class="ui celled table">
+			<thead>
+				<tr>
+					<th th:text="#{articletable.name}">Name</th>
+					<th th:text="#{articletable.amount}">Anzahl</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="article: ${articles}">
+					<td th:text="${article.name}">Name</td>
+					<td th:text="${article.amount}">Anzahl</td>
+				</tr>
+			</tbody>
+		</table>
+</body>
+</html>

@@ -37,7 +37,37 @@
   				</div>
   			</div>
   			<div class="twelve wide column">
-  				<t2>Hier stehen später die Bestellungen</t2>
+  				<t2>Bestellübersicht</t2>
+
+
+				<table class="ui inverted grey table">
+					<thead>
+					<tr>
+						<th>Datum</th>
+						<th>Preis</th>
+						<th>Status</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="ordered : ${ordersofthedude} ">
+
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="${ordered.status}"></td>
+
+
+					</tr>
+					</tbody>
+				</table>
+
+
+				<form th:action="@{/showcustomerorders}">
+					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
+					<input name="nameoftheorderer" type="hidden" th:value="${name}">
+					<input name="emailoftheorderer" type="hidden" th:value="${email}">
+					<input name="addressoftheorderer" type="hidden" th:value="${address}">
+				</form>
+
   			</div>
 		</div>
 	</body>
