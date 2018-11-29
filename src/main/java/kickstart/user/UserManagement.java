@@ -2,6 +2,7 @@ package kickstart.user;
 
 import org.springframework.data.util.Streamable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.salespointframework.useraccount.Role;
@@ -48,10 +49,12 @@ public class UserManagement {
 	
 	public Streamable<User> findAllEmployees() {
 		Iterable<User> userList = users.findAll();
-		List<User> employeesList = null;
+		List<User> employeesList = new ArrayList();
+		
 		
 		for (User user : userList) {
 		    if (user.getUserAccount().hasRole(Role.of("ROLE_EMPLOYEE"))) {
+		    	System.out.println("HAB WAS!!");
 		        employeesList.add(user);
 		    }
 		}

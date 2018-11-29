@@ -41,6 +41,7 @@ class UserDataInitializer implements DataInitializer {
 		UserAccount ua1 = userAccountManager.create("daniel", "123", Role.of("ROLE_CUSTOMER"));
 		UserAccount ua2 = userAccountManager.create("mitarbeitah", "123", Role.of("ROLE_EMPLOYEE"));
 		UserAccount ua3 = userAccountManager.create("chef", "123", Role.of("ROLE_BOSS"));
+		ua3.add(Role.of("ROLE_EMPLOYEE"));
 
 		User c1 = new User(ua1, "Daniel", "Körsten", "daniel@beispiel.de", "Coole Straße 18, Gera");
 		User c2 = new User(ua2, "Alfons", "Zitterbacke", "alfons@moebl-hier.de", "Arbeiterstraße 1, Dresden");
