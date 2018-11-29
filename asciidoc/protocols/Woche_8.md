@@ -1,5 +1,7 @@
 # Protokoll Woche 8
 
+Gruppe 34, Schriftführer: Daniel Körsten
+
 ## Konsutation
 
 - Testplan vereinheitlichen
