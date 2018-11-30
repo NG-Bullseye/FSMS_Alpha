@@ -4,11 +4,15 @@ import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.quantity.Metric;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 
 /** 
@@ -33,6 +37,9 @@ public abstract class Article extends Product{
 	}
 	
 	private String description;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Comment> comments = new ArrayList<>();
 
 	/**
 	 * 
@@ -111,4 +118,25 @@ public abstract class Article extends Product{
 
 	public abstract void setWeight(double weight);
 	public abstract void setColour(String colour);
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void addComment(Comment comment){
+		comments.add(comment);
+	}
+
+	public double getAverageRating() {
+		double amount = comments.size();
+		if(amount==0) {return 0;}
+		else {
+			double rating = 0;
+			for (Comment c : comments) {
+				rating += c.getRating();
+			}
+			double gerundet = Math.round((rating / amount) * 100.0) / 100.0;
+
+			return gerundet;
+		}
+	}
 }

@@ -1,6 +1,8 @@
 package kickstart.articles;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
@@ -28,7 +30,7 @@ public class Part extends Article {
 		super("a","b");
 	}
 
-	public Part(String name, String description, double weight,double price, HashSet<String> colour, Set<String> categories)
+	public Part(String name, String description, double price, double weight, HashSet<String> colour, Set<String> categories)
 		throws IllegalArgumentException, NullPointerException
 	{
 		super(name, description);
@@ -99,13 +101,6 @@ public class Part extends Article {
 	@Override
 	public Set<String> getColour() {
 		return colour;
-/* Merge Fehler
-		Set<String> out = new HashSet<>();
-		
-		out.add(colour);
-		
-		return out;
-*/
 	}
 	
 	/**
@@ -142,4 +137,7 @@ public class Part extends Article {
 		this.getCategories().forEach(returning::add);
 		return returning;
 	}
+
+
+
 }

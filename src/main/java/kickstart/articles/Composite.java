@@ -176,4 +176,5 @@ public class Composite extends Article {
 		});
 		return categories;
 	}
+
 }
