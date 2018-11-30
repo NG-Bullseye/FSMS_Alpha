@@ -1242,8 +1242,7 @@ Was das zu erstellende Programm auf alle Fälle leisten muss.
     <tr><td>F15</td><td>Fahrzeugermittlung<td>Für jeden Warenkorb muss das System ein Fahrzeug aus dem Fuhrpark ermittlen, das diese Artikel transportieren könnte, oder ausgeben, dass es kein mögliches Fahrzeug gäbe.</td></tr>
     <tr><td>F16</td><td>Bestellübersicht<td>Das System kann jedem Kunden seine getätigten Bestellungen anzeigen oder einem Admin alle getätigten Bestellungen.</td></tr>
     <tr><td>F17</td><td>Finanzübersicht<td>Das System enthält Informationen über Einnahmen und Ausgaben und kann diese einem Admin anzeigen.</td></tr>
-        <tr><td>F17</td><td>Daten bearbeiten<td>Die Daten eines Nutzers </td></tr>
-              <tr><td>F18</td><td>Daten bearbeiten<td>Die Daten eines Nutzers können von ihm oder einem Admin geändert werden.</td></tr>
+  <tr><td>F18</td><td>Daten bearbeiten<td>Die Daten eines Nutzers können von ihm oder einem Admin geändert werden.</td></tr>
     <tr><td>F19</td><td>Userlisten<td>Ein Admin kann alle User oder auch User mit nur einer speziellen Rolle, wie Kunde oder Mitarbeiter sich anzeigen lassen.</td></tr>
     <tr><td>F20</td><td> Bestellungen stornieren<td>Das System muss überprüfen ob Bestellungen stornierbar sind und falls dies möglich ist die Effekte der Bestellung umkehren(das heißt Rücküberweisung des Geldes und Erhöhung der Artikelanzahl)</td></tr> 
       <tr><td>F21</td><td>Katalog bearbeiten<td>Neue Artikel können von Mitarbeitern zum Katalog hinzugefügt werden und bereits vorhandene bearbeitet bzw. versteckt werden.</td></tr>
