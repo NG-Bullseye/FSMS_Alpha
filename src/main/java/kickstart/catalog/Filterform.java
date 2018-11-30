@@ -1,4 +1,4 @@
-package kickstart.forms;
+package kickstart.catalog;
 
 import java.util.ArrayList;
 

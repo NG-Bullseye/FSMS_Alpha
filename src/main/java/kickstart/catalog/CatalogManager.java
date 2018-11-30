@@ -1,17 +1,12 @@
 package kickstart.catalog;
 
-import kickstart.forms.CompositeForm;
-import kickstart.forms.Filterform;
-import kickstart.forms.Form;
 import kickstart.articles.*;
 import kickstart.inventory.InventoryManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.money.MonetaryAmount;
 import java.util.*;
 
 

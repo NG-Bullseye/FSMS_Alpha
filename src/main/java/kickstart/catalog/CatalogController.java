@@ -15,21 +15,14 @@
  */
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import kickstart.forms.CompositeForm;
-import kickstart.forms.Filterform;
-import kickstart.forms.Form;
 import org.salespointframework.catalog.ProductIdentifier;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
