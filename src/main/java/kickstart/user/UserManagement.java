@@ -43,6 +43,12 @@ public class UserManagement {
 		return user;
 	}
 	
+public User findUserById (long id) {
+		
+		User user = users.findById(id);
+		return user;
+	}
+	
 	public Streamable<User> findAll() {
 		return Streamable.of(users.findAll());
 	}
@@ -54,7 +60,6 @@ public class UserManagement {
 		
 		for (User user : userList) {
 		    if (user.getUserAccount().hasRole(Role.of("ROLE_EMPLOYEE"))) {
-		    	System.out.println("HAB WAS!!");
 		        employeesList.add(user);
 		    }
 		}

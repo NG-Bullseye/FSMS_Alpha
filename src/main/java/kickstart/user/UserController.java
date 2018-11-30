@@ -64,14 +64,18 @@ class UserController {
 		return "customeraccount";
 	}
 	
-	@GetMapping("/manageuser")
+	@GetMapping("/managecustomer")
 	String userAccount(@RequestParam(value = "user") long requestId, Model model){
-		System.out.println(requestId); //YEAH
+		User requestedUser = userManagement.findUserById(requestId);
+		String completeName = requestedUser.getFirstname() + " " + requestedUser.getLastname();
+		model.addAttribute("name", completeName);
+		model.addAttribute("email", requestedUser.getEmail());
+		model.addAttribute("address", requestedUser.getAddress());
 		return "customeraccount";
 	}
 	
 	@GetMapping("/customers")
-	//@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	String customers(Model model) {
 
 		model.addAttribute("customerList", userManagement.findAll());
@@ -79,7 +83,7 @@ class UserController {
 		return "customers";
 }
 	@GetMapping("/employees")
-	//@PreAuthorize("hasRole('ROLE_BOSS')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	String employees(Model model) {
 
 		model.addAttribute("customerList", userManagement.findAllEmployees());
