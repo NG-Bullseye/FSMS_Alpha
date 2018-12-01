@@ -63,7 +63,7 @@ public class CartOrderManager {
 
 			cart.clear();
 
-			return "redirect:/order";
+			return "redirect:/catalog";
 		}
 		return "/cart";
 	}

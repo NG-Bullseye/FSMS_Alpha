@@ -68,7 +68,7 @@ public class OrderController {
 	}
 
 															//Optional<UserAccount>
-	@PostMapping("/addorder")
+	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart, Model model, @LoggedIn UserAccount account){
 
 	return cartOrderManager.newOrder(cart, model, account);
