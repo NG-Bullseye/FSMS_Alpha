@@ -164,6 +164,8 @@ public class CatalogManager {
 				ids.put(article.getId().toString(),article);
 		});
 		LinkedList<Article> parts = new LinkedList<>();
+		
+		
 		rightMap.forEach((article,count)->{
 				int i = count;
 				while (i>0){
@@ -172,6 +174,15 @@ public class CatalogManager {
 				}
 
 		} );
+		
+		if(form.getName() == null)
+		{
+			System.out.println("Name ist null");
+		}
+		if(form.getDescription()== null)
+		{
+			System.out.println("Beschreibung ist null");
+		}
 		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
 		catalog.save(newArticle);
 		inventory.addArticle(newArticle);

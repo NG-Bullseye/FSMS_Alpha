@@ -1,5 +1,6 @@
 package kickstart.articles;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -78,6 +79,7 @@ public class Composite extends Article {
 
 		this.updateStatus = true;
 		
+		this.partIds = new ArrayList<ProductIdentifier>();
 		
 		this.type = ArticleType.COMPOSITE;
 
@@ -137,6 +139,8 @@ public class Composite extends Article {
 		Quantity weight = Quantity.of(0, Metric.KILOGRAM);
 		Set<String> colours = new HashSet<String>();
 		// TODO: Instantiate price
+		
+		
 		
 		for(Article article: parts) {
 			if(article.getUpdateStatus() == false)
