@@ -7,7 +7,7 @@
 		Katalog
 	  </a>
 	  <a class="item" href="customeraccount.html" th:href="@{/customeraccount}"
-		sec:authorize="hasRole('ROLE_CUSTOMER')"
+		sec:authorize="isAuthenticated()"
 		th:text="Kundenkonto">Kundenkonto
 	  </a>
 	  <a class="item" href="customers.html" th:href="@{/customers}"

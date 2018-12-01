@@ -54,7 +54,7 @@ class UserController {
 	}
 
 	@GetMapping("/customeraccount")
-	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_EMPLOYEE')")
 	String userAccount(@LoggedIn UserAccount loggedInUserWeb, Model model){
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		String completeName = loggedInUser.getFirstname() + " " + loggedInUser.getLastname();
@@ -65,6 +65,7 @@ class UserController {
 	}
 	
 	@GetMapping("/managecustomer")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	String userAccount(@RequestParam(value = "user") long requestId, Model model){
 		User requestedUser = userManagement.findUserById(requestId);
 		String completeName = requestedUser.getFirstname() + " " + requestedUser.getLastname();
@@ -78,7 +79,7 @@ class UserController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	String customers(Model model) {
 
-		model.addAttribute("customerList", userManagement.findAll());
+		model.addAttribute("customerList", userManagement.findAllCustomers());
 
 		return "customers";
 }
