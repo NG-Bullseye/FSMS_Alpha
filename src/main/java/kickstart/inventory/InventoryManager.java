@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
@@ -115,6 +116,16 @@ public class InventoryManager {
 			inventory.save(item.get());
 		}
 		
+	}
+	
+	public void reorder(@NotNull ProductIdentifier id, @NotNull Quantity quantity)
+	{
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);
+		
+		if(item.isPresent()) {
+			item.get().addReorder(Interval.from(time.getTime()).to(time.getTime().plusDays(reorderTime)).getEnd(), quantity);
+			inventory.save(item.get());
+		}
 	}
 	
 	/**
