@@ -52,17 +52,6 @@ public class CompositeTest {
 	}
 	
 	@Test
-	public void testConstructorNullArgument()
-	{
-		try
-		{
-			@SuppressWarnings("unused")
-			Composite c = new Composite("Name", "Description", null);
-			fail("Composite should throw a NullPointerException when parts is null");
-		}catch(NullPointerException e) {}
-	}
-	
-	@Test
 	public void testConstructorEmptyList()
 	{
 		try
