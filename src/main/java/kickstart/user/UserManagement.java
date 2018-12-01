@@ -49,8 +49,19 @@ public User findUserById (long id) {
 		return user;
 	}
 	
-	public Streamable<User> findAll() {
-		return Streamable.of(users.findAll());
+	public Streamable<User> findAllCustomers() {
+		Iterable<User> userList = users.findAll();
+		List<User> customersList = new ArrayList();
+		
+		
+		for (User user : userList) {
+		    if (user.getUserAccount().hasRole(Role.of("ROLE_CUSTOMER"))) {
+		    	customersList.add(user);
+		    }
+		}
+		
+		Iterable<User> employees = customersList; 
+		return Streamable.of(employees);
 	}
 	
 	public Streamable<User> findAllEmployees() {

@@ -11,7 +11,7 @@
 	    <table class="ui celled table">
 	        <thead>
 	        <tr>
-	            <th th:text="Nutzername">Nutzername</th>
+	            <th h:text="Nutzername">Nutzername</th>
 	            <th th:text="Vorname">Vorname</th>
 	            <th th:text="Nachname">Nachname</th>
 	            <th th:text="E-Mail">E-Mail</th>
@@ -21,7 +21,10 @@
 	        </thead>
 	        <tbody th:remove="all-but-first">
 	        <tr th:each=" customer : ${customerList}">
-	            <td th:text="${customer.userAccount.id}">Nutzername</td>
+	            <td>
+	            	<i class="user icon"></i>
+	             	<t4 th:text="${customer.userAccount.id}">Nutzername</t4>
+	             </td>
 	            <td th:text="${customer.firstname}">Vorname</td>
 	            <td th:text="${customer.lastname}">Nachname</td>
 	            <td th:text="${customer.email}">E-Mail</td>

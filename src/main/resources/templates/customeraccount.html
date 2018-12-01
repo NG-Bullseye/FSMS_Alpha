@@ -12,6 +12,10 @@
 			<t1 sec:authorize="hasRole('ROLE_EMPLOYEE')" th:text="${'Account von: ' + name }">Hallo Nutzer</t1>
 		</div>
 		
+		<div id="customerbox">
+			<a class="ui button" id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+		</div>
+		
 		<div id="tablespace">
 			<div class="ui grid">
 	  			<div class="four wide column">
@@ -34,7 +38,7 @@
 	  					<tnorm th:text="${address}">Addresse</tnorm>
 	  				</div>
 	  				<div id="textnhead">
-	  					<button class="ui button">Daten ändern</button>
+	  					<a class="ui button" id="data" th:text="${'Daten ' + 'ändern'}">Daten ändern</a>
 	  				</div>
 	  			</div>
 	  			<div class="twelve wide column">
@@ -72,6 +76,35 @@
 	  			</div>
 			</div>
 		</div>
+		
+		<div class="ui tiny modal" id="deactivateAccount">
+		  <div class="ui icon header">
+		    <i class="frown icon"></i>
+		    Möchten Sie den Kundenaccount wirklich deaktivieren?
+		  </div>
+		  <div class="content">
+		    <p>Durch deaktivieren des Accounts sind sie nicht mehr in der Lage, sich auf unserer Webseite anzumelden.</p>
+		    <p>Sind sie wirklich sicher?</p>
+		  </div>
+		  <div class="actions">
+		    <div class="negative ui button">
+		      <i class="remove icon"></i>
+		      No
+		    </div>
+		    <div class="positive ui button">
+		      <i class="checkmark icon"></i>
+		      Yes
+		    </div>
+		  </div>
+		</div>
 	</body>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#deactivate').click(function(){
+			$('.tiny.modal').modal('show');
+		});
+	});
+	</script>
 
 </html>
