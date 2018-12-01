@@ -14,7 +14,7 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.ui.Model;
 
-import java.util.Optional;
+
 
 
 public class CartOrderManager {
@@ -29,9 +29,16 @@ public class CartOrderManager {
 		return orderManager;
 	}
 
+
 	public Cart initializeCart() {
 
 		return new Cart();
+	}
+
+	public String cancelOrder(Order order){
+
+		orderManager.cancelOrder(order);
+		return "/customeraccount";
 	}
 
 	public String addComposite (Composite article, int count, Cart cart){
@@ -58,6 +65,7 @@ public class CartOrderManager {
 			Order order = new Order(account, Cash.CASH);
 			cart.addItemsTo(order);
 			orderManager.save(order);
+			
 
 
 
@@ -67,6 +75,8 @@ public class CartOrderManager {
 		}
 		return "/cart";
 	}
+
+
 
 
 }

@@ -45,17 +45,33 @@
 					<tr>
 						<th>Datum</th>
 						<th>Preis</th>
-						
+						<th>Status</th>
+
 					</tr>
 					</thead>
 					<tbody>
-					<tr th:each="ordered : ${ordersofthedude} ">
+					<tr th:each="ordered : ${ordersofthedudeopen} ">
 
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="Austehend"></td>
+						<td><form th:action="@{/cancelthatorder}">
+							<button id="buttonspace" type="submit" class="ui button" th:text="stornieren">stronieren</button>
+							<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+						</form></td>
 
+					</tr>
+					<tr th:each="ordered : ${ordersofthedudepaid} ">
 
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="Bezahlt"></td>
+					</tr>
+					<tr th:each="ordered : ${ordersofthedudecomplete} ">
 
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="Abgeschlossen"></td>
 					</tr>
 					</tbody>
 				</table>
