@@ -18,7 +18,8 @@ public class Part extends Article {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity quantity;
 
-	private HashSet<String> colour;
+	@ElementCollection
+	private Set<String> colour;
 	private ArticleType type;
 	
 	/**
@@ -100,6 +101,7 @@ public class Part extends Article {
 	 * 
 	 * @throws IllegalArgumentException: If colour is null
 	 */
+	@Override
 	public void setColour(@NotNull String colour)
 			throws IllegalArgumentException	{
 		if(colour == null)	{
@@ -128,7 +130,7 @@ public class Part extends Article {
 	}
 
 	@Override
-	public boolean update(List<Article> parts) {
+	public boolean update(@NotNull List<Article> parts) {
 		return true;
 	}
 }

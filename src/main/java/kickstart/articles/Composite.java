@@ -38,7 +38,7 @@ public class Composite extends Article {
 	// This is list saves the ProductIdentifiers to reference the parts. This is easier
 	// to save as it doesn't consists of multiple levels. If changes in one of the parts occur
 	// the articles with these identifiers get loaded from the database.
-	@OneToMany
+	@ElementCollection
 	private List<ProductIdentifier> partIds;
 
 	private ArticleType type;
@@ -57,6 +57,7 @@ public class Composite extends Article {
 	
 	private MonetaryAmount price;
 	
+	@ElementCollection
 	private Set<String> colours;
 	/**
 	 * Standard constructor for Composite. See {@link Article} for more information as it's the base class

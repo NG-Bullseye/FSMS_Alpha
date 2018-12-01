@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.javamoney.moneta.Money;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
@@ -43,6 +44,7 @@ public abstract class Article extends Product{
 
 	// This list stores the identifiers to every article that uses this article
 	// as a part. This is needed to identify
+	@ElementCollection
 	private List<ProductIdentifier> parents;
 	
 	/**
@@ -93,7 +95,7 @@ public abstract class Article extends Product{
 		this.description = description;
 	}
 	
-	public abstract boolean update(List<Article> parts);
+	public abstract boolean update(@NotNull List<Article> parts);
 	
 	public boolean getUpdateStatus() {
 		return updateStatus;
@@ -121,5 +123,5 @@ public abstract class Article extends Product{
 	public abstract ArticleType getType();
 
 	public abstract void setWeight(double weight);
-	public abstract void setColour(String colour);
+	public abstract void setColour(@NotNull String colour);
 }
