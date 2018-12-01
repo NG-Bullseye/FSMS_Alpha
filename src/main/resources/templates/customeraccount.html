@@ -34,7 +34,7 @@
 	  					<tnorm th:text="${address}">Addresse</tnorm>
 	  				</div>
 	  				<div id="textnhead">
-	  					<button class="ui button">Daten ändern</button>
+	  					<a class="ui button" id="data" th:text="${'Daten ' + 'ändern'}">Daten ändern</a>
 	  				</div>
 	  			</div>
 	  			<div class="twelve wide column">
@@ -72,6 +72,34 @@
 	  			</div>
 			</div>
 		</div>
+		
+	<div class="ui basic modal" id="changeData">
+  <div class="ui icon header">
+    <i class="archive icon"></i>
+    Archive Old Messages
+  </div>
+  <div class="content">
+    <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+  </div>
+  <div class="actions">
+    <div class="ui red basic cancel inverted button">
+      <i class="remove icon"></i>
+      No
+    </div>
+    <div class="ui green ok inverted button">
+      <i class="checkmark icon"></i>
+      Yes
+    </div>
+  </div>
+</div>
 	</body>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#data').click(function(){
+			$('#changeData').modal('show');
+		});
+	});
+	</script>
 
 </html>
