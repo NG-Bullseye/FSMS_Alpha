@@ -12,18 +12,17 @@
 <br>
 <br>
 <div class="ui grid">
-    <div class="row">
         <div class="column"></div>
 
-        <div class="ui items ten wide column">
+        <div class="ui items sixteen wide column">
                 <div class="item">
                 <div class="large image">
                     <img th:src="@{resources/static.resources.productimages/placeholder.jpg}"
                          src="../static/resources/productimages/placeholder.jpg"/>
                 </div>
-                    <div class="ui three column"></div>
+                    <div class="ui three wide column"></div>
                 <div class="content">
-                    <a class="header" th:text="${article.name}">Name</a>
+                    <h3 class="ui dividing header" th:text="${article.name}">Name</h3>
                     <div class="meta">
                         <span th:text="${article.price}">Preis</span>
                     </div>
@@ -31,7 +30,7 @@
                         <p th:text="${article.description}">Beschreibung</p>
                     </div>
                     <div class="ui button">
-                        <a class="item" th:href="@{http://localhost:8080/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
+                        <a class="item" th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
                         </a>
                     </div>
                 </div>
@@ -39,7 +38,6 @@
                 </div>
             </div>
         </div>
-</div>
         <div th:switch="${article.type}">
             <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
                 <div class="ui labeled input">
@@ -101,8 +99,8 @@
                 <option value=10> 10 </option>
             </select>
         </div>
-        <button type="submit" class="ui labeled icon button">
-            <i class="icon edit"></i><span> Bewertung abgeben</span>
+        <button type="submit" class="ui labeled button">
+            <div class="ui label">Bewertung abgeben</div>
         </button>
     </form>
 

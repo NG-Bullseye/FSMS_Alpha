@@ -45,41 +45,33 @@ public class CatalogManager {
 
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
-		HashSet<Article> categories = new HashSet<>();
+		HashSet<Article> rightType = new HashSet<>();
 
-		if (filterform.getCategory().equals("composite")) {
-			Iterable<Article> rightCategories = catalog.findAll();
-			rightCategories.forEach(article -> {
-				if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);});}
+		if (filterform.getType().equals("composite")) {
+			catalog.findComposite().forEach(rightType::add);}
 		 else {
-			if (filterform.getCategory().equals("part")) {
-				Iterable<Article> rightCategories = catalog.findAll();
-				rightCategories.forEach(article -> {
-					if(article.getType()==Article.ArticleType.PART) categories.add(article);
-				});
+			if (filterform.getType().equals("part")) {
+				catalog.findPart().forEach(rightType::add);
 			} else {
-				Iterable<Article> rightCategories = catalog.findAll();
-				rightCategories.forEach(categories::add);
+				catalog.findAll().forEach(rightType::add);
 
 			}
 		}
 		HashSet<Article> rightColours = new HashSet<>();
-		for (Article article : categories) {
-			for (String colour : filterform.getSelectedColours()) {
-				if (article.getColour().contains(colour)) {
-					rightColours.add(article);
-				}
-			}
-		}
+		catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
+
 		HashSet<Article> rightPrice = new HashSet<>();
-		for (Article article : rightColours) {
-			if (!article.getPrice().isLessThan(Money.of(filterform.getMinPrice(), "EUR")) && !article.getPrice().isGreaterThan(Money.of(filterform.getMaxPrice(),"EUR"))) {
-				rightPrice.add(article);
-			}
-		}
+		catalog.findByPrice(Money.of(filterform.getMinPrice(),"EUR"),Money.of(filterform.getMaxPrice(),"EUR")).forEach(rightPrice::add);
 
+		HashSet<Article> rightCategories = new HashSet<>();
+		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 
-		return rightPrice;
+		HashSet<Article> result = rightType;
+		result.retainAll(rightColours);
+		result.retainAll(rightPrice);
+		result.retainAll(rightCategories);
+
+		return result;
 	}
 	public void newPart(Form form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
