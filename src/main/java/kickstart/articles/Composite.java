@@ -1,12 +1,15 @@
 package kickstart.articles;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
@@ -40,7 +43,8 @@ public class Composite extends Article {
 	// to save as it doesn't consists of multiple levels. If changes in one of the parts occur
 	// the articles with these identifiers get loaded from the database.
 	@ElementCollection
-	private List<ProductIdentifier> partIds;
+	private Map<ProductIdentifier, Integer> partIds;
+	//private List<ProductIdentifier> partIds;
 
 	private ArticleType type;
 
@@ -48,9 +52,6 @@ public class Composite extends Article {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity weight;
 	
-	// The variable indicates whether the saved values need an update since the value
-	// of one (or multiple) part has changed.
-	private boolean updateStatus;
 
 	private Composite(){
 		super("a","b");
@@ -77,16 +78,22 @@ public class Composite extends Article {
 
 		this.parts = parts;
 
-		this.updateStatus = true;
+		this.setUpdateStatus(true);
 		
-		this.partIds = new ArrayList<ProductIdentifier>();
+		this.partIds = new HashMap<ProductIdentifier, Integer>();
 		
 		this.type = ArticleType.COMPOSITE;
 
 		for (Article article: parts) {
 			article.getCategories().forEach(this::addCategory);
 			
-			partIds.add(article.getId());
+			if(partIds.containsKey(article.getId())) {
+				partIds.put(article.getId(), partIds.get(article.getId()) + 1);
+			}
+			else {
+				partIds.put(article.getId(), 1);
+			}
+			
 		}
 		
 		update(parts);
@@ -98,7 +105,12 @@ public class Composite extends Article {
 	 */
 	public void addPart(@NotNull Article article) {
 		parts.add(article);
-		partIds.add(article.getId());
+		if(partIds.containsKey(article.getId())) {
+			partIds.put(article.getId(), partIds.get(article.getId()) + 1);
+		}
+		else {
+			partIds.put(article.getId(), 1);
+		}
 	}
 
 	/**
@@ -113,7 +125,12 @@ public class Composite extends Article {
 			// Removes only the first appearance of this article. To remove it multiple times
 			// call the method multiple times.
 			parts.remove(article);
-			partIds.remove(article.getId());
+			if(partIds.get(article.getId()) == 1) {
+				partIds.remove(article.getId());
+			}
+			else {
+				partIds.put(article.getId(),partIds.get(article.getId()) - 1 );
+			}
 		}
 	}
 	
@@ -127,32 +144,54 @@ public class Composite extends Article {
 		return parts;
 	}
 	
-	public List<ProductIdentifier> getPartIds() {
+	/**
+	 * 
+	 * @return Returns a list of the ids for every part
+	 */
+	public Map<ProductIdentifier, Integer> getPartIds() {
 		return partIds;
 	}
 	
+	/**
+	 * @param parts The list of all parts obtained from the catalog, since they aren't saved in 
+	 *  the article. Use the saved articles to get all parts from the catalog
+	 *  @return Returns true if the attributes got updated. Returns false if a part needs to get
+	 *   updated before
+	 */
 	public boolean update(@NotNull List<Article> parts) {
+		// Every part should have at least have one part
 		if(parts.size() == 0) {
 			throw new IllegalArgumentException();
 		}
 		
 		Quantity weight = Quantity.of(0, Metric.KILOGRAM);
 		Set<String> colours = new HashSet<String>();
-		// TODO: Instantiate price
-		
-		
-		
+		MonetaryAmount price = Money.of(0, "EUR");
+			
 		for(Article article: parts) {
-			if(article.getUpdateStatus() == false)
-			{
+			// A part of this article was affected by a change and still has 
+			// not changed values
+			if(article.getUpdateStatus() == false) {
 				return false;
 			}
 			
-			weight.add(article.getWeight());
+			for(int factor = partIds.get(article.getId()); factor > 0; factor--) {
+				weight = weight.add(article.getWeight());
+
+				price = price.add(article.getPrice());
+			}
 			colours.addAll(article.getColour());
-			
+			for(String category: article.getCategories()) {
+				this.addCategory(category);
+			}
 			
 		}
+		
+		this.weight = weight;
+		this.price = price;
+		this.colours = colours;
+		
+		
 		this.setUpdateStatus(true);
 		
 		return true;
@@ -164,14 +203,6 @@ public class Composite extends Article {
 	 */
 	public Quantity getWeight()
 	{
-		// This doesn't lead to errors since every change ensures that the list has at least one element.
-		Quantity weight = parts.get(0).getWeight();
-
-		for(int i = 0; i < parts.size(); i++)
-		{
-			weight = weight.add(parts.get(i).getWeight());
-		}
-
 		return weight;
 	}
 
@@ -192,6 +223,9 @@ public class Composite extends Article {
 		return colours;
 	}
 	
+	/**
+	 * @return Returns the type of the article
+	 */
 	public ArticleType getType()
 	{
 		return type;

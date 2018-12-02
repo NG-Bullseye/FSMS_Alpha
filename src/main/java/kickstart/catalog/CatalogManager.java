@@ -79,7 +79,7 @@ public class CatalogManager {
 
 			if(affectedArticles.get(0).getType() == ArticleType.COMPOSITE) {
 				Composite c = (Composite) affectedArticles.get(0);
-				parts = getArticlesFromIdentifiers(c.getPartIds());
+				parts = getArticlesFromIdentifiers(c.getPartIds().keySet());
 			}
 			
 			if(affectedArticles.get(0).update(parts)) {
@@ -93,10 +93,10 @@ public class CatalogManager {
 		}
 	}
 	
-	public List<Article> getArticlesFromIdentifiers(List<ProductIdentifier> list) {
+	public List<Article> getArticlesFromIdentifiers(Set<ProductIdentifier> set) {
 		List<Article> articles = new ArrayList<Article>();
 		
-		for(ProductIdentifier id: list) {
+		for(ProductIdentifier id: set) {
 			Optional<Article> a = this.catalog.findById(id);
 			if(a.isPresent()) {
 				articles.add(a.get());
@@ -174,15 +174,7 @@ public class CatalogManager {
 				}
 
 		} );
-		
-		if(form.getName() == null)
-		{
-			System.out.println("Name ist null");
-		}
-		if(form.getDescription()== null)
-		{
-			System.out.println("Beschreibung ist null");
-		}
+
 		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
 		catalog.save(newArticle);
 		inventory.addArticle(newArticle);
