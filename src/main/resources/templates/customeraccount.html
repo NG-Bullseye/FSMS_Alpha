@@ -14,8 +14,8 @@
 		</div>
 
 		<div id="customerbox" th:switch="${enableDeactivation}"> 
- 			 <a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
-  		 <a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
+ 			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+  			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
     
 		<div id="tablespace">
@@ -137,6 +137,7 @@
 		$('#activate').click(function(){
 			$('#activateAccount').modal('show');
 		});
+	});
 	</script>
 </html>
 
