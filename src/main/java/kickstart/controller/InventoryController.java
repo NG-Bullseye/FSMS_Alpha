@@ -97,6 +97,6 @@ public class InventoryController {
 		
 		manager.reorder(identifier, Quantity.of(form.getAmount(), Metric.UNIT));
 		
-		return "redirect:/index";
+		return "redirect:/";
 	}
 }
