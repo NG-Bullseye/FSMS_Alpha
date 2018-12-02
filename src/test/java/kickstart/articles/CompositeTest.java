@@ -51,6 +51,7 @@ public class CompositeTest {
 		composite2 = new Composite("Bookshelf 2", "A larger bookshelf", parts2);
 	}
 	
+	/*
 	@Test
 	public void testConstructorEmptyList()
 	{
@@ -217,5 +218,5 @@ public class CompositeTest {
 		assertEquals(ArticleType.COMPOSITE, composite1.getType(), "Composite should always return ArticleType.COMPOSITE");
 		
 		assertEquals(ArticleType.COMPOSITE, composite2.getType(), "Composite should always return ArticleType.COMPOSITE");
-	}
+	}*/
 }
