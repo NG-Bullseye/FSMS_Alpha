@@ -1,91 +1,117 @@
+
+
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
 	<head th:include="header :: head">
 		<title id="pageTitle">Kundenkonto</title>
 	</head>
 	<body>
-		<nav th:include="navbar :: navbar"></nav>	
-	
+		<nav th:include="navbar :: navbar"></nav>
+    
 		<div id="title">
-			<t1 sec:authorize="isAuthenticated()" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t1>
+			<t1 sec:authorize="hasRole('ROLE_CUSTOMER')" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t1>
+			<t1 sec:authorize="hasRole('ROLE_EMPLOYEE')" th:text="${'Account von: ' + name }">Hallo Nutzer</t1>
 		</div>
-		
-		
+    
+		<div id="customerbox">
+			<a class="ui button" id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+		</div>
+    
+		<div id="tablespace">
 		<div class="ui grid">
-  			<div class="four wide column">
-  				<div id="leftspace">
-  					<t2>Ihre Daten bei uns:</t2>
-  				</div>
-  				<div id="textnhead">
-  					<t3>Name</t3>
-  					<br>
-  					<tnorm th:text="${name}">Name</tnorm>
-  				</div>
-  				<div id="textnhead">
-  					<t3>E-Mail Adresse:</t3>
-  					<br>
-  					<tnorm th:text="${email}">E-Mail</tnorm>
-  				</div>
-  				<div id="textnhead">
-  					<t3>Anschrift:</t3>
-  					<br>
-  					<tnorm th:text="${address}">Addresse</tnorm>
-  				</div>
-  				<div id="textnhead">
-  					<button class="ui button">Daten ändern</button>
-  				</div>
-  			</div>
-  			<div class="twelve wide column">
-  				<t2>Bestellübersicht</t2>
-
-
-				<table class="ui inverted grey table">
-					<thead>
+		<div class="four wide column">
+			<div id="textnhead">
+				<t2>Ihre Daten bei uns:</t2>
+			</div>
+			<div id="textnhead">
+				<t3>Name</t3>
+				<br>
+				<tnorm th:text="${name}">Name</tnorm>
+			</div>
+			<div id="textnhead">
+				<t3>E-Mail Adresse:</t3>
+				<br>
+				<tnorm th:text="${email}">E-Mail</tnorm>
+			</div>
+			<div id="textnhead">
+				<t3>Anschrift:</t3>
+				<br>
+				<tnorm th:text="${address}">Addresse</tnorm>
+			</div>
+			<div id="textnhead">
+				<a class="ui button" id="data" th:text="${'Daten ' + 'ändern'}">Daten ändern</a>
+			</div>
+		</div>
+		<div class="twelve wide column">
+			<t2>Bestellübersicht</t2>
+			<table class="ui inverted grey table">
+				<thead>
 					<tr>
 						<th>Datum</th>
 						<th>Preis</th>
 						<th>Status</th>
-
 					</tr>
-					</thead>
-					<tbody>
+				</thead>
+				<tbody>
 					<tr th:each="ordered : ${ordersofthedudeopen} ">
-
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Austehend"></td>
-						<td><form th:action="@{/cancelthatorder}">
-							<button id="buttonspace" type="submit" class="ui button" th:text="stornieren">stronieren</button>
-							<input name="orderidentity" type="hidden" th:value="${ordered.id}">
-						</form></td>
-
+						<td>
+							<form th:action="@{/cancelthatorder}">
+								<button id="buttonspace" type="submit" class="ui button" th:text="stornieren">stronieren</button>
+								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+							</form>
+						</td>
 					</tr>
 					<tr th:each="ordered : ${ordersofthedudepaid} ">
-
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Bezahlt"></td>
 					</tr>
 					<tr th:each="ordered : ${ordersofthedudecomplete} ">
-
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Abgeschlossen"></td>
 					</tr>
-					</tbody>
-				</table>
-
-
-				<form th:action="@{/showcustomerorders}">
-					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
-					<input name="nameoftheorderer" type="hidden" th:value="${name}">
-					<input name="emailoftheorderer" type="hidden" th:value="${email}">
-					<input name="addressoftheorderer" type="hidden" th:value="${address}">
-				</form>
-
-  			</div>
+				</tbody>
+			</table>
+			<form th:action="@{/showcustomerorders}">
+				<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
+				<input name="nameoftheorderer" type="hidden" th:value="${name}">
+				<input name="emailoftheorderer" type="hidden" th:value="${email}">
+				<input name="addressoftheorderer" type="hidden" th:value="${address}">
+			</form>
+		</div>
+      
+      
+		<div class="ui tiny modal" id="deactivateAccount">
+			<div class="ui icon header">
+				<i class="frown icon"></i>
+				Möchten Sie den Kundenaccount wirklich deaktivieren?
+			</div>
+			<div class="content">
+				<p>Durch deaktivieren des Accounts sind sie nicht mehr in der Lage, sich auf unserer Webseite anzumelden.</p>
+				<p>Sind sie wirklich sicher?</p>
+			</div>
+			<div class="actions">
+				<div class="negative ui button">
+					<i class="remove icon"></i>
+					No
+				</div>
+				<div class="positive ui button">
+					<i class="checkmark icon"></i>
+					Yes
+				</div>
+			</div>
 		</div>
 	</body>
-
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#deactivate').click(function(){
+				$('.tiny.modal').modal('show');
+			});
+		});
+	</script>
 </html>
+
