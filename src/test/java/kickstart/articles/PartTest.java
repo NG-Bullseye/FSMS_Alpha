@@ -103,8 +103,8 @@ public class PartTest {
 		assertEquals(part2.getWeight(), Quantity.of(2.0, Metric.KILOGRAM), "Part should return the value it was set to." );
 		
 		assertEquals(part3.getWeight(), Quantity.of(1.0, Metric.KILOGRAM), "Part should return the value it was set to." );	
-		*/
-	}
+		
+	}*/
 	
 	@Test
 	public void testSetWeight()
@@ -186,8 +186,7 @@ public class PartTest {
 	}
 	
 	@Test
-	public void testType()
-	{
+	public void testType() {
 		
 		HashSet<String> colours = new HashSet<String>();
 		colours.add("Colour");
@@ -195,6 +194,6 @@ public class PartTest {
 		assertEquals(part1.getType(), ArticleType.PART, "Parts should always have the type PART");
 		
 		assertEquals(new Part("name", "description", 1, 1, colours, categories).getType(), ArticleType.PART, "Parts should always have the type PART");
-	}*/
+	}
 }
 
