@@ -113,5 +113,7 @@ public class CatalogManager {
 		catalog.save(newArticle);
 		inventory.addArticle(newArticle);
 	}
-
+	public void saveArticle(Article article){
+		catalog.save(article);
+	}
 }
