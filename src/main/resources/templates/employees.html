@@ -2,7 +2,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="header :: head">
-		<title id="pageTitle">Kundenübersicht</title>
+		<title id="pageTitle">Mitarbeiterübersicht</title>
 	</head>
 <body>
     <nav th:include="navbar :: navbar"></nav>
@@ -16,6 +16,8 @@
 	            <th th:text="Nachname">Nachname</th>
 	            <th th:text="E-Mail">E-Mail</th>
 	            <th th:text="Anschrift">Anschrift</th>
+	            <th th:text="Gehalt">Gehalt</th>
+	            <th th:text="'Verfügbare ' + 'Aktionen'">Verfügbare Aktionen</th>
 	        </tr>
 	        </thead>
 	        <tbody th:remove="all-but-first">
@@ -25,6 +27,15 @@
 	            <td th:text="${customer.lastname}">Nachname</td>
 	            <td th:text="${customer.email}">E-Mail</td>
 	            <td th:text="${customer.address}">Anschrift</td>
+	            <td th:text="${customer.salary}">Gehalt</td>
+	            <td>
+		  			<div class="ui button">
+		  				<a class="link" th:text="Deaktivieren">Deaktivieren</a>
+		  			</div>
+		  			<div class="ui button">
+		  				<a class="link" th:text="'Gehalt ' + 'anpassen'">Gehalt anpassen</a>
+		  			</div>
+		  		</td>
 	        </tr>
 	        </tbody>
 	    </table>

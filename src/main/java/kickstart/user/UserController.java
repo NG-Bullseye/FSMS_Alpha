@@ -2,6 +2,7 @@ package kickstart.user;
 
 import org.salespointframework.useraccount.web.LoggedIn;
 import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountIdentifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import javax.validation.Valid;
@@ -69,9 +70,15 @@ class UserController {
 	String userAccount(@RequestParam(value = "user") long requestId, Model model){
 		User requestedUser = userManagement.findUserById(requestId);
 		String completeName = requestedUser.getFirstname() + " " + requestedUser.getLastname();
+		if (requestedUser.getUserAccount().isEnabled()) {
+			model.addAttribute("enableDeactivation", true);
+		} else {
+			model.addAttribute("enableDeactivation", false);
+		}
 		model.addAttribute("name", completeName);
 		model.addAttribute("email", requestedUser.getEmail());
 		model.addAttribute("address", requestedUser.getAddress());
+		model.addAttribute("id", requestedUser.getId());
 		return "customeraccount";
 	}
 	
@@ -91,5 +98,14 @@ class UserController {
 
 		return "employees";
 }
+	
+	@GetMapping("/activation")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
+	String activation(@RequestParam(value = "user") long requestId, @RequestParam(value = "type") int type){
+		User requestedUser = userManagement.findUserById(requestId);
+		UserAccountIdentifier accountId = requestedUser.getUserAccount().getId();
+		userManagement.useraccountActivation(accountId, type);
+		return "redirect:/customers";
+	}
 
 }
