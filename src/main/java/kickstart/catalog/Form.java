@@ -1,4 +1,4 @@
-package kickstart.forms;
+package kickstart.catalog;
 
 import org.springframework.format.annotation.NumberFormat;
 

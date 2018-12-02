@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <head th:include="header :: head">
+    <title>Lkw Ausleihe</title>
+
+</head>
+
+<body>
+
+<nav th:include="navbar :: navbar"></nav>
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4" th:text="#{cp.header}"></h1>
+    <p class="lead" th:text="#{cp.description}"></p>
+</div>
+
+<div class="container">
+    <div class="card-deck mb-3 text-center">
+
+        <!--<editor-fold desc="Card add">-->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" th:text="#{cp.addCardInfoHeader}">Add</h4>
+            </div>
+            <div class="card-body">
+
+                <form class="item" th:action="@{/addTruck}" method="post">
+                    <button class="btn btn-sm btn-outline-secondary" th:text="#{cp.add}">
+                        addTruckToInventory
+                    </button>
+                </form>
+
+                <ul class="list-unstyled mt-3 mb-4">
+                </ul>
+
+            </div>
+        </div>
+        <!--</editor-fold>-->
+
+        <!--<editor-fold desc="Card rent">-->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" th:text="#{cp.rentCardInfoHeader}">Rent</h4>
+            </div>
+            <div class="card-body">
+
+                <form class="item" th:action="@{/rentTruck1Dummy}" method="post">
+                    <button class="btn btn-sm btn-outline-secondary" th:text="#{cp.rent1}">
+                        remove from free add to taken
+                    </button>
+                </form>
+
+                <form class="item" th:action="@{/rentTruck2Dummy}" method="post">
+                    <button class="btn btn-sm btn-outline-secondary" th:text="#{cp.rent2}">
+                        carMa
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            var message = /*[[${rentMessage}]]*/ 'Januar';
+                            alert(message)
+                            /*]]>*/
+                        </script>
+                    </button>
+
+                </form>
+
+                <ul class="list-unstyled mt-3 mb-4">
+                </ul>
+
+            </div>
+        </div>
+
+        <!--<editor-fold desc="Card return">-->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal" th:text="#{cp.returnCardInfoHeader}">Rent</h4>
+            </div>
+            <div class="card-body">
+               <form class="item" th:action="@{/returnTruck}" method="post">
+                    <button class="btn btn-sm btn-outline-secondary" th:text="#{cp.return}">
+                       return
+                    </button>
+                </form>
+
+                <ul class="list-unstyled mt-3 mb-4">
+                </ul>
+            </div>
+        </div>
+        <!--</editor-fold>-->
+    </div>
+
+
+    <!--<editor-fold desc="Bestand Table">-->
+
+    <div class="ui container">
+        <h2 th:text="#{cp.bestand}"></h2>
+        <table class="ui celled table">
+            <thead>
+
+            <tr>
+                <th th:text="#{cp.free}"></th>
+                <th th:text="#{cp.taken}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${freeTrucksNumber}"></td>
+                <td th:text="${takenTrucksNumber}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="ui container">
+        <h2 th:text="#{cp.freeTrucks}"></h2>
+        <table class="ui celled table">
+             <thead>
+            <tr>
+                <th th:text="#{cp.freeTrucksName}"></th>
+                <th th:text="#{cp.freeTrucksCapacity}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <tr th:each="entry:${freeTrucks}">
+                <td th:text="${entry.getName()}"></td>
+                <td th:text="${entry.getCapacity()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="ui container">
+        <h2 th:text="#{cp.takenTrucks}"></h2>
+        <table class="ui celled table">
+            <thead>
+            <tr>
+                <th th:text="#{cp.takenTrucksName}"></th>
+                <th th:text="#{cp.takenTrucksCapacity}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <tr th:each="entry:${takenTrucks}">
+                <td th:text="${entry.getName()}"></td>
+                <td th:text="${entry.getCapacity()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--</editor-fold>-->
+
+
+</div>
+<!-- load faster -->
+<script src="/carManagerMessage.js"></script>
+
+</body>
+</html>
