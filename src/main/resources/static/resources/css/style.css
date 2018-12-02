@@ -3,11 +3,17 @@ body {
   background-color: #F9F9F9;
 }
 
-/*divs*/
-
-#navmenu {
-  /*Das ist für die Navbar*/
+a.link {
+     text-decoration: none;
+     color: rgba(0,0,0,.6);
 }
+
+a.whitelink {
+     text-decoration: none;
+     color: #fff;
+}
+
+/*divs*/
 
 #title {
   /*Title*/

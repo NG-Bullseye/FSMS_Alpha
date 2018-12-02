@@ -12,8 +12,9 @@
 			<t1 sec:authorize="hasRole('ROLE_EMPLOYEE')" th:text="${'Account von: ' + name }">Hallo Nutzer</t1>
 		</div>
 		
-		<div id="customerbox">
-			<a class="ui button" id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+		<div id="customerbox" th:switch="${enableDeactivation}"> 
+ 			 <a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+  			 <a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
 		
 		<div id="tablespace">
@@ -89,20 +90,45 @@
 		  <div class="actions">
 		    <div class="negative ui button">
 		      <i class="remove icon"></i>
-		      No
+		      Nein
 		    </div>
-		    <div class="positive ui button">
+		    <div class="positive ui button" th:href="@{'/activation'(user=${id})(type=0)}">
 		      <i class="checkmark icon"></i>
-		      Yes
+		      <a class="whitelink" th:href="@{'/activation'(user=${id}, type=0)}" th:text="Ja">Ja</a>
 		    </div>
 		  </div>
 		</div>
+		
+		<div class="ui tiny modal" id="activateAccount">
+		  <div class="ui icon header">
+		    <i class="smile icon"></i>
+		    Möchten Sie den Kundenaccount wieder aktivieren?
+		  </div>
+		  <div class="content">
+		    <p>Dem Kunden wird damit ermöglich, sich ab sofort wieder auf der Webseite anzumelden.</p>
+		    <p>Fortfahren?</p>
+		  </div>
+		  <div class="actions">
+		    <div class="negative ui button">
+		      <i class="remove icon"></i>
+		      Nein
+		    </div>
+		    <div class="positive ui button" th:href="@{'/activation'(user=${id})(type=0)}">
+		      <i class="checkmark icon"></i>
+		      <a class="whitelink" th:href="@{'/activation'(user=${id}, type=1)}" th:text="Ja">Ja</a>
+		    </div>
+		  </div>
+		</div>
+		
 	</body>
 
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$('#deactivate').click(function(){
-			$('.tiny.modal').modal('show');
+			$('#deactivateAccount').modal('show');
+		});
+		$('#activate').click(function(){
+			$('#activateAccount').modal('show');
 		});
 	});
 	</script>

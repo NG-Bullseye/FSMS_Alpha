@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountIdentifier;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +78,19 @@ public User findUserById (long id) {
 		
 		Iterable<User> employees = employeesList; 
 		return Streamable.of(employees);
+	}
+	
+	public void useraccountActivation(UserAccountIdentifier accountId, int type) {
+		if (type == 0) {
+			userAccounts.disable(accountId);
+			return;
+		} else if (type == 1) {
+			userAccounts.enable(accountId);
+			return;
+		} else {
+			return;
+		}
+		
 	}
 	
 }

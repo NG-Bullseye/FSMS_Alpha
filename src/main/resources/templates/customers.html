@@ -11,12 +11,12 @@
 	    <table class="ui celled table">
 	        <thead>
 	        <tr>
-	            <th h:text="Nutzername">Nutzername</th>
+	            <th th:text="Nutzername">Nutzername</th>
 	            <th th:text="Vorname">Vorname</th>
 	            <th th:text="Nachname">Nachname</th>
 	            <th th:text="E-Mail">E-Mail</th>
 	            <th th:text="Anschrift">Anschrift</th>
-	            <th th:text="'Link ' + 'zum ' + 'Kundenkonto'">Link zum Kundenkonto</th>
+	            <th th:text="'Verfügbare ' + 'Aktionen'">Verfügbare Aktionen</th>
 	        </tr>
 	        </thead>
 	        <tbody th:remove="all-but-first">
@@ -31,7 +31,10 @@
 	            <td th:text="${customer.address}">Anschrift</td>
 	  			<td>
 		  			<div class="ui button">
-		  				<a th:href="@{'/managecustomer'(user=${customer.id})}"th:text="Kundenkonto">Kundenkonto</a>
+		  				<a class="link" th:href="@{'/managecustomer'(user=${customer.id})}" th:text="Kundenkonto">Kundenkonto</a>
+		  			</div>
+		  			<div class="ui button">
+		  				<a class="link" th:text="'Zum ' + 'Mitarbeiter ' + 'hochstufen'">Zum Mitarbeiter hochstufen</a>
 		  			</div>
 		  		</td>
 	        </tr>

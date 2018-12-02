@@ -33,11 +33,6 @@ class UserDataInitializer implements DataInitializer {
 			return;
 		}
 
-		UserAccount bossAccount = userAccountManager.create("boss", "123", Role.of("ROLE_BOSS"));
-		userAccountManager.save(bossAccount);
-
-		Role customerRole = Role.of("ROLE_CUSTOMER");
-
 		UserAccount ua1 = userAccountManager.create("daniel", "123", Role.of("ROLE_CUSTOMER"));
 		UserAccount ua2 = userAccountManager.create("mitarbeitah", "123", Role.of("ROLE_EMPLOYEE"));
 		UserAccount ua3 = userAccountManager.create("chef", "123", Role.of("ROLE_BOSS"));
