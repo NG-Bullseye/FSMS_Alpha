@@ -39,7 +39,7 @@ public class PartTest {
 		part3 = new Part("shelf", "for a book shelf", 30, 1, colours3, categories);
 	}
 
-	/*
+	
 	@Test
 	public void testConstructorNullArgument()
 	{
@@ -102,9 +102,9 @@ public class PartTest {
 		
 		assertEquals(part2.getWeight(), Quantity.of(2.0, Metric.KILOGRAM), "Part should return the value it was set to." );
 		
-		assertEquals(part3.getWeight(), Quantity.of(1.0, Metric.KILOGRAM), "Part should return the value it was set to." );	
+		assertEquals(part3.getWeight(), Quantity.of(1.0, Metric.KILOGRAM), "Part should return the value it was set to." );	*/
 		
-	}*/
+	}
 	
 	@Test
 	public void testSetWeight()

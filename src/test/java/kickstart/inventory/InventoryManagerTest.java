@@ -147,7 +147,6 @@ public class InventoryManagerTest {
 		assertThat(manager.isPresent(q)).as("InventoryManager should return false if an article isn't present ").isFalse();
 	}
 	
-	/*
 	@Test
 	@Transient
 	public void testUpdate() {
@@ -163,5 +162,5 @@ public class InventoryManagerTest {
 		.as("InventoryManager should increase the amount after the reordertime has passed").isTrue();
 		
 		time.reset();
-	}	*/
+	}
 }
