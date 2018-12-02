@@ -29,10 +29,15 @@ public class Part extends Article {
 	private Part(){
 		super("a","b");
 	}
-
+  
+	public Part(String name, String description, double price, double weight, HashSet<String> colour, Set<String> categories)
+		throws IllegalArgumentException, NullPointerException
+	{
+/* durch merge rausgefallen. Soll es drin bleiben?
 	public Part(@NotNull String name,@NotNull String description, double weight,
 			double price,@NotNull HashSet<String> colour,@NotNull Set<String> categories)
 		throws IllegalArgumentException {
+*/
 		super(name, description);
 		
 
@@ -88,13 +93,6 @@ public class Part extends Article {
 	@Override
 	public Set<String> getColour() {
 		return colour;
-/* Merge Fehler
-		Set<String> out = new HashSet<>();
-		
-		out.add(colour);
-		
-		return out;
-*/
 	}
 	
 	/**

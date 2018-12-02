@@ -5,11 +5,15 @@ import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.quantity.Metric;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
@@ -42,11 +46,13 @@ public abstract class Article extends Product{
 	// like the price have to get updated. True means that no updates are needed.
 	private boolean updateStatus;
 
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Comment> comments = new ArrayList<>();
 	// This list stores the identifiers to every article that uses this article
 	// as a part. This is needed to identify
 	@ElementCollection
 	private List<ProductIdentifier> parents;
-	
+  
 	/**
 	 * 
 	 * @param name: The name of the article. Neither null nor an empty String(i.e. "")
@@ -123,5 +129,27 @@ public abstract class Article extends Product{
 	public abstract ArticleType getType();
 
 	public abstract void setWeight(double weight);
-	public abstract void setColour(@NotNull String colour);
+
+	public abstract void setColour(String colour);
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void addComment(Comment comment){
+		comments.add(comment);
+	}
+
+	public double getAverageRating() {
+		double amount = comments.size();
+		if(amount==0) {return 0;}
+		else {
+			double rating = 0;
+			for (Comment c : comments) {
+				rating += c.getRating();
+			}
+			double gerundet = Math.round((rating / amount) * 100.0) / 100.0;
+
+			return gerundet;
+		}
+	}
 }

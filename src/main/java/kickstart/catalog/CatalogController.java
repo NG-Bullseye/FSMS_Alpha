@@ -16,29 +16,29 @@
 package kickstart.catalog;
 
 import kickstart.articles.Article;
-import kickstart.forms.CompositeForm;
-import kickstart.forms.Filterform;
-import kickstart.forms.Form;
+import kickstart.articles.Comment;
+import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.salespointframework.time.BusinessTime;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Controller
 public class CatalogController {
 
 	private final CatalogManager manager;
+	private final BusinessTime businessTime;
 
-	CatalogController(CatalogManager manager){
+	CatalogController(CatalogManager manager, BusinessTime businessTime){
 	this.manager = manager;
+	this.businessTime=businessTime;
 	}
 
 	@ModelAttribute("colours")
@@ -79,6 +79,16 @@ public class CatalogController {
 		System.out.println(manager.getArticle(identifier).getDescription());
 
 		return "article";
+	}
+	@PostMapping("artikel/{identifier}/comment")
+	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload, Model model){
+		Article article = manager.getArticle(identifier);
+		article.addComment(payload.toComment(businessTime.getTime()));
+		manager.saveArticle(article);
+
+		return "redirect:/artikel/"+ article.getId();
+
+
 	}
 	@GetMapping("edit/{identifier}")
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
@@ -130,4 +140,18 @@ public class CatalogController {
 		return"redirect:/catalog";
 	}
 
+
+
+	interface CommentAndRating {
+
+		/*	@NotEmpty*/
+		String getComment();
+
+		@Range(min = 1, max = 10)
+		int getRating();
+
+		default Comment toComment(LocalDateTime time) {
+			return new Comment(getComment(), getRating(), time);
+		}
+	}
 }
