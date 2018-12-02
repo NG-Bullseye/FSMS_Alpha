@@ -99,7 +99,6 @@ public class Part extends Article {
 	 * 
 	 * @throws IllegalArgumentException: If colour is null
 	 */
-	@Override
 	public void setColour(@NotNull String colour)
 			throws IllegalArgumentException	{
 		if(colour == null)	{
