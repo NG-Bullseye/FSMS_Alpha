@@ -1,4 +1,4 @@
-package kickstart.customer;
+package kickstart.user;
 
 import java.util.Arrays;
 
@@ -12,14 +12,14 @@ import org.springframework.util.Assert;
 
 @Component
 @Order(10)
-class CustomerDataInitializer implements DataInitializer {
+class UserDataInitializer implements DataInitializer {
 
 	private final UserAccountManager userAccountManager;
-	private final CustomerRepository customerRepository;
+	private final UserRepository customerRepository;
 
-	CustomerDataInitializer(UserAccountManager userAccountManager, CustomerRepository customerRepository) {
+	UserDataInitializer(UserAccountManager userAccountManager, UserRepository customerRepository) {
 
-		Assert.notNull(customerRepository, "CustomerRepository must not be null!");
+		Assert.notNull(customerRepository, "UserRepository must not be null!");
 		Assert.notNull(userAccountManager, "UserAccountManager must not be null!");
 
 		this.userAccountManager = userAccountManager;
@@ -41,10 +41,11 @@ class CustomerDataInitializer implements DataInitializer {
 		UserAccount ua1 = userAccountManager.create("daniel", "123", Role.of("ROLE_CUSTOMER"));
 		UserAccount ua2 = userAccountManager.create("mitarbeitah", "123", Role.of("ROLE_EMPLOYEE"));
 		UserAccount ua3 = userAccountManager.create("chef", "123", Role.of("ROLE_BOSS"));
+		ua3.add(Role.of("ROLE_EMPLOYEE"));
 
-		Customer c1 = new Customer(ua1, "Daniel", "Körsten", "daniel@beispiel.de", "Coole Straße 18, Gera");
-		Customer c2 = new Customer(ua2, "Alfons", "Zitterbacke", "alfons@moebl-hier.de", "Arbeiterstraße 1, Dresden");
-		Customer c3 = new Customer(ua3, "Daniel", "Matusek", "besterTutor@tu-dresden.de", "Private Straße 15, Dresden");
+		User c1 = new User(ua1, "Daniel", "Körsten", "daniel@beispiel.de", "Coole Straße 18, Gera");
+		User c2 = new User(ua2, "Alfons", "Zitterbacke", "alfons@moebl-hier.de", "Arbeiterstraße 1, Dresden");
+		User c3 = new User(ua3, "Daniel", "Matusek", "besterTutor@tu-dresden.de", "Private Straße 15, Dresden");
 
 		customerRepository.saveAll(Arrays.asList(c1, c2, c3));
 	}

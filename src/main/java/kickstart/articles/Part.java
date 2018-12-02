@@ -1,6 +1,7 @@
 package kickstart.articles;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
@@ -8,6 +9,7 @@ import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Part extends Article {
@@ -16,21 +18,26 @@ public class Part extends Article {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity quantity;
 
-	private HashSet<String> colour;
+	@ElementCollection
+	private Set<String> colour;
 	private ArticleType type;
 	
 	/**
 	 * 
 	 * @throws IllegalArgumentException: If price or weight are not positive or colour equals the empty string
-	 * @throws NullPointerException: If colour equals null
 	 */
 	private Part(){
 		super("a","b");
 	}
-
+  
 	public Part(String name, String description, double price, double weight, HashSet<String> colour, Set<String> categories)
 		throws IllegalArgumentException, NullPointerException
 	{
+/* durch merge rausgefallen. Soll es drin bleiben?
+	public Part(@NotNull String name,@NotNull String description, double weight,
+			double price,@NotNull HashSet<String> colour,@NotNull Set<String> categories)
+		throws IllegalArgumentException {
+*/
 		super(name, description);
 		
 
@@ -45,20 +52,9 @@ public class Part extends Article {
 			throw new IllegalArgumentException("Part.price should be positive.");
 		}
 */
-		if(weight <= 0)
-		{
+		if(weight <= 0) {
 			throw new IllegalArgumentException("Part.weight should be positive");
 		}
-
-		if(colour == null)
-		{
-			throw new NullPointerException("Part.colour shouldn't be null");
-		}
-		
-		/*if(colour.equals(""))
-		{
-			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");
-		}*/
 		
 		this.colour = colour;
 
@@ -83,10 +79,8 @@ public class Part extends Article {
 	 * @throws IllegalArgumentException: If weight is not positive
 	 */
 	public void setWeight(double weight)
-		throws IllegalArgumentException
-	{
-		if(weight <= 0)
-		{
+		throws IllegalArgumentException {
+		if(weight <= 0) {
 			throw new IllegalArgumentException("Part.weight should be positive");
 		}
 		
@@ -104,18 +98,15 @@ public class Part extends Article {
 	/**
 	 * 
 	 * @throws IllegalArgumentException: If colour is null
-	 * @throws NullPointerException: If colour equals the empty string
 	 */
-	public void setColour(String colour)
-			throws IllegalArgumentException, NullPointerException
-	{
-		if(colour == null)
-		{
+	@Override
+	public void setColour(@NotNull String colour)
+			throws IllegalArgumentException	{
+		if(colour == null)	{
 			throw new NullPointerException("Part.colour shouldn't be null");
 		}
 		
-		if(colour.equals(""))
-		{
+		if(colour.equals("")) {
 			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");
 		}
 		
@@ -136,6 +127,8 @@ public class Part extends Article {
 		return returning;
 	}
 
-
-
+	@Override
+	public boolean update(@NotNull List<Article> parts) {
+		return true;
+	}
 }

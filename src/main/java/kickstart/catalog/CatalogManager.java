@@ -1,6 +1,7 @@
 package kickstart.catalog;
 
 import kickstart.articles.*;
+import kickstart.articles.Article.ArticleType;
 import kickstart.inventory.InventoryManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
@@ -30,6 +31,8 @@ public class CatalogManager {
 	}
 
 	public void editArticle(Form article, ProductIdentifier identifier) {
+		// Edit article
+		
 		System.out.println("wird aufgerufen");
 		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
@@ -41,6 +44,61 @@ public class CatalogManager {
 
 		catalog.deleteById(identifier);
 		catalog.save(afterEdit);
+		
+		// Edit any articles that get affected by this
+		
+		List<Article> affectedArticles = new ArrayList<Article>();
+
+		List<ProductIdentifier> articleList = new ArrayList<ProductIdentifier>();
+		articleList.addAll(afterEdit.getParents());
+		afterEdit.setUpdateStatus(false);
+		
+		while(!articleList.isEmpty()) {
+			Optional<Article> a = catalog.findById(articleList.get(0));
+			if(a.isPresent()) {				
+				affectedArticles.add(a.get());
+				
+				articleList.addAll(a.get().getParents());
+				
+				a.get().setUpdateStatus(false);
+				
+				articleList.remove(0);
+			}
+			else {
+				articleList.remove(0);
+			}
+		}
+		
+		while(!affectedArticles.isEmpty()) {
+			List<Article> parts = new ArrayList<Article>();
+
+			if(affectedArticles.get(0).getType() == ArticleType.COMPOSITE) {
+				Composite c = (Composite) affectedArticles.get(0);
+				parts = getArticlesFromIdentifiers(c.getPartIds().keySet());
+			}
+			
+			if(affectedArticles.get(0).update(parts)) {
+				affectedArticles.get(0).setUpdateStatus(true);
+				affectedArticles.remove(0);
+			}
+			else {
+				affectedArticles.add(affectedArticles.get(0));
+				affectedArticles.remove(0);
+			}
+		}
+	}
+	
+	public List<Article> getArticlesFromIdentifiers(Set<ProductIdentifier> set) {
+		List<Article> articles = new ArrayList<Article>();
+		
+		for(ProductIdentifier id: set) {
+			Optional<Article> a = this.catalog.findById(id);
+			if(a.isPresent()) {
+				articles.add(a.get());
+			}
+		}
+		
+		return articles;
 	}
 
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
@@ -93,6 +151,8 @@ public class CatalogManager {
 				ids.put(article.getId().toString(),article);
 		});
 		LinkedList<Article> parts = new LinkedList<>();
+		
+		
 		rightMap.forEach((article,count)->{
 				int i = count;
 				while (i>0){
@@ -101,6 +161,7 @@ public class CatalogManager {
 				}
 
 		} );
+
 		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
 		catalog.save(newArticle);
 		inventory.addArticle(newArticle);

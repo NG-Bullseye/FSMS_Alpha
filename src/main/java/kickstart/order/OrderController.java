@@ -68,7 +68,7 @@ public class OrderController {
 	}
 
 															//Optional<UserAccount>
-	@PostMapping("/addorder")
+	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart, Model model, @LoggedIn UserAccount account){
 
 	return cartOrderManager.newOrder(cart, model, account);
@@ -81,7 +81,19 @@ public class OrderController {
 		model.addAttribute("name", completeName);
 		model.addAttribute("email", emailoforderer);
 		model.addAttribute("address", addressoforderer);
-		model.addAttribute("ordersofthedude",cartOrderManager.getOrderManager().findBy(userAccount));
+		model.addAttribute("ordersofthedudecomplete", cartOrderManager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
+		model.addAttribute("ordersofthedudeopen", cartOrderManager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
+		model.addAttribute("ordersofthedudepaid", cartOrderManager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
+
+
+
 		return "/customeraccount";
+	}
+
+	@RequestMapping("/cancelthatorder")
+	String cancelOrder(@RequestParam("orderidentity") Order order){
+
+
+		return cartOrderManager.cancelOrder(order);
 	}
 }

@@ -79,6 +79,24 @@
         </div>
     </div>
 
+</div>
+<div th:switch="${article.type}">
+    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
+        <label class="ui label">Anzahl:</label>
+        <input name="count" type="number" min="1" max="10" value="1">
+
+        <input name="part" type="hidden" th:value="${article.id}">
+        <input class="ui button" type="submit" th:text="Hinzufügen">
+    </form>
+    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
+        <label class="ui label">Anzahl</label>
+        <input name="count" type="number" min="1" max="10" value="1">
+        <input name="article" type="hidden" th:value="${article.id}">
+        <div class="ui label">in den Warenkorb</div>
+        <input class="ui labeled button" type="submit" name="in den Warenkorb">
+    </form>
+
+
     <form class="ui reply form" role="form" th:action="@{/artikel/{id}/comment(id=${article.id})}" method="post">
         <div class="field">
             <textarea id="comment" name="comment" cols="40" rows="5"></textarea><br/>
