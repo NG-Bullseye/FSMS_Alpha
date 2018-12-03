@@ -35,6 +35,14 @@
   				<div id="textnhead">
   					<button class="ui button">Daten ändern</button>
   				</div>
+
+				<div id="textnhead" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+    			<form th:action="@{/addcustomertocart}">
+        			<button type="submit" class="ui button" th:text="Auswählen">choose</button>
+        			<!--<input name="customer" type="hidden" th:value="${customer.userAccount.id}">-->
+			    </form>
+				</div>
+
   			</div>
   			<div class="twelve wide column">
   				<t2>Bestellübersicht</t2>
@@ -55,10 +63,24 @@
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Austehend"></td>
-						<td><form th:action="@{/cancelthatorder}">
-							<button id="buttonspace" type="submit" class="ui button" th:text="stornieren">stronieren</button>
-							<input name="orderidentity" type="hidden" th:value="${ordered.id}">
-						</form></td>
+						<td align="center" th:width="50">
+							<form th:action="@{/cancelthatorder}">
+								<button type="submit" class="ui button" th:text="bezahlen">paying</button>
+								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+								<input name="choose" type="hidden" th:value="bezahlen">
+								<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+
+
+							</form>
+						</td>
+						<td align="center" th:width="50">
+							<form th:action="@{/cancelthatorder}">
+								<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
+								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+								<input name="choose" type="hidden" th:value="stornieren">
+								<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+							</form>
+						</td>
 
 					</tr>
 					<tr th:each="ordered : ${ordersofthedudepaid} ">
@@ -79,9 +101,8 @@
 
 				<form th:action="@{/showcustomerorders}">
 					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
-					<input name="nameoftheorderer" type="hidden" th:value="${name}">
-					<input name="emailoftheorderer" type="hidden" th:value="${email}">
-					<input name="addressoftheorderer" type="hidden" th:value="${address}">
+					<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+
 				</form>
 
   			</div>

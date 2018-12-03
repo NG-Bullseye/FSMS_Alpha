@@ -9,7 +9,7 @@
 <h1>Warenkorb</h1>
 
 <div th:unless="${cart.empty}">
-    <table class="table table-striped">
+    <table class="ui celled padded table">
         <thead>
         <tr>
             <th th:text="Titel">Titel</th>
@@ -22,13 +22,13 @@
 
         <tr th:each="funiture : ${cart} ">
             <td th:text="${funiture.productName}">Moebelstück</td>
-            <td th:text="${funiture.quantity}">5</td>
-            <td th:text="${funiture.price}">10 Euro</td>
+            <td th:text="${funiture.quantity}">Anzahl</td>
+            <td th:text="${funiture.price}">Preis</td>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="value"><span th:text="${{cart.price}}">1337</span></div>
+<div class="value", align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
 <form th:action="@{/addorder}">
     <button id="buttonspace" type="submit" class="ui button" th:text="Bestellen">button</button>
 </form>
