@@ -41,6 +41,11 @@ a.whitelink {
 	text-align: right;
 }
 
+#rightspace {
+	padding: 0em 4em 0em 0em;
+	text-align: right;
+}
+
 /*fonts*/
 
 t1 {
