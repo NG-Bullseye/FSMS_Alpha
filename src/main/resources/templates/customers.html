@@ -34,7 +34,7 @@
 		  				<a class="link" th:href="@{'/managecustomer'(user=${customer.id})}" th:text="Kundenkonto">Kundenkonto</a>
 		  			</div>
 		  			<div class="ui button" sec:authorize="hasRole('ROLE_BOSS')">
-		  				<a class="link" th:text="'Zum ' + 'Mitarbeiter ' + 'hochstufen'">Zum Mitarbeiter hochstufen</a>
+		  				<a class="link" th:href="@{'/changeRole'(user=${customer.id}, type=0)}" th:text="'Zum ' + 'Mitarbeiter ' + 'hochstufen'">Zum Mitarbeiter hochstufen</a>
 		  			</div>
 		  		</td>
 	        </tr>
