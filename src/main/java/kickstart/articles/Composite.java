@@ -171,7 +171,7 @@ public class Composite extends Article {
 		for(Article article: parts) {
 			// A part of this article was affected by a change and still has 
 			// not changed values
-			if(article.getUpdateStatus() == false) {
+			if(!article.getUpdateStatus()) {
 				return false;
 			}
 			
