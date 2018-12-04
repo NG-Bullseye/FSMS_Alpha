@@ -17,8 +17,11 @@ package kickstart.catalog;
 
 import kickstart.articles.Article;
 import kickstart.articles.Comment;
+import kickstart.inventory.ReorderableInventoryItem;
+
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,8 +39,8 @@ public class CatalogController {
 	private final CatalogManager manager;
 	private final BusinessTime businessTime;
 
-	CatalogController(CatalogManager manager, BusinessTime businessTime){
-	this.manager = manager;
+	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory, BusinessTime businessTime){
+	this.manager = new CatalogManager(catalog, inventory);
 	this.businessTime=businessTime;
 	}
 
@@ -107,7 +110,7 @@ public class CatalogController {
 		}
 		manager.editArticle(form, identifier);
 
-		return "redirect:/article/"+manager.getArticle(identifier);
+		return "redirect:/article/"+ manager.getArticle(identifier);
 	}
 	@GetMapping("catalog/part/new")
 	public String showNew(Model model){
