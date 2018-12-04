@@ -6,6 +6,12 @@
 <body>
 <nav th:include="navbar :: navbar"></nav>
 <h2 th:text="#{articletable.title}">Lagerübersicht</h2>
+<a th:href="@{/reorders}">
+	<div class="ui button">
+		<tnorm th:text="#{articletable.reorder}">Nachbestellungen</tnorm>
+	</div>
+</a>
+<div id="tablespace">
 <table id="articletable" class="ui celled table">
 			<thead>
 				<tr>
@@ -20,5 +26,6 @@
 				</tr>
 			</tbody>
 		</table>
+</div>
 </body>
 </html>
