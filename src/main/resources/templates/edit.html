@@ -12,71 +12,95 @@
 
 
         <form method="post" th:action="@{/edit/{id}(id=${article.getId()})}" th:object="${form}">
-            <div class=" ui vertical segment">
-                <div class="ui labeled input">
-                <div class="ui label">Produktname</div>
-                <input type="text" th:field="*{name}" th:placeholder="${article.name}" required="required"/>
-                </div>
-            </div>
-            <div class="ui vertical segment">
-                <div class="ui labeled input">
-                    <div class="ui label">Beschreibung</div>
-                <input type="text" th:field="*{description}" th:placeholder="${article.description}" required="required"/>
-                </div>
-            </div>
-            <div class="ui vertical segment">
-                <div class="ui labeled input">
-                    <div class="ui label">Preis</div>
+
+    <table id="tablespace" class="ui table">
+    <thead>
+        <th></th>
+        <th><t3>Bisherige Werte</t3></th>
+        <th><t3>neue Werte</t3></th>
+    </thead>
+        <tbody>
+
+        <tr>
+            <td><t3>Bezeichnung:</t3></td>
+            <td th:text="${article.name}">Name</td>
+            <td>
+                <input type="text" th:field="*{name}" required="required"/>
+            </td>
+        </tr>
+        <tr>
+            <td><t3>Beschreibung:</t3></td>
+            <td th:text="${article.description}">Name</td>
+            <td>
+                <input type="text" th:field="*{description}" required="required"/>
+            </td>
+        </tr>
+        <tr>
+            <td><t3>Preis:</t3></td>
+            <td th:text="${article.price}">Name</td>
+            <td>
                 <input type="number" th:field="*{price}" min="1" max="50000" value="1" step="0.1" required="required"/>
                 <a th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Bitte richtigen Preis eingeben</a>
-                </div>
-            </div>
-            <div class="ui vertical segment">
-                <div class="ui labeled input">
-                    <div class="ui label">Gewicht</div>
+            </td>
+        </tr>
+        <tr>
+            <td><t3>Gewicht:</t3></td>
+            <td th:text="${article.weight}">Name</td>
+            <td>
                 <input type="number" th:field="*{weight}" min="0.1" max="5000" value="0.1"  step="0.1" required="required"/>
-                    <a th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}">Bitte richtiges Gewicht eingeben</a>
-                </div>
+                <a th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}">Bitte richtiges Gewicht eingeben</a>
+            </td>
+        </tr>
+        <tr>
+            <td><t3>Farben:</t3></td>
+        </tr>
+        <tr th:each="colour : ${colours}">
+            <td></td>
+            <div th:switch="${article.getColour().contains(colour)}">
+                <td th:case="true" th:text="${colour}"></td>
+                <td th:case="*"></td>
             </div>
-            <div class="ui vertical item">
-                <div class="ui simple dropdown item">
-                    Farben
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div th:each="colour: ${colours}">
-                            <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
-                                                                  th:field="*{selectedColours}"
-                                                                  th:value="${colour}" />
-                                <label
-                                        th:text="${colour}"></label>
-                            </div>
+            <td>
+                <div class="ui labeled input">
+                    <input class="ui checkbox" type="checkbox"
+                                                     th:field="*{selectedColours}"
+                                                     th:value="${colour}" />
+                    <label
+                            th:text="${colour}">
+                    </label>
+                </div>
+            </td>
 
-                        </div>
-                    </div>
+            </tr>
+            <tr>
+                <td><t3>Kategorien:</t3></td>
+            </tr>
+            <tr th:each="category : ${categories}">
+                <td></td>
+                <div th:switch="${articleCategories.contains(category)}">
+                <td th:case="true" th:text="${category}"></td>
+                <td th:case="*"></td>
                 </div>
-            </div>
-            <div class="ui vertical item">
-                <div class="ui simple dropdown item">
-                    Kategorien
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div th:each="category: ${categories}">
-                            <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
-                                                                  th:field="*{selectedCategories}"
-                                                                  th:value="${category}" />
-                                <label
-                                        th:text="${category}"></label>
-                            </div>
+                <td>
+                    <div class="ui labeled input">
+                        <input class="ui checkbox" type="checkbox"
+                               th:field="*{selectedCategories}"
+                               th:value="${category}" />
+                        <label
+                                th:text="${category}">
+                        </label>
+                    </div>
+                </td>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </tr>
+        </tbody>
+
+    </table>
             <div class="ui vertical segment">
 
-                    <a class="item">
-                        <input type="submit" value="Ändern" class="ui button"/>
-                    </a>
+                <a class="item">
+                    <input type="submit" value="Ändern" class="ui button"/>
+                </a>
 
             </div>
         </form>

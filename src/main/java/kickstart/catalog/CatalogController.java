@@ -28,6 +28,7 @@ import org.salespointframework.time.BusinessTime;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 
@@ -98,7 +99,9 @@ public class CatalogController {
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
-		System.out.println(manager.getArticle(identifier));
+		HashSet<String> articleCategories = new HashSet<>();
+		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+		model.addAttribute("articleCategories", articleCategories);
 		model.addAttribute("form",new Form()); //Damit man im folgenden form bearbeiten kann
 		return "edit";
 	}
