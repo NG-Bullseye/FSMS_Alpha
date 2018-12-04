@@ -30,6 +30,9 @@
             <a class="item" th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
             </a>
         </div>
+        <div class="ui button">
+            <a class="item" th:href="@{/hide/{id}(id=${article.getId()})}" target="_self">Für Kunden verbergen</a>
+        </div>
     </div>
 </div>
 <div th:switch="${article.type}">

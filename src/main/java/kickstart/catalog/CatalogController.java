@@ -60,11 +60,7 @@ public class CatalogController {
 	String catalog(Model model){
 
 
-		model.addAttribute("catalog", manager.getWholeCatalog());
-
-		model.addAttribute("urlAll","catalog");
-		model.addAttribute("urlPart","part");
-		model.addAttribute("urlComposite","composite");
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
 
 		return "catalog";
@@ -75,6 +71,12 @@ public class CatalogController {
 			return "redirect:/catalog/";
 		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
+		return "catalog";
+	}
+	@GetMapping("catalog/all")
+	public String completeCatalog(Model model){
+		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("filterform",new Filterform());
 		return "catalog";
 	}
 	@GetMapping("artikel/{identifier}")
@@ -145,6 +147,11 @@ public class CatalogController {
 		model.addAttribute("catalog", manager.getWholeCatalog());
 
 		return"redirect:/catalog";
+	}
+	@GetMapping("hide/{identifier}")
+	public String hide(@PathVariable ProductIdentifier identifier, Model model){
+		manager.hideArticle(identifier);
+		return "redirect:/catalog/";
 	}
 
 
