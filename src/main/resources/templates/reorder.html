@@ -5,8 +5,11 @@
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
-<h2 th:text="#{reordertable.title}">Lagerübersicht</h2>
-<table id=reordertable class="ui celled table">
+<div id="title">
+	<t1 th:text="#{reordertable.title}">Lagerübersicht</t1>
+</div>
+<div id="tablespace">
+	<table id=reordertable class="ui celled table">
 			<thead>
 				<tr>
 					<th th:text="#{reordertable.name}">Name</th>
@@ -15,12 +18,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="reoder: ${reorders}">
+				<tr th:each="reorder: ${reorders}">
 					<td th:text="${reorder.name}">Name</td>
 					<td th:text="${reorder.time}">Ankunft</td>
 					<td th:text="${reorder.amount}">Anzahl</td>
 				</tr>
 			</tbody>
-		</table>
+	</table>
+</div>
 </body>
 </html>

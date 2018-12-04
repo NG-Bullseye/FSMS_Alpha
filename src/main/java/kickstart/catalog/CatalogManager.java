@@ -3,8 +3,13 @@ package kickstart.catalog;
 import kickstart.articles.*;
 import kickstart.articles.Article.ArticleType;
 import kickstart.inventory.InventoryManager;
+import kickstart.inventory.ReorderableInventoryItem;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +20,18 @@ import java.util.*;
 public class CatalogManager {
 	private final WebshopCatalog catalog;
 	private HashSet<Article> hiddenArticles;
+	private final Inventory<ReorderableInventoryItem> inventory;
+	
+	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
+		this.catalog = catalog;
+		this.inventory = inventory;
+		hiddenArticles = new HashSet<>();
+	/*
 	@Autowired
 	private InventoryManager inventory;
 	public CatalogManager(WebshopCatalog catalog) {
 		this.catalog = catalog;
-		hiddenArticles = new HashSet<>();
+		hiddenArticles = new HashSet<>();*/
 	}
 
 	public Iterable<Article> getWholeCatalog() {
@@ -54,7 +66,6 @@ public class CatalogManager {
 		article.getSelectedCategories().forEach(afterEdit::addCategory);
 		article.getSelectedColours().forEach(afterEdit::setColour);
 
-		catalog.deleteById(identifier);
 		catalog.save(afterEdit);
 		
 		// Edit any articles that get affected by this
@@ -146,7 +157,7 @@ public class CatalogManager {
 	public void newPart(Form form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
-			inventory.addArticle(newArticle);
+			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
 	public void newComposite(CompositeForm form, Map<String,String> partsCount) {//-----------------------WEITERMACHEN----------------------------------
 
@@ -176,7 +187,7 @@ public class CatalogManager {
 
 		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
 		catalog.save(newArticle);
-		inventory.addArticle(newArticle);
+		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
 	public void saveArticle(Article article){
 		catalog.save(article);

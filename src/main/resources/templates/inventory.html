@@ -6,6 +6,12 @@
 <body>
 <nav th:include="navbar :: navbar"></nav>
 <h2 th:text="#{articletable.title}">Lagerübersicht</h2>
+<a th:href="@{/reorders}">
+	<div class="ui button">
+		<tnorm th:text="#{articletable.reorder}">Nachbestellungen</tnorm>
+	</div>
+</a>
+<div id="tablespace">
 <table id="articletable" class="ui celled table">
 			<thead>
 				<tr>
@@ -14,11 +20,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="article: ${articles}">
-					<td th:text="${article.name}">Name</td>
-					<td th:text="${article.amount}">Anzahl</td>
+				<tr th:each="item: ${inventoryItems}">
+					<td th:text="${item.name}">Name</td>
+					<td th:text="${item.amount}">Anzahl</td>
 				</tr>
 			</tbody>
 		</table>
+</div>
 </body>
 </html>

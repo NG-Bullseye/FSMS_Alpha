@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 import forms.ReorderForm;
 import kickstart.inventory.InventoryManager;
@@ -21,7 +24,10 @@ import kickstart.inventory.ReorderableInventoryItem;
 @Controller
 public class InventoryController {
 
+	//private @Autowired Inventory<ReorderableInventoryItem> inventory;
 	private InventoryManager manager;
+	
+	//private @Autowired BusinessTime time;
 	
 	public class TableElement
 	{
@@ -52,9 +58,12 @@ public class InventoryController {
 		}
 	}
 	
-	public InventoryController(InventoryManager manager)
+	public InventoryController(Inventory<ReorderableInventoryItem> inventory, 
+			BusinessTime time)
 	{
-		this.manager = manager;
+		manager = new InventoryManager(inventory, time);
+		
+		manager.getInventory().deleteAll();
 	}
 	
 	@GetMapping("/inventory")
@@ -82,7 +91,7 @@ public class InventoryController {
 			for(LocalDateTime ldt: item.getReorders().keySet())
 			{
 				tableElements.add(new TableElement(item.getProduct().getName(), 
-						item.getQuantity().getAmount().toString(), ldt.toString()));
+						item.getReorders().get(ldt).toString(), ldt.toString()));
 			}
 		}
 		
