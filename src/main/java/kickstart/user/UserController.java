@@ -107,5 +107,29 @@ class UserController {
 		userManagement.useraccountActivation(accountId, type);
 		return "redirect:/customers";
 	}
+	
+	@GetMapping("/deactivateMyself")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	String deactivateMyself(@LoggedIn UserAccount loggedInUser){
+		UserAccountIdentifier accountId = loggedInUser.getId();
+		userManagement.useraccountActivation(accountId, 0);
+		return "redirect:/logout";
+	}
+	
+	@GetMapping("/changeRole")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
+	String changeRole(@RequestParam(value = "user") long requestId, @RequestParam(value = "type") int type) {
+		User requestedUser = userManagement.findUserById(requestId);
+		userManagement.changeRole(requestedUser, type);
+		return "redirect:/employees";
+	}
+	
+	@GetMapping("/changeMoney")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
+	String changeMoney(@RequestParam(value = "user") long requestId, @RequestParam(value = "money") int money) {
+		User requestedUser = userManagement.findUserById(requestId);
+		userManagement.changeMoney(requestedUser, money);
+		return "redirect:/employees";
+	}
 
 }
