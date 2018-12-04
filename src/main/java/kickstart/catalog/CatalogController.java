@@ -29,6 +29,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class CatalogController {
@@ -68,7 +69,10 @@ public class CatalogController {
 		return "catalog";
 	}
 	@PostMapping("/catalog")
-	String catalogFiltered (@ModelAttribute("filterform") Filterform filterform, Model model){
+	String catalogFiltered (@ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset, Model model){
+		if(reset.equals("Filter zurücksetzen")){
+			return "redirect:/catalog/";
+		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
 		return "catalog";
 	}
