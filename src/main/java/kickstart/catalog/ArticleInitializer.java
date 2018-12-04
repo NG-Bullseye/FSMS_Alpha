@@ -4,7 +4,10 @@ import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
+import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Quantity;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -45,7 +48,6 @@ public class ArticleInitializer implements DataInitializer {
 		catalog.save(p2);
 		catalog.save(new Part("Matratze 140x190","eine 140x190 große Matratze",18,200.0, c1,cat2));
 		catalog.save(new Part("Bettgestell 140x190","ein Bettgestell für eine 140x190 große Matratze",30,75.0, c1,cat1));
-
 		LinkedList<Article> l1 = new LinkedList<>();
 		for(int i=0;i<4;i++){
 		l1.add(p1);
