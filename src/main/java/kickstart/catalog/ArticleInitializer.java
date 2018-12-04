@@ -16,6 +16,7 @@ import java.util.HashSet;
 import static org.salespointframework.core.Currencies.EURO;
 
 @Component
+@Order(20)
 public class ArticleInitializer implements DataInitializer {
 	private final WebshopCatalog catalog;
 
