@@ -17,7 +17,7 @@ public class JavaMailer {
         SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(email);
 		message.setSubject("Registrierung");
-		message.setText("Sie haben sich erfolgreich registriert!");
+		message.setText("Sie haben sich erfolgreich bei Möbel-Hier registriert!");
 		sendMail(message);
 		return;
     }

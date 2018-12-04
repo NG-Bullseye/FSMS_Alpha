@@ -25,6 +25,10 @@ a.whitelink {
   text-align: center;
 }
 
+#rigthalign {
+  text-align: rigth;
+}
+
 #buttonspace {
 	margin: 2em 0em 0em 0em;
 }

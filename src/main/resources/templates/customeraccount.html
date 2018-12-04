@@ -122,10 +122,12 @@
 		      <i class="remove icon"></i>
 		      Nein
 		    </div>
-		    <div class="positive ui button" th:href="@{'/activation'(user=${id})(type=0)}">
-		      <i class="checkmark icon"></i>
-		      <a class="whitelink" th:href="@{'/activation'(user=${id}, type=0)}" th:text="Ja">Ja</a>
-		    </div>
+		    <a th:href="@{'/activation'(user=${id}, type=0)}">
+			    <div class="positive ui button">
+			      <i class="checkmark icon"></i>
+			      Ja
+			    </div>
+		    </a>
 		  </div>
 		</div>
 		
