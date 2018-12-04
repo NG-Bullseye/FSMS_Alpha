@@ -108,6 +108,14 @@ class UserController {
 		return "redirect:/customers";
 	}
 	
+	@GetMapping("/deactivateMyself")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	String deactivateMyself(@LoggedIn UserAccount loggedInUser){
+		UserAccountIdentifier accountId = loggedInUser.getId();
+		userManagement.useraccountActivation(accountId, 0);
+		return "redirect:/logout";
+	}
+	
 	@GetMapping("/changeRole")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	String changeRole(@RequestParam(value = "user") long requestId, @RequestParam(value = "type") int type) {
