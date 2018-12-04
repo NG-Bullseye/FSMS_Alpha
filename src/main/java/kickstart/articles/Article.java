@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
+import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -49,7 +50,8 @@ public abstract class Article extends Product{
 	// This list stores the identifiers to every article that uses this article
 	// as a part. This is needed to identify
 	@ElementCollection
-	private List<ProductIdentifier> parents = new LinkedList<>();
+	@javax.persistence.Transient
+	private List<ProductIdentifier> parents;
   
 	/**
 	 * 
@@ -78,6 +80,7 @@ public abstract class Article extends Product{
 		this.description = description;
 		
 		updateStatus = true;
+		this.parents = new LinkedList<>();
 	}
 	
 	public String getDescription() {
