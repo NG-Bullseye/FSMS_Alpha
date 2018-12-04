@@ -4,6 +4,7 @@ package kickstart.order;
 
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
+import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
@@ -19,6 +20,7 @@ import org.salespointframework.time.BusinessTime;
 
 
 
+
 @Controller
 @SessionAttributes("cart")
 public class OrderController {
@@ -26,13 +28,16 @@ public class OrderController {
 	private final CartOrderManager cartordermanager;
 	private final OrderManager<Order> orderManager;
 	private final BusinessTime businesstime;
+	private final UserManagement userManagement;
 
-	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime){
+
+	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime, UserManagement userManagement){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
 		this.businesstime = businesstime;
 		this.cartordermanager = new CartOrderManager(orderManager, businesstime);
+		this.userManagement = userManagement;
 
 	}
 
@@ -58,7 +63,8 @@ public class OrderController {
 	}
 
 	@GetMapping("/addcostumertocart")
-	String addCostumer(@RequestParam("customer") UserAccount account){
+	String addCostumer(@RequestParam(value = "user") long requestId){
+		UserAccount account = userManagement.findUserById(requestId).getUserAccount();
 		return cartordermanager.addCostumer(account);
 	}
 
