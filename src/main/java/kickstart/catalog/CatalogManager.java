@@ -1,17 +1,13 @@
 package kickstart.catalog;
 
-import kickstart.forms.CompositeForm;
-import kickstart.forms.Filterform;
-import kickstart.forms.Form;
 import kickstart.articles.*;
+import kickstart.articles.Article.ArticleType;
 import kickstart.inventory.InventoryManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.money.MonetaryAmount;
 import java.util.*;
 
 
@@ -35,6 +31,8 @@ public class CatalogManager {
 	}
 
 	public void editArticle(Form article, ProductIdentifier identifier) {
+		// Edit article
+		
 		System.out.println("wird aufgerufen");
 		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
@@ -46,45 +44,92 @@ public class CatalogManager {
 
 		catalog.deleteById(identifier);
 		catalog.save(afterEdit);
+		
+		// Edit any articles that get affected by this
+		
+		List<Article> affectedArticles = new ArrayList<Article>();
+
+		List<ProductIdentifier> articleList = new ArrayList<ProductIdentifier>();
+		articleList.addAll(afterEdit.getParents());
+		afterEdit.setUpdateStatus(false);
+		
+		while(!articleList.isEmpty()) {
+			Optional<Article> a = catalog.findById(articleList.get(0));
+			if(a.isPresent()) {				
+				affectedArticles.add(a.get());
+				
+				articleList.addAll(a.get().getParents());
+				
+				a.get().setUpdateStatus(false);
+				
+				articleList.remove(0);
+			}
+			else {
+				articleList.remove(0);
+			}
+		}
+		
+		while(!affectedArticles.isEmpty()) {
+			List<Article> parts = new ArrayList<Article>();
+
+			if(affectedArticles.get(0).getType() == ArticleType.COMPOSITE) {
+				Composite c = (Composite) affectedArticles.get(0);
+				parts = getArticlesFromIdentifiers(c.getPartIds().keySet());
+			}
+			
+			if(affectedArticles.get(0).update(parts)) {
+				affectedArticles.get(0).setUpdateStatus(true);
+				affectedArticles.remove(0);
+			}
+			else {
+				affectedArticles.add(affectedArticles.get(0));
+				affectedArticles.remove(0);
+			}
+		}
+	}
+	
+	public List<Article> getArticlesFromIdentifiers(Set<ProductIdentifier> set) {
+		List<Article> articles = new ArrayList<Article>();
+		
+		for(ProductIdentifier id: set) {
+			Optional<Article> a = this.catalog.findById(id);
+			if(a.isPresent()) {
+				articles.add(a.get());
+			}
+		}
+		
+		return articles;
 	}
 
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
-		HashSet<Article> categories = new HashSet<>();
+		HashSet<Article> rightType = new HashSet<>();
 
-		if (filterform.getCategory().equals("composite")) {
-			Iterable<Article> rightCategories = catalog.findAll();
-			rightCategories.forEach(article -> {
-				if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);});}
+		if (filterform.getType().equals("composite")) {
+			catalog.findComposite().forEach(rightType::add);}
 		 else {
-			if (filterform.getCategory().equals("part")) {
-				Iterable<Article> rightCategories = catalog.findAll();
-				rightCategories.forEach(article -> {
-					if(article.getType()==Article.ArticleType.PART) categories.add(article);
-				});
+			if (filterform.getType().equals("part")) {
+				catalog.findPart().forEach(rightType::add);
 			} else {
-				Iterable<Article> rightCategories = catalog.findAll();
-				rightCategories.forEach(categories::add);
+				catalog.findAll().forEach(rightType::add);
 
 			}
 		}
 		HashSet<Article> rightColours = new HashSet<>();
-		for (Article article : categories) {
-			for (String colour : filterform.getSelectedColours()) {
-				if (article.getColour().contains(colour)) {
-					rightColours.add(article);
-				}
-			}
-		}
+		catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
+
 		HashSet<Article> rightPrice = new HashSet<>();
-		for (Article article : rightColours) {
-			if (!article.getPrice().isLessThan(Money.of(filterform.getMinPrice(), "EUR")) && !article.getPrice().isGreaterThan(Money.of(filterform.getMaxPrice(),"EUR"))) {
-				rightPrice.add(article);
-			}
-		}
+		catalog.findByPrice(Money.of(filterform.getMinPrice(),"EUR"),Money.of(filterform.getMaxPrice(),"EUR")).forEach(rightPrice::add);
 
+		HashSet<Article> rightCategories = new HashSet<>();
+		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 
-		return rightPrice;
+		HashSet<Article> result = rightType;
+		result.retainAll(rightColours);
+		result.retainAll(rightPrice);
+		result.retainAll(rightCategories);
+
+		return result;
 	}
 	public void newPart(Form form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
@@ -106,6 +151,8 @@ public class CatalogManager {
 				ids.put(article.getId().toString(),article);
 		});
 		LinkedList<Article> parts = new LinkedList<>();
+		
+		
 		rightMap.forEach((article,count)->{
 				int i = count;
 				while (i>0){
@@ -114,8 +161,12 @@ public class CatalogManager {
 				}
 
 		} );
+
 		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
 		catalog.save(newArticle);
 		inventory.addArticle(newArticle);
+	}
+	public void saveArticle(Article article){
+		catalog.save(article);
 	}
 }

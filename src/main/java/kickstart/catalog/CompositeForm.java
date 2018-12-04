@@ -1,4 +1,4 @@
-package kickstart.forms;
+package kickstart.catalog;
 
 import kickstart.articles.Article;
 

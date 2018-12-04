@@ -3,11 +3,17 @@ body {
   background-color: #F9F9F9;
 }
 
-/*divs*/
-
-#navmenu {
-  /*Das ist für die Navbar*/
+a.link {
+     text-decoration: none;
+     color: rgba(0,0,0,.6);
 }
+
+a.whitelink {
+     text-decoration: none;
+     color: #fff;
+}
+
+/*divs*/
 
 #title {
   /*Title*/
@@ -16,7 +22,7 @@ body {
 }
 
 #registration {
-  text-align:center;
+  text-align: center;
 }
 
 #buttonspace {
@@ -24,16 +30,15 @@ body {
 }
 
 #textnhead {
-	padding: 0em 1em 0em 1em;
 	margin: 0em 0em 1em 0em;
 }
 
-#leftspace {
-	padding: 0em 1em 1em 1em;
-}
-
 #tablespace {
-	padding: 2em;
+	padding: 3em;
+}
+#customerbox {
+	padding: 1em 3em 1em 1em;
+	text-align: right;
 }
 
 /*fonts*/
@@ -55,6 +60,10 @@ t3 {
   font-size: 1em;
   font-weight: bold;
   color: #494949;
+}
+
+t4{
+	
 }
 
 tnorm {

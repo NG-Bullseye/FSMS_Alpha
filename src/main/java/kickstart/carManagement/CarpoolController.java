@@ -40,7 +40,7 @@ public class CarpoolController {
 		try{
 			List<Truck> trucks=carpoolManager.getTakenTrucks();
 			carpoolManager.returnTruckToFreeTrucks(trucks.get(0));
-		}catch (NullPointerException r){
+		}catch (Exception r){
 			return "redirect:pricing";
 		}
 		return "redirect:pricing";
