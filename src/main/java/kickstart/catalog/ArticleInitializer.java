@@ -3,7 +3,10 @@ package kickstart.catalog;
 import kickstart.articles.Article;
 import kickstart.articles.Part;
 import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
+import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Quantity;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -41,5 +44,6 @@ public class ArticleInitializer implements DataInitializer {
 		catalog.save(new Part("mittelgroße Tischplatte","eine mittelgroße Tischplatte",17,70.0, c1,cat1));
 		catalog.save(new Part("Matratze 140x190","eine 140x190 große Matratze",18,200.0, c1,cat2));
 		catalog.save(new Part("Bettgestell 140x190","ein Bettgestell für eine 140x190 große Matratze",30,75.0, c1,cat1));
+
 	}
 }
