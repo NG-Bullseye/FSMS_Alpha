@@ -86,13 +86,12 @@ public class Composite extends Article {
 
 		for (Article article: parts) {
 			article.getCategories().forEach(this::addCategory);
-
-			article.setParent(this.getId());
 			
 			if(partIds.containsKey(article.getId())) {
 				partIds.put(article.getId(), partIds.get(article.getId()) + 1);
 			}
 			else {
+				article.setParent(this.getId());
 				partIds.put(article.getId(), 1);
 			}
 			
