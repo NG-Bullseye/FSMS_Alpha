@@ -71,7 +71,7 @@
         <a class="item">
             <input class="ui button" type="submit" value="Filter zurücksetzen" name="reset">
         </a>
-        <a class="item">
+        <a class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
             <a class="ui button" th:href="@{/catalog/all}">gesamter Katalog</a>
         </a>
     </div>

@@ -139,7 +139,7 @@ public class CatalogController {
 		CompositeForm composite = new CompositeForm();
 		model.addAttribute("compositeForm",composite);
 		model.addAttribute("catalog", manager.getWholeCatalog());
-		model.addAttribute("form", new ReorderForm());
+		//model.addAttribute("form", new ReorderForm());
 		return"newComposite";
 	}
 	@PostMapping("catalog/composite/new")
