@@ -44,18 +44,18 @@
             Bitte geben sie das neue Gehalt ein:
          </div>
          <div class="content">
-            <div class="field">
+         <form method="post" role="form" class="ui form" id="form" th:action="@{/register}" th:object="${form}">
+            <div class="inline field">
                <input name="money" placeholder="50">
                <div class="ui left pointing label">Bitte geben sie einen Wert größer 0 ein.</div>
             </div>
+            </form>
          </div>
          <div class="actions">
-            <div class="positive ui button">
-               <i class="checkmark icon"></i>
-               Übernehmen
+            <input class="positive ui button" type="submit" value="Übernehmen" form="form"><i class="checkmark icon"></i></input>
+            </div>
             </div>
          </div>
-      </div>
    </body>
    <script type="text/javascript">
       $(document).ready(function(){

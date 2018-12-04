@@ -46,6 +46,11 @@ a.whitelink {
 	text-align: right;
 }
 
+#halfwidth {
+	margin: 0 auto;
+	width: 425px;
+}
+
 /*fonts*/
 
 t1 {
