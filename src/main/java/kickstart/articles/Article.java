@@ -130,7 +130,7 @@ public abstract class Article extends Product{
 
 	public abstract void setWeight(double weight);
 
-	public abstract void setColour(String colour);
+	public abstract void setColour(@NotNull String colour);
 
 	public List<Comment> getComments() {
 		return comments;

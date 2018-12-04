@@ -15,7 +15,7 @@ interface RegistrationForm {
 	String getLastname();
 
 	@NotEmpty(message = "Bitte geben sie eine E-Mail ein!")
-	//@Email(message = "E-Mail Adresse ungültig!")
+	@Email(message = "E-Mail Adresse ungültig!")
 	String getEmail();
 
 	@NotEmpty(message = "Bitte geben sie ein Passwort ein!")

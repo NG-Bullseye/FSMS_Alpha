@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head th:include="header :: head">
@@ -12,10 +10,12 @@
 			<t1 sec:authorize="hasRole('ROLE_CUSTOMER')" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t1>
 			<t1 sec:authorize="hasRole('ROLE_EMPLOYEE')" th:text="${'Account von: ' + name }">Hallo Nutzer</t1>
 		</div>
-
+		<div id="customerbox" sec:authorize="hasRole('ROLE_CUSTOMER')">
+			<a class="ui button" id="deactivateMyself" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+		</div>
 		<div id="customerbox" th:switch="${enableDeactivation}"> 
- 			 <a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
-  		 <a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
+ 			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+  			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
     <div id="textnhead" sec:authorize="hasRole('ROLE_EMPLOYEE')">
     			<form th:action="@{/addcustomertocart}">
@@ -114,7 +114,7 @@
 		    Möchten Sie den Kundenaccount wirklich deaktivieren?
 		  </div>
 		  <div class="content">
-		    <p>Durch deaktivieren des Accounts sind sie nicht mehr in der Lage, sich auf unserer Webseite anzumelden.</p>
+		    <p>Durch deaktivieren des Accounts ist der Kunde nicht mehr in der Lage, sich auf der Webseite anzumelden.</p>
 		    <p>Sind sie wirklich sicher?</p>
 		  </div>
 		  <div class="actions">
@@ -125,6 +125,27 @@
 		    <div class="positive ui button" th:href="@{'/activation'(user=${id})(type=0)}">
 		      <i class="checkmark icon"></i>
 		      <a class="whitelink" th:href="@{'/activation'(user=${id}, type=0)}" th:text="Ja">Ja</a>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="ui tiny modal" id="deactivateOwnAccount">
+		  <div class="ui icon header">
+		    <i class="frown icon"></i>
+		    Möchten Sie ihren Kundenaccount wirklich deaktivieren?
+		  </div>
+		  <div class="content">
+		    <p>Durch deaktivieren des Accounts sind sie nicht mehr in der Lage, sich auf unserer Webseite anzumelden.</p>
+		    <p>Sind sie wirklich sicher?</p>
+		  </div>
+		  <div class="actions">
+		    <div class="negative ui button">
+		      <i class="remove icon"></i>
+		      Nein
+		    </div>
+		    <div class="positive ui button">
+		      <i class="checkmark icon"></i>
+		      <a class="whitelink" th:href="@{/deactivateMyself}" th:text="Ja">Ja</a>
 		    </div>
 		  </div>
 		</div>
@@ -156,9 +177,13 @@
 		$('#deactivate').click(function(){
 			$('#deactivateAccount').modal('show');
 		});
+		$('#deactivateMyself').click(function(){
+			$('#deactivateOwnAccount').modal('show');
+		});
 		$('#activate').click(function(){
 			$('#activateAccount').modal('show');
 		});
+	});
 	</script>
 </html>
 

@@ -19,17 +19,33 @@ import java.util.*;
 @Component
 public class CatalogManager {
 	private final WebshopCatalog catalog;
-	
+	private HashSet<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
 	
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
+	/*
+	@Autowired
+	private InventoryManager inventory;
+	public CatalogManager(WebshopCatalog catalog) {
+		this.catalog = catalog;
+		hiddenArticles = new HashSet<>();*/
 	}
 
 	public Iterable<Article> getWholeCatalog() {
 		return catalog.findAll();
 
+	}
+
+	public Iterable<Article> getVisibleCatalog(){
+		HashSet<Article> visible = new HashSet<>();
+		catalog.findAll().forEach(article -> {
+			if(!hiddenArticles.contains(article)){
+				visible.add(article);
+			}
+		});
+		return visible;
 	}
 
 	public Article getArticle(ProductIdentifier id) {
@@ -174,5 +190,9 @@ public class CatalogManager {
 	}
 	public void saveArticle(Article article){
 		catalog.save(article);
+	}
+
+	public void hideArticle(ProductIdentifier identifier){
+		hiddenArticles.add(catalog.findById(identifier).get());
 	}
 }

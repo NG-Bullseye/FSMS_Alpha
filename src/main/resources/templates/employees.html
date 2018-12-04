@@ -1,45 +1,68 @@
+
+
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="header :: head">
-		<title id="pageTitle">Mitarbeiterübersicht</title>
-	</head>
-<body>
-    <nav th:include="navbar :: navbar"></nav>
-
-	<div id="tablespace">
-	    <table class="ui celled table">
-	        <thead>
-	        <tr>
-	            <th th:text="Nutzername">Nutzername</th>
-	            <th th:text="Vorname">Vorname</th>
-	            <th th:text="Nachname">Nachname</th>
-	            <th th:text="E-Mail">E-Mail</th>
-	            <th th:text="Anschrift">Anschrift</th>
-	            <th th:text="Gehalt">Gehalt</th>
-	            <th th:text="'Verfügbare ' + 'Aktionen'">Verfügbare Aktionen</th>
-	        </tr>
-	        </thead>
-	        <tbody th:remove="all-but-first">
-	        <tr th:each=" customer : ${customerList}">
-	            <td th:text="${customer.userAccount.id}">Nutzername</td>
-	            <td th:text="${customer.firstname}">Vorname</td>
-	            <td th:text="${customer.lastname}">Nachname</td>
-	            <td th:text="${customer.email}">E-Mail</td>
-	            <td th:text="${customer.address}">Anschrift</td>
-	            <td th:text="${customer.salary}">Gehalt</td>
-	            <td>
-		  			<div class="ui button">
-		  				<a class="link" th:text="Deaktivieren">Deaktivieren</a>
-		  			</div>
-		  			<div class="ui button">
-		  				<a class="link" th:text="'Gehalt ' + 'anpassen'">Gehalt anpassen</a>
-		  			</div>
-		  		</td>
-	        </tr>
-	        </tbody>
-	    </table>
-    </div>
-
-</body>
+   <head th:include="header :: head">
+      <title id="pageTitle">Mitarbeiterübersicht</title>
+   </head>
+   <body>
+      <nav th:include="navbar :: navbar"></nav>
+      <div id="tablespace">
+         <table class="ui celled table">
+            <thead>
+               <tr>
+                  <th th:text="Nutzername">Nutzername</th>
+                  <th th:text="Vorname">Vorname</th>
+                  <th th:text="Nachname">Nachname</th>
+                  <th th:text="E-Mail">E-Mail</th>
+                  <th th:text="Anschrift">Anschrift</th>
+                  <th th:text="Gehalt">Gehalt</th>
+                  <th th:text="'Verfügbare ' + 'Aktionen'">Verfügbare Aktionen</th>
+               </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+               <tr th:each=" customer : ${customerList}">
+                  <td th:text="${customer.userAccount.id}">Nutzername</td>
+                  <td th:text="${customer.firstname}">Vorname</td>
+                  <td th:text="${customer.lastname}">Nachname</td>
+                  <td th:text="${customer.email}">E-Mail</td>
+                  <td th:text="${customer.address}">Anschrift</td>
+                  <td th:text="${customer.salary}">Gehalt</td>
+                  <td>
+                     <a class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="change" th:text="${'Gehalt ' + 'anpassen'}">Gehalt anpassen</a>
+                     <div class="ui button" sec:authorize="hasRole('ROLE_BOSS')" th:if="!${customer.userAccount.hasRole('ROLE_BOSS')} AND ${customer.userAccount.hasRole('ROLE_EMPLOYEE')}">
+                        <a class="link" th:href="@{'/changeRole'(user=${customer.id}, type=1)}" th:text="'Zum ' + 'Kunden ' + 'herabstufen'">Zum Kunden herabstufen</a>
+                     </div>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      <div class="ui tiny modal" id="changemoney">
+         <div class="ui icon header">
+            <i class="euro sign icon"></i>
+            Bitte geben sie das neue Gehalt ein:
+         </div>
+         <div class="content">
+         <form method="post" role="form" class="ui form" id="form" th:action="@{/register}" th:object="${form}">
+            <div class="inline field">
+               <input name="money" placeholder="50">
+               <div class="ui left pointing label">Bitte geben sie einen Wert größer 0 ein.</div>
+            </div>
+            </form>
+         </div>
+         <div class="actions">
+            <input class="positive ui button" type="submit" value="Übernehmen" form="form"><i class="checkmark icon"></i></input>
+            </div>
+            </div>
+         </div>
+   </body>
+   <script type="text/javascript">
+      $(document).ready(function(){
+      	$('#change').click(function(){
+      		$('#changemoney').modal('show');
+      	});
+      });
+   </script>
 </html>
+

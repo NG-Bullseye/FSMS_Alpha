@@ -81,16 +81,42 @@ public User findUserById (long id) {
 	}
 	
 	public void useraccountActivation(UserAccountIdentifier accountId, int type) {
-		if (type == 0) {
+		if (type == 0) { // deaktivieren
 			userAccounts.disable(accountId);
 			return;
-		} else if (type == 1) {
+		} else if (type == 1) { // aktivieren
 			userAccounts.enable(accountId);
 			return;
 		} else {
-			return;
+			throw new IllegalArgumentException("Parameter type has illegal value");
 		}
 		
+	}
+	
+	public void changeRole(User user, int type) {
+		UserAccount userAccount = user.getUserAccount();
+		if (type == 0) { // Kunde zum Mitarbeiter machen
+			userAccount.add(Role.of("ROLE_EMPLOYEE"));
+			userAccount.remove(Role.of("ROLE_CUSTOMER"));
+			changeMoney(user, 50);
+			return;
+		} else if (type == 1) { // Mitarbeiter zum Kunde machen
+			userAccount.add(Role.of("ROLE_CUSTOMER"));
+			userAccount.remove(Role.of("ROLE_EMPLOYEE"));
+			changeMoney(user, 0);
+			return;
+		} else {
+			throw new IllegalArgumentException("Parameter type has illegal value");
+		}
+	}
+	
+	public void changeMoney(User user, int money) {
+		if (money >= 0 && money < 1000000) {
+			user.setSalary(money);
+			return;
+		} else {
+			throw new IllegalArgumentException("Parameter money has illegal value");
+		}
 	}
 	
 }
