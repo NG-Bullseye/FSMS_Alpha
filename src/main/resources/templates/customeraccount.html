@@ -17,6 +17,12 @@
  			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
   			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
+    <div id="textnhead" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+    			<form th:action="@{/addcustomertocart}">
+        			<button type="submit" class="ui button" th:text="Auswählen">choose</button>
+        			<!--<input name="customer" type="hidden" th:value="${customer.userAccount.id}">-->
+			    </form>
+				</div>
     
 		<div id="tablespace">
 		<div class="ui grid">
@@ -58,10 +64,23 @@
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Austehend"></td>
-						<td>
+
+						<td align="center" th:width="50">
 							<form th:action="@{/cancelthatorder}">
-								<button id="buttonspace" type="submit" class="ui button" th:text="stornieren">stronieren</button>
+								<button type="submit" class="ui button" th:text="bezahlen">paying</button>
 								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+								<input name="choose" type="hidden" th:value="bezahlen">
+								<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+
+
+							</form>
+						</td>
+						<td align="center" th:width="50">
+							<form th:action="@{/cancelthatorder}">
+								<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
+								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+								<input name="choose" type="hidden" th:value="stornieren">
+								<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
 							</form>
 						</td>
 					</tr>
@@ -75,14 +94,17 @@
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Abgeschlossen"></td>
 					</tr>
-				</tbody>
-			</table>
-			<form th:action="@{/showcustomerorders}">
-				<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
-				<input name="nameoftheorderer" type="hidden" th:value="${name}">
-				<input name="emailoftheorderer" type="hidden" th:value="${email}">
-				<input name="addressoftheorderer" type="hidden" th:value="${address}">
-			</form>
+					</tbody>
+				</table>
+
+
+				<form th:action="@{/showcustomerorders}">
+					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
+					<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+
+				</form>
+
+  			</div>
 		</div>
       
       

@@ -28,7 +28,9 @@ import org.salespointframework.time.BusinessTime;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class CatalogController {
@@ -58,18 +60,23 @@ public class CatalogController {
 	String catalog(Model model){
 
 
-		model.addAttribute("catalog", manager.getWholeCatalog());
-
-		model.addAttribute("urlAll","catalog");
-		model.addAttribute("urlPart","part");
-		model.addAttribute("urlComposite","composite");
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
 
 		return "catalog";
 	}
 	@PostMapping("/catalog")
-	String catalogFiltered (@ModelAttribute("filterform") Filterform filterform, Model model){
+	String catalogFiltered (@ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset, Model model){
+		if(reset.equals("Filter zurücksetzen")){
+			return "redirect:/catalog/";
+		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
+		return "catalog";
+	}
+	@GetMapping("catalog/all")
+	public String completeCatalog(Model model){
+		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("filterform",new Filterform());
 		return "catalog";
 	}
 	@GetMapping("artikel/{identifier}")
@@ -94,7 +101,9 @@ public class CatalogController {
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
-		System.out.println(manager.getArticle(identifier));
+		HashSet<String> articleCategories = new HashSet<>();
+		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+		model.addAttribute("articleCategories", articleCategories);
 		model.addAttribute("form",new Form()); //Damit man im folgenden form bearbeiten kann
 		return "edit";
 	}
@@ -138,6 +147,11 @@ public class CatalogController {
 		model.addAttribute("catalog", manager.getWholeCatalog());
 
 		return"redirect:/catalog";
+	}
+	@GetMapping("hide/{identifier}")
+	public String hide(@PathVariable ProductIdentifier identifier, Model model){
+		manager.hideArticle(identifier);
+		return "redirect:/catalog/";
 	}
 
 
