@@ -20,14 +20,17 @@ public class UserManagement {
 
 	private final UserRepository users;
 	private final UserAccountManager userAccounts;
+	private final JavaMailer mailSender;
 
-	UserManagement(UserRepository users, UserAccountManager userAccounts) {
+	UserManagement(UserRepository users, UserAccountManager userAccounts, JavaMailer mailSender) {
 
 		Assert.notNull(users, "UserRepository must not be null!");
 		Assert.notNull(userAccounts, "UserAccountManager must not be null!");
+		Assert.notNull(mailSender, "JavaMailer must not be null!");
 
 		this.users = users;
 		this.userAccounts = userAccounts;
+		this.mailSender = mailSender;
 	}
 
 	public User createUser(RegistrationForm form) {
@@ -35,6 +38,7 @@ public class UserManagement {
 		Assert.notNull(form, "Registration form must not be null!");
 
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
+		mailSender.sendCustomerRegistrationMessage(form.getEmail());
 		return users.save(new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
 	
