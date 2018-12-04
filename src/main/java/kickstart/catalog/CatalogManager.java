@@ -25,6 +25,7 @@ public class CatalogManager {
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
+		hiddenArticles = new HashSet<>();
 	/*
 	@Autowired
 	private InventoryManager inventory;
