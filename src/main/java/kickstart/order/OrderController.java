@@ -27,16 +27,16 @@ public class OrderController {
 
 	private final CartOrderManager cartordermanager;
 	private final OrderManager<Order> orderManager;
-	private final BusinessTime businesstime;
+	private final BusinessTime businessTime;
 	private final UserManagement userManagement;
 
 
-	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime, UserManagement userManagement){
+	OrderController(OrderManager<Order> orderManager, BusinessTime businessTime, UserManagement userManagement){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
-		this.businesstime = businesstime;
-		this.cartordermanager = new CartOrderManager(orderManager, businesstime);
+		this.businessTime = businessTime;
+		this.cartordermanager = new CartOrderManager(orderManager, businessTime);
 		this.userManagement = userManagement;
 
 	}
@@ -48,7 +48,19 @@ public class OrderController {
 	}
 
 	@GetMapping("/cart")
-	String basket() {
+	String basket(Model model) {
+
+
+
+		if(cartordermanager.getAccount() != null){
+			UserAccount accountname = cartordermanager.getAccount();
+			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
+
+		}
+		else {
+			model.addAttribute("nameoftheorderer", "Bitte einen Kunde ausählen");
+		}
+
 		return "cart";
 	}
 
@@ -84,9 +96,9 @@ public class OrderController {
 
 
 	@RequestMapping("/addorder")
-	String newOrder(@ModelAttribute Cart cart, Model model, @LoggedIn UserAccount account){
+	String newOrder(@ModelAttribute Cart cart, Model model){
 
-	return cartordermanager.newOrder(cart, model, account);
+	return cartordermanager.newOrder(cart, model);
 	}
 
 	@RequestMapping("/showcustomerorders")

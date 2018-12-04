@@ -20,17 +20,21 @@ import java.time.LocalDateTime;
 
 public class CartOrderManager {
 
-	private final OrderManager<Order> ordermanager;
-	private UserAccount account;
-	private final BusinessTime businesstime;
+	private final OrderManager<Order> orderManager;
+	private UserAccount account = null;
+	private final BusinessTime businessTime;
 
-	CartOrderManager(OrderManager<Order> ordermanager, BusinessTime businesstime){
-		this.ordermanager = ordermanager;
-		this.businesstime = businesstime;
+	CartOrderManager(OrderManager<Order> orderManager, BusinessTime businesstime){
+		this.orderManager = orderManager;
+		this.businessTime = businesstime;
 	}
 
 	public OrderManager<Order> getOrderManager(){
-		return ordermanager;
+		return orderManager;
+	}
+
+	public UserAccount getAccount(){
+		return account;
 	}
 
 
@@ -42,14 +46,14 @@ public class CartOrderManager {
 	public String cancelorpayOrder(Order order, String choose){
 
 		if(choose.equals("bezahlen")){
-			ordermanager.payOrder(order);
+			orderManager.payOrder(order);
 		}
 
 		if(choose.equals("stornieren")) {
-			ordermanager.cancelOrder(order);
+			orderManager.cancelOrder(order);
 		}
 
-		return "/customeraccount";
+		return "customeraccount";
 	}
 
 	public String addComposite (Composite article, int count, Cart cart){
@@ -72,15 +76,15 @@ public class CartOrderManager {
 
 	public String addCostumer(UserAccount account){
 		this.account = account;
-		return "/catalog";
+		return "cart";
 	}
 
-	public String newOrder(Cart cart, Model model, UserAccount account){
+	public String newOrder(Cart cart, Model model){
 
 		if(!cart.isEmpty() ) {
 			Order order = new Order(account, Cash.CASH);
 			cart.addItemsTo(order);
-			ordermanager.save(order);
+			orderManager.save(order);
 
 			cart.clear();
 
@@ -94,14 +98,14 @@ public class CartOrderManager {
 		LocalDateTime date = LocalDateTime.now();
 
 
-		for(Order order:ordermanager.findBy(account)){
+		for(Order order: orderManager.findBy(account)){
 
 			/**
-					case 1: ordermanager.payOrder(order);
+					case 1: orderManager.payOrder(order);
 					//case 2: versendet
 					//case 8: abholbereit
-					case 9: if(!order.isPaid()){ordermanager.payOrder(order);}
-							ordermanager.completeOrder(order);**/
+					case 9: if(!order.isPaid()){orderManager.payOrder(order);}
+							orderManager.completeOrder(order);**/
 
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 			Interval intervalcheck = Interval.from(order.getDateCreated()).to(order.getDateCreated());
@@ -111,7 +115,7 @@ public class CartOrderManager {
 
 			if(order.isPaid()){
 				if(intervalcheck.getDuration().compareTo(interval.getDuration()) >= 0){
-					ordermanager.completeOrder(order);
+					orderManager.completeOrder(order);
 
 				}
 			}
