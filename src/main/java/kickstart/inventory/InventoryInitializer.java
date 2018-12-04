@@ -28,7 +28,7 @@ public class InventoryInitializer implements DataInitializer{
 		inventory.deleteAll();
 		
 		for(Article article: catalog.findAll()) {
-			inventory.save(new ReorderableInventoryItem(article, Quantity.of(0, Metric.UNIT)));
+			inventory.save(new ReorderableInventoryItem(article, Quantity.of(10, Metric.UNIT)));
 		}
 	}
 
