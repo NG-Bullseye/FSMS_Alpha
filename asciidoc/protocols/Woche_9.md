@@ -4,7 +4,7 @@ Gruppe 34, Schriftführer: Daniel Körsten
 
 ## Konsutation
 
-- Dieses mal fand unsere Zwischenpräsentations statt. [Link Präsentation](../master/presentation/SWT_Zwischenpräsentation.pdf)
+- Dieses mal fand unsere Zwischenpräsentations statt. [Link Präsentation](../presentation/SWT_Zwischenpräsentation.pdf)
 
 - Nächster Sonntag: Harte Deadline Muss-Kriterien -> Besprechung, was noch zu tun ist
 
