@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.Set;
 
 public class ArticleTest {
@@ -34,6 +35,19 @@ public class ArticleTest {
 		@Override
 		public ArticleType getType() {
 			return ArticleType.PART;
+		}
+
+		@Override
+		public void setWeight(double weight) {			
+		}
+
+		@Override
+		public void setColour(String colour) {
+		}
+
+		@Override
+		public boolean update(List<Article> parts) {
+			return true;
 		}		
 	}
 	

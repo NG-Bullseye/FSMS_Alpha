@@ -9,7 +9,7 @@
 <div class="ui attached stackable menu">
 
     <div class="ui container left attached">
-        <select class="ui simple search dropdown item" th:field="*{category}">
+        <select class="ui simple search dropdown item" th:field="*{type}">
                 <option th:value="all" >Alle Artikel</option>
                 <option th:value="part" >Möbelteile</option>
                 <option th:value="composite">Möbel</option>
@@ -38,19 +38,41 @@
                         <a class="item">
                             <div class="ui labeled input">
                                 <div class="ui label">Mindestpreis</div>
-                                <input type="number" th:field="*{minPrice}">
+                                <input type="number" th:value="1" th:field="*{minPrice}">
                             </div>
                         </a>
                         <a class="item">
                             <div class="ui labeled input">
                                 <div class="ui label">Maximalpreis</div>
-                                <input type="number" th:field="*{maxPrice}">
+                                <input type="number" th:value="50000.0" th:field="*{maxPrice}">
                             </div>
                         </a>
                     </div>
+            </div>
+        <div class="ui simple dropdown item">
+            Kategorien
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <ul>
+                    <a th:each="category: ${categories}">
+                        <a class="item"> <input type="checkbox"
+                                                th:field="*{selectedCategories}"
+                                                th:value="${category}" />
+                            <label
+                                    th:text="${category}"></label>
+                        </a>
+                    </a>
+                </ul>
+            </div>
         </div>
         <a class="item">
-            <input class="ui button" type="submit" value="Filtern">
+            <input class="ui button" type="submit" value="Filtern" name="reset">
+        </a>
+        <a class="item">
+            <input class="ui button" type="submit" value="Filter zurücksetzen" name="reset">
+        </a>
+        <a class="item">
+            <a class="ui button" th:href="@{/catalog/all}">gesamter Katalog</a>
         </a>
     </div>
         <div class="ui right attached simple dropdown item">

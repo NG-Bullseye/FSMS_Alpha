@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+    <title id="pageTitle">Lager</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+<h2 th:text="#{articletable.title}">Lagerübersicht</h2>
+<a th:href="@{/reorders}">
+	<div class="ui button">
+		<tnorm th:text="#{articletable.reorder}">Nachbestellungen</tnorm>
+	</div>
+</a>
+<div id="tablespace">
+<table id="articletable" class="ui celled table">
+			<thead>
+				<tr>
+					<th th:text="#{articletable.name}">Name</th>
+					<th th:text="#{articletable.amount}">Anzahl</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item: ${inventoryItems}">
+					<td th:text="${item.name}">Name</td>
+					<td th:text="${item.amount}">Anzahl</td>
+				</tr>
+			</tbody>
+		</table>
+</div>
+</body>
+</html>

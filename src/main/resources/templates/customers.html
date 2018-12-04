@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+		<title id="pageTitle">Kundenübersicht</title>
+	</head>
+<body>
+    <nav th:include="navbar :: navbar"></nav>
+
+	<div id="tablespace">
+	    <table class="ui celled table">
+	        <thead>
+	        <tr>
+	            <th th:text="Nutzername">Nutzername</th>
+	            <th th:text="Vorname">Vorname</th>
+	            <th th:text="Nachname">Nachname</th>
+	            <th th:text="E-Mail">E-Mail</th>
+	            <th th:text="Anschrift">Anschrift</th>
+	            <th th:text="'Verfügbare ' + 'Aktionen'">Verfügbare Aktionen</th>
+	        </tr>
+	        </thead>
+	        <tbody th:remove="all-but-first">
+	        <tr th:each=" customer : ${customerList}">
+	            <td>
+	            	<i class="user icon"></i>
+	             	<t4 th:text="${customer.userAccount.id}">Nutzername</t4>
+	             </td>
+	            <td th:text="${customer.firstname}">Vorname</td>
+	            <td th:text="${customer.lastname}">Nachname</td>
+	            <td th:text="${customer.email}">E-Mail</td>
+	            <td th:text="${customer.address}">Anschrift</td>
+	  			<td>
+		  			<div class="ui button">
+		  				<a class="link" th:href="@{'/managecustomer'(user=${customer.id})}" th:text="Kundenkonto">Kundenkonto</a>
+		  			</div>
+		  			<div class="ui button" sec:authorize="hasRole('ROLE_BOSS')">
+		  				<a class="link" th:href="@{'/changeRole'(user=${customer.id}, type=0)}" th:text="'Zum ' + 'Mitarbeiter ' + 'hochstufen'">Zum Mitarbeiter hochstufen</a>
+		  			</div>
+		  		</td>
+
+	        </tr>
+	        </tbody>
+	    </table>
+    </div>
+
+</body>
+</html>

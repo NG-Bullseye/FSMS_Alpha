@@ -1,12 +1,18 @@
-package kickstart.forms;
+package kickstart.catalog;
 
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 
 public class Filterform {
 	private ArrayList<String> selectedColours;
-	private int minPrice;
-	private int maxPrice;
-	private String category;
+
+	private int minPrice = 1;
+
+	private int maxPrice = 10000;
+	private String type;
+	private ArrayList<String> selectedCategories;
 
 	public Filterform(){}
 
@@ -34,11 +40,19 @@ public class Filterform {
 		this.minPrice = minPrice;
 	}
 
-	public String getCategory() {
-		return category;
+	public String getType() {
+		return type;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setSelectedCategories(ArrayList<String> selectedCategories) {
+		this.selectedCategories = selectedCategories;
+	}
+
+	public ArrayList<String> getSelectedCategories() {
+		return selectedCategories;
 	}
 }

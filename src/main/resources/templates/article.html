@@ -1,30 +1,85 @@
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
 <!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
-
 <head th:include="header :: head">
-    <title id="pageTitle">Startseite</title>
+    <title id="pageTitle">Katalog</title>
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.css'>
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
-<div class="ui container center aligned">
+<div id="tablespace" class="ui grid">
+    <div class="four wide column">
+        <div class="ui image">
+            <img th:src="@{/resources/productImages/placeholder.jpg}"
+                 src="../static/resources/productImages/placeholder.jpg"/>
+        </div>
+    </div>
 
-    <p class="description" th:text="${article.name}">Name</p>
-    <p th:text="${article.description}">Beschreibung</p>
-    <p th:text="${article.price}">Preis</p>
-    <p th:text="${article.getId()}">ID</p>
-    <p th:text="${article.type}"></p>
-    <div class="ui button">
-        <a class="item" th:href="@{http://localhost:8080/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
-        </a>
+    <div id="rightspace" class="twelve wide column">
+        <div id="textnhead">
+            <tnorm th:text="${article.name}">Name</tnorm>
+        </div>
+        <div id="textnhead">
+            <div class="meta">
+                <tnorm th:text="${article.price}">Preis</tnorm>
+            </div>
+        </div>
+        <div class="description">
+            <p th:text="${article.description}">Beschreibung</p>
+        </div>
+        <div class="ui button">
+            <a class="item" th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
+            </a>
+        </div>
+        <div class="ui button">
+            <a class="item" th:href="@{/hide/{id}(id=${article.getId()})}" target="_self">Für Kunden verbergen</a>
+        </div>
+    </div>
+</div>
+<div th:switch="${article.type}">
+    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
+        <div class="ui labeled input">
+            <div class="ui label">Anzahl:</div>
+            <input name="count" type="number" min="1" max="10" value="1">
+            <input name="part" type="hidden" th:value="${article.id}">
+            <input class="ui button" type="submit" value="Artikel hinzufügen">
+        </div>
+    </form>
+    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
+        <div class="ui labeled input">
+            <div class="ui label">Anzahl:</div>
+            <input name="count" type="number" min="1" max="10" value="1">
+            <input name="article" type="hidden" th:value="${article.id}">
+            <input class="ui button" type="submit" value="Artikel hinzufügen">
+        </div>
+    </form>
+</div>
+<div class="ui container center aligned">
+    <form th:action="@{/reorder/{id}(id=${article.getId()})}" method=post th:object="${form}">
+        <label class="ui label">Anzahl</label>
+        <input name="amount" type="number" value="1">
+        <input class="ui labeled button" type="submit" value="Nachbestellen">
+    </form>
+</div>
+<div class="ui comments">
+    <h3 class="ui dividing header">Bewertungen</h3>
+    <h4 th:text="'durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' " >5</h4>
+    <div class="comment" th:each="comment : ${article.comments}">
+        <div class="content">
+            <div class="metadata">
+                <div class="rating">
+                    <span th:text="'★ '+${comment.rating}">5</span>
+                </div>
+            </div>
+            <div class="text" th:text="${comment.text}">Eins tolles Ding</div>
+        </div>
     </div>
 </div>
 <div th:switch="${article.type}">
     <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
         <label class="ui label">Anzahl:</label>
         <input name="count" type="number" min="1" max="10" value="1">
-        <input name="article" type="hidden" th:value="${article.id}">
+        <input name="part" type="hidden" th:value="${article.id}">
         <input class="ui button" type="submit" th:text="Hinzufügen">
     </form>
     <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
@@ -34,8 +89,29 @@
         <div class="ui label">in den Warenkorb</div>
         <input class="ui labeled button" type="submit" name="in den Warenkorb">
     </form>
-
+    <form class="ui reply form" role="form" th:action="@{/artikel/{id}/comment(id=${article.id})}" method="post">
+        <div class="field">
+            <textarea id="comment" name="comment" cols="40" rows="5"></textarea><br/>
+        </div>
+        <div class="field">
+            <label for="rating">Bewertung</label>
+            <select id="rating" name="rating">
+                <option value=1> 1 </option>
+                <option value=2> 2 </option>
+                <option value=3> 3 </option>
+                <option value=4> 4 </option>
+                <option value=5> 5 </option>
+                <option value=6> 6 </option>
+                <option value=7> 7 </option>
+                <option value=8> 8 </option>
+                <option value=9> 9</option>
+                <option value=10> 10 </option>
+            </select>
+        </div>
+        <button type="submit" class="ui labeled button">
+            <div class="ui label">Bewertung abgeben</div>
+        </button>
+    </form>
 </div>
-
 </body>
 </html>

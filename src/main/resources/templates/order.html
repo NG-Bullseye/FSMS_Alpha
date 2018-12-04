@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+    <title id="pageTitle">Bestellungen</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+
+<h2>Bestellungen</h2>
+
+
+    <h3>Offene Bestellungen</h3>
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+
+            <th th:text="Kunde">EinZahler</th>
+            <th th:text="Summe">Betrag</th>
+            <th th:text="Datum">Datum</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ordered : ${openorders} ">
+
+
+            <td th:text="${ordered.userAccount.id}"></td>
+            <td th:text="${ordered.totalPrice}"></td>
+            <td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+    <h3>Bezahlte Bestellungen</h3>
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+
+            <th th:text="Kunde">Zahler</th>
+            <th th:text="Summe">Gezahlt</th>
+            <th th:text="Datum">Datum</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${paidorders} ">
+
+
+            <td> <a th:href = "@{/paidorder/{id}(id=${order.id})}" th:text="${order.userAccount.id}"></td>
+            <td th:text="${order.totalPrice}"></td>
+            <td th:text="${#temporals.format(order.dateCreated, 'dd.MM.yyyy')}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+    <h3>Abgeschlossene Bestellungen</h3>
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+
+            <th th:text="Kunde">DerZahler</th>
+            <th th:text="Summe">AbgeschlosseneSumme</th>
+            <th th:text="Datum">Datum</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orders : ${completeorders} ">
+
+
+            <td th:text="${orders.userAccount.id}"></td>
+            <td th:text="${orders.totalPrice}"></td>
+            <td th:text="${#temporals.format(orders.dateCreated, 'dd.MM.yyyy')}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+    <title id="pageTitle">Warenkorb</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+
+<h1>Warenkorb</h1>
+
+<div th:unless="${cart.empty}">
+    <table class="ui celled padded table">
+        <thead>
+        <tr>
+            <th th:text="Titel">Titel</th>
+            <th th:text="Stückzahl">Stückzahl</th>
+            <th th:text="Preis">Preis</th>
+        </tr>
+        </thead>
+        <tbody th:remove="all-but-first">
+
+
+        <tr th:each="funiture : ${cart} ">
+            <td th:text="${funiture.productName}">Moebelstück</td>
+            <td th:text="${funiture.quantity}">Anzahl</td>
+            <td th:text="${funiture.price}">Preis</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="value", align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
+<form th:action="@{/addorder}">
+    <button id="buttonspace" type="submit" class="ui button" th:text="Bestellen">button</button>
+</form>
+</body>
+</html>
