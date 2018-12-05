@@ -25,8 +25,13 @@ a.whitelink {
   text-align: center;
 }
 
-#rigthalign {
-  text-align: rigth;
+#modalbutton {
+  text-align: center;
+  margin: 2em 1em 1em 1em;
+}
+
+#modalcontent {
+  margin: 1em;
 }
 
 #buttonspace {
@@ -40,6 +45,7 @@ a.whitelink {
 #tablespace {
 	padding: 3em;
 }
+
 #customerbox {
 	padding: 1em 3em 1em 1em;
 	text-align: right;

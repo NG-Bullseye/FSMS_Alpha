@@ -22,17 +22,29 @@
 				</thead>
 				<tbody th:remove="all-but-first">
 					<tr th:each=" customer : ${customerList}">
-						<td th:text="${customer.userAccount.id}">Nutzername</td>
+						<td>
+							<i class="user md icon" th:if="${customer.userAccount.hasRole('ROLE_BOSS')}"></i>
+							<t4 th:text="${customer.userAccount.id}">Nutzername</t4>
+						</td>
 						<td th:text="${customer.firstname}">Vorname</td>
 						<td th:text="${customer.lastname}">Nachname</td>
 						<td th:text="${customer.email}">E-Mail</td>
 						<td th:text="${customer.address}">Anschrift</td>
 						<td th:text="${customer.salary}">Gehalt</td>
 						<td>
-							<a class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="change" th:text="${'Gehalt ' + 'anpassen'}">Gehalt anpassen</a>
-							<div class="ui button" sec:authorize="hasRole('ROLE_BOSS')" th:if="!${customer.userAccount.hasRole('ROLE_BOSS')} AND ${customer.userAccount.hasRole('ROLE_EMPLOYEE')}">
-								<a class="link" th:href="@{'/changeRole'(user=${customer.id}, type=1)}" th:text="'Feuern' + '!'">Feuern!</a>
-							</div>
+							<a sec:authorize="hasRole('ROLE_BOSS')"  id="change">
+								<div class="ui button">
+									<i class="euro sign icon"></i>
+									Gehalt anpassen
+								</div>
+							</a>
+							
+							<a th:href="@{'/changeRole'(user=${customer.id}, type=1)}" sec:authorize="hasRole('ROLE_BOSS')">
+								<div class="ui button" th:if="!${customer.userAccount.hasRole('ROLE_BOSS')} AND ${customer.userAccount.hasRole('ROLE_EMPLOYEE')}">
+									<i class="bullhorn icon"></i>
+									Feuern!
+								</div>
+							</a>
 						</td>
 					</tr>
 				</tbody>
@@ -44,20 +56,18 @@
 				Bitte geben sie das neue Gehalt ein:
 			</div>
 			<form method="post" role="form" class="ui form" id="form" th:action="@{/changeMoney}" th:object="${form}">
-				<div class="content">
+				<div id="modalcontent" class="content">
 					<div class="inline field">
 						<input name="money" placeholder="50">
 						<div class="ui left pointing label">Bitte geben sie einen Wert größer 0 ein.</div>
 					</div>
 				</div>
-				<p>
-				<div id="rigthalign" class="actions">
+				<div id="modalbutton" class="actions">
 					<button type="submit" class="positive ui button">
 					<i class="checkmark icon"></i>
 					Übernehmen
 					</button>
 				</div>
-				</p>
 			</form>
 		</div>
 		
