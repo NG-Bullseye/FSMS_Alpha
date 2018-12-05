@@ -20,4 +20,6 @@ interface EditForm {
 
 	@NotEmpty(message = "Bitte geben sie eine Adresse ein!")
 	String getAddress();
+	
+	String getId();
 }

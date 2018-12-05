@@ -45,8 +45,16 @@ public class UserManagement {
 	public void editData(EditForm form) {
 
 		Assert.notNull(form, "Registration form must not be null!");
-
 		
+		long requestedId = Long.parseLong(form.getId());
+		User user = findUserById(requestedId);
+		user.setFirstname(form.getFirstname());
+		user.setLastname(form.getLastname());
+		user.setAddress(form.getAddress());
+		user.setEmail(form.getEmail());
+		UserAccount userAccount = user.getUserAccount();
+		userAccounts.changePassword(userAccount, form.getPassword());
+		return;
 	}
 	
 	public User findUser (UserAccount userAccount) {

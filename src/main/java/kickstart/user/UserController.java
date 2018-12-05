@@ -138,6 +138,9 @@ class UserController {
 	String editNow(@Valid @ModelAttribute("form") EditForm form, BindingResult bindingResult, Model model, Errors result) {
 
 		if (result.hasErrors()) {
+			long requestedId = Long.parseLong(form.getId());
+			User requestedUser = userManagement.findUserById(requestedId);
+			model.addAttribute("user", requestedUser);
 			model.addAttribute("form", form);
 			return "editdata";
 		}

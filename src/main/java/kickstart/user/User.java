@@ -32,6 +32,11 @@ public class User {
 		this.address = address;
 		salary = 0;
 	}
+
+	public UserAccount getUserAccount() {
+		return userAccount;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -40,27 +45,42 @@ public class User {
 		return address;
 	}
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public String getEmail() {
 		return email;
 	}
 
-	public UserAccount getUserAccount() {
-		return userAccount;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	
+
 	public String getFirstname() {
 		return firstname;
 	}
-	
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
 	public String getLastname() {
 		return lastname;
 	}
-	
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
 	public int getSalary() {
 		return salary;
 	}
-	
+
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
+
+	
+	
 }
