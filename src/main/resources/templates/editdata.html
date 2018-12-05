@@ -1,0 +1,66 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:include="header :: head">
+		<title id="pageTitle">Daten ändern</title>
+	</head>
+	<body>
+		<nav th:include="navbar :: navbar"></nav>
+		
+		<div id="title">
+			<t1>Bitte geben sie hier ihre neuen Daten ein:</t1>
+		</div>
+		
+		<div id="halfwidth">
+			<form method="post" role="form" class="ui form" id="form" th:action="@{/editData}" th:object="${form}">
+				<div class="ui negative message" th:if="${#fields.hasErrors('*')}">
+					<p>Einige Angaben sind nicht korrekt.</p>
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label th:text="Vorname" for="firstname">Vorname</label>
+						<input id="firstname" name="firstname" th:field="*{firstname}" th:errorclass="fieldError" type="text" th:placeholder="${user.firstname}"/><br/>
+						<div class="ui negative message" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">
+							<p>Der Name darf nicht leer sein.</p>
+						</div>
+					</div>
+					<div class="field">
+						<label th:text="Nachname" for="lastname">Nachname</label>
+						<input id="lastname" name="lastname" th:field="*{lastname}" th:errorclass="fieldError" type="text" th:placeholder="${user.lastname}"/><br/>
+						<div class="ui negative message" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">
+							<p>Der Name darf nicht leer sein.</p>
+						</div>
+					</div>
+				</div>
+				<div class="inline field">
+					<label th:text="Adresse" for="address">Adresse</label><br/>
+					<input id="address" name="address" th:field="*{address}" th:errorclass="fieldError" type="text" th:placeholder="${user.address}"/>
+					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">
+						Die Adresse darf nicht leer sein.
+					</div>
+				</div>
+				<div class="inline field">
+					<label th:text="E-Mail" for="email">E-Mail Adresse</label><br/>
+					<input id="email" name="email" th:field="*{email}" th:errorclass="fieldError" type="text" th:placeholder="${user.email}"/>
+					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+						Die E-Mail darf nicht leer sein.
+					</div>
+				</div>
+				<div class="inline field">
+					<label th:text="Passwort" for="password">Passwort</label><br/>
+					<input id="password" name="password" th:field="*{password}" th:errorclass="fieldError" type="password" placeholder="Passwort"/>
+					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+						Das Passwort darf nicht leer sein.
+					</div>
+				</div>
+				<input type="hidden" id="customerid" name="customerid" th:value="${user.id}"/><br/>
+				<button type="submit" class="ui button">
+					<i class="edit icon"></i>
+					Daten übernehmen
+				</button>
+			</form>
+		</div>
+	</body>
+</html>
+

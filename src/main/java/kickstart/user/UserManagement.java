@@ -42,6 +42,13 @@ public class UserManagement {
 		return users.save(new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
 	
+	public void editData(EditForm form) {
+
+		Assert.notNull(form, "Registration form must not be null!");
+
+		
+	}
+	
 	public User findUser (UserAccount userAccount) {
 		
 		User user = users.findByUserAccount(userAccount);

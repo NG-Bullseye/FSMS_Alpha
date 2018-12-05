@@ -48,6 +48,17 @@
 			<div id="textnhead">
 				<a class="ui button" id="data" th:text="${'Daten ' + 'ändern'}">Daten ändern</a>
 			</div>
+			
+			
+			<a th:href="@{'/editData'(user=${id})}">
+			  			<div class="ui button">
+			  			<i class="edit icon"></i>
+			  			Daten ändern
+			  			</div>
+		  			</a>
+			
+			
+			
 		</div>
 		<div class="twelve wide column">
 			<t2>Bestellübersicht</t2>

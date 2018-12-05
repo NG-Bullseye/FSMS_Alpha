@@ -62,6 +62,7 @@ class UserController {
 		model.addAttribute("name", completeName);
 		model.addAttribute("email", loggedInUser.getEmail());
 		model.addAttribute("address", loggedInUser.getAddress());
+		model.addAttribute("id", loggedInUser.getId());
 		return "customeraccount";
 	}
 	
@@ -123,4 +124,27 @@ class UserController {
 		userManagement.changeRole(requestedUser, type);
 		return "redirect:/employees";
 	}
+	
+	@GetMapping("/editData")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_BOSS')")
+	String editData(@RequestParam(value = "user") long requestId, EditForm form, Model model) {
+		User requestedUser = userManagement.findUserById(requestId);
+		model.addAttribute("user", requestedUser);
+		model.addAttribute("form", form);
+		return "editdata";
+	}
+	
+	@PostMapping("/editData")
+	String editNow(@Valid @ModelAttribute("form") EditForm form, BindingResult bindingResult, Model model, Errors result) {
+
+		if (result.hasErrors()) {
+			model.addAttribute("form", form);
+			return "editdata";
+		}
+
+		userManagement.editData(form);
+
+		return "redirect:/";
+	}
+
 }
