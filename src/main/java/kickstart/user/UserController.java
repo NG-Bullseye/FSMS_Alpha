@@ -126,7 +126,6 @@ class UserController {
 	}
 	
 	@GetMapping("/editData")
-	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_BOSS')")
 	String editData(@RequestParam(value = "user") long requestId, EditForm form, Model model) {
 		User requestedUser = userManagement.findUserById(requestId);
 		model.addAttribute("user", requestedUser);
