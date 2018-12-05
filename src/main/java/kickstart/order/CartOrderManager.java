@@ -107,9 +107,7 @@ public class CartOrderManager {
 			Interval intervalcheck = Interval.from(order.getDateCreated()).to(order.getDateCreated());
 			intervalcheck.getDuration().plusDays(1);
 
-			System.out.println(intervalcheck.getDuration().compareTo(interval.getDuration()));
-
-			if(order.isPaid()){
+			if(order.isPaid() && !order.isCompleted()){
 				if(intervalcheck.getDuration().compareTo(interval.getDuration()) >= 0){
 					ordermanager.completeOrder(order);
 
