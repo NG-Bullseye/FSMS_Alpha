@@ -6,7 +6,12 @@
 <body>
 <nav th:include="navbar :: navbar"></nav>
 
+<div class="twelve wide column">
 <h1>Warenkorb</h1>
+</div>
+<div class="four wide column" align="right">
+<h2 th:text="${nameoftheorderer}">Hallr</h2>
+</div>
 
 <div th:unless="${cart.empty}">
     <table class="ui celled padded table">
