@@ -28,9 +28,17 @@
         </tbody>
     </table>
 </div>
-<div class="value", align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
-<form th:action="@{/addorder}">
-    <button id="buttonspace" type="submit" class="ui button" th:text="Bestellen">button</button>
-</form>
-</body>
-</html>
+
+
+<div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
+<div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+<div>
+    <form th:action="@{/renttruck}">
+        <button type="submit" class="ui button" th:text="'LKW' +' '+ 'mieten'">button</button>
+    </form>
+    <form th:action="@{/addorder}" th:align="right">
+        <button id="buttonspace" type="submit" class="ui button" th:text="Bestellen">button</button>
+    </form>
+    </div>
+    </body>
+    </html>

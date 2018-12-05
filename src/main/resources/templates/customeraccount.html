@@ -63,7 +63,7 @@
 					<tr th:each="ordered : ${ordersofthedudeopen} ">
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
-						<td th:text="Austehend"></td>
+						<td th:text="'wird'+' ' + 'Versendet'"></td>
 
 						<td align="center" th:width="50">
 							<form th:action="@{/cancelthatorder}">
@@ -89,10 +89,20 @@
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Bezahlt"></td>
 					</tr>
+					<tr th:each="ordered : ${ordersofthedudedeliverd} ">
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="'zum'+' '+'abholen'+' '+'Bereit'"></td>
+					</tr>
 					<tr th:each="ordered : ${ordersofthedudecomplete} ">
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Abgeschlossen"></td>
+					</tr>
+					<tr th:each="ordered : ${ordersofthedudecompletee} ">
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="Kontrolle"></td>
 					</tr>
 					</tbody>
 				</table>
