@@ -54,11 +54,13 @@
         </div>
     </form>
 </div>
-<div class="ui container center aligned">
-    <form th:action="@{/reorder/{id}(id=${article.getId()})}" method=post th:object="${form}">
-        <label class="ui label">Anzahl</label>
-        <input name="amount" type="number" value="1">
-        <input class="ui labeled button" type="submit" value="Nachbestellen">
+<div >
+    <form class="ui form" th:action="@{/reorder/{id}(id=${article.getId()})}" method=post th:object="${registrationform}">
+        <div class="ui labeled input">
+        	<div class="ui label">Anzahl</div>
+        	<input name="amount" type="number" value="1">
+        	<input class="ui button" type="submit" value="Nachbestellen">
+        </div>
     </form>
 </div>
 <div class="ui comments">

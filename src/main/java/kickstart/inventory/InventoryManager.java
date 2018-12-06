@@ -169,7 +169,9 @@ public class InventoryManager {
 		Iterable<ReorderableInventoryItem> items = inventory.findAll();
 		
 		for(ReorderableInventoryItem item : items) {
-			item.update(time.getTime());
+			if(item.update(time.getTime())) {
+				inventory.save(item);
+			}
 		}
 	}
 }
