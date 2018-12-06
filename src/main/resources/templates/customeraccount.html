@@ -13,16 +13,19 @@
 		<div id="customerbox" sec:authorize="hasRole('ROLE_CUSTOMER')">
 			<a class="ui button" id="deactivateMyself" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
 		</div>
-		<div id="customerbox" th:switch="${enableDeactivation}"> 
+		<div id="customerbox" th:switch="${enableDeactivation}">
+			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')" th:href="@{'/addcostumertocart'(user=${id})}" th:text="Auswählen">choose</a>
  			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
   			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
-    <div id="textnhead" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-    			<form th:action="@{/addcustomertocart}">
-        			<button type="submit" class="ui button" th:text="Auswählen">choose</button>
-        			<!--<input name="customer" type="hidden" th:value="${customer.userAccount.id}">-->
-			    </form>
-				</div>
+
+		<!--<form th:action="@{/addcustomertocart}">
+            <button type="submit" class="ui button" th:text="Auswählen">choose</button>
+            <input name="customer" type="hidden" th:value="${customer.userAccount.id}">
+			    </form>-->
+
+
+
     
 		<div id="tablespace">
 		<div class="ui grid">
@@ -132,7 +135,7 @@
 		      <i class="remove icon"></i>
 		      Nein
 		    </div>
-		    <div class="positive ui button" th:href="@{'/activation'(user=${id})(type=0)}">
+		    <div class="positive ui button">
 		      <i class="checkmark icon"></i>
 		      <a class="whitelink" th:href="@{'/activation'(user=${id}, type=0)}" th:text="Ja">Ja</a>
 		    </div>

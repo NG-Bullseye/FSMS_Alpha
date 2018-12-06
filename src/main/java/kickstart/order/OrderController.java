@@ -5,6 +5,7 @@ package kickstart.order;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
+import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.salespointframework.time.BusinessTime;
+
 
 
 
@@ -51,6 +53,16 @@ public class OrderController {
 
 		model.addAttribute("wightofcart", cartordermanager.getWight());
 
+		if(cartordermanager.getAccount() != null){
+			UserAccount accountname = cartordermanager.getAccount();
+			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
+
+		}
+		else {
+			model.addAttribute("nameoftheorderer", "Bitte einen Kunde ausählen");
+		}
+
+
 		return "cart";
 	}
 
@@ -65,7 +77,8 @@ public class OrderController {
 	}
 
 	@GetMapping("/addcostumertocart")
-	String addCostumer(@RequestParam("customer") UserAccount account){
+	String addCostumer(@RequestParam(value = "user") long requestId){
+		UserAccount account = userManagement.findUserById(requestId).getUserAccount();
 		return cartordermanager.addCostumer(account);
 	}
 
@@ -92,9 +105,9 @@ public class OrderController {
 
 
 	@RequestMapping("/addorder")
-	String newOrder(@ModelAttribute Cart cart, Model model, @LoggedIn UserAccount account){
+	String newOrder(@ModelAttribute Cart cart, Model model){
 
-	return cartordermanager.newOrder(cart, model, account);
+	return cartordermanager.newOrder(cart, model);
 	}
 
 	@RequestMapping("/showcustomerorders")

@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 
 
 public class CartOrderManager {
-
 	private final OrderManager<Order> ordermanager;
 	private UserAccount account;
 	private final BusinessTime businesstime;
@@ -41,7 +40,11 @@ public class CartOrderManager {
 	}
 
 	public OrderManager<Order> getOrderManager(){
-		return ordermanager;
+		return orderManager;
+	}
+
+	public UserAccount getAccount(){
+		return account;
 	}
 
 
@@ -53,14 +56,14 @@ public class CartOrderManager {
 	public String cancelorpayOrder(Order order, String choose){
 
 		if(choose.equals("bezahlen")){
-			ordermanager.payOrder(order);
+			orderManager.payOrder(order);
 		}
 
 		if(choose.equals("stornieren")) {
-			ordermanager.cancelOrder(order);
+			orderManager.cancelOrder(order);
 		}
 
-		return "/customeraccount";
+		return "customeraccount";
 	}
 
 	public String addComposite (Composite article, int count, Cart cart){
@@ -91,15 +94,15 @@ public class CartOrderManager {
 
 	public String addCostumer(UserAccount account){
 		this.account = account;
-		return "/catalog";
+		return "cart";
 	}
 
-	public String newOrder(Cart cart, Model model, UserAccount account){
+	public String newOrder(Cart cart, Model model){
 
 		if(!cart.isEmpty() ) {
 			Order order = new Order(account, Cash.CASH);
 			cart.addItemsTo(order);
-			ordermanager.save(order);
+			orderManager.save(order);
 
 			wight = Quantity.of(0,Metric.KILOGRAM);
 			cart.clear();
@@ -114,11 +117,12 @@ public class CartOrderManager {
 		LocalDateTime date = businesstime.getTime();
 
 
-		for(Order order:ordermanager.findBy(account)){
-
+		for(Order order: orderManager.findBy(account)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 
 			if(order.isPaid() && !order.isCompleted()){
+				if(intervalcheck.getDuration().compareTo(interval.getDuration()) >= 0){
+					orderManager.completeOrder(order);
 
 				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
 					ordermanager.completeOrder(order);
