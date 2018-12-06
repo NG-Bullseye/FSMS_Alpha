@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 
 
 public class CartOrderManager {
-	private final OrderManager<Order> ordermanager;
+	private final OrderManager<Order> orderManager;
 	private UserAccount account;
 	private final BusinessTime businesstime;
 	private Quantity wight = Quantity.of(0, Metric.KILOGRAM);
@@ -30,7 +30,7 @@ public class CartOrderManager {
 
 
 	CartOrderManager(OrderManager<Order> ordermanager, BusinessTime businesstime, CarpoolManager carpoolManager){
-		this.ordermanager = ordermanager;
+		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
 	}
@@ -87,6 +87,8 @@ public class CartOrderManager {
 
 	public String addLKW(Cart cart){
 
+		// für funktion mit leos carpool Manager entkommentieren wenn vorhanden
+
 		//cart.addOrUpdateItem(carpoolManager.rentTruckByWight(wight,account), Quantity.of(1));
 
 		return "cart";
@@ -121,14 +123,12 @@ public class CartOrderManager {
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 
 			if(order.isPaid() && !order.isCompleted()){
-				if(intervalcheck.getDuration().compareTo(interval.getDuration()) >= 0){
-					orderManager.completeOrder(order);
 
 				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
-					ordermanager.completeOrder(order);
+					orderManager.completeOrder(order);
 				}
 				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
-					ordermanager.completeOrder(order);
+					orderManager.completeOrder(order);
 				}
 			}
 

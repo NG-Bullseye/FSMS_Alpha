@@ -31,14 +31,16 @@ public class OrderController {
 	private final OrderManager<Order> orderManager;
 	private final BusinessTime businesstime;
 	private final CarpoolManager carpoolManager;
+	private final UserManagement userManagement;
 
-	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime, CarpoolManager carpoolManager){
+	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
 		this.businesstime = businesstime;
 		this.carpoolManager = carpoolManager;
 		this.cartordermanager = new CartOrderManager(orderManager, businesstime, carpoolManager);
+		this.userManagement = userManagement;
 
 	}
 
@@ -121,10 +123,13 @@ public class OrderController {
 		model.addAttribute("address", listofstring[3] + " " + listofstring[4] + " " + listofstring[5] + " " + listofstring[6]);
 		cartordermanager.changeStatus(userAccount);
 
-		model.addAttribute("ordersofthedudecompletee", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
+		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
 		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
 		model.addAttribute("ordersofthedudepaid", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
-		for(Order order:cartordermanager.getOrderManager().findBy(userAccount)){
+
+
+		//muss gefixed werden
+		/**for(Order order:cartordermanager.getOrderManager().findBy(userAccount)){
 			if(order.isCompleted()){
 
 
@@ -147,10 +152,7 @@ public class OrderController {
 				}
 			}
 
-		}
-
-
-
+		}**/
 		return "/customeraccount";
 	}
 

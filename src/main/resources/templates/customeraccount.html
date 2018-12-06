@@ -102,11 +102,6 @@
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Abgeschlossen"></td>
 					</tr>
-					<tr th:each="ordered : ${ordersofthedudecompletee} ">
-						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
-						<td th:text="${ordered.totalPrice}"></td>
-						<td th:text="Kontrolle"></td>
-					</tr>
 					</tbody>
 				</table>
 
