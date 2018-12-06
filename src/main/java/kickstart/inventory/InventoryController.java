@@ -10,7 +10,6 @@ import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
-import org.salespointframework.time.BusinessTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import kickstart.accountancy.AccountancyManager;
 
 @Controller
 public class InventoryController {
@@ -54,9 +55,9 @@ public class InventoryController {
 	}
 	
 	public InventoryController(Inventory<ReorderableInventoryItem> inventory, 
-			BusinessTime time)
+			AccountancyManager accountancy)
 	{
-		manager = new InventoryManager(inventory, time);
+		manager = new InventoryManager(inventory, accountancy);
 		
 		manager.getInventory().deleteAll();
 	}
