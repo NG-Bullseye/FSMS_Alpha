@@ -8,6 +8,7 @@ import org.salespointframework.quantity.Metric;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
@@ -133,6 +134,8 @@ public abstract class Article extends Product{
 
 	public abstract void setColour(@NotNull String colour);
 
+	public abstract Map<ProductIdentifier, Integer> getPartIds();
+
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -153,4 +156,7 @@ public abstract class Article extends Product{
 			return gerundet;
 		}
 	}
+
+	public abstract void addPart(@NotNull Article article);
+	public abstract void removePart(@NotNull Article article);
 }
