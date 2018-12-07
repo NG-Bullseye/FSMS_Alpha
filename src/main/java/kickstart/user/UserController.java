@@ -21,21 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 class UserController {
 
 	private final UserManagement userManagement;
-	//private final AuthenticationManager manager;
-	
-	//CRAZY
-	//private final UserRepository users;
 
 	UserController(UserManagement userManagement) {
 
 		Assert.notNull(userManagement, "UserManagement must not be null!");
 
 		this.userManagement = userManagement;
-		//this.manager = manager;
-		//this.users = users;
 	}
 
-	//register
 	@PostMapping("/register")
 	String registerNew(@Valid @ModelAttribute("form") RegistrationForm form, BindingResult bindingResult, Model model, Errors result) {
 
