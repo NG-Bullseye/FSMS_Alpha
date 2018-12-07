@@ -6,66 +6,65 @@
 		<title id="pageTitle">Error</title>
 	</head>
 	<body>
-<body>
-<div id="title">
-<t1>
-<i class="bug icon"></i>
-Ups... Hier ist etwas schiefgelaufen...
-<i class="bug icon"></i>
-</t1>
-<br/>
-<p>
-	<a href="index.html" th:href="@{/}">
-						<div class="ui primary basic button">
-						<i class="terminal icon"></i>
-							Zurück zur Startseite
-						</div>
-					</a>
-</p>
-</div>
-<div id="tablespace">
-<table class="ui celled table">
-<thead>
-   <tr>
-   	<th>Beschreibung</th>
-    <th>Informationn</th>
-  </tr>
- </thead>
- <tbody>
-    <tr>
-        <td>Date</td>
-        <td th:text="${timestamp}"/>
-    </tr>
-    <tr>
-        <td>Path</td>
-        <td th:text="${path}"/>
-    </tr>
-    <tr>
-        <td>Error</td>
-        <td th:text="${error}"/>
-    </tr>
-    <tr>
-        <td>Status</td>
-        <td th:text="${status}"/>
-    </tr>
-    <tr>
-        <td>Message</td>
-        <td th:text="${message}"/>
-    </tr>
-    <tr>
-        <td>Exception</td>
-        <td th:text="${exception}"/>
-    </tr>
-    <tr>
-        <td>Trace</td>
-        <td>
-            <pre th:text="${trace}"/>
-        </td>
-    </tr>
-     </tbody>
-</table>
-</div>
-
+		<body>
+			<div id="title">
+				<t1>
+					<i class="bug icon"></i>
+					Ups... Hier ist etwas schiefgelaufen...
+					<i class="bug icon"></i>
+				</t1>
+				<br/>
+				<p>
+					<a href="index.html" th:href="@{/}">
+				<div class="ui primary basic button">
+				<i class="terminal icon"></i>
+				Zurück zur Startseite
+				</div>
+				</a>
+				</p>
+			</div>
+			<div id="tablespace">
+				<table class="ui celled table">
+					<thead>
+						<tr>
+							<th>Beschreibung</th>
+							<th>Informationn</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Date</td>
+							<td th:text="${timestamp}"/>
+						</tr>
+						<tr>
+							<td>Path</td>
+							<td th:text="${path}"/>
+						</tr>
+						<tr>
+							<td>Error</td>
+							<td th:text="${error}"/>
+						</tr>
+						<tr>
+							<td>Status</td>
+							<td th:text="${status}"/>
+						</tr>
+						<tr>
+							<td>Message</td>
+							<td th:text="${message}"/>
+						</tr>
+						<tr>
+							<td>Exception</td>
+							<td th:text="${exception}"/>
+						</tr>
+						<tr>
+							<td>Trace</td>
+							<td>
+								<pre th:text="${trace}"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 	</body>
 </html>
 
