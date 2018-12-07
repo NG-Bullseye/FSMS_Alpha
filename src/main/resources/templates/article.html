@@ -54,11 +54,13 @@
     </form>
 </div>
 
-<div class="ui container" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+<div class="ui form" sec:authorize="hasRole('ROLE_EMPLOYEE')">
     <form th:action="@{/reorder/{id}(id=${article.getId()})}" method=post th:object="${form}">
-        <label class="ui label">Anzahl</label>
-        <input name="amount" type="number" value="1">
-        <input class="ui labeled button" type="submit" value="Nachbestellen">
+    	<div class="ui labeled input">
+        	<label class="ui label">Anzahl</label>
+        	<input name="amount" type="number" value="1">
+        	<input class="ui button" type="submit" value="Nachbestellen">
+        </div>
     </form>
 </div>
 <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
