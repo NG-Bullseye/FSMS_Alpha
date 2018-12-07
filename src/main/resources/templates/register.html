@@ -2,15 +2,21 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8"> 
 	<head th:include="header :: head">
 		<title id="pageTitle">Registrierung</title>
 	</head>
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
+		
+		<div id="title">
+			<t1>Hier können sie sich registrieren:</t1>
+		</div>
+		
 		<div id="halfwidth">
 			<form method="post" role="form" class="ui form" id="form" th:action="@{/register}" th:object="${form}">
 				<div class="ui negative message" th:if="${#fields.hasErrors('*')}">
-					<p>Einige Angaben sind nicht korrekt.</p>
+					<p>Bitte überprüfen sie ihre Eingabe.</p>
 				</div>
 				<div class="inline field">
 					<label th:text="Username" for="username">Username</label><br/>
@@ -23,14 +29,14 @@
 					<div class="field">
 						<label th:text="Vorname" for="firstname">Vorname</label>
 						<input id="firstname" name="firstname" th:field="*{firstname}" th:errorclass="fieldError" type="text" placeholder="Vorname"/><br/>
-						<div class="ui negative message" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">
+						<div class="ui pointing red basic label" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">
 							<p>Der Name darf nicht leer sein.</p>
 						</div>
 					</div>
 					<div class="field">
 						<label th:text="Nachname" for="lastname">Nachname</label>
 						<input id="lastname" name="lastname" th:field="*{lastname}" th:errorclass="fieldError" type="text" placeholder="Nachname"/><br/>
-						<div class="ui negative message" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">
+						<div class="ui pointing red basic label" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">
 							<p>Der Name darf nicht leer sein.</p>
 						</div>
 					</div>

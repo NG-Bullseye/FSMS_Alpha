@@ -15,20 +15,20 @@
 		<div id="halfwidth">
 			<form method="post" role="form" class="ui form" id="form" th:action="@{/editData}" th:object="${form}">
 				<div class="ui negative message" th:if="${#fields.hasErrors('*')}">
-					<p>Einige Angaben sind nicht korrekt.</p>
+					<p>Bitte prüfen sie ihre Eingabe.</p>
 				</div>
 				<div class="two fields">
 					<div class="field">
 						<label th:text="Vorname" for="firstname">Vorname</label>
 						<input id="firstname" name="firstname" th:field="*{firstname}" th:errorclass="fieldError" type="text" th:placeholder="${user.firstname}"/><br/>
-						<div class="ui negative message" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">
+						<div class="ui pointing red basic label" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">
 							<p>Der Name darf nicht leer sein.</p>
 						</div>
 					</div>
 					<div class="field">
 						<label th:text="Nachname" for="lastname">Nachname</label>
 						<input id="lastname" name="lastname" th:field="*{lastname}" th:errorclass="fieldError" type="text" th:placeholder="${user.lastname}"/><br/>
-						<div class="ui negative message" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">
+						<div class="ui pointing red basic label" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">
 							<p>Der Name darf nicht leer sein.</p>
 						</div>
 					</div>

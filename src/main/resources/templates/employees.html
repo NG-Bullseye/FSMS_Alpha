@@ -58,7 +58,7 @@
 			<form method="post" role="form" class="ui form" id="form" th:action="@{/changeMoney}" th:object="${form}">
 				<div id="modalcontent" class="content">
 					<div class="inline field">
-						<input name="money" placeholder="50">
+						<input name="money" id="money" type="number" min="0" step="10" placeholder="50">
 						<div class="ui left pointing label">Bitte geben sie einen Wert größer 0 ein.</div>
 					</div>
 				</div>
