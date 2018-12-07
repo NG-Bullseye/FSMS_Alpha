@@ -2,17 +2,14 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<meta charset="utf-8"> 
 	<head th:include="header :: head">
 		<title id="pageTitle">Registrierung</title>
 	</head>
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
-		
 		<div id="title">
 			<t1>Hier können sie sich registrieren:</t1>
 		</div>
-		
 		<div id="halfwidth">
 			<form method="post" role="form" class="ui form" id="form" th:action="@{/register}" th:object="${form}">
 				<div class="ui negative message" th:if="${#fields.hasErrors('*')}">

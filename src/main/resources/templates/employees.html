@@ -33,11 +33,11 @@
 						<td th:text="${customer.salary}">Gehalt</td>
 						<td>
 							<a sec:authorize="hasRole('ROLE_BOSS')" th:href="@{'/salary'(user=${customer.id})}">
-		  						<div class="ui button">
-			  						<i class="euro sign icon"></i>
-			  						Gehalt anpassen
-		  						</div>
-	  						</a>
+								<div class="ui button">
+									<i class="euro sign icon"></i>
+									Gehalt anpassen
+								</div>
+							</a>
 							<a th:href="@{'/changeRole'(user=${customer.id}, type=1)}" sec:authorize="hasRole('ROLE_BOSS')">
 								<div class="ui button" th:if="!${customer.userAccount.hasRole('ROLE_BOSS')} AND ${customer.userAccount.hasRole('ROLE_EMPLOYEE')}">
 									<i class="bullhorn icon"></i>
@@ -69,7 +69,6 @@
 				</div>
 			</form>
 		</div>
-		
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function(){
