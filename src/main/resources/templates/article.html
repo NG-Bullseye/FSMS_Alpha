@@ -27,9 +27,14 @@
         <div class="description">
             <p th:text="${article.description}">Beschreibung</p>
         </div>
-        <div class="ui button">
+        <div th:switch="${article.type}">
+        <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).PART}">
             <a class="item" th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
             </a>
+        </div>
+        <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
+            <a class="item" th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">Bearbeiten</a>
+        </div>
         </div>
         <div class="ui button">
             <a class="item" th:href="@{/hide/{id}(id=${article.getId()})}" target="_self">Für Kunden verbergen</a>

@@ -160,13 +160,14 @@ public class CatalogController {
 	@GetMapping("/edit/composite/{identifier}")
 	public String editComposite(@PathVariable ProductIdentifier identifier, Model model){
 		model.addAttribute("article",manager.getArticle(identifier));
-		model.addAttribute("form",new CompositeForm());
+		model.addAttribute("compositeForm",new CompositeForm());
+		model.addAttribute("catalog", manager.getArticlesForCompositeEdit(identifier));
 
 		return "editComposite";
 	}
 	@PostMapping("/edit/composite/{identifier}")
-	public String editCompositeFinished(@PathVariable ProductIdentifier identifier,Model model, @NotNull @RequestParam Map<String,String> partsMapping, @ModelAttribute CompositeForm form){
-		manager.editComposite(identifier,form,partsMapping);
+	public String editCompositeFinished(@PathVariable ProductIdentifier identifier,Model model, @NotNull @RequestParam Map<String,String> partsMapping, @ModelAttribute CompositeForm compositeForm){
+		manager.editComposite(identifier,compositeForm,partsMapping);
 		return "redirect:/article/" + identifier;
 	}
 

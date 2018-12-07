@@ -156,6 +156,6 @@ public abstract class Article extends Product{
 		}
 	}
 
-	public abstract void addPart(Article article);
-	public abstract void removePart(Article article);
+	public abstract void addPart(@NotNull Article article);
+	public abstract void removePart(@NotNull Article article);
 }

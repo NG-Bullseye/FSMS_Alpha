@@ -56,6 +56,12 @@ public class ArticleTest {
 		public Map<ProductIdentifier, Integer> getPartIds(){
 			return null;
 		}
+
+		@Override
+		public void addPart(Article article){}
+
+		@Override
+		public void removePart(Article article){}
 	}
 	
 	@Test

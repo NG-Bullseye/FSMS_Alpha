@@ -10,7 +10,7 @@
 <div class="ui page grid">
     <div class=" ui segment">
 
-
+    <form method="post" th:action="@{/edit/composite/{id}(id=${article.id})}" th:object="${compositeForm}">
         <table id="tablespace" class="ui table">
             <thead>
             <th></th>
@@ -33,21 +33,10 @@
                     <input type="text" th:field="*{description}" required="required"/>
                 </td>
             </tr>
-            <tr th:each="category : ${categories}">
-                <td></td>
-                <div th:switch="${articleCategories.contains(category)}">
-                    <td th:case="true" th:text="${category}"></td>
-                    <td th:case="*"></td>
-                </div>
+            <tr th:each="article : ${catalog}">
+                    <td class="ui label" th:text="${article.name}"></td>
                 <td>
-                    <div class="ui labeled input">
-                        <input class="ui checkbox" type="checkbox"
-                               th:field="*{selectedCategories}"
-                               th:value="${category}" />
-                        <label
-                                th:text="${category}">
-                        </label>
-                    </div>
+                    <input type="number" value="0" th:name="article_+${article.id}" >
                 </td>
 
             </tr>
@@ -61,7 +50,7 @@
             </a>
 
         </div>
-        </form>
+    </form>
     </div>
 </div>
 </body>

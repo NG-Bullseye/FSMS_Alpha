@@ -103,8 +103,8 @@ public class Composite extends Article {
 	 * Adds a new part to the list of parts.
 	 * @param article The new part to get added to parts
 	 */
-	public void addPart(@NotNull Article article) {
-		parts.add(article);
+	public void addPart(Article article) {
+		//parts.add(article);
 		if(partIds.containsKey(article.getId())) {
 			partIds.put(article.getId(), partIds.get(article.getId()) + 1);
 		}
@@ -119,12 +119,12 @@ public class Composite extends Article {
 	 *  to an empty list, the article won't get removed.
 	 * @param article The article that should get removed.
 	 */
-	public void removePart(@NotNull Article article) {
+	public void removePart(Article article) {
 		// A Composite should always have at least one part
 		if(partIds.size() > 1) {
 			// Removes only the first appearance of this article. To remove it multiple times
 			// call the method multiple times.
-			parts.remove(article);
+			//parts.remove(article);
 			if(partIds.get(article.getId()) == 1) {
 				partIds.remove(article.getId());
 			}

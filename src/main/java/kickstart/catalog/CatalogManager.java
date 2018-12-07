@@ -72,6 +72,8 @@ public class CatalogManager {
 
 	public void editComposite(ProductIdentifier identifier, CompositeForm form,Map<String, String> partsCount){
 		Article afterEdit = catalog.findById(identifier).get();
+		afterEdit.setName(form.getName());
+		afterEdit.setDescription(form.getDescription());
 		LinkedList<Article> partsBefore = new LinkedList<>();
 		afterEdit.getPartIds().forEach((article,count) ->{
 			int i = count;
@@ -95,6 +97,7 @@ public class CatalogManager {
 				afterEdit.removePart(partsBefore.get(i));
 			}
 		}
+		afterEdit.update(partsAfter);
 		catalog.save(afterEdit);
 		this.editAffectedArticles(afterEdit);
 
@@ -262,16 +265,27 @@ public class CatalogManager {
 	public List<ProductIdentifier> getParents(Article article){
 		LinkedList<ProductIdentifier> parents = new LinkedList<>();
 
-		HashSet<Composite> allComposites = new HashSet<>();
+		HashSet<Article> allComposites = new HashSet<>();
 		catalog.findComposite().forEach(composite ->{
-			allComposites.add((Composite)composite);
+			allComposites.add(composite);
 		});
-		for (Composite composite: allComposites
+		for (Article composite: allComposites
 			 ) {
-			if(composite.getParts().contains(article)){
+			if(composite.getPartIds().containsKey(article)){
 				parents.add(article.getId());
 			}
 		}
 	return parents;
+	}
+
+	public Iterable<Article> getArticlesForCompositeEdit(ProductIdentifier identifier){
+		HashSet<Article> parts = new HashSet<>();
+		this.getAvailableForNewComposite().forEach(parts::add);
+		catalog.findById(identifier).get().getPartIds().forEach((article,count)->{
+			parts.add(catalog.findById(article).get());
+		});
+		parts.remove(catalog.findById(identifier).get()); //Damit man den Artikel nicht sich selbst hinzufügen kann
+
+		return parts;
 	}
 }
