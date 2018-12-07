@@ -117,7 +117,7 @@ public class CatalogController {
 		if(bindingResult.hasErrors()){
 			return "edit";
 		}
-		manager.editArticle(form, identifier);
+		manager.editPart(form, identifier);
 
 		return "redirect:/article/"+ manager.getArticle(identifier);
 	}
@@ -137,8 +137,8 @@ public class CatalogController {
 
 		CompositeForm composite = new CompositeForm();
 		model.addAttribute("compositeForm",composite);
-		model.addAttribute("catalog", manager.getWholeCatalog());
-		return"newComposite";
+		model.addAttribute("catalog", manager.getAvailableForNewComposite());
+		return "newComposite";
 	}
 	@PostMapping("catalog/composite/new")
 	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model,@NotNull @RequestParam Map<String,String> partsMapping){

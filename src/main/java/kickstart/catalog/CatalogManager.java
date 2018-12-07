@@ -1,7 +1,6 @@
 package kickstart.catalog;
 
 import kickstart.articles.*;
-import kickstart.articles.Article.ArticleType;
 import kickstart.inventory.InventoryManager;
 import kickstart.inventory.ReorderableInventoryItem;
 
@@ -21,11 +20,13 @@ public class CatalogManager {
 	private final WebshopCatalog catalog;
 	private HashSet<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
+	private HashSet<Article> availableForNewComposite;
 	
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
 		hiddenArticles = new HashSet<>();
+		availableForNewComposite = new HashSet<>();
 	/*
 	@Autowired
 	private InventoryManager inventory;
@@ -42,7 +43,7 @@ public class CatalogManager {
 	public Iterable<Article> getVisibleCatalog(){
 		HashSet<Article> visible = new HashSet<>();
 		catalog.findAll().forEach(article -> {
-			if(!hiddenArticles.contains(article)){
+			if(!hiddenArticles.contains(article)&&!inventory.findByProductIdentifier(article.getId()).get().getQuantity().equals(0)){
 				visible.add(article);
 			}
 		});
@@ -54,10 +55,9 @@ public class CatalogManager {
 		return returning.get();
 	}
 
-	public void editArticle(Form article, ProductIdentifier identifier) {
-		// Edit article
-		
-		System.out.println("wird aufgerufen");
+	public void editPart(Form article, ProductIdentifier identifier) {
+
+		this.createAvailableForNewComposite();
 		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
@@ -67,39 +67,40 @@ public class CatalogManager {
 		article.getSelectedColours().forEach(afterEdit::setColour);
 
 		catalog.save(afterEdit);
-		
-		// Edit any articles that get affected by this
-		
-		List<Article> affectedArticles = new ArrayList<Article>();
+		this.editAffectedArticles(afterEdit);
+	}
 
-		List<ProductIdentifier> articleList = new ArrayList<ProductIdentifier>();
-		articleList.addAll(afterEdit.getParents());
+	public void editAffectedArticles(Article afterEdit){
+		List<Article> affectedArticles = new ArrayList<>();
+
+		List<ProductIdentifier> articleList = new ArrayList<>();
+		articleList.addAll(this.getParents(afterEdit));
 		afterEdit.setUpdateStatus(false);
-		
+
 		while(!articleList.isEmpty()) {
 			Optional<Article> a = catalog.findById(articleList.get(0));
-			if(a.isPresent()) {				
+			if(a.isPresent()) {
 				affectedArticles.add(a.get());
-				
+
 				articleList.addAll(a.get().getParents());
-				
+
 				a.get().setUpdateStatus(false);
-				
+
 				articleList.remove(0);
 			}
 			else {
 				articleList.remove(0);
 			}
 		}
-		
+
 		while(!affectedArticles.isEmpty()) {
 			List<Article> parts = new ArrayList<Article>();
 
-			if(affectedArticles.get(0).getType() == ArticleType.COMPOSITE) {
+			if(affectedArticles.get(0).getType() == Article.ArticleType.COMPOSITE) {
 				Composite c = (Composite) affectedArticles.get(0);
 				parts = getArticlesFromIdentifiers(c.getPartIds().keySet());
 			}
-			
+
 			if(affectedArticles.get(0).update(parts)) {
 				affectedArticles.get(0).setUpdateStatus(true);
 				affectedArticles.remove(0);
@@ -109,8 +110,8 @@ public class CatalogManager {
 				affectedArticles.remove(0);
 			}
 		}
+
 	}
-	
 	public List<Article> getArticlesFromIdentifiers(Set<ProductIdentifier> set) {
 		List<Article> articles = new ArrayList<Article>();
 		
@@ -161,11 +162,9 @@ public class CatalogManager {
 	}
 	public void newComposite(CompositeForm form, Map<String,String> partsCount) {//-----------------------WEITERMACHEN----------------------------------
 
-		System.out.println(form.getDescription());
-		System.out.println(form.getName());
 		HashMap<String,Integer> rightMap = new HashMap<>();
 		partsCount.forEach((article,id)->{
-			if(article.contains("article_"))
+			if(article.contains("article_"))													//Alle vorkommenden Article ais der Map auslesen
 			rightMap.put(article.replace("article_",""),Integer.parseInt(id));
 		});
 		HashMap<String, Article> ids = new HashMap<>();
@@ -195,5 +194,50 @@ public class CatalogManager {
 
 	public void hideArticle(ProductIdentifier identifier){
 		hiddenArticles.add(catalog.findById(identifier).get());
+	}
+
+	public Iterable<Article> getAvailableForNewComposite() {
+		this.createAvailableForNewComposite();
+		return availableForNewComposite;
+	}
+	public void createAvailableForNewComposite(){
+		System.out.println(catalog.findComposite());
+		HashSet<Article> articlesWithoutParents = new HashSet<>();
+		catalog.findAll().forEach(articlesWithoutParents::add);
+
+		HashSet<Composite> allComposites = new HashSet<>();
+		catalog.findComposite().forEach(composite ->{
+			allComposites.add((Composite)composite);
+		});
+		try {
+			for (Composite composite: allComposites) {
+				List<Article> parts = composite.getParts();
+				for (Article article: parts) {
+					if(articlesWithoutParents.contains(article)){
+						articlesWithoutParents.remove(article);
+					}
+				}
+			}
+		} catch (NullPointerException n){
+			System.out.println("Die Liste an Composites ist leer.");
+		}
+
+		this.availableForNewComposite = articlesWithoutParents;
+	}
+
+	public List<ProductIdentifier> getParents(Article article){
+		LinkedList<ProductIdentifier> parents = new LinkedList<>();
+
+		HashSet<Composite> allComposites = new HashSet<>();
+		catalog.findComposite().forEach(composite ->{
+			allComposites.add((Composite)composite);
+		});
+		for (Composite composite: allComposites
+			 ) {
+			if(composite.getParts().contains(article)){
+				parents.add(article.getId());
+			}
+		}
+	return parents;
 	}
 }
