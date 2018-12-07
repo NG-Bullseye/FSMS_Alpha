@@ -21,11 +21,18 @@ public class CatalogManager {
 	private final WebshopCatalog catalog;
 	private HashSet<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
+	private HashSet<Article> unusedArticles;
 	
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
-		hiddenArticles = new HashSet<>();
+		this.hiddenArticles = new HashSet<>();
+		this.unusedArticles = new HashSet<>();
+
+
+
+
+
 	/*
 	@Autowired
 	private InventoryManager inventory;
@@ -46,6 +53,14 @@ public class CatalogManager {
 				visible.add(article);
 			}
 		});
+
+		catalog.findAll().forEach(article -> {
+			System.out.println(article.getParents());
+			if(article.getParents().isEmpty()){
+				unusedArticles.add(article);
+			}
+		});
+		System.out.println(unusedArticles);
 		return visible;
 	}
 

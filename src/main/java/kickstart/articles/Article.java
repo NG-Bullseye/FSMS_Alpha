@@ -6,15 +6,14 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.quantity.Metric;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
+import org.springframework.data.annotation.Transient;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.ElementCollection;
+import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
@@ -51,6 +50,7 @@ public abstract class Article extends Product{
 	// This list stores the identifiers to every article that uses this article
 	// as a part. This is needed to identify
 	@ElementCollection
+	@javax.persistence.Transient
 	private List<ProductIdentifier> parents;
   
 	/**
@@ -80,6 +80,7 @@ public abstract class Article extends Product{
 		this.description = description;
 		
 		updateStatus = true;
+		this.parents = new LinkedList<>();
 	}
 	
 	public String getDescription() {
