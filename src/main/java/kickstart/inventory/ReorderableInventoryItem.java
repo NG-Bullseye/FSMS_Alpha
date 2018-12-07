@@ -40,8 +40,10 @@ public class ReorderableInventoryItem extends InventoryItem{
 		reorders.put(time, quantity);
 	}
 	
-	public void update(LocalDateTime time)
+	public boolean update(LocalDateTime time)
 	{
+		boolean changed = false;
+		
 		List<LocalDateTime> finishedOrders = new ArrayList<LocalDateTime>();
 		
 		for(LocalDateTime ldt: reorders.keySet())
@@ -49,6 +51,8 @@ public class ReorderableInventoryItem extends InventoryItem{
 			if(time.isAfter(ldt) || time.isEqual(ldt))
 			{
 				increaseQuantity(reorders.get(ldt));
+				
+				changed = true;
 				
 				finishedOrders.add(ldt);
 			}
@@ -58,6 +62,8 @@ public class ReorderableInventoryItem extends InventoryItem{
 		{
 			reorders.remove(ldt);
 		}
+		
+		return changed;
 	}
 	
 	public Map<LocalDateTime, Quantity> getReorders()

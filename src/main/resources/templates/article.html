@@ -53,6 +53,7 @@
         </div>
     </form>
 </div>
+
 <div class="ui container" sec:authorize="hasRole('ROLE_EMPLOYEE')">
     <form th:action="@{/reorder/{id}(id=${article.getId()})}" method=post th:object="${form}">
         <label class="ui label">Anzahl</label>
