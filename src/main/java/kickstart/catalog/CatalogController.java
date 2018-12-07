@@ -15,6 +15,7 @@
  */
 package kickstart.catalog;
 
+import forms.ReorderForm;
 import kickstart.articles.Article;
 import kickstart.articles.Comment;
 import kickstart.inventory.ReorderableInventoryItem;
@@ -138,6 +139,7 @@ public class CatalogController {
 		CompositeForm composite = new CompositeForm();
 		model.addAttribute("compositeForm",composite);
 		model.addAttribute("catalog", manager.getWholeCatalog());
+		//model.addAttribute("form", new ReorderForm());
 		return"newComposite";
 	}
 	@PostMapping("catalog/composite/new")

@@ -4,11 +4,13 @@ package kickstart.order;
 
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
+import kickstart.carManagement.CarpoolManager;
 import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
+import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.stereotype.Controller;
@@ -27,16 +29,17 @@ public class OrderController {
 
 	private final CartOrderManager cartordermanager;
 	private final OrderManager<Order> orderManager;
-	private final BusinessTime businessTime;
+	private final BusinessTime businesstime;
+	private final CarpoolManager carpoolManager;
 	private final UserManagement userManagement;
 
-
-	OrderController(OrderManager<Order> orderManager, BusinessTime businessTime, UserManagement userManagement){
+	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
-		this.businessTime = businessTime;
-		this.cartordermanager = new CartOrderManager(orderManager, businessTime);
+		this.businesstime = businesstime;
+		this.carpoolManager = carpoolManager;
+		this.cartordermanager = new CartOrderManager(orderManager, businesstime, carpoolManager);
 		this.userManagement = userManagement;
 
 	}
@@ -50,7 +53,7 @@ public class OrderController {
 	@GetMapping("/cart")
 	String basket(Model model) {
 
-
+		model.addAttribute("wightofcart", cartordermanager.getWight());
 
 		if(cartordermanager.getAccount() != null){
 			UserAccount accountname = cartordermanager.getAccount();
@@ -60,6 +63,7 @@ public class OrderController {
 		else {
 			model.addAttribute("nameoftheorderer", "Bitte einen Kunde ausählen");
 		}
+
 
 		return "cart";
 	}
@@ -94,6 +98,13 @@ public class OrderController {
 
 	}
 
+	@RequestMapping("/renttruck")
+	String addLKW (Cart cart){
+
+		return cartordermanager.addLKW(cart);
+
+	}
+
 
 	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart, Model model){
@@ -106,14 +117,42 @@ public class OrderController {
 
 		String[] listofstring = orderer.split(" ");
 
+
 		model.addAttribute("name", listofstring[0]+ " " + listofstring[1]);
 		model.addAttribute("email", listofstring[2]);
 		model.addAttribute("address", listofstring[3] + " " + listofstring[4] + " " + listofstring[5] + " " + listofstring[6]);
 		cartordermanager.changeStatus(userAccount);
+
 		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
 		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
 		model.addAttribute("ordersofthedudepaid", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
 
+
+		//muss gefixed werden
+		/**for(Order order:cartordermanager.getOrderManager().findBy(userAccount)){
+			if(order.isCompleted()){
+
+
+				if(order.getDateCreated().getYear()-businesstime.getTime().getYear()<0){
+					if(businesstime.getTime().getDayOfYear() + 365 - order.getDateCreated().getDayOfYear() == 0){
+						model.addAttribute("ordersofthedudedeliverd",order);
+					}
+				}
+				else if(businesstime.getTime().getDayOfYear() - order.getDateCreated().getDayOfYear() == 0){
+					model.addAttribute("ordersofthedudedeliverd",order);
+				}
+
+				if(order.getDateCreated().getYear()-businesstime.getTime().getYear()<0){
+					if(businesstime.getTime().getDayOfYear() + 365 - order.getDateCreated().getDayOfYear() > 0){
+						model.addAttribute("ordersofthedudecomplete",order);
+					}
+				}
+				else if(businesstime.getTime().getDayOfYear() - order.getDateCreated().getDayOfYear() > 0){
+					model.addAttribute("ordersofthedudecomplete",order);
+				}
+			}
+
+		}**/
 		return "/customeraccount";
 	}
 

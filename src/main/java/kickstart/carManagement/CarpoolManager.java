@@ -60,6 +60,11 @@ public class CarpoolManager {
 		return rent(weight,userAccount);
 	}
 
+	public void rentTruckByWight(){
+
+		System.out.println("jo funkt");
+	}
+
 
 
 	public void addFreeTruck(String name, MonetaryAmount priceInEuro,long amount){
