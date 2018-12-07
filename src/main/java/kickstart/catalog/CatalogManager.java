@@ -21,13 +21,12 @@ public class CatalogManager {
 	private HashSet<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
 	private HashSet<Article> availableForNewComposite;
+	private HashSet<Article>Articles;
 	
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
-		hiddenArticles = new HashSet<>();
-		availableForNewComposite = new HashSet<>();
-	/*
+/*
 	@Autowired
 	private InventoryManager inventory;
 	public CatalogManager(WebshopCatalog catalog) {
@@ -47,6 +46,14 @@ public class CatalogManager {
 				visible.add(article);
 			}
 		});
+
+		catalog.findAll().forEach(article -> {
+			System.out.println(article.getParents());
+			if(article.getParents().isEmpty()){
+				unusedArticles.add(article);
+			}
+		});
+		System.out.println(unusedArticles);
 		return visible;
 	}
 

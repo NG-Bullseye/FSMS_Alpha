@@ -1,5 +1,4 @@
-
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
 <head th:include="header :: head">
     <title id="pageTitle">Katalog</title>
@@ -41,7 +40,7 @@
         </div>
     </div>
 </div>
-<div th:switch="${article.type}">
+<div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
     <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
         <div class="ui labeled input">
             <div class="ui label">Anzahl:</div>
@@ -59,13 +58,28 @@
         </div>
     </form>
 </div>
-<div class="ui container center aligned">
+
+<div class="ui container" sec:authorize="hasRole('ROLE_EMPLOYEE')">
     <form th:action="@{/reorder/{id}(id=${article.getId()})}" method=post th:object="${form}">
         <label class="ui label">Anzahl</label>
         <input name="amount" type="number" value="1">
         <input class="ui labeled button" type="submit" value="Nachbestellen">
     </form>
 </div>
+<div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
+        <label class="ui label">Anzahl:</label>
+        <input name="count" type="number" min="1" max="10" value="1">
+        <input name="part" type="hidden" th:value="${article.id}">
+        <input class="ui button" type="submit" th:text="Hinzufügen">
+    </form>
+    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
+        <label class="ui label">Anzahl</label>
+        <input name="count" type="number" min="1" max="10" value="1">
+        <input name="article" type="hidden" th:value="${article.id}">
+        <div class="ui label">in den Warenkorb</div>
+        <input class="ui labeled button" type="submit" name="in den Warenkorb">
+    </form></div>
 <div class="ui comments">
     <h3 class="ui dividing header">Bewertungen</h3>
     <h4 th:text="'durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' " >5</h4>
@@ -80,20 +94,7 @@
         </div>
     </div>
 </div>
-<div th:switch="${article.type}">
-    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
-        <label class="ui label">Anzahl:</label>
-        <input name="count" type="number" min="1" max="10" value="1">
-        <input name="part" type="hidden" th:value="${article.id}">
-        <input class="ui button" type="submit" th:text="Hinzufügen">
-    </form>
-    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
-        <label class="ui label">Anzahl</label>
-        <input name="count" type="number" min="1" max="10" value="1">
-        <input name="article" type="hidden" th:value="${article.id}">
-        <div class="ui label">in den Warenkorb</div>
-        <input class="ui labeled button" type="submit" name="in den Warenkorb">
-    </form>
+
     <form class="ui reply form" role="form" th:action="@{/artikel/{id}/comment(id=${article.id})}" method="post">
         <div class="field">
             <textarea id="comment" name="comment" cols="40" rows="5"></textarea><br/>

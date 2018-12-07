@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kickstart.articles.Article;
 import kickstart.articles.Part;
 
+/*
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @Transactional
@@ -163,5 +164,5 @@ public class InventoryManagerTest {
 		.as("InventoryManager should increase the amount after the reordertime has passed").isTrue();
 		
 		time.reset();
-	}	*/
-}
+	}	
+}*/

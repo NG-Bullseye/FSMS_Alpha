@@ -11,6 +11,7 @@ import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
 import org.salespointframework.quantity.Quantity;
+import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.stereotype.Controller;
@@ -58,7 +59,6 @@ public class OrderController {
 		if(cartordermanager.getAccount() != null){
 			UserAccount accountname = cartordermanager.getAccount();
 			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
-
 		}
 		else {
 			model.addAttribute("nameoftheorderer", "Bitte einen Kunde ausählen");
@@ -68,19 +68,22 @@ public class OrderController {
 		return "cart";
 	}
 
-	@GetMapping("/order")
-	String orderview(Model model, Model modelcompleted, Model modelorders) {
+	@GetMapping("/lkwbooking")
+	String question(Model model){
+		if(cartordermanager.getAccount() == null){
+			return "redirect:/customers";
+		}
+		model.addAttribute("wightofcart", cartordermanager.getWight());
+		UserAccount accountname = cartordermanager.getAccount();
+		model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
 
-		modelorders.addAttribute("openorders", cartordermanager.getOrderManager().findBy(OrderStatus.OPEN));
-		model.addAttribute("paidorders", cartordermanager.getOrderManager().findBy(OrderStatus.PAID));
-		modelcompleted.addAttribute("completeorders", cartordermanager.getOrderManager().findBy(OrderStatus.COMPLETED));
-
-		return "order";
+		return "lkwbooking";
 	}
 
 	@GetMapping("/addcostumertocart")
 	String addCostumer(@RequestParam(value = "user") long requestId){
 		UserAccount account = userManagement.findUserById(requestId).getUserAccount();
+
 		return cartordermanager.addCostumer(account);
 	}
 
@@ -107,9 +110,9 @@ public class OrderController {
 
 
 	@RequestMapping("/addorder")
-	String newOrder(@ModelAttribute Cart cart, Model model){
+	String newOrder(@ModelAttribute Cart cart){
 
-	return cartordermanager.newOrder(cart, model);
+	return cartordermanager.newOrder(cart);
 	}
 
 	@RequestMapping("/showcustomerorders")
@@ -126,33 +129,9 @@ public class OrderController {
 		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
 		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
 		model.addAttribute("ordersofthedudepaid", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
-
-
 		//muss gefixed werden
-		/**for(Order order:cartordermanager.getOrderManager().findBy(userAccount)){
-			if(order.isCompleted()){
+		//model.addAttribute("ordersofthedudedeliverd",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
 
-
-				if(order.getDateCreated().getYear()-businesstime.getTime().getYear()<0){
-					if(businesstime.getTime().getDayOfYear() + 365 - order.getDateCreated().getDayOfYear() == 0){
-						model.addAttribute("ordersofthedudedeliverd",order);
-					}
-				}
-				else if(businesstime.getTime().getDayOfYear() - order.getDateCreated().getDayOfYear() == 0){
-					model.addAttribute("ordersofthedudedeliverd",order);
-				}
-
-				if(order.getDateCreated().getYear()-businesstime.getTime().getYear()<0){
-					if(businesstime.getTime().getDayOfYear() + 365 - order.getDateCreated().getDayOfYear() > 0){
-						model.addAttribute("ordersofthedudecomplete",order);
-					}
-				}
-				else if(businesstime.getTime().getDayOfYear() - order.getDateCreated().getDayOfYear() > 0){
-					model.addAttribute("ordersofthedudecomplete",order);
-				}
-			}
-
-		}**/
 		return "/customeraccount";
 	}
 

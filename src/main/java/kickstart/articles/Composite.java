@@ -91,6 +91,7 @@ public class Composite extends Article {
 				partIds.put(article.getId(), partIds.get(article.getId()) + 1);
 			}
 			else {
+				article.setParent(this.getId());
 				partIds.put(article.getId(), 1);
 			}
 			
@@ -244,9 +245,7 @@ public class Composite extends Article {
 	// TODO: Better way to convert Streamable to Set?
 	public Set<String> getAllCategories(){					//Hat ohne die Funktion einen Fehler ausgegeben
 		HashSet<String> categories = new HashSet<String>();
-		this.getCategories().forEach(category->{
-			categories.add(category);
-		});
+		this.getCategories().forEach(categories::add);
 		return categories;
 	}
 

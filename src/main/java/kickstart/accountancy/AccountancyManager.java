@@ -27,6 +27,8 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.money.MonetaryAmount;
+
 import static org.salespointframework.core.Currencies.EURO;
 
 @Service
@@ -62,7 +64,7 @@ public class AccountancyManager {
 	}
 
 	//<editor-fold desc="Time Skipp Logic">
-	LocalDateTime getTime(){
+	public LocalDateTime getTime(){
 		return businessTime.getTime();
 	}
 
@@ -100,7 +102,7 @@ public class AccountancyManager {
 		accountancy.add( entry);
 	}
 
-	void minus(Money money,LocalDateTime time){
+	public void minus(MonetaryAmount money,LocalDateTime time){
 		WebshopAccountancyEntry entry= new WebshopAccountancyEntry(money,time);
 		accountancy.add( entry);
 	}
