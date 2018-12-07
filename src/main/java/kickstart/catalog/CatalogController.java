@@ -15,7 +15,6 @@
  */
 package kickstart.catalog;
 
-import forms.ReorderForm;
 import kickstart.articles.Article;
 import kickstart.articles.Comment;
 import kickstart.inventory.ReorderableInventoryItem;
