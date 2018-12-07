@@ -102,10 +102,10 @@ public class InventoryController {
 	@PostMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String reorder(@PathVariable ProductIdentifier identifier,
-			@Valid @ModelAttribute("registrationform")ReorderForm form, Model model, Errors result) {
+			@Valid @ModelAttribute("reorderform")ReorderForm form, Model model, Errors result) {
 		
 		if(result.hasErrors()) {
-			model.addAttribute("registrationform", form);
+			model.addAttribute("reorderform", form);
 			
 			return "article";
 		}
