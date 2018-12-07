@@ -87,8 +87,7 @@ public class CartOrderManager {
 		// für funktion mit leos carpool Manager entkommentieren wenn vorhanden
 
 		//cart.addOrUpdateItem(carpoolManager.rentTruckByWight(wight,account), Quantity.of(1));
-		System.out.println("ohjeah man");
-
+		
 		return newOrder(cart);
 	}
 
