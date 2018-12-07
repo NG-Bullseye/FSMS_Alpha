@@ -155,4 +155,7 @@ public abstract class Article extends Product{
 			return gerundet;
 		}
 	}
+
+	public abstract void addPart(Article article);
+	public abstract void removePart(Article article);
 }

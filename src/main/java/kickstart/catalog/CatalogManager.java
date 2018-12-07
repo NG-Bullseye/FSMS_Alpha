@@ -70,6 +70,36 @@ public class CatalogManager {
 		this.editAffectedArticles(afterEdit);
 	}
 
+	public void editComposite(ProductIdentifier identifier, CompositeForm form,Map<String, String> partsCount){
+		Article afterEdit = catalog.findById(identifier).get();
+		LinkedList<Article> partsBefore = new LinkedList<>();
+		afterEdit.getPartIds().forEach((article,count) ->{
+			int i = count;
+			while(i>0) {
+				partsBefore.add(catalog.findById(article).get());
+				i--;
+			}
+		});
+		LinkedList<Article> partsAfter = new LinkedList<>();
+		partsAfter.addAll(this.compositeMapFiltering(partsCount));
+
+		partsAfter.forEach(article -> {
+			if(partsBefore.contains(article)){
+				partsBefore.remove(article);
+			}else{
+				afterEdit.addPart(article);
+			}
+		});
+		if(!partsBefore.isEmpty()){
+			for(int i = 0; i < partsBefore.size()-1; i++){
+				afterEdit.removePart(partsBefore.get(i));
+			}
+		}
+		catalog.save(afterEdit);
+		this.editAffectedArticles(afterEdit);
+
+	}
+
 	public void editAffectedArticles(Article afterEdit){
 		List<Article> affectedArticles = new ArrayList<>();
 
@@ -162,31 +192,37 @@ public class CatalogManager {
 	}
 	public void newComposite(CompositeForm form, Map<String,String> partsCount) {//-----------------------WEITERMACHEN----------------------------------
 
+		Composite newArticle = new Composite(form.getName(),form.getDescription(),this.compositeMapFiltering(partsCount));
+		catalog.save(newArticle);
+		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
+	}
+
+
+	//Eingabe von der Website Spring-seitig als Map<String,String>, weswegen in dieser Funktion die Map in eine Liste von Artikeln umgewandelt wird
+	public LinkedList<Article> compositeMapFiltering(Map<String,String> partsCount){
 		HashMap<String,Integer> rightMap = new HashMap<>();
 		partsCount.forEach((article,id)->{
 			if(article.contains("article_"))													//Alle vorkommenden Article ais der Map auslesen
-			rightMap.put(article.replace("article_",""),Integer.parseInt(id));
+				rightMap.put(article.replace("article_",""),Integer.parseInt(id));
 		});
 		HashMap<String, Article> ids = new HashMap<>();
 		catalog.findAll().forEach(article -> {
-				if(rightMap.containsKey(article.getId().toString()))
+			if(rightMap.containsKey(article.getId().toString()))
 				ids.put(article.getId().toString(),article);
 		});
+
 		LinkedList<Article> parts = new LinkedList<>();
-		
-		
+
+
 		rightMap.forEach((article,count)->{
-				int i = count;
-				while (i>0){
-					parts.add(catalog.findById(ids.get(article).getId()).get()); //Sucht den Article,der zu dem String gemappt ist und übergibt diesen
-					i--;
-				}
+			int i = count;
+			while (i>0){
+				parts.add(catalog.findById(ids.get(article).getId()).get()); //Sucht den Article,der zu dem String gemappt ist und übergibt diesen
+				i--;
+			}
 
 		} );
-
-		Composite newArticle = new Composite(form.getName(),form.getDescription(),parts);
-		catalog.save(newArticle);
-		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
+		return parts;
 	}
 	public void saveArticle(Article article){
 		catalog.save(article);
