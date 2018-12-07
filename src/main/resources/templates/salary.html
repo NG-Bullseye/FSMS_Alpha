@@ -17,7 +17,7 @@
 
 				<div class="inline field">
 					<label th:text="Gehalt" for="salary">Gehalt</label><br/>
-					<input th:id="salary" th:name="salary" th:errorclass="fieldError" type="text" th:value="${user.salary}"/>
+					<input autofocus type="text" th:id="salary" th:name="salary" th:field="*{salary}" th:errorclass="fieldError" th:value="${user.salary}"/>
 					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">
 						Bitte ein Gehalt eingeben.
 					</div>

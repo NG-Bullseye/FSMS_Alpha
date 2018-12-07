@@ -1,11 +1,15 @@
 package kickstart.user;
+
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 interface MoneyForm {
 
 	@NotEmpty(message = "Bitte geben sie ein Gehalt ein!")
-	int getSalary();
+	@Pattern(regexp = "^\\d{1,4}$", message = "Eingabe ungültig!")
+	String getSalary();
 	
-	@NotEmpty
+	@NotEmpty(message = "Id sollte nicht null sein!")
+	@Pattern(regexp = "^\\d{1,9}$", message = "Id kann nicht negativ sein!")
 	String getId();
 }

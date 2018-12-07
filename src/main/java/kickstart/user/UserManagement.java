@@ -131,12 +131,13 @@ public User findUserById (long id) {
 	
 	public void changeSalary(MoneyForm form) {
 		
-		Assert.notNull(form, "Registration form must not be null!");
+		Assert.notNull(form, "Money form must not be null!");
 		
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
-		int salary = form.getSalary();
+		int salary = Integer.parseInt(form.getSalary());
 		user.setSalary(salary);
+		return;
 	}
 	
 }
