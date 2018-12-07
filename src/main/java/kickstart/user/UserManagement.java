@@ -117,12 +117,12 @@ public User findUserById (long id) {
 		if (type == 0) { // Kunde zum Mitarbeiter machen
 			userAccount.add(Role.of("ROLE_EMPLOYEE"));
 			userAccount.remove(Role.of("ROLE_CUSTOMER"));
-			//changeSalary(user, 50);
+			user.setSalary(50);
 			return;
 		} else if (type == 1) { // Mitarbeiter zum Kunde machen
 			userAccount.add(Role.of("ROLE_CUSTOMER"));
 			userAccount.remove(Role.of("ROLE_EMPLOYEE"));
-			//changeSalary(user, 0);
+			user.setSalary(0);
 			return;
 		} else {
 			throw new IllegalArgumentException("Parameter type has illegal value");

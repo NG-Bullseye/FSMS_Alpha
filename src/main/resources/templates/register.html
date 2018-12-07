@@ -20,7 +20,7 @@
 				</div>
 				<div class="inline field">
 					<label th:text="Username" for="username">Username</label><br/>
-					<input id="name" name="name" th:field="*{name}" th:errorclass="fieldError" type="text" placeholder="Username"/>
+					<input autofocus id="name" name="name" th:field="*{name}" th:errorclass="fieldError" type="text" placeholder="Username"/>
 					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
 						Der Name darf nicht leer sein.
 					</div>

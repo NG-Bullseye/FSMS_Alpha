@@ -1,6 +1,7 @@
 package kickstart.user;
 
 import org.salespointframework.useraccount.web.LoggedIn;
+import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountIdentifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,7 +69,7 @@ class UserController {
 	
 	@GetMapping("/managecustomer")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	String userAccount(@RequestParam(value = "user") long requestId, Model model){
+	String manageUserAccount(@RequestParam(value = "user") long requestId, Model model){
 		User requestedUser = userManagement.findUserById(requestId);
 		String completeName = requestedUser.getFirstname() + " " + requestedUser.getLastname();
 		if (requestedUser.getUserAccount().isEnabled()) {
@@ -127,8 +128,18 @@ class UserController {
 	}
 	
 	@GetMapping("/editData")
-	String editData(@RequestParam(value = "user") long requestId, EditForm form, Model model) {
+	String editData(@RequestParam(value = "user") long requestId, @LoggedIn UserAccount loggedInUserWeb, EditForm form, Model model) {
 		User requestedUser = userManagement.findUserById(requestId);
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		
+		if (requestId !=  loggedInUser.getId() && !loggedInUser.getUserAccount().hasRole(Role.of("ROLE_BOSS"))) { //EMPLOYEE ändert Kundenaccount
+			model.addAttribute("unallowed", true);
+			model.addAttribute("user", requestedUser);
+			model.addAttribute("form", form);
+			return "editdata";
+		}
+		
+		model.addAttribute("unallowed", false);
 		model.addAttribute("user", requestedUser);
 		model.addAttribute("form", form);
 		return "editdata";
@@ -136,15 +147,15 @@ class UserController {
 	
 	@PostMapping("/editData")
 	String editNow(@Valid @ModelAttribute("form") EditForm form, BindingResult bindingResult, Model model, Errors result) {
-
+		long requestedId = Long.parseLong(form.getId());
+		User requestedUser = userManagement.findUserById(requestedId);
+		
 		if (result.hasErrors()) {
-			long requestedId = Long.parseLong(form.getId());
-			User requestedUser = userManagement.findUserById(requestedId);
 			model.addAttribute("user", requestedUser);
 			model.addAttribute("form", form);
 			return "editdata";
 		}
-
+		
 		userManagement.editData(form);
 
 		return "redirect:/";

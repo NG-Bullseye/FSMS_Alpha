@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head th:include="header :: head">
-		<title id="pageTitle">Daten Ändern</title>
+		<title id="pageTitle">Gehalt anpassen</title>
 	</head>
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
@@ -17,7 +17,7 @@
 
 				<div class="inline field">
 					<label th:text="Gehalt" for="salary">Gehalt</label><br/>
-					<input autofocus type="text" th:id="salary" th:name="salary" th:field="*{salary}" th:errorclass="fieldError" th:value="${user.salary}"/>
+					<input autofocus type="text" th:id="salary" th:name="salary" th:field="*{salary}" th:errorclass="fieldError" th:placeholder="${user.salary}"/>
 					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">
 						Bitte ein Gehalt eingeben.
 					</div>
