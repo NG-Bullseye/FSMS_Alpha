@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
+
+<!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
+
+<head th:include="header :: head">
+    <title id="pageTitle">Startseite</title>
+</head>
+<body>
+<nav th:include="navbar :: navbar"></nav>
+<div class="ui page grid">
+    <div class=" ui segment">
+
+
+        <table id="tablespace" class="ui table">
+            <thead>
+            <th></th>
+            <th><t3>Bisherige Werte</t3></th>
+            <th><t3>neue Werte</t3></th>
+            </thead>
+            <tbody>
+
+            <tr>
+                <td><t3>Bezeichnung:</t3></td>
+                <td th:text="${article.name}">Name</td>
+                <td>
+                    <input type="text" th:field="*{name}" required="required"/>
+                </td>
+            </tr>
+            <tr>
+                <td><t3>Beschreibung:</t3></td>
+                <td th:text="${article.description}">Name</td>
+                <td>
+                    <input type="text" th:field="*{description}" required="required"/>
+                </td>
+            </tr>
+            <tr th:each="category : ${categories}">
+                <td></td>
+                <div th:switch="${articleCategories.contains(category)}">
+                    <td th:case="true" th:text="${category}"></td>
+                    <td th:case="*"></td>
+                </div>
+                <td>
+                    <div class="ui labeled input">
+                        <input class="ui checkbox" type="checkbox"
+                               th:field="*{selectedCategories}"
+                               th:value="${category}" />
+                        <label
+                                th:text="${category}">
+                        </label>
+                    </div>
+                </td>
+
+            </tr>
+            </tbody>
+
+        </table>
+        <div class="ui vertical segment">
+
+            <a class="item">
+                <input type="submit" value="Ändern" class="ui button"/>
+            </a>
+
+        </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

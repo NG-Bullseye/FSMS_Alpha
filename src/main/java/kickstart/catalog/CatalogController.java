@@ -157,6 +157,8 @@ public class CatalogController {
 		return "redirect:/catalog/";
 	}
 
+	@GetMapping
+
 
 
 	interface CommentAndRating {

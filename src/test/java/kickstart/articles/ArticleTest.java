@@ -1,6 +1,7 @@
 package kickstart.articles;
 
 import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Quantity;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ArticleTest {
@@ -48,7 +50,12 @@ public class ArticleTest {
 		@Override
 		public boolean update(List<Article> parts) {
 			return true;
-		}		
+		}
+
+		@Override
+		public Map<ProductIdentifier, Integer> getPartIds(){
+			return null;
+		}
 	}
 	
 	@Test

@@ -201,22 +201,20 @@ public class CatalogManager {
 		return availableForNewComposite;
 	}
 	public void createAvailableForNewComposite(){
-		System.out.println(catalog.findComposite());
 		HashSet<Article> articlesWithoutParents = new HashSet<>();
 		catalog.findAll().forEach(articlesWithoutParents::add);
 
-		HashSet<Composite> allComposites = new HashSet<>();
-		catalog.findComposite().forEach(composite ->{
-			allComposites.add((Composite)composite);
-		});
+		HashSet<Article> allComposites = new HashSet<>();
+		catalog.findComposite().forEach(allComposites::add);
 		try {
-			for (Composite composite: allComposites) {
-				List<Article> parts = composite.getParts();
-				for (Article article: parts) {
+			for (Article composite: allComposites) {
+				Map<ProductIdentifier, Integer> parts = composite.getPartIds();
+				parts.forEach((articleId,count)->{
+					Article article = catalog.findById(articleId).get();
 					if(articlesWithoutParents.contains(article)){
 						articlesWithoutParents.remove(article);
 					}
-				}
+				});
 			}
 		} catch (NullPointerException n){
 			System.out.println("Die Liste an Composites ist leer.");

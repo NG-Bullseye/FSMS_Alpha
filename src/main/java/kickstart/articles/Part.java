@@ -2,9 +2,11 @@ package kickstart.articles;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
@@ -130,5 +132,10 @@ public class Part extends Article {
 	@Override
 	public boolean update(@NotNull List<Article> parts) {
 		return true;
+	}
+
+	@Override
+	public Map<ProductIdentifier, Integer> getPartIds(){
+		return null;
 	}
 }

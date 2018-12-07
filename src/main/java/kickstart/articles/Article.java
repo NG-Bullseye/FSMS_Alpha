@@ -7,6 +7,7 @@ import org.salespointframework.quantity.Metric;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
@@ -131,6 +132,8 @@ public abstract class Article extends Product{
 	public abstract void setWeight(double weight);
 
 	public abstract void setColour(@NotNull String colour);
+
+	public abstract Map<ProductIdentifier, Integer> getPartIds();
 
 	public List<Comment> getComments() {
 		return comments;
