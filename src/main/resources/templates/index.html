@@ -1,7 +1,7 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
-	
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head th:include="header :: head">
 		<title id="pageTitle">Startseite</title>
 	</head>
@@ -16,5 +16,22 @@
 				<a class="ui button" href="register.html" th:href="@{/register}" th:text="Registrieren">Registrierung</a>
 			</div>
 		</div>
-</body>
+		<div id="registration" sec:authorize="!hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')">
+			<t2>Sie möchten ohne Registrierung fortfahren?</t2>
+			<div id="buttonspace">
+				<a class="ui button" href="catalog.html" th:href="@{/catalog}" th:text="'Zum ' + 'Katalog'">Zum Katalog</a>
+			</div>
+		</div>
+		<div id="registration" sec:authorize="hasAnyRole('CUSTOMER')">
+			<t2>Sie möchten bestellen? Dann rufen sie Jetzt an!</t2>
+			<div id="buttonspace">
+				<t1><i class="phone icon"></i>
+					0900 123 456
+				</t1>
+				<br/>
+				<tnorm>*für nur 1,99€ pro Minute.</tnorm>
+			</div>
+		</div>
+	</body>
 </html>
+

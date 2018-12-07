@@ -20,14 +20,17 @@ public class UserManagement {
 
 	private final UserRepository users;
 	private final UserAccountManager userAccounts;
+	private final JavaMailer mailSender;
 
-	UserManagement(UserRepository users, UserAccountManager userAccounts) {
+	UserManagement(UserRepository users, UserAccountManager userAccounts, JavaMailer mailSender) {
 
 		Assert.notNull(users, "UserRepository must not be null!");
 		Assert.notNull(userAccounts, "UserAccountManager must not be null!");
+		Assert.notNull(mailSender, "JavaMailer must not be null!");
 
 		this.users = users;
 		this.userAccounts = userAccounts;
+		this.mailSender = mailSender;
 	}
 
 	public User createUser(RegistrationForm form) {
@@ -35,7 +38,23 @@ public class UserManagement {
 		Assert.notNull(form, "Registration form must not be null!");
 
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
+		mailSender.sendCustomerRegistrationMessage(form.getEmail());
 		return users.save(new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
+	}
+	
+	public void editData(EditForm form) {
+
+		Assert.notNull(form, "Registration form must not be null!");
+		
+		long requestedId = Long.parseLong(form.getId());
+		User user = findUserById(requestedId);
+		user.setFirstname(form.getFirstname());
+		user.setLastname(form.getLastname());
+		user.setAddress(form.getAddress());
+		user.setEmail(form.getEmail());
+		UserAccount userAccount = user.getUserAccount();
+		userAccounts.changePassword(userAccount, form.getPassword());
+		return;
 	}
 	
 	public User findUser (UserAccount userAccount) {
@@ -81,16 +100,44 @@ public User findUserById (long id) {
 	}
 	
 	public void useraccountActivation(UserAccountIdentifier accountId, int type) {
-		if (type == 0) {
+		if (type == 0) { // deaktivieren
 			userAccounts.disable(accountId);
 			return;
-		} else if (type == 1) {
+		} else if (type == 1) { // aktivieren
 			userAccounts.enable(accountId);
 			return;
 		} else {
-			return;
+			throw new IllegalArgumentException("Parameter type has illegal value");
 		}
 		
+	}
+	
+	public void changeRole(User user, int type) {
+		UserAccount userAccount = user.getUserAccount();
+		if (type == 0) { // Kunde zum Mitarbeiter machen
+			userAccount.add(Role.of("ROLE_EMPLOYEE"));
+			userAccount.remove(Role.of("ROLE_CUSTOMER"));
+			user.setSalary(50);
+			return;
+		} else if (type == 1) { // Mitarbeiter zum Kunde machen
+			userAccount.add(Role.of("ROLE_CUSTOMER"));
+			userAccount.remove(Role.of("ROLE_EMPLOYEE"));
+			user.setSalary(0);
+			return;
+		} else {
+			throw new IllegalArgumentException("Parameter type has illegal value");
+		}
+	}
+	
+	public void changeSalary(MoneyForm form) {
+		
+		Assert.notNull(form, "Money form must not be null!");
+		
+		long requestedId = Long.parseLong(form.getId());
+		User user = findUserById(requestedId);
+		int salary = Integer.parseInt(form.getSalary());
+		user.setSalary(salary);
+		return;
 	}
 	
 }

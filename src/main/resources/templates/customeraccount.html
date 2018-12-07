@@ -1,143 +1,188 @@
 
 
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head th:include="header :: head">
 		<title id="pageTitle">Kundenkonto</title>
 	</head>
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
-    
 		<div id="title">
 			<t1 sec:authorize="hasRole('ROLE_CUSTOMER')" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t1>
 			<t1 sec:authorize="hasRole('ROLE_EMPLOYEE')" th:text="${'Account von: ' + name }">Hallo Nutzer</t1>
 		</div>
-
+		<div id="customerbox" sec:authorize="hasRole('ROLE_CUSTOMER')">
+			<a class="ui button" id="deactivateMyself" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+		</div>
 		<div id="customerbox" th:switch="${enableDeactivation}"> 
- 			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
-  			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
+			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
-    
-		<div id="tablespace">
-		<div class="ui grid">
-		<div class="four wide column">
-			<div id="textnhead">
-				<t2>Ihre Daten bei uns:</t2>
-			</div>
-			<div id="textnhead">
-				<t3>Name</t3>
-				<br>
-				<tnorm th:text="${name}">Name</tnorm>
-			</div>
-			<div id="textnhead">
-				<t3>E-Mail Adresse:</t3>
-				<br>
-				<tnorm th:text="${email}">E-Mail</tnorm>
-			</div>
-			<div id="textnhead">
-				<t3>Anschrift:</t3>
-				<br>
-				<tnorm th:text="${address}">Addresse</tnorm>
-			</div>
-			<div id="textnhead">
-				<a class="ui button" id="data" th:text="${'Daten ' + 'ändern'}">Daten ändern</a>
-			</div>
-		</div>
-		<div class="twelve wide column">
-			<t2>Bestellübersicht</t2>
-			<table class="ui inverted grey table">
-				<thead>
-					<tr>
-						<th>Datum</th>
-						<th>Preis</th>
-						<th>Status</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="ordered : ${ordersofthedudeopen} ">
-						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
-						<td th:text="${ordered.totalPrice}"></td>
-						<td th:text="Austehend"></td>
-						<td>
-							<form th:action="@{/cancelthatorder}">
-								<button id="buttonspace" type="submit" class="ui button" th:text="stornieren">stronieren</button>
-								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
-							</form>
-						</td>
-					</tr>
-					<tr th:each="ordered : ${ordersofthedudepaid} ">
-						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
-						<td th:text="${ordered.totalPrice}"></td>
-						<td th:text="Bezahlt"></td>
-					</tr>
-					<tr th:each="ordered : ${ordersofthedudecomplete} ">
-						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
-						<td th:text="${ordered.totalPrice}"></td>
-						<td th:text="Abgeschlossen"></td>
-					</tr>
-				</tbody>
-			</table>
-			<form th:action="@{/showcustomerorders}">
-				<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
-				<input name="nameoftheorderer" type="hidden" th:value="${name}">
-				<input name="emailoftheorderer" type="hidden" th:value="${email}">
-				<input name="addressoftheorderer" type="hidden" th:value="${address}">
+		<div id="textnhead" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+			<form th:action="@{/addcustomertocart}">
+				<button type="submit" class="ui button" th:text="Auswählen">choose</button>
+				<!--<input name="customer" type="hidden" th:value="${customer.userAccount.id}">-->
 			</form>
 		</div>
-      
-      
+		<div id="tablespace">
+		<div class="ui grid">
+			<div class="four wide column">
+				<div id="textnhead">
+					<t2>Ihre Daten bei uns:</t2>
+				</div>
+				<div id="textnhead">
+					<t3>Name</t3>
+					<br>
+					<tnorm th:text="${name}">Name</tnorm>
+				</div>
+				<div id="textnhead">
+					<t3>E-Mail Adresse:</t3>
+					<br>
+					<tnorm th:text="${email}">E-Mail</tnorm>
+				</div>
+				<div id="textnhead">
+					<t3>Anschrift:</t3>
+					<br>
+					<tnorm th:text="${address}">Addresse</tnorm>
+				</div>
+				<div id="textnhead">
+					<a th:href="@{'/editData'(user=${id})}">
+						<div class="ui button">
+							<i class="edit icon"></i>
+							Daten ändern
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="twelve wide column">
+				<t2>Bestellübersicht</t2>
+				<table class="ui inverted grey table">
+					<thead>
+						<tr>
+							<th>Datum</th>
+							<th>Preis</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="ordered : ${ordersofthedudeopen} ">
+							<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+							<td th:text="${ordered.totalPrice}"></td>
+							<td th:text="Austehend"></td>
+							<td align="center" th:width="50">
+								<form th:action="@{/cancelthatorder}">
+									<button type="submit" class="ui button" th:text="bezahlen">paying</button>
+									<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+									<input name="choose" type="hidden" th:value="bezahlen">
+									<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+								</form>
+							</td>
+							<td align="center" th:width="50">
+								<form th:action="@{/cancelthatorder}">
+									<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
+									<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+									<input name="choose" type="hidden" th:value="stornieren">
+									<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+								</form>
+							</td>
+						</tr>
+						<tr th:each="ordered : ${ordersofthedudepaid} ">
+							<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+							<td th:text="${ordered.totalPrice}"></td>
+							<td th:text="Bezahlt"></td>
+						</tr>
+						<tr th:each="ordered : ${ordersofthedudecomplete} ">
+							<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+							<td th:text="${ordered.totalPrice}"></td>
+							<td th:text="Abgeschlossen"></td>
+						</tr>
+					</tbody>
+				</table>
+				<form th:action="@{/showcustomerorders}">
+					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
+					<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+				</form>
+			</div>
+		</div>
 		<div class="ui tiny modal" id="deactivateAccount">
-		  <div class="ui icon header">
-		    <i class="frown icon"></i>
-		    Möchten Sie den Kundenaccount wirklich deaktivieren?
-		  </div>
-		  <div class="content">
-		    <p>Durch deaktivieren des Accounts sind sie nicht mehr in der Lage, sich auf unserer Webseite anzumelden.</p>
-		    <p>Sind sie wirklich sicher?</p>
-		  </div>
-		  <div class="actions">
-		    <div class="negative ui button">
-		      <i class="remove icon"></i>
-		      Nein
-		    </div>
-		    <div class="positive ui button" th:href="@{'/activation'(user=${id})(type=0)}">
-		      <i class="checkmark icon"></i>
-		      <a class="whitelink" th:href="@{'/activation'(user=${id}, type=0)}" th:text="Ja">Ja</a>
-		    </div>
-		  </div>
+			<div class="ui icon header">
+				<i class="frown icon"></i>
+				Möchten Sie den Kundenaccount wirklich deaktivieren?
+			</div>
+			<div class="content">
+				<p>Durch deaktivieren des Accounts ist der Kunde nicht mehr in der Lage, sich auf der Webseite anzumelden.</p>
+				<p>Sind sie wirklich sicher?</p>
+			</div>
+			<div class="actions">
+				<div class="negative ui button">
+					<i class="remove icon"></i>
+					Nein
+				</div>
+				<a th:href="@{'/activation'(user=${id}, type=0)}">
+					<div class="positive ui button">
+						<i class="checkmark icon"></i>
+						Ja
+					</div>
+				</a>
+			</div>
 		</div>
-		
+		<div class="ui tiny modal" id="deactivateOwnAccount">
+			<div class="ui icon header">
+				<i class="frown icon"></i>
+				Möchten Sie ihren Kundenaccount wirklich deaktivieren?
+			</div>
+			<div class="content">
+				<p>Durch deaktivieren des Accounts sind sie nicht mehr in der Lage, sich auf unserer Webseite anzumelden.</p>
+				<p>Sind sie wirklich sicher?</p>
+			</div>
+			<div class="actions">
+				<div class="negative ui button">
+					<i class="remove icon"></i>
+					Nein
+				</div>
+				<a th:href="@{/deactivateMyself}">
+					<div class="positive ui button">
+						<i class="checkmark icon"></i>
+						Ja
+					</div>
+				</a>
+			</div>
+		</div>
 		<div class="ui tiny modal" id="activateAccount">
-		  <div class="ui icon header">
-		    <i class="smile icon"></i>
-		    Möchten Sie den Kundenaccount wieder aktivieren?
-		  </div>
-		  <div class="content">
-		    <p>Dem Kunden wird damit ermöglich, sich ab sofort wieder auf der Webseite anzumelden.</p>
-		    <p>Fortfahren?</p>
-		  </div>
-		  <div class="actions">
-		    <div class="negative ui button">
-		      <i class="remove icon"></i>
-		      Nein
-		    </div>
-		    <div class="positive ui button" th:href="@{'/activation'(user=${id})(type=0)}">
-		      <i class="checkmark icon"></i>
-		      <a class="whitelink" th:href="@{'/activation'(user=${id}, type=1)}" th:text="Ja">Ja</a>
-		    </div>
-		  </div>
+			<div class="ui icon header">
+				<i class="smile icon"></i>
+				Möchten Sie den Kundenaccount wieder aktivieren?
+			</div>
+			<div class="content">
+				<p>Dem Kunden wird damit ermöglich, sich ab sofort wieder auf der Webseite anzumelden.</p>
+				<p>Fortfahren?</p>
+			</div>
+			<div class="actions">
+				<div class="negative ui button">
+					<i class="remove icon"></i>
+					Nein
+				</div>
+				<a th:href="@{'/activation'(user=${id}, type=1)}">
+					<div class="positive ui button">
+						<i class="checkmark icon"></i>
+						Ja
+					</div>
+				</a>
+			</div>
 		</div>
-		
 	</body>
 	<script type="text/javascript">
-	$(document).ready(function(){
-		$('#deactivate').click(function(){
-			$('#deactivateAccount').modal('show');
+		$(document).ready(function(){
+			$('#deactivate').click(function(){
+				$('#deactivateAccount').modal('show');
+			});
+			$('#deactivateMyself').click(function(){
+				$('#deactivateOwnAccount').modal('show');
+			});
+			$('#activate').click(function(){
+				$('#activateAccount').modal('show');
+			});
 		});
-		$('#activate').click(function(){
-			$('#activateAccount').modal('show');
-		});
-	});
 	</script>
 </html>
 

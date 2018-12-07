@@ -14,28 +14,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import org.salespointframework.time.BusinessTime;
 
-import java.util.Optional;
+
 
 
 @Controller
 @SessionAttributes("cart")
 public class OrderController {
 
-	private final CartOrderManager cartOrderManager;
+	private final CartOrderManager cartordermanager;
 	private final OrderManager<Order> orderManager;
+	private final BusinessTime businesstime;
 
-	OrderController(OrderManager<Order> orderManager){
+	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
-		this.cartOrderManager = new CartOrderManager(orderManager);
+		this.businesstime = businesstime;
+		this.cartordermanager = new CartOrderManager(orderManager, businesstime);
+
 	}
 
 	@ModelAttribute("cart")
 	Cart initializeCart() {
 
-	return cartOrderManager.initializeCart();
+	return cartordermanager.initializeCart();
 	}
 
 	@GetMapping("/cart")
@@ -46,54 +50,64 @@ public class OrderController {
 	@GetMapping("/order")
 	String orderview(Model model, Model modelcompleted, Model modelorders) {
 
-		modelorders.addAttribute("openorders", cartOrderManager.getOrderManager().findBy(OrderStatus.OPEN));
-		model.addAttribute("paidorders", cartOrderManager.getOrderManager().findBy(OrderStatus.PAID));
-		modelcompleted.addAttribute("completeorders", cartOrderManager.getOrderManager().findBy(OrderStatus.COMPLETED));
+		modelorders.addAttribute("openorders", cartordermanager.getOrderManager().findBy(OrderStatus.OPEN));
+		model.addAttribute("paidorders", cartordermanager.getOrderManager().findBy(OrderStatus.PAID));
+		modelcompleted.addAttribute("completeorders", cartordermanager.getOrderManager().findBy(OrderStatus.COMPLETED));
 
 		return "order";
+	}
+
+	@GetMapping("/addcostumertocart")
+	String addCostumer(@RequestParam("customer") UserAccount account){
+		return cartordermanager.addCostumer(account);
 	}
 
 	@PostMapping("/cart_composite")
 	String addComposite (@RequestParam("article") Composite article, @RequestParam("count") int count, @ModelAttribute Cart cart){
 
-		return cartOrderManager.addComposite(article,count,cart);
+		return cartordermanager.addComposite(article,count,cart);
 
 	}
 
 	@PostMapping("/cart_part")
 	String addPart (@RequestParam("part") Part part, @RequestParam("count") int count, @ModelAttribute Cart cart){
 
-		return cartOrderManager.addPart(part, count, cart);
+		return cartordermanager.addPart(part, count, cart);
 
 	}
 
-															//Optional<UserAccount>
+
 	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart, Model model, @LoggedIn UserAccount account){
 
-	return cartOrderManager.newOrder(cart, model, account);
+	return cartordermanager.newOrder(cart, model, account);
 	}
 
 	@RequestMapping("/showcustomerorders")
-	String showcostumerorder(@RequestParam("nameoftheorderer") String completeName, @RequestParam("addressoftheorderer") String addressoforderer, @RequestParam("emailoftheorderer") String emailoforderer, @LoggedIn UserAccount userAccount, Model model){
+	String showcostumerorder(@RequestParam("theabsoluteorderer") String orderer, @LoggedIn UserAccount userAccount, Model model){
 
+		String[] listofstring = orderer.split(" ");
 
-		model.addAttribute("name", completeName);
-		model.addAttribute("email", emailoforderer);
-		model.addAttribute("address", addressoforderer);
-		model.addAttribute("ordersofthedudecomplete", cartOrderManager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
-		model.addAttribute("ordersofthedudeopen", cartOrderManager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
-		model.addAttribute("ordersofthedudepaid", cartOrderManager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
-
-
+		model.addAttribute("name", listofstring[0]+ " " + listofstring[1]);
+		model.addAttribute("email", listofstring[2]);
+		model.addAttribute("address", listofstring[3] + " " + listofstring[4] + " " + listofstring[5] + " " + listofstring[6]);
+		cartordermanager.changeStatus(userAccount);
+		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
+		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
+		model.addAttribute("ordersofthedudepaid", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
 
 		return "/customeraccount";
 	}
 
 	@RequestMapping("/cancelthatorder")
-	String cancelOrder(@RequestParam("orderidentity") Order order){
+	String cancelOrder(@RequestParam("orderidentity") Order order, @RequestParam("choose") String choose, @RequestParam("theabsoluteorderer") String orderer , Model model){
 
+		String[] listofstring = orderer.split(" ");
 
-		return cartOrderManager.cancelOrder(order);
+		model.addAttribute("name", listofstring[0]+ " " + listofstring[1]);
+		model.addAttribute("email", listofstring[2]);
+		model.addAttribute("address", listofstring[3] + " " + listofstring[4] + " " + listofstring[5] + " " + listofstring[6]);
+
+		return cartordermanager.cancelorpayOrder(order ,choose);
 	}
 }

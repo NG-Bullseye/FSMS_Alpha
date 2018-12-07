@@ -1,33 +1,52 @@
+
+
 <nav id="navmenu" th:fragment="navbar">
 	<div class="ui secondary  menu">
-	  <a class="item" href="index.html" th:href="@{/}" th:text="Startseite">
+		<a class="item" href="index.html" th:href="@{/}" th:text="Startseite">
 		Startseite
-	  </a>
-	  <a class="item" href="catalog.html" th:href="@{/catalog}" th:text="Katalog">
-		Katalog
-	  </a>
-	  <a class="item" href="customeraccount.html" th:href="@{/customeraccount}"
-		sec:authorize="isAuthenticated()"
-		th:text="Kundenkonto">Kundenkonto
-	  </a>
-	  <a class="item" href="customers.html" th:href="@{/customers}"
-		sec:authorize="hasRole('ROLE_EMPLOYEE')"
-		th:text="Kundenübersicht">Kundenübersicht
-	  </a>
-	  <a class="item" href="employees.html" th:href="@{/employees}"
-		sec:authorize="hasRole('ROLE_BOSS')"
-		th:text="Mitarbeiterliste">Mitarbeiterliste
-	  </a>
-        <a class="item" href="cart.html" th:href="@{/cart}"
-		   sec:authorize="hasRole('ROLE_EMPLOYEE')"
-		   th:text="Warenkorb">Warenkorb
 		</a>
-	  <div class="right menu">
-		<t3 class="item" sec:authorize="isAuthenticated()" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t3>
-		  <a class="item" th:href="@{/login}" sec:authorize="!isAuthenticated()" th:text="Login">Login</a>
-		  <form class="item" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+		<a class="item" href="catalog.html" th:href="@{/catalog}" th:text="Katalog">
+		Katalog
+		</a>
+		<a class="item" href="customeraccount.html" th:href="@{/customeraccount}"
+			sec:authorize="isAuthenticated()"
+			th:text="Kundenkonto">Kundenkonto
+		</a>
+		<a class="item" href="customers.html" th:href="@{/customers}"
+			sec:authorize="hasRole('ROLE_EMPLOYEE')"
+			th:text="Kundenübersicht">Kundenübersicht
+		</a>
+		<a class="item" href="employees.html" th:href="@{/employees}"
+			sec:authorize="hasRole('ROLE_BOSS')"
+			th:text="Mitarbeiterliste">Mitarbeiterliste
+		</a>
+		<a class="item" href="cart.html" th:href="@{/cart}"
+			sec:authorize="hasRole('ROLE_EMPLOYEE')"
+			th:text="Warenkorb">Warenkorb
+		</a>
+		
+		<a class="item" href="inventory.html" th:href="@{/inventory}"
+			sec:authorize="hasRole('ROLE_EMPLOYEE')"
+			th:text="Lager">Lager
+		</a>
+				
+		<a class="item" href="carpool.html" th:href="@{/carpool}"
+			sec:authorize="hasRole('ROLE_EMPLOYEE')"
+			th:text="Fuhrpark">Fuhrpark
+		</a>
+		
+		<a class="item" href="accountancy.html" th:href="@{/accountancy}"
+			sec:authorize="hasRole('ROLE_BOSS')"
+			th:text="Buchhaltung">Buchhaltung
+		</a>
+
+		<div class="right menu">
+			<t3 class="item" sec:authorize="isAuthenticated()" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t3>
+			<a class="item" th:href="@{/login}" sec:authorize="!isAuthenticated()" th:text="Login">Login</a>
+			<form class="item" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
 				<button type="submit" class="ui button" th:text="Logout">Logout</button>
-		  </form>
-	  </div>
+			</form>
+		</div>
 	</div>
 </nav>
+
