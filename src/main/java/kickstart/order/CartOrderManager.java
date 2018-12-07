@@ -16,9 +16,8 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
-import org.springframework.ui.Model;
-
 import java.time.LocalDateTime;
+
 
 
 public class CartOrderManager {
@@ -47,7 +46,6 @@ public class CartOrderManager {
 		return account;
 	}
 
-
 	public Cart initializeCart() {
 
 		return new Cart();
@@ -72,7 +70,7 @@ public class CartOrderManager {
 
 		cart.addOrUpdateItem(article, Quantity.of(count));
 
-		return "cart";
+		return "redirect:/catalog";
 	}
 
 	public String addPart (Part article, int count, Cart cart){
@@ -80,26 +78,26 @@ public class CartOrderManager {
 		wight = wight.add(article.getWeight());
 		cart.addOrUpdateItem(article, Quantity.of(count));
 
-		return "cart";
+		return "redirect:/catalog";
 	}
 
-	//Truck truck, Cart cart
 
 	public String addLKW(Cart cart){
 
 		// für funktion mit leos carpool Manager entkommentieren wenn vorhanden
 
 		//cart.addOrUpdateItem(carpoolManager.rentTruckByWight(wight,account), Quantity.of(1));
-
-		return "cart";
+		
+		return newOrder(cart);
 	}
+
 
 	public String addCostumer(UserAccount account){
 		this.account = account;
-		return "cart";
+		return "redirect:/cart";
 	}
 
-	public String newOrder(Cart cart, Model model){
+	public String newOrder(Cart cart){
 
 		if(!cart.isEmpty() ) {
 			Order order = new Order(account, Cash.CASH);
@@ -109,15 +107,14 @@ public class CartOrderManager {
 			wight = Quantity.of(0,Metric.KILOGRAM);
 			cart.clear();
 
-			return "redirect:/catalog";
+			return "redirect:/";
 		}
-		return "/cart";
+		return "redirect:/catalog";
 	}
 
 	public void changeStatus(UserAccount account){
-		//Interval interval;
-		LocalDateTime date = businesstime.getTime();
 
+		LocalDateTime date = businesstime.getTime();
 
 		for(Order order: orderManager.findBy(account)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
@@ -131,10 +128,9 @@ public class CartOrderManager {
 					orderManager.completeOrder(order);
 				}
 			}
-
 		}
-
 	}
+
 
 
 
