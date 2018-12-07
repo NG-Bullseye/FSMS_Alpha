@@ -1,14 +1,11 @@
 <head th:fragment="head">
 	<meta charset="UTF-8" />
 <!-- Unser CSS -->
-    <link th:href="@{/resources/css/style.css}" rel="stylesheet"
-          href="../static/resources/css/style.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/ourstyle.css}" />
 <!-- JQuery -->
-    <script th:src="@{/resources/js/jquery-3.3.1.min.js}"
-            src="../static/resources/js/jquery-3.3.1.min.js"></script>
+    <script th:src="@{/resources/js/jquery-3.3.1.min.js}" src="../static/resources/js/jquery-3.3.1.min.js"></script>
 <!-- Semantic UI -->
-    <script th:src="@{/resources/js/semantic.min.js}"
-            src="../static/resources/js/semantic.min.js"></script>
+    <script th:src="@{/resources/js/semantic.min.js}" src="../static/resources/js/semantic.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/resources/css/semantic.min.css" th:href="@{/resources/css/semantic.min.css}" />
     <link rel="stylesheet" type="text/css" href="../static/resources/css/icon.min.css" th:href="@{/resources/css/icon.min.css}" />
     <title th:include=":: #pageTitle">Layout Generic Title</title>

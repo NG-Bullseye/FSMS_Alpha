@@ -117,25 +117,26 @@ public User findUserById (long id) {
 		if (type == 0) { // Kunde zum Mitarbeiter machen
 			userAccount.add(Role.of("ROLE_EMPLOYEE"));
 			userAccount.remove(Role.of("ROLE_CUSTOMER"));
-			changeMoney(user, 50);
+			//changeSalary(user, 50);
 			return;
 		} else if (type == 1) { // Mitarbeiter zum Kunde machen
 			userAccount.add(Role.of("ROLE_CUSTOMER"));
 			userAccount.remove(Role.of("ROLE_EMPLOYEE"));
-			changeMoney(user, 0);
+			//changeSalary(user, 0);
 			return;
 		} else {
 			throw new IllegalArgumentException("Parameter type has illegal value");
 		}
 	}
 	
-	public void changeMoney(User user, int money) {
-		if (money >= 0 && money < 1000000) {
-			user.setSalary(money);
-			return;
-		} else {
-			throw new IllegalArgumentException("Parameter money has illegal value");
-		}
+	public void changeSalary(MoneyForm form) {
+		
+		Assert.notNull(form, "Registration form must not be null!");
+		
+		long requestedId = Long.parseLong(form.getId());
+		User user = findUserById(requestedId);
+		int salary = form.getSalary();
+		user.setSalary(salary);
 	}
 	
 }

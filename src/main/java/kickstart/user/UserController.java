@@ -93,29 +93,11 @@ class UserController {
 }
 	@GetMapping("/employees")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
-	String employees(MoneyForm form, Model model) {
+	String employees(Model model) {
 
 		model.addAttribute("customerList", userManagement.findAllEmployees());
-		model.addAttribute("form", form);
 
 		return "employees";
-}
-	
-	@PostMapping("/employees")
-	@PreAuthorize("hasRole('ROLE_BOSS')")
-	String changeMoney(@Valid @ModelAttribute("form") MoneyForm form, BindingResult bindingResult, Model model, Errors result) {
-
-		if (result.hasErrors()) {
-			long requestedId = Long.parseLong(form.getId());
-			User requestedUser = userManagement.findUserById(requestedId);
-			model.addAttribute("user", requestedUser);
-			model.addAttribute("form", form);
-			return "editdata";
-		}
-
-		userManagement.editData(form);
-
-		return "redirect:/";
 	}
 
 	
@@ -166,6 +148,32 @@ class UserController {
 		userManagement.editData(form);
 
 		return "redirect:/";
+	}
+	
+	@GetMapping("/salary")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
+	String changeSalary(@RequestParam(value = "user") long requestId, MoneyForm form, Model model) {
+		User requestedUser = userManagement.findUserById(requestId);
+		model.addAttribute("user", requestedUser);
+		model.addAttribute("form", form);
+		return "salary";
+	}
+	
+	@PostMapping("/salary")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
+	String changeSalaryNow(@Valid @ModelAttribute("form") MoneyForm form, BindingResult bindingResult, Model model, Errors result) {
+
+		if (result.hasErrors()) {
+			long requestedId = Long.parseLong(form.getId());
+			User requestedUser = userManagement.findUserById(requestedId);
+			model.addAttribute("user", requestedUser);
+			model.addAttribute("form", form);
+			return "salary";
+		}
+
+		userManagement.changeSalary(form);
+
+		return "redirect:/employees";
 	}
 
 }
