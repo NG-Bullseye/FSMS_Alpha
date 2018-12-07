@@ -10,6 +10,7 @@ import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -63,6 +64,7 @@ public class InventoryController {
 	}
 	
 	@GetMapping("/inventory")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String inventoryView(Model model)
 	{
 		List<TableElement> tableElements = new ArrayList<TableElement>();
@@ -78,6 +80,7 @@ public class InventoryController {
 	}
 	
 	@GetMapping("/reorders")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String reorderView(Model model)
 	{
 		List<TableElement> tableElements = new ArrayList<TableElement>();
@@ -97,6 +100,7 @@ public class InventoryController {
 	}
 	
 	@PostMapping("reorder/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String reorder(@PathVariable ProductIdentifier identifier,
 			@Valid @ModelAttribute("registrationform")ReorderForm form, Model model, Errors result) {
 		
@@ -112,6 +116,7 @@ public class InventoryController {
 	}
 	
 	@GetMapping("inventory/update")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String updateInventory() {
 		
 		manager.update();
