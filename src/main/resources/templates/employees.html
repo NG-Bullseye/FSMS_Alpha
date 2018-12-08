@@ -8,7 +8,7 @@
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
 		<div id="tablespace">
-			<table class="ui celled table">
+			<table class="ui sortable striped celled table">
 				<thead>
 					<tr>
 						<th th:text="Nutzername">Nutzername</th>
@@ -75,6 +75,7 @@
 			$('#change').click(function(){
 				$('#changemoney').modal('show');
 			});
+			$('table').tablesort()
 		});
 	</script>
 </html>

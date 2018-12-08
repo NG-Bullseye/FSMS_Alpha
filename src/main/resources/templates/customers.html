@@ -2,13 +2,13 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="header :: head">
-		<title id="pageTitle">Kundenübersicht</title>
-	</head>
+	<title id="pageTitle">Kundenübersicht</title>
+</head>
 <body>
     <nav th:include="navbar :: navbar"></nav>
 
 	<div id="tablespace">
-	    <table class="ui celled table">
+	    <table class="ui sortable striped celled table">
 	        <thead>
 	        <tr>
 	            <th th:text="Nutzername">Nutzername</th>
@@ -49,4 +49,9 @@
     </div>
 
 </body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('table').tablesort()
+	});
+</script>
 </html>
