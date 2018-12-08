@@ -12,22 +12,23 @@ import java.util.HashSet;
 public interface WebshopCatalog extends Catalog<Article> {
 	static final Sort DEFAULT_SORT = new Sort(Sort.Direction.DESC, "productIdentifier");
 
-	Iterable<Article> findByType(Article.ArticleType type, Sort sort);
+	/*Iterable<Article> findByType(Article.ArticleType type, Sort sort);
 
 	default Iterable<Article> findByType(Article.ArticleType type) {
 		return findByType(type, DEFAULT_SORT);
-	}
+	}*/
+
 	default Iterable<Article> findComposite(){
-		Iterable<Article> rightCategories = this.findAll();
+		Iterable<Article> allCategories = this.findAll();
 		HashSet<Article> categories = new HashSet<>();
-		rightCategories.forEach(article -> {
+		allCategories.forEach(article -> {
 			if(article.getType()==Article.ArticleType.COMPOSITE) categories.add(article);});
 		return categories;
 	}
 	default Iterable<Article> findPart(){
-		Iterable<Article> rightCategories = this.findAll();
+		Iterable<Article> allCategories = this.findAll();
 		HashSet<Article> categories = new HashSet<>();
-		rightCategories.forEach(article -> {
+		allCategories.forEach(article -> {
 			if(article.getType()==Article.ArticleType.PART) categories.add(article);});
 		return categories;
 	}

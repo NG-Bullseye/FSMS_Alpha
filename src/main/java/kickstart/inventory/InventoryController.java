@@ -1,28 +1,31 @@
-package kickstart.controller;
+package kickstart.inventory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import forms.ReorderForm;
-import kickstart.inventory.InventoryManager;
-import kickstart.inventory.ReorderableInventoryItem;
+import kickstart.accountancy.AccountancyManager;
 
 @Controller
 public class InventoryController {
 
 	private InventoryManager manager;
-	
+		
 	public class TableElement
 	{
 		private String name;
@@ -52,12 +55,16 @@ public class InventoryController {
 		}
 	}
 	
-	public InventoryController(InventoryManager manager)
+	public InventoryController(Inventory<ReorderableInventoryItem> inventory, 
+			AccountancyManager accountancy)
 	{
-		this.manager = manager;
+		manager = new InventoryManager(inventory, accountancy);
+		
+		manager.getInventory().deleteAll();
 	}
 	
 	@GetMapping("/inventory")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String inventoryView(Model model)
 	{
 		List<TableElement> tableElements = new ArrayList<TableElement>();
@@ -73,6 +80,7 @@ public class InventoryController {
 	}
 	
 	@GetMapping("/reorders")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String reorderView(Model model)
 	{
 		List<TableElement> tableElements = new ArrayList<TableElement>();
@@ -82,21 +90,53 @@ public class InventoryController {
 			for(LocalDateTime ldt: item.getReorders().keySet())
 			{
 				tableElements.add(new TableElement(item.getProduct().getName(), 
-						item.getQuantity().getAmount().toString(), ldt.toString()));
+						item.getReorders().get(ldt).toString(), ldt.toString()));
 			}
 		}
 		
 		model.addAttribute("reorders", tableElements);
 		
-		return "reorder";
+		return "reorders";
+	}
+	
+	@GetMapping("reorder/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	public String showReorder(@PathVariable ProductIdentifier identifier, Model model,
+			ReorderForm form) {
+		if(manager.isPresent(identifier)) {
+			model.addAttribute("form", form);
+			model.addAttribute("id", identifier);
+			model.addAttribute("name", manager.getInventory().findByProductIdentifier(identifier)
+					.get().getProduct().getName());
+			
+			return "reorder";
+		}
+		
+		return "error";
 	}
 	
 	@PostMapping("reorder/{identifier}")
-	public String reorder(@PathVariable ProductIdentifier identifier,
-			@ModelAttribute("form")ReorderForm form, Model model) {
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	public String reorder(@PathVariable ProductIdentifier identifier, Model model,
+			@Valid @ModelAttribute("form")ReorderForm form, Errors result) {
+		
+		if(result.hasErrors()) {
+			model.addAttribute("form", form);
+			model.addAttribute("id", identifier);
+			return "reorder";
+		}
 		
 		manager.reorder(identifier, Quantity.of(form.getAmount(), Metric.UNIT));
 		
-		return "redirect:/";
+		return "redirect:/reorders";
+	}
+	
+	@GetMapping("inventory/update")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	public String updateInventory() {
+		
+		manager.update();
+		
+		return "redirect:/inventory";
 	}
 }

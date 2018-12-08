@@ -17,8 +17,11 @@ package kickstart.catalog;
 
 import kickstart.articles.Article;
 import kickstart.articles.Comment;
+import kickstart.inventory.ReorderableInventoryItem;
+
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,8 +41,8 @@ public class CatalogController {
 	private final CatalogManager manager;
 	private final BusinessTime businessTime;
 
-	CatalogController(CatalogManager manager, BusinessTime businessTime){
-	this.manager = manager;
+	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory, BusinessTime businessTime){
+	this.manager = new CatalogManager(catalog, inventory);
 	this.businessTime=businessTime;
 	}
 
@@ -79,7 +82,7 @@ public class CatalogController {
 		model.addAttribute("filterform",new Filterform());
 		return "catalog";
 	}
-	@GetMapping("artikel/{identifier}")
+	@GetMapping("article/{identifier}")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
@@ -87,7 +90,7 @@ public class CatalogController {
 
 		return "article";
 	}
-	@PostMapping("artikel/{identifier}/comment")
+	@PostMapping("article/{identifier}/comment")
 	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload, Model model){
 		Article article = manager.getArticle(identifier);
 		article.addComment(payload.toComment(businessTime.getTime()));
@@ -114,9 +117,9 @@ public class CatalogController {
 		if(bindingResult.hasErrors()){
 			return "edit";
 		}
-		manager.editArticle(form, identifier);
+		manager.editPart(form, identifier);
 
-		return "redirect:/article/"+manager.getArticle(identifier);
+		return "redirect:/article/"+ identifier;
 	}
 	@GetMapping("catalog/part/new")
 	public String showNew(Model model){
@@ -134,8 +137,8 @@ public class CatalogController {
 
 		CompositeForm composite = new CompositeForm();
 		model.addAttribute("compositeForm",composite);
-		model.addAttribute("catalog", manager.getWholeCatalog());
-		return"newComposite";
+		model.addAttribute("catalog", manager.getAvailableForNewComposite());
+		return "newComposite";
 	}
 	@PostMapping("catalog/composite/new")
 	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model,@NotNull @RequestParam Map<String,String> partsMapping){
@@ -152,6 +155,20 @@ public class CatalogController {
 	public String hide(@PathVariable ProductIdentifier identifier, Model model){
 		manager.hideArticle(identifier);
 		return "redirect:/catalog/";
+	}
+
+	@GetMapping("/edit/composite/{identifier}")
+	public String editComposite(@PathVariable ProductIdentifier identifier, Model model){
+		model.addAttribute("article",manager.getArticle(identifier));
+		model.addAttribute("compositeForm",new CompositeForm());
+		model.addAttribute("catalog", manager.getArticlesForCompositeEdit(identifier));
+
+		return "editComposite";
+	}
+	@PostMapping("/edit/composite/{identifier}")
+	public String editCompositeFinished(@PathVariable ProductIdentifier identifier,Model model, @NotNull @RequestParam Map<String,String> partsMapping, @ModelAttribute CompositeForm compositeForm){
+		manager.editComposite(identifier,compositeForm,partsMapping);
+		return "redirect:/article/" + identifier;
 	}
 
 

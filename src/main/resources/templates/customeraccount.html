@@ -14,16 +14,18 @@
 		<div id="customerbox" sec:authorize="hasRole('ROLE_CUSTOMER')">
 			<a class="ui button" id="deactivateMyself" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
 		</div>
-		<div id="customerbox" th:switch="${enableDeactivation}"> 
-			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
-			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
+
+		<div id="customerbox" th:switch="${enableDeactivation}">
+			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')" th:href="@{'/addcostumertocart'(user=${id})}" th:text="Auswählen">choose</a>
+ 			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+  			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
-		<div id="textnhead" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-			<form th:action="@{/addcustomertocart}">
-				<button type="submit" class="ui button" th:text="Auswählen">choose</button>
-				<!--<input name="customer" type="hidden" th:value="${customer.userAccount.id}">-->
-			</form>
-		</div>
+
+		<!--<form th:action="@{/addcustomertocart}">
+            <button type="submit" class="ui button" th:text="Auswählen">choose</button>
+            <input name="customer" type="hidden" th:value="${customer.userAccount.id}">
+			    </form>-->
+  
 		<div id="tablespace">
 		<div class="ui grid">
 			<div class="four wide column">
@@ -54,48 +56,57 @@
 					</a>
 				</div>
 			</div>
-			<div class="twelve wide column">
-				<t2>Bestellübersicht</t2>
-				<table class="ui inverted grey table">
-					<thead>
-						<tr>
-							<th>Datum</th>
-							<th>Preis</th>
-							<th>Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="ordered : ${ordersofthedudeopen} ">
-							<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
-							<td th:text="${ordered.totalPrice}"></td>
-							<td th:text="Austehend"></td>
-							<td align="center" th:width="50">
-								<form th:action="@{/cancelthatorder}">
-									<button type="submit" class="ui button" th:text="bezahlen">paying</button>
-									<input name="orderidentity" type="hidden" th:value="${ordered.id}">
-									<input name="choose" type="hidden" th:value="bezahlen">
-									<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
-								</form>
-							</td>
-							<td align="center" th:width="50">
-								<form th:action="@{/cancelthatorder}">
-									<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
-									<input name="orderidentity" type="hidden" th:value="${ordered.id}">
-									<input name="choose" type="hidden" th:value="stornieren">
-									<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
-								</form>
-							</td>
-						</tr>
-						<tr th:each="ordered : ${ordersofthedudepaid} ">
-							<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
-							<td th:text="${ordered.totalPrice}"></td>
-							<td th:text="Bezahlt"></td>
-						</tr>
-						<tr th:each="ordered : ${ordersofthedudecomplete} ">
-							<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
-							<td th:text="${ordered.totalPrice}"></td>
-							<td th:text="Abgeschlossen"></td>
-						</tr>
+		</div>
+		<div class="twelve wide column">
+			<t2>Bestellübersicht</t2>
+			<table class="ui inverted grey table">
+				<thead>
+					<tr>
+						<th>Datum</th>
+						<th>Preis</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ordered : ${ordersofthedudeopen} ">
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="'wird'+' ' + 'Versendet'"></td>
+
+						<td align="center" th:width="50">
+							<form th:action="@{/cancelthatorder}">
+								<button type="submit" class="ui button" th:text="bezahlen">paying</button>
+								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+								<input name="choose" type="hidden" th:value="bezahlen">
+								<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+
+
+							</form>
+						</td>
+						<td align="center" th:width="50">
+							<form th:action="@{/cancelthatorder}">
+								<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
+								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
+								<input name="choose" type="hidden" th:value="stornieren">
+								<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
+							</form>
+						</td>
+					</tr>
+					<tr th:each="ordered : ${ordersofthedudepaid} ">
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="Bezahlt"></td>
+					</tr>
+					<tr th:each="ordered : ${ordersofthedudedeliverd} ">
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="'zum'+' '+'abholen'+' '+'Bereit'"></td>
+					</tr>
+					<tr th:each="ordered : ${ordersofthedudecomplete} ">
+						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
+						<td th:text="${ordered.totalPrice}"></td>
+						<td th:text="Abgeschlossen"></td>
+					</tr>
 					</tbody>
 				</table>
 				<form th:action="@{/showcustomerorders}">

@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import static org.salespointframework.core.Currencies.EURO;
 
 @Component
+@Order(20)
 public class ArticleInitializer implements DataInitializer {
 	private final WebshopCatalog catalog;
 
@@ -44,15 +45,18 @@ public class ArticleInitializer implements DataInitializer {
 		cat2.add("Bett");
 		Part p1 = new Part("mittelhohes Tischbein","ein mittelhohes Tischbein",15,20.0, c1,cat1);
 		Part p2 = new Part("mittelgroße Tischplatte","eine mittelgroße Tischplatte",55,70.0, c1,cat1);
-		catalog.save(p1);
-		catalog.save(p2);
+
 		catalog.save(new Part("Matratze 140x190","eine 140x190 große Matratze",18,200.0, c1,cat2));
 		catalog.save(new Part("Bettgestell 140x190","ein Bettgestell für eine 140x190 große Matratze",30,75.0, c1,cat1));
+
 		LinkedList<Article> l1 = new LinkedList<>();
 		for(int i=0;i<4;i++){
 		l1.add(p1);
 		}
 		l1.add(p2);
-		catalog.save(new Composite("mittelgroßer Tisch","ein mittelgroßer Tisch",l1));
+		Composite com1 = new Composite("mittelgroßer Tisch","ein mittelgroßer Tisch",l1);
+		catalog.save(p1);
+		catalog.save(p2);
+		catalog.save(com1);
 	}
 }

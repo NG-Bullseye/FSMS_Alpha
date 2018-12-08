@@ -1,0 +1,189 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <head th:include="header :: head">
+        <title id="pageTitle">Online Fuhrpark</title>
+    </head>
+
+    <body>
+
+        <nav th:include="navbar :: navbar"></nav>
+
+
+        <h1 class="display-4" th:text="#{cp.header}"></h1>
+
+
+        <div class="ui container">
+
+            <div class="ui cards">
+
+                <!--<editor-fold desc="Card add">-->
+                <div class="card">
+
+                    <div class="content">
+                        <div class="header">
+                            Lkw hinzufügen
+                        </div>
+                        <div class="meta">
+
+                        </div>
+                        <div class="description">
+                            füge einen Lkw mit gewählter Maximallast hinzu
+                        </div>
+                    </div>
+
+                    <div class="extra content">
+                        <form method="post"  class="ui form" th:action="@{/addTruck}" th:object="${newForm}">
+
+                            <div class="labled input">
+                                <label >Bezeichnung</label><br/>
+                                <input th:field="*{name}" type="text" >
+                            </div>
+
+                            <div class="labled input">
+                                <label >Maximallast</label><br/>
+                                <input type="number" th:value="1" th:field="*{capacity}" >
+                            </div>
+
+                            <div class="labled input">
+                                <label>Mietpreis</label><br/>
+                                <input type="number" th:value="1" th:field="*{price}"  >
+                            </div>
+
+
+
+                            <button type="submit" class="ui button">hinzufügen</button>
+                        </form>
+                    </div>
+                </div>
+                <!--</editor-fold>-->
+
+                <!--<editor-fold desc="Card return">-->
+                <div class="card">
+
+                    <div class="content">
+                        <div class="header">
+                            Lkw zurückgeben
+                        </div>
+                        <div class="meta">
+                        </div>
+                        <div class="description">
+                            zeigt das zurückgeben eines Lkw's
+                        </div>
+                    </div>
+
+                    <div class="extra content">
+                        <form method="post"  class="ui form" th:action="@{/returnTruck}" th:object="${returnForm}">
+                            <div class="inline field">
+                                <label th:text="Username">Username</label><br/>
+                                <input th:field="*{name}" type="text"/>
+                            </div>
+                            <button type="submit" class="ui button" th:text="zurückgeben">return</button>
+                        </form>
+                    </div>
+
+                </div>
+                <!--</editor-fold>-->
+
+                <!--<editor-fold desc="Rent">-->
+                <div class="card" sec:authorize="hasRole('ROLE_BOSS')">
+
+                    <div class="content">
+                        <div class="header">
+                            Lkw ausleihen
+                        </div>
+                        <div class="meta">
+
+                        </div>
+                        <div class="description">
+                            Leihe den günstigesten Lkw gemäß der zu transportierenden Last aus
+                        </div>
+                    </div>
+
+                    <div class="extra content">
+                        <div class="ui two buttons">
+                            <form class="item" th:action="@{/rentTruck1Dummy}" method="post">
+                                <button class="ui basic green button" th:text="#{cp.rent1}">
+                                    addTruckToInventory
+                                </button>
+                            </form>
+
+                            <form class="item" th:action="@{/rentTruck2Dummy}" method="post">
+                                <button class="ui basic green button" th:text="#{cp.rent2}">
+                                    addTruckToInventory
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--</editor-fold>-->
+
+            </div>
+
+            <!--<editor-fold desc="Bestand Table">-->
+            <div class="ui container">
+                <h2 th:text="#{cp.bestand}"></h2>
+                <table class="ui celled table">
+                    <thead>
+
+                    <tr>
+                        <th th:text="#{cp.free}"></th>
+                        <th th:text="#{cp.taken}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${freeTrucksNumber}"></td>
+                        <td th:text="${takenTrucksNumber}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ui container">
+                <h2 th:text="#{cp.freeTrucks}"></h2>
+                <table class="ui celled table">
+                     <thead>
+                    <tr>
+                        <th th:text="#{cp.freeTrucksName}"></th>
+                        <th th:text="#{cp.freeTrucksCapacity}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    <tr th:each="entry:${freeTrucks}">
+                        <td th:text="${entry.getName()}"></td>
+                        <td th:text="${entry.getCapacity().toString()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ui container">
+                <h2 th:text="#{cp.takenTrucks}"></h2>
+                <table class="ui celled table">
+                    <thead>
+                    <tr>
+                        <th >Ausgeliehen von</th>
+                        <th th:text="#{cp.takenTrucksName}"></th>
+                        <th th:text="#{cp.takenTrucksCapacity}"></th>
+                        <th >Ausgeliehen am</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    <tr th:each="entry:${takenTrucks}">
+                        <td th:text="${truckUserAccountMapping.get(entry).getUsername()}"></td>
+                        <td th:text="${entry.getName()}"></td>
+                        <td th:text="${entry.getCapacity().toString()}"></td>
+                        <td th:text="${#temporals.format(entry.getDayOfRent(), 'dd.MM.yyyy HH:mm')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!--</editor-fold>-->
+
+        </div>
+
+    </body>
+</html>

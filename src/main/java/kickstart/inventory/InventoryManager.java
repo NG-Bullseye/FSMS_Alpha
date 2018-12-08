@@ -4,6 +4,8 @@ package kickstart.inventory;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
+import javax.money.MonetaryAmount;
+
 
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -11,8 +13,10 @@ import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import kickstart.accountancy.AccountancyManager;
 import kickstart.articles.Article;
 
 /**
@@ -20,14 +24,13 @@ import kickstart.articles.Article;
  *  This class manages all aspects of the inventory/stock. It stores the amount and can change the 
  *  amount by reorders to the stock or by orders of a customer. 
  */
-@Service
+@Component
 public class InventoryManager {
 
 	// Stores the amount of each article.
-	private Inventory<ReorderableInventoryItem> inventory;
+	private final Inventory<ReorderableInventoryItem> inventory;
 	
-	// The time to determine when a reorder completes.
-	private BusinessTime time;
+	private AccountancyManager accountancy;
 	
 	// The time difference (in days) until a reorder is completed 
 	private final long reorderTime = 6;
@@ -40,9 +43,9 @@ public class InventoryManager {
 	 * @param time An interface to determine the time
 	 */
 	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory,
-			@NotNull BusinessTime time ) {
+			@NotNull AccountancyManager accountancy ) {
 		this.inventory = inventory;
-		this.time = time;
+		this.accountancy = accountancy;
 	}
 	
 	/**
@@ -56,12 +59,6 @@ public class InventoryManager {
 	public Inventory<ReorderableInventoryItem> getInventory() {
 		return inventory;
 	}
-	
-	public BusinessTime getTime() {
-		return time;
-	}
-	
-
 	
 	/**
 	 * 
@@ -112,8 +109,12 @@ public class InventoryManager {
 		Optional<ReorderableInventoryItem> item = inventory.findByProduct(article);
 		
 		if(item.isPresent()) {
-			item.get().addReorder(Interval.from(time.getTime()).to(time.getTime().plusDays(reorderTime)).getEnd(), quantity);
+			item.get().addReorder(Interval.from(accountancy.getTime()).to(accountancy.getTime()
+					.plusDays(reorderTime)).getEnd(), quantity);
 			inventory.save(item.get());
+
+			accountancy.addEntry(item.get().getProduct().getPrice().multiply(
+					item.get().getQuantity().getAmount()));
 		}
 		
 	}
@@ -123,8 +124,12 @@ public class InventoryManager {
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);
 		
 		if(item.isPresent()) {
-			item.get().addReorder(Interval.from(time.getTime()).to(time.getTime().plusDays(reorderTime)).getEnd(), quantity);
+			item.get().addReorder(Interval.from(accountancy.getTime()).to(accountancy.getTime()
+					.plusDays(reorderTime)).getEnd(), quantity);
 			inventory.save(item.get());
+
+			accountancy.addEntry(item.get().getProduct().getPrice().multiply(
+					quantity.getAmount()).multiply(-1));
 		}
 	}
 	
@@ -138,7 +143,7 @@ public class InventoryManager {
 	public void decreaseQuantity(@NotNull Article article, @NotNull Quantity quantity)
 		throws IllegalArgumentException {
 		if(inventory.findByProduct(article).isPresent() == false) {
-			throw new IllegalArgumentException();
+			return;
 		}
 		if(!quantity.isCompatibleWith(Metric.UNIT)) {
 			throw new IllegalArgumentException();
@@ -160,6 +165,10 @@ public class InventoryManager {
 		return inventory.findByProduct(article).isPresent();
 	}
 	
+	public boolean isPresent(@NotNull ProductIdentifier id) {
+		return inventory.findByProductIdentifier(id).isPresent();
+	}
+	
 	/**
 	 * This functions runs the update method of the class {@link Reorder} for all currently stored reorders.
 	 * If update on a reorders returns true, the reorder is deleted from the repository.
@@ -168,7 +177,9 @@ public class InventoryManager {
 		Iterable<ReorderableInventoryItem> items = inventory.findAll();
 		
 		for(ReorderableInventoryItem item : items) {
-			item.update(time.getTime());
+			if(item.update(accountancy.getTime())) {
+				inventory.save(item);
+			}
 		}
 	}
 }

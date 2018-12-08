@@ -21,11 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.money.MonetaryAmount;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -62,7 +64,7 @@ public class AccountancyManager {
 	}
 
 	//<editor-fold desc="Time Skipp Logic">
-	LocalDateTime getTime(){
+	public LocalDateTime getTime(){
 		return businessTime.getTime();
 	}
 
@@ -75,34 +77,29 @@ public class AccountancyManager {
 	}
 	//</editor-fold>
 
-	void plus(){
-		Order order1=new Order(userAccount, Cash.CASH); //dummy
-		cart.addOrUpdateItem(product,Quantity.of(1));
-		cart.addItemsTo(order1);
-		orderManager.save(order1);
-		orderManager.payOrder(order1);
-		orderManager.completeOrder(order1);
-		cart.clear();
-		/*
-		WebshopAccountancyEntry entry= new WebshopAccountancyEntry(order1.getTotalPrice(),order1.getDateCreated());
-		accountancy.add( entry);
-		*/
-	}
-
-	void minus(){
-		WebshopAccountancyEntry entry= new WebshopAccountancyEntry((Money.of(-100,EURO)),businessTime.getTime());
-		accountancy.add( entry);
-	}
-
 	//<editor-fold desc="Schnittstelle für zusatzkosten">
-	void plus(Order order){
-		WebshopAccountancyEntry entry= new WebshopAccountancyEntry(order.getTotalPrice(),order.getDateCreated());
-		accountancy.add( entry);
+	public boolean addEntry(Order order){
+		try{
+			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(order.getTotalPrice(),order.getDateCreated());
+			accountancy.add(entry);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
-	void minus(Money money,LocalDateTime time){
-		WebshopAccountancyEntry entry= new WebshopAccountancyEntry(money,time);
-		accountancy.add( entry);
+	public boolean addEntry(MonetaryAmount amount){
+		try{
+			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime());
+			accountancy.add(entry);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 	//</editor-fold>
 
@@ -126,7 +123,6 @@ public class AccountancyManager {
 				.getMonth()))
 				.stream()
 				.collect(Collectors.toSet());
-
 
 		List list = new ArrayList<>(results);
 
@@ -157,5 +153,37 @@ public class AccountancyManager {
 		return intervalBuilder.to(endOfMonthToFetch);
 	}
 
-	//</editor-fold>
+
+
+	public List<AccountancyEntry> getFilteredYearList(YearFilterForm form) {
+		return accountancy
+				.find(fetchOneYearSinceInterval(form.getYear()))
+				.get()
+				.collect(Collectors.toList());
+	}
+
+	private Interval fetchOneYearSinceInterval(int sinceYear){
+		LocalDateTime now=businessTime.getTime();
+		int nowYearNumber=now.getYear();
+		int startYearNumber=sinceYear;
+		int yearBackNumber=nowYearNumber-startYearNumber;
+		if(yearBackNumber<0){
+			return null;
+		}
+		LocalDateTime firstDayOfThisYear=now.withDayOfYear(1);
+		LocalDateTime startTime=firstDayOfThisYear.minusMonths(yearBackNumber);
+		LocalDateTime endOfYearToFetch=startTime.plusYears(1);
+		Interval.IntervalBuilder intervalBuilder=Interval.from(startTime);
+		return intervalBuilder.to(endOfYearToFetch);
+	}
+
+	public Accountancy getAccountancy() {
+		return accountancy;
+	}
+
+	public BusinessTime getBusinessTime() {
+		return businessTime;
+	}
+
+//</editor-fold>
 }

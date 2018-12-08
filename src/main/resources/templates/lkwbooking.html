@@ -7,10 +7,10 @@
 <nav th:include="navbar :: navbar"></nav>
 
 <div class="twelve wide column">
-<h1>Warenkorb</h1>
+    <h1>Warenkorb</h1>
 </div>
 <div class="four wide column" align="right">
-<h2 th:text="${nameoftheorderer}">Hallr</h2>
+    <h2 th:text="${nameoftheorderer}">Hallr</h2>
 </div>
 
 <div th:unless="${cart.empty}">
@@ -37,10 +37,14 @@
 
 <div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
 <div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+<div th:align="center"><h2>Wollen sie einen LKW mieten?</h2></div>
 <div>
-     <form th:action="@{/lkwbooking}" th:align="right">
-        <button id="buttonspace" type="submit" class="ui button" th:text="Bestellen">button</button>
+    <form th:action="@{/renttruck}">
+        <button type="submit" class="ui button" th:text="'LKW' +' '+ 'mieten'">button</button>
     </form>
-    </div>
-    </body>
-    </html>
+    <form th:action="@{/addorder}" th:align="right">
+        <button id="buttonspace" type="submit" class="ui button" th:text="Nein">button</button>
+    </form>
+</div>
+</body>
+</html>
