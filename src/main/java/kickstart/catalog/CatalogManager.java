@@ -22,7 +22,8 @@ public class CatalogManager {
 	private final Inventory<ReorderableInventoryItem> inventory;
 	private HashSet<Article> availableForNewComposite;
 	private HashSet<Article>Articles;
-	
+	private List<Article> unusedArticles;
+
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;

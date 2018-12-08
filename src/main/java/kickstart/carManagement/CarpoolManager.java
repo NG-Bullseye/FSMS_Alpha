@@ -1,8 +1,12 @@
 package kickstart.carManagement;
 
 
+import kickstart.accountancy.AccountancyManager;
+import kickstart.accountancy.YearFilterForm;
+import org.javamoney.moneta.Money;
+import org.salespointframework.accountancy.Accountancy;
+import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.catalog.Catalog;
-import org.salespointframework.inventory.Inventory;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
@@ -11,13 +15,16 @@ import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
-import org.salespointframework.useraccount.Role;
+import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.money.MonetaryAmount;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class CarpoolManager {
@@ -30,9 +37,14 @@ public class CarpoolManager {
 	private UserAccountManager userAccountManager; //dummy
 	private UserAccount userAccount;
 	private Catalog carCatalog;
+	private List<Truck> userTruckList;
+	private AccountancyManager accountancyManager;
+	private Map<UserAccount,List<Truck>> userAccountTruckMap;
 
-	public CarpoolManager(OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog ) {
-
+	public CarpoolManager(AccountancyManager accountancyManager, OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog, BusinessTime businessTime ) {
+		this.accountancyManager=accountancyManager;
+		userAccountTruckMap =new HashMap<>();
+		this.businessTime=businessTime;
 		this.carCatalog=carCatalog;
 		this.freeTrucks = new ArrayList<>();
 		this.takenTrucks = new ArrayList<>();
@@ -43,21 +55,17 @@ public class CarpoolManager {
 
 
 	public String rentTruck1Dummy(){
-		Role customerRole = Role.of("ROLE_CUSTOMER");
-		this.userAccount = userAccountManager.create("has"+(new Random()).nextInt(99999999), "123", customerRole);
-
-		long weight =20;//
-		rent(weight,userAccount);
+		this.userAccount = userAccountManager.findByUsername("chef").get();
+		Quantity weight =Quantity.of(20,Metric.KILOGRAM);
+		rentTruckByWeight(weight,userAccount);
 		return "Erfolgreich";
 	}
 
 	public String rentTruck2Dummy(){
-		Role customerRole = Role.of("ROLE_CUSTOMER");
-		this.userAccount = userAccountManager.create("hans"+(new Random()).nextInt(1000000)
-				, "123", customerRole);
-
-		long weight =100;
-		return rent(weight,userAccount);
+		this.userAccount = userAccountManager.findByUsername("daniel").get();
+		Quantity weight =Quantity.of(100,Metric.KILOGRAM);
+		rentTruckByWeight(weight,userAccount);
+		return "Erfolgreich";
 	}
 
 	public void rentTruckByWight(){
@@ -67,44 +75,54 @@ public class CarpoolManager {
 
 
 
-	public void addFreeTruck(String name, MonetaryAmount priceInEuro,long amount){
+	public void addFreeTruck(TruckClassForm form){
 
-		Truck truck= new Truck(name,priceInEuro, amount);
+		int price;
+		int capacity;
+		MonetaryAmount money;
+		Quantity quantityCapapacity;
+		try{
+			price=form.getPrice();
+			capacity=form.getCapacity();
+
+			money=Money.of(price,"EUR");
+			quantityCapapacity=Quantity.of(capacity, Metric.KILOGRAM);
+
+		}catch (Exception e){
+			System.out.println("money or capacity is not entered as number");
+			return;
+		}
+
+		Truck truck= new Truck(
+				form.getName()
+				,money
+				,quantityCapapacity
+				,businessTime.getTime());
 		freeTrucks.add(truck);
 		carCatalog.save(truck);
 		carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
+	public Truck rentTruckByWeight(Quantity weight,UserAccount rentedBy){
 
-	public boolean returnTruckToFreeTrucks(Truck truck){
-		try{
-			takenTrucks.remove(truck);
-			Truck truckCopie= new Truck(truck.getName(),truck.getPrice(), truck.getCapacity());
-			freeTrucks.add(truckCopie);
-			carCatalog.save(truckCopie);
-			carCatalog.save(new InventoryItem(truckCopie,Quantity.of(1)));
-		}catch (Exception e){
-			System.out.println("MyError: Truck can not be returned: ");
-			e.getCause();
-			return false;
+		Assert.notNull(rentedBy, "useraccount must not be null!");
+		if (weight.isZeroOrNegative()){
+			//popup
+			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
-		return true;
-	}
-
-
-	public String rent(long weight,UserAccount userAccount){
 		List<Truck> filteredTrucks=new ArrayList<>();
+
 		for (Truck t:
 				freeTrucks) {
-			if (t.getCapacity()>=weight)
-			filteredTrucks.add(t);
+			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
+				filteredTrucks.add(t);
 		}
 
 		if (filteredTrucks.size()<=0){
-			return "Zurzeit steht kein Truck zur verfügung";
-
+			return null;
 		}
 
+		//<editor-fold desc="FilterLogic">
 		if (filteredTrucks.size()>1){
 			Collections.sort(filteredTrucks, new Comparator<Truck>() {
 				@Override
@@ -114,27 +132,113 @@ public class CarpoolManager {
 			});
 		}
 
-		Truck truckToRent=filteredTrucks.get(0);
+		//</editor-fold>
+		Truck truckToRent;
+		try{
+			truckToRent=filteredTrucks.get(0);
+		}catch (NullPointerException e){
+			System.out.println("Nullpointer in fitereredTrucks.get(0) in carpoolManager");
+			return null;
+		}
+		try{
+			truckToRent.setRentDay(businessTime.getTime());
 
-		Order order=new Order(userAccount, Cash.CASH); //dummy
-		cart=new Cart();
-		cart.addOrUpdateItem(truckToRent,Quantity.of(1));
-		cart.addItemsTo(order);
-		orderManager.save(order);
-		orderManager.payOrder(order);
-		orderManager.completeOrder(order);
-		cart.clear();
-		freeTrucks.remove(truckToRent);
-		takenTrucks.add(truckToRent);
+			//if user was a truck allready
+			if (userAccountTruckMap.containsKey(rentedBy)){
+				userAccountTruckMap.get(rentedBy).add(truckToRent);
+			}
+			//if user has no truck at the moment
+			else{
+				userTruckList=new ArrayList<>();
+				userTruckList.add(truckToRent);
+				userAccountTruckMap.put(rentedBy,userTruckList);
+			}
 
-		return "Bestellung erfolgreich!";
+			//<editor-fold desc="Bestellung">
+			takenTrucks.add(truckToRent);
+			Order order=new Order(userAccount, Cash.CASH); //dummy
+			cart=new Cart();
+			cart.addOrUpdateItem(truckToRent,Quantity.of(1));
+			cart.addItemsTo(order);
+			orderManager.save(order);
+			orderManager.payOrder(order);
+			orderManager.completeOrder(order);
+			cart.clear();
+			freeTrucks.remove(truckToRent);
+		}catch (Exception e){
+			System.out.println("Somthing went wrong in CarpoolManager in rent Truck method");
+			truckToRent=null;
+		}
+		//</editor-fold>
+		return truckToRent;
 	}
 
-	public List<Truck> getFreeTrucks() {
+	 boolean returnTruckToFreeTrucks(ReturnForm form){
+		try{
+			UserAccount rentedBy;
+			if(userAccountManager.findByUsername(form.getName()).isPresent()){
+				rentedBy=userAccountManager.findByUsername(form.getName()).get();
+			}
+			else{
+				System.out.println("MyError: User not present ");
+				return false;
+			}
+			List<Truck> truckList= userAccountTruckMap.get(rentedBy);
+			userAccountTruckMap.remove(rentedBy);
+			for (Truck t: truckList
+				 ) {
+				Truck truckCopie= new Truck(t.getName(),t.getPrice(), t.getCapacity(),t.getDayOfRent());
+				freeTrucks.add(truckCopie);
+				takenTrucks.remove(t);
+				carCatalog.save(truckCopie);
+				carCatalog.save(new InventoryItem(truckCopie,Quantity.of(1)));
+			}
+
+
+		}catch (Exception e){
+			System.out.println("MyError: Truck can not be returned: ");
+			e.getCause();
+			return false;
+		}
+		return true;
+	}
+
+	Map<Truck,UserAccount> getTruckUserAccountMap() {
+
+		 Map<Truck,UserAccount> myNewHashMap = new HashMap<>();
+		 for(Map.Entry<UserAccount, List<Truck>> entry : userAccountTruckMap.entrySet()){
+		 	for(Truck t:entry.getValue()){
+
+		 		if(!myNewHashMap.containsKey(t)){
+
+		 			myNewHashMap.put(t,entry.getKey());
+				}
+				else throw new IllegalArgumentException("The same truck cant be rented twice. logic programing error in carpoolmanager");
+			}
+
+		}
+		return  myNewHashMap;
+		/*List<Map<Truck,UserAccount>> list=new ArrayList<>();
+		for (Map.Entry<Truck, List<UserAccount>> entry: myNewHashMap.entrySet()
+		){
+			for (UserAccount u:entry.getValue()
+				 ) {
+
+				Map<Truck, UserAccount> map=new Hashtable<>();
+				map.put(entry.getKey(),u);
+				list.add(map);
+			}
+		}
+		return list;*/
+	}
+
+	 List<Truck> getFreeTrucks() {
 		return freeTrucks;
 	}
 
-	public List<Truck> getTakenTrucks() {
+	 List<Truck> getTakenTrucks() {
 		return takenTrucks;
 	}
+
+
 }

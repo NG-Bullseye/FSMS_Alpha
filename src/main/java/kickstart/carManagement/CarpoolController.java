@@ -1,62 +1,83 @@
 package kickstart.carManagement;
 
-import org.javamoney.moneta.Money;
+import kickstart.accountancy.YearFilterForm;
+import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-
-import static org.salespointframework.core.Currencies.EURO;
 
 @Controller
 public class CarpoolController {
 
 	private CarpoolManager carpoolManager;
+	private UserAccountManager userAccountManager;
+	private TruckClassForm truckClassForm;
 
-	public CarpoolController(CarpoolManager carpoolManager) {
+	public CarpoolController(CarpoolManager carpoolManager,UserAccountManager userAccountManager) {
 		this.carpoolManager = carpoolManager;
+		this.userAccountManager=userAccountManager;
 	}
 
 
-	@RequestMapping("/pricing")
-	String show(Model model){
+	@RequestMapping("/carpool")
+	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
+		truckClassForm= new TruckClassForm();
+		model.addAttribute("newForm",truckClassForm);
+
 		model.addAttribute("freeTrucks",carpoolManager.getFreeTrucks() );
 		model.addAttribute("takenTrucks",carpoolManager.getTakenTrucks() );
 		model.addAttribute("freeTrucksNumber",carpoolManager.getFreeTrucks().size() );
 		model.addAttribute("takenTrucksNumber",carpoolManager.getTakenTrucks().size() );
+		model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
 
-		return "pricing";
+		return "carpool";
 	}
 
-	@RequestMapping("/addTruck")
+	@PostMapping("/addTruck")
+	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) { // Hier habe ich festgelegt, dass er die Form als Eingabe erwartet
+
+		try{
+			model.addAttribute("newForm",truckClassForm);
+			carpoolManager.addFreeTruck(form);   //hier wird die korrekte Form an deine Manager-Funktion übergeben
+		}catch (Exception r){
+			r.printStackTrace();
+			return "redirect:carpool";
+		}
+
+
+		return "redirect:carpool";
+	}
+
+	/*@RequestMapping("/addTruck")
 	public String addFreeTruckDummy(){
 		carpoolManager.addFreeTruck("Dummy Lkw ", Money.of(30,EURO), 20);
-		return "redirect:pricing";
-	}
+		return "redirect:carpool";
+	}*/
 
-	@RequestMapping("/returnTruck")
-	public String returnTruckToCatalogDummy(){
+	@PostMapping("/returnTruck")
+	String returnTruck(@ModelAttribute("returnForm") ReturnForm form, Model model) {
+
 		try{
-			List<Truck> trucks=carpoolManager.getTakenTrucks();
-			carpoolManager.returnTruckToFreeTrucks(trucks.get(0));
+			carpoolManager.returnTruckToFreeTrucks(form); //auswahl treffen anhand von useraccount
 		}catch (Exception r){
-			return "redirect:pricing";
+			return "redirect:carpool";
 		}
-		return "redirect:pricing";
+		return "redirect:carpool";
 	}
 
 
 
 	@RequestMapping("/rentTruck1Dummy")
 	public String capacity1(Model model){
-		model.addAttribute("rentMessage",carpoolManager.rentTruck1Dummy())	;
-		return "redirect:pricing";
+		carpoolManager.rentTruck1Dummy();
+		return "redirect:carpool";
 	}
 	@RequestMapping("/rentTruck2Dummy")
 	public String capacity2(Model model){
-		model.addAttribute("rentMessage",carpoolManager.rentTruck2Dummy())	;
-		return "redirect:pricing";
+		carpoolManager.rentTruck2Dummy();
+		return "redirect:carpool";
 	}
 
 

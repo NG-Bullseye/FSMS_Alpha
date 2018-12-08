@@ -112,10 +112,9 @@ public class InventoryManager {
 			item.get().addReorder(Interval.from(accountancy.getTime()).to(accountancy.getTime()
 					.plusDays(reorderTime)).getEnd(), quantity);
 			inventory.save(item.get());
-			
-			
-			accountancy.minus(item.get().getProduct().getPrice().multiply(
-					item.get().getQuantity().getAmount()), accountancy.getTime());
+
+			accountancy.addEntry(item.get().getProduct().getPrice().multiply(
+					item.get().getQuantity().getAmount()));
 		}
 		
 	}
@@ -128,9 +127,9 @@ public class InventoryManager {
 			item.get().addReorder(Interval.from(accountancy.getTime()).to(accountancy.getTime()
 					.plusDays(reorderTime)).getEnd(), quantity);
 			inventory.save(item.get());
-		
-			accountancy.minus(item.get().getProduct().getPrice().multiply(
-					quantity.getAmount()).multiply(-1) , accountancy.getTime());
+
+			accountancy.addEntry(item.get().getProduct().getPrice().multiply(
+					quantity.getAmount()).multiply(-1));
 		}
 	}
 	

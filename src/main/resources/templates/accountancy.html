@@ -1,5 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 	<head th:include="header :: head">
 		<title id="pageTitle">Finanzübersicht</title>
 	</head>
@@ -12,7 +11,7 @@
 		<div class="row">
 	
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" sec:authorize="hasRole('ROLE_BOSS')">
 					<h1 class="h2" th:text="#{db.accountancy}"> accountany </h1>
 					<div class="time-display">
 						<td class="h2" th:text="#{db.today}">Today:  </td>
@@ -31,18 +30,19 @@
 								travel 1 month in time
 							</button>
 						</form>
-	
+						<!--		-->
 						<form class="item" th:action="@{/plus}" method="post">
-							<button class="btn btn-sm btn-outline-secondary" th:text="#{db.plus}">
-								make standard order
+							<button class="btn btn-sm btn-outline-secondary">
+								+20 Euro
 							</button>
 						</form>
 	
 						<form class="item" th:action="@{/minus}" method="post">
-							<button class="btn btn-sm btn-outline-secondary" th:text="#{db.minus}">
-								make standard order
+							<button class="btn btn-sm btn-outline-secondary" >
+								-20 Euro
 							</button>
 						</form>
+
 					</div>
 				</div>
 	
@@ -68,6 +68,41 @@
 						</tbody>
 					</table>
 				</div>
+
+				<div class="ui container">
+
+				</div>
+
+                <div class="ui container">
+                    <h2 >Posten der vergangenen Jahre</h2>
+                    <table class="ui celled table">
+                        <thead>
+                        <tr>
+
+                            <th>
+							<form method="post"  class="ui form" th:action="@{/accountancy}" th:object="${yearFilterForm}">
+								<div class="inline field">
+									<label>Jahr: </label>
+									<input th:field="*{year}" type="number"/>
+									<button type="submit" class="ui button" >Filtern</button>
+								</div>
+
+							</form>
+							</th>
+							<th >Betrag</th>
+						</tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="entry:${filteredYearList}">
+                            <td th:text="${entry.getValue().getNumber().longValue()}"></td>
+
+                            <td th:text="${#temporals.format(entry.getDate().get(),'dd.MM.yyyy HH:mm')}"></td>
+
+						</tr>
+                        </tbody>
+                    </table>
+                </div>
+
 			</main>
 		</div>
 	</div>

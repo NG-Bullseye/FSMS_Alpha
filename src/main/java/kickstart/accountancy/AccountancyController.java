@@ -15,11 +15,13 @@
  */
 package kickstart.accountancy;
 
+import org.javamoney.moneta.Money;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.Month;
@@ -34,7 +36,7 @@ public class AccountancyController {
 
 
 	private AccountancyManager accountancyManager;
-
+	//YearFilterForm yearFilterForm=new YearFilterForm() ;
 
 	private UserAccount userAccount;
 	@Autowired
@@ -46,8 +48,12 @@ public class AccountancyController {
 	}
 
 	@RequestMapping("/accountancy")
-	public String accountancy(Model model) {
+	public String accountancy(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm,Model model) {
 		model.addAttribute("time", accountancyManager.getTime());
+
+		model.addAttribute("yearFilterForm",yearFilterForm);
+		model.addAttribute("filteredYear",yearFilterForm.getYear());
+		model.addAttribute("filteredYearList",accountancyManager.getFilteredYearList(yearFilterForm));
 
 		model.addAttribute("dezValue", accountancyManager.fetchMonthlyAccountancyValue(Month.DECEMBER));
 		model.addAttribute("novValue", accountancyManager.fetchMonthlyAccountancyValue(Month.NOVEMBER));
@@ -65,7 +71,7 @@ public class AccountancyController {
 		model.addAttribute("monthlyAccountancy",accountancyManager.fetchThisMonthAccountancy());
 		//model.addAttribute("monthlyOrders", accountancyManager.fetchMonthlyOrders());
 
-		return "dashboard";
+		return "accountancy";
 	}
 
 	@RequestMapping("/skippDay")
@@ -81,16 +87,17 @@ public class AccountancyController {
 		return "redirect:/accountancy";
 	}
 
+	/*  */
 	@RequestMapping("/plus")
 	public String order() {
-		accountancyManager.plus();
+		accountancyManager.addEntry(Money.of(20,"EUR"));
 		return "redirect:/accountancy";
 	}
 
 	@RequestMapping("/minus")
 	public String payDay() {
-		accountancyManager.minus();
-
+		accountancyManager.addEntry(Money.of(-20,"EUR"));
 		return "redirect:/accountancy";
 	}
+
 }
