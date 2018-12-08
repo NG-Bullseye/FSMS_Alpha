@@ -96,23 +96,39 @@ public class InventoryController {
 		
 		model.addAttribute("reorders", tableElements);
 		
-		return "reorder";
+		return "reorders";
+	}
+	
+	@GetMapping("reorder/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	public String showReorder(@PathVariable ProductIdentifier identifier, Model model,
+			ReorderForm form) {
+		if(manager.isPresent(identifier)) {
+			model.addAttribute("form", form);
+			model.addAttribute("id", identifier);
+			model.addAttribute("name", manager.getInventory().findByProductIdentifier(identifier)
+					.get().getProduct().getName());
+			
+			return "reorder";
+		}
+		
+		return "error";
 	}
 	
 	@PostMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String reorder(@PathVariable ProductIdentifier identifier,
-			@Valid @ModelAttribute("reorderform")ReorderForm form, Model model, Errors result) {
+	public String reorder(@PathVariable ProductIdentifier identifier, Model model,
+			@Valid @ModelAttribute("form")ReorderForm form, Errors result) {
 		
 		if(result.hasErrors()) {
-			model.addAttribute("reorderform", form);
-			
-			return "article";
+			model.addAttribute("form", form);
+			model.addAttribute("id", identifier);
+			return "reorder";
 		}
 		
 		manager.reorder(identifier, Quantity.of(form.getAmount(), Metric.UNIT));
 		
-		return "redirect:/";
+		return "redirect:/reorders";
 	}
 	
 	@GetMapping("inventory/update")

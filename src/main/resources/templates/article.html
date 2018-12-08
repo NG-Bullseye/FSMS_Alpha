@@ -54,18 +54,12 @@
     </form>
 </div>
 
-<div class="ui form" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-    <form th:action="@{/reorder/{id}(id=${article.getId()})}" method=post th:object="${reorderform}">
-    	<div class="ui labeled input">
-        	<label class="ui label">Anzahl</label>
-        	<input id="amount" name="amount" th:field="*{amount}" th:errorclass="fieldError" type="number" value="1">
-        	<div class="ui negative message" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">
-				<p>Die Anzahl muss positiv sein.</p>
-			</div>
-        	<input class="ui button" type="submit" value="Nachbestellen">
-        </div>
-    </form>
-</div>
+<a th:href="@{/reorder/{id}(id=${article.id})}">
+	<div class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+		<tnorm th:text="#{article.reorder}">Nachbestellen</tnorm>
+	</div>
+</a>
+
 <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
     <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
         <label class="ui label">Anzahl:</label>
