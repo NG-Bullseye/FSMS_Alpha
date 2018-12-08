@@ -3,16 +3,6 @@ body {
   background-color: #F9F9F9;
 }
 
-a.link {
-     text-decoration: none;
-     color: rgba(0,0,0,.6);
-}
-
-a.whitelink {
-     text-decoration: none;
-     color: #fff;
-}
-
 /*divs*/
 
 #title {
@@ -23,6 +13,16 @@ a.whitelink {
 
 #registration {
   text-align: center;
+  margin-bottom: 3em;
+}
+
+#modalbutton {
+  text-align: center;
+  margin: 2em 1em 1em 1em;
+}
+
+#modalcontent {
+  margin: 1em;
 }
 
 #buttonspace {
@@ -36,6 +36,7 @@ a.whitelink {
 #tablespace {
 	padding: 3em;
 }
+
 #customerbox {
 	padding: 1em 3em 1em 1em;
 	text-align: right;

@@ -24,6 +24,22 @@
 			sec:authorize="hasRole('ROLE_EMPLOYEE')"
 			th:text="Warenkorb">Warenkorb
 		</a>
+		
+		<a class="item" href="inventory.html" th:href="@{/inventory}"
+			sec:authorize="hasRole('ROLE_EMPLOYEE')"
+			th:text="Lager">Lager
+		</a>
+				
+		<a class="item" href="carpool.html" th:href="@{/carpool}"
+			sec:authorize="hasRole('ROLE_EMPLOYEE')"
+			th:text="Fuhrpark">Fuhrpark
+		</a>
+		
+		<a class="item" href="accountancy.html" th:href="@{/accountancy}"
+			sec:authorize="hasRole('ROLE_BOSS')"
+			th:text="Buchhaltung">Buchhaltung
+		</a>
+
 		<div class="right menu">
 			<t3 class="item" sec:authorize="isAuthenticated()" th:text="${'Willkommen, ' + #authentication?.name + '!'}">Hallo Nutzer</t3>
 			<a class="item" th:href="@{/login}" sec:authorize="!isAuthenticated()" th:text="Login">Login</a>

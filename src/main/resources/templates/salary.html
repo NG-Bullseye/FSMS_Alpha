@@ -1,0 +1,31 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:include="header :: head">
+		<title id="pageTitle">Gehalt anpassen</title>
+	</head>
+	<body>
+		<nav th:include="navbar :: navbar"></nav>
+		<div id="title">
+			<t1>Bitte geben sie hier ihre neuen Daten ein:</t1>
+		</div>
+		<div id="halfwidth">
+			<form method="post" role="form" class="ui form" id="form" th:action="@{/salary}" th:object="${form}">
+				<div class="inline field">
+					<label th:text="Gehalt" for="salary">Gehalt</label><br/>
+					<input autofocus type="text" th:id="salary" th:name="salary" th:field="*{salary}" th:errorclass="fieldError" th:placeholder="${user.salary}"/>
+					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">
+						Bitte ein Gehalt eingeben.
+					</div>
+				</div>
+				<input type="hidden" th:id="id" th:name="id" th:value="${user.id}"/><br/>
+				<button type="submit" class="ui button">
+				<i class="euro sign icon"></i>
+				Gehalt anpassen
+				</button>
+			</form>
+		</div>
+	</body>
+</html>
+
