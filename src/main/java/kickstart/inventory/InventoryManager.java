@@ -166,6 +166,10 @@ public class InventoryManager {
 		return inventory.findByProduct(article).isPresent();
 	}
 	
+	public boolean isPresent(@NotNull ProductIdentifier id) {
+		return inventory.findByProductIdentifier(id).isPresent();
+	}
+	
 	/**
 	 * This functions runs the update method of the class {@link Reorder} for all currently stored reorders.
 	 * If update on a reorders returns true, the reorder is deleted from the repository.
