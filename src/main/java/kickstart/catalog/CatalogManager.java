@@ -26,6 +26,7 @@ public class CatalogManager {
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
+		this.hiddenArticles = new HashSet<Article>();
 /*
 	@Autowired
 	private InventoryManager inventory;
@@ -47,6 +48,8 @@ public class CatalogManager {
 			}
 		});
 
+		HashSet<Article> unusedArticles = new HashSet<Article>();
+		
 		catalog.findAll().forEach(article -> {
 			System.out.println(article.getParents());
 			if(article.getParents().isEmpty()){
