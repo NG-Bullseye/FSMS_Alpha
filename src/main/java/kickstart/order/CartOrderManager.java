@@ -86,7 +86,11 @@ public class CartOrderManager {
 
 		// für funktion mit leos carpool Manager entkommentieren wenn vorhanden
 
-		//cart.addOrUpdateItem(carpoolManager.rentTruckByWight(wight,account), Quantity.of(1));
+		Truck truck=carpoolManager.rentTruckByWight(wight,account);
+		if(truck==null){
+			return "redirect:/";
+		}
+		cart.addOrUpdateItem(truck, Quantity.of(1));
 		
 		return newOrder(cart);
 	}

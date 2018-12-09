@@ -44,7 +44,7 @@ public class AccountancyController {
 	{
 		this.accountancyManager = accountancyManager;
 		//iniziiert das Prudukt "stuhl", den Useracount und fügt produkt dem catalog hinzu
-		accountancyManager.initOrder();
+	//	accountancyManager.initOrder();
 	}
 
 	@RequestMapping("/accountancy")
