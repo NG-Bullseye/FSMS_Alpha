@@ -76,7 +76,7 @@
             <a id="editspace" class="ui button" th:href="@{/catalog/all}">gesamten Katalog anzeigen</a>
         </div>
     </div>
-        <div class="ui right attached simple dropdown item">
+        <div sec:authorize="hasRole('ROLE_EMPLOYEE')" class="ui right attached simple dropdown item">
             neues Möbelstück
             <i class="dropdown icon"></i>
             <div class="menu">
