@@ -1251,8 +1251,6 @@ Was das zu erstellende Programm auf alle Fälle leisten muss.
 
 ## 7.2. Kann-Kriterien
 
-Anforderungen die das Programm leisten können soll, aber für den korrekten Betrieb entbehrlich sind.
-
 <table>
     <thead>
         <th>Name</th>
