@@ -13,6 +13,7 @@ import org.salespointframework.quantity.Quantity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -101,8 +102,7 @@ public class InventoryController {
 	
 	@GetMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String showReorder(@PathVariable ProductIdentifier identifier, Model model,
-			ReorderForm form) {
+	public String showReorder(@PathVariable ProductIdentifier identifier, ReorderForm form, Model model) {
 		if(manager.isPresent(identifier)) {
 			model.addAttribute("form", form);
 			model.addAttribute("id", identifier);
@@ -117,16 +117,18 @@ public class InventoryController {
 	
 	@PostMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String reorder(@PathVariable ProductIdentifier identifier, Model model,
-			@Valid @ModelAttribute("form")ReorderForm form, Errors result) {
+	public String reorder(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form")ReorderForm form, BindingResult bindingResult, Model model, Errors result) {
 		
 		if(result.hasErrors()) {
 			model.addAttribute("form", form);
 			model.addAttribute("id", identifier);
+			model.addAttribute("name", manager.getInventory().findByProductIdentifier(identifier)
+					.get().getProduct().getName());
 			return "reorder";
 		}
 		
-		manager.reorder(identifier, Quantity.of(form.getAmount(), Metric.UNIT));
+		int amount = Integer.parseInt(form.getAmount());
+		manager.reorder(identifier, Quantity.of(amount, Metric.UNIT));
 		
 		return "redirect:/reorders";
 	}
