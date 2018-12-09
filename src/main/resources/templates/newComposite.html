@@ -15,13 +15,13 @@
             <div class=" ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Produktname</div>
-                    <input type="text" th:field="*{name}" />
+                    <input type="text" th:field="*{name}" required="required" />
                 </div>
             </div>
             <div class="ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Beschreibung</div>
-                    <input type="text" th:field="*{description}" />
+                    <input type="text" th:field="*{description}" required="required" />
                 </div>
             </div>
                 <div th:each="article : ${catalog}">
