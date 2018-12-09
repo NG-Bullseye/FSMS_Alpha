@@ -7,11 +7,9 @@
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
-<div class="ui page grid">
-    <div class=" ui segment">
 
 <form method="post" th:action="@{/catalog/part/new}" th:object="${form}">
-    <table id="tablespace" class="ui table">
+    <table id="editspace" class="ui definition table">
     <thead>
         <th></th>
         <th><t3>Bisherige Werte</t3></th>
@@ -51,6 +49,8 @@
         </tr>
         <tr>
             <td><t3>Farben:</t3></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr th:each="colour : ${colours}">
             <td></td>
@@ -102,7 +102,5 @@
 
             </div>
         </form>
-    </div>
-</div>
 </body>
 </html>

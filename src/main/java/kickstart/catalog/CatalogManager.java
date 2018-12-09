@@ -267,7 +267,7 @@ public class CatalogManager {
 				});
 			}
 		} catch (NullPointerException n){
-			System.out.println("Die Liste an Composites ist leer.");
+			System.out.println("Die Liste ist leer.");
 		}
 
 		this.availableForNewComposite = articlesWithoutParents;
@@ -289,11 +289,11 @@ public class CatalogManager {
 	return parents;
 	}
 
-	public Iterable<Article> getArticlesForCompositeEdit(ProductIdentifier identifier){
-		HashSet<Article> parts = new HashSet<>();
-		this.getAvailableForNewComposite().forEach(parts::add);
+	public Map<Article,Integer> getArticlesForCompositeEdit(ProductIdentifier identifier){
+		HashMap<Article, Integer> parts = new HashMap<>();
+		this.getAvailableForNewComposite().forEach(article->parts.put(article,0));
 		catalog.findById(identifier).get().getPartIds().forEach((article,count)->{
-			parts.add(catalog.findById(article).get());
+			parts.put(catalog.findById(article).get(),count);
 		});
 		parts.remove(catalog.findById(identifier).get()); //Damit man den Artikel nicht sich selbst hinzufügen kann
 

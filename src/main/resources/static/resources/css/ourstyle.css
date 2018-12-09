@@ -51,6 +51,9 @@ body {
 	margin: 0 auto;
 	width: 425px;
 }
+#editspace {
+    padding: 5%;
+}
 
 /*fonts*/
 
