@@ -176,6 +176,9 @@ public class CatalogController {
 	}
 	@PostMapping("/edit/composite/{identifier}")
 	public String editCompositeFinished(@PathVariable ProductIdentifier identifier,Model model, @NotNull @RequestParam Map<String,String> partsMapping, @ModelAttribute CompositeForm compositeForm){
+		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
+			return "redirect:/edit/composite/"+identifier;
+		}
 		manager.editComposite(identifier,compositeForm,partsMapping);
 		return "redirect:/article/" + identifier;
 	}

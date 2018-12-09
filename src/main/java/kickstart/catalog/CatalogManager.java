@@ -54,7 +54,6 @@ public class CatalogManager {
 				unusedArticles.add(article);
 			}
 		});
-
 		return visible;
 	}
 
