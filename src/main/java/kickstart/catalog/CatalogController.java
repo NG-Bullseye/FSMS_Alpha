@@ -142,8 +142,11 @@ public class CatalogController {
 		return "newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model,@NotNull @RequestParam Map<String,String> partsMapping){
+	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model,@RequestParam Map<String,String> partsMapping){
 
+		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
+			return "redirect:/catalog/composite/new";
+		}
 		model.addAttribute("compositeForm",new CompositeForm());
 
 		manager.newComposite(form,partsMapping);
