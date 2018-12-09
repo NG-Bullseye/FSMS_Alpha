@@ -1,17 +1,16 @@
 package kickstart.catalog;
 
 import kickstart.articles.*;
-import kickstart.inventory.InventoryManager;
+import static org.salespointframework.core.Currencies.*;
 import kickstart.inventory.ReorderableInventoryItem;
-
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -21,13 +20,11 @@ public class CatalogManager {
 	private HashSet<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
 	private HashSet<Article> availableForNewComposite;
-	private HashSet<Article>Articles;
-	private List<Article> unusedArticles;
 
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
-		this.hiddenArticles = new HashSet<Article>();
+		this.hiddenArticles = new HashSet<>();
 /*
 	@Autowired
 	private InventoryManager inventory;
@@ -49,15 +46,15 @@ public class CatalogManager {
 			}
 		});
 
-		HashSet<Article> unusedArticles = new HashSet<Article>();
+		HashSet<Article> unusedArticles = new HashSet<>();
 		
 		catalog.findAll().forEach(article -> {
-			System.out.println(article.getParents());
+
 			if(article.getParents().isEmpty()){
 				unusedArticles.add(article);
 			}
 		});
-		System.out.println(unusedArticles);
+
 		return visible;
 	}
 
@@ -72,8 +69,9 @@ public class CatalogManager {
 		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
-		afterEdit.setPrice(Money.of(article.getPrice(), "EUR"));
+		afterEdit.setPrice(Money.of(article.getPrice(),EURO));
 		afterEdit.setWeight(article.getWeight());
+		afterEdit.getCategories().forEach(afterEdit::removeCategory);
 		article.getSelectedCategories().forEach(afterEdit::addCategory);
 		article.getSelectedColours().forEach(afterEdit::setColour);
 
@@ -187,16 +185,19 @@ public class CatalogManager {
 		catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
 
 		HashSet<Article> rightPrice = new HashSet<>();
-		catalog.findByPrice(Money.of(filterform.getMinPrice(),"EUR"),Money.of(filterform.getMaxPrice(),"EUR")).forEach(rightPrice::add);
+		catalog.findByPrice(Money.of(filterform.getMinPrice(),EURO),Money.of(filterform.getMaxPrice(),EURO)).forEach(rightPrice::add);
 
 		HashSet<Article> rightCategories = new HashSet<>();
 		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 
 		HashSet<Article> result = rightType;
-		result.retainAll(rightColours);
+		if(!filterform.getSelectedColours().isEmpty()) {
+			result.retainAll(rightColours);
+		}
 		result.retainAll(rightPrice);
-		result.retainAll(rightCategories);
-
+		if(!filterform.getSelectedCategories().isEmpty()) {
+			result.retainAll(rightCategories);
+		}
 		return result;
 	}
 	public void newPart(Form form){
@@ -246,6 +247,9 @@ public class CatalogManager {
 		hiddenArticles.add(catalog.findById(identifier).get());
 	}
 
+	public void makeArticleVisible(ProductIdentifier identifier){
+		hiddenArticles.remove(catalog.findById(identifier).get());
+	}
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
 		return availableForNewComposite;
@@ -267,7 +271,7 @@ public class CatalogManager {
 				});
 			}
 		} catch (NullPointerException n){
-			System.out.println("Die Liste an Composites ist leer.");
+			System.out.println("Die Liste ist leer.");
 		}
 
 		this.availableForNewComposite = articlesWithoutParents;
@@ -277,9 +281,7 @@ public class CatalogManager {
 		LinkedList<ProductIdentifier> parents = new LinkedList<>();
 
 		HashSet<Article> allComposites = new HashSet<>();
-		catalog.findComposite().forEach(composite ->{
-			allComposites.add(composite);
-		});
+		catalog.findComposite().forEach(allComposites::add);
 		for (Article composite: allComposites
 			 ) {
 			if(composite.getPartIds().containsKey(article)){
@@ -289,14 +291,28 @@ public class CatalogManager {
 	return parents;
 	}
 
-	public Iterable<Article> getArticlesForCompositeEdit(ProductIdentifier identifier){
-		HashSet<Article> parts = new HashSet<>();
-		this.getAvailableForNewComposite().forEach(parts::add);
+	public Map<Article,Integer> getArticlesForCompositeEdit(ProductIdentifier identifier){
+		HashMap<Article, Integer> parts = new HashMap<>();
+		this.getAvailableForNewComposite().forEach(article->parts.put(article,0));
 		catalog.findById(identifier).get().getPartIds().forEach((article,count)->{
-			parts.add(catalog.findById(article).get());
+			parts.put(catalog.findById(article).get(),count);
 		});
 		parts.remove(catalog.findById(identifier).get()); //Damit man den Artikel nicht sich selbst hinzufügen kann
 
 		return parts;
 	}
+
+	public int maximumOrderAmount(ProductIdentifier identifier){
+		BigDecimal amount = inventory.findByProductIdentifier(identifier).get().getQuantity().getAmount();
+
+		return amount.intValue();
+	}
+	public boolean isHidden(ProductIdentifier identifier){
+		if(hiddenArticles.contains(catalog.findById(identifier).get())){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

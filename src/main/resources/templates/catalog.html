@@ -9,7 +9,7 @@
 <div class="ui attached stackable menu">
 
     <div class="ui container left attached">
-        <select class="ui simple search dropdown item" th:field="*{type}">
+        <select id="typebutton" class="ui simple search dropdown item" th:field="*{type}">
                 <option th:value="all" >Alle Artikel</option>
                 <option th:value="part" >Möbelteile</option>
                 <option th:value="composite">Möbel</option>
@@ -55,7 +55,8 @@
             <div class="menu">
                 <ul>
                     <a th:each="category: ${categories}">
-                        <a class="item"> <input type="checkbox"
+                        <a class="item">
+                            <input type="checkbox"
                                                 th:field="*{selectedCategories}"
                                                 th:value="${category}" />
                             <label
@@ -71,9 +72,9 @@
         <a class="item">
             <input class="ui button" type="submit" value="Filter zurücksetzen" name="reset">
         </a>
-        <a class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-            <a class="ui button" th:href="@{/catalog/all}">gesamter Katalog</a>
-        </a>
+        <div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+            <a id="editspace" class="ui button" th:href="@{/catalog/all}">gesamten Katalog anzeigen</a>
+        </div>
     </div>
         <div class="ui right attached simple dropdown item">
             neues Möbelstück

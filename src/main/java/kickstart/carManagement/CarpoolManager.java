@@ -57,23 +57,16 @@ public class CarpoolManager {
 	public String rentTruck1Dummy(){
 		this.userAccount = userAccountManager.findByUsername("chef").get();
 		Quantity weight =Quantity.of(20,Metric.KILOGRAM);
-		rentTruckByWeight(weight,userAccount);
+		rentTruckByWight(weight,userAccount);
 		return "Erfolgreich";
 	}
 
 	public String rentTruck2Dummy(){
 		this.userAccount = userAccountManager.findByUsername("daniel").get();
 		Quantity weight =Quantity.of(100,Metric.KILOGRAM);
-		rentTruckByWeight(weight,userAccount);
+		rentTruckByWight(weight,userAccount);
 		return "Erfolgreich";
 	}
-
-	public void rentTruckByWight(){
-
-		System.out.println("jo funkt");
-	}
-
-
 
 	public void addFreeTruck(TruckClassForm form){
 
@@ -103,7 +96,7 @@ public class CarpoolManager {
 		carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
-	public Truck rentTruckByWeight(Quantity weight,UserAccount rentedBy){
+	public Truck rentTruckByWight(Quantity weight,UserAccount rentedBy){
 
 		Assert.notNull(rentedBy, "useraccount must not be null!");
 		if (weight.isZeroOrNegative()){
@@ -156,14 +149,6 @@ public class CarpoolManager {
 
 			//<editor-fold desc="Bestellung">
 			takenTrucks.add(truckToRent);
-			Order order=new Order(userAccount, Cash.CASH); //dummy
-			cart=new Cart();
-			cart.addOrUpdateItem(truckToRent,Quantity.of(1));
-			cart.addItemsTo(order);
-			orderManager.save(order);
-			orderManager.payOrder(order);
-			orderManager.completeOrder(order);
-			cart.clear();
 			freeTrucks.remove(truckToRent);
 		}catch (Exception e){
 			System.out.println("Somthing went wrong in CarpoolManager in rent Truck method");

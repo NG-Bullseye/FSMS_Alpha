@@ -12,36 +12,38 @@
 	
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" sec:authorize="hasRole('ROLE_BOSS')">
-					<h1 class="h2" th:text="#{db.accountancy}"> accountany </h1>
+					<h1 class="h2" >Buchhaltung </h1>
 					<div class="time-display">
-						<td class="h2" th:text="#{db.today}">Today:  </td>
+						<td class="h2" >Heute:  </td>
 						<td th:text="${#temporals.format(time, 'dd.MM.yyyy HH:mm')}"></td>
 					</div>
 					<div class="btn-toolbar mb-2 mb-md-0">
 	
 						<form class="item" th:action="@{/skippDay}" method="post">
-						<button class="btn btn-sm btn-outline-secondary" th:text="#{db.skippDay}">
-							travel 1 Day in time
+						<button class="btn btn-sm btn-outline-secondary" >
+							Tag vorspulen
 						</button>
 						</form>
 	
 						<form class="item" th:action="@{/skippMonth}" method="post">
-							<button class="btn btn-sm btn-outline-secondary" th:text="#{db.skippMonth}">
-								travel 1 month in time
+							<button class="btn btn-sm btn-outline-secondary" >
+							Monat vorspulen
 							</button>
 						</form>
-						<!--		-->
+						<!--
 						<form class="item" th:action="@{/plus}" method="post">
 							<button class="btn btn-sm btn-outline-secondary">
 								+20 Euro
 							</button>
 						</form>
-	
+
 						<form class="item" th:action="@{/minus}" method="post">
 							<button class="btn btn-sm btn-outline-secondary" >
 								-20 Euro
 							</button>
 						</form>
+						-->
+
 
 					</div>
 				</div>
@@ -51,13 +53,13 @@
 	
 				<!-- Table -->
 				<div class="ui container">
-					<h2 th:text="#{orders.completed}"></h2>
+					<h2 >Abgeschlosene Bestellungen</h2>
 					<table class="ui celled table">
 						<thead>
 							<tr>
-								<th th:text="#{db.ammount}">Betrag</th>
+								<th >Betrag</th>
 								<!--<th th:text="#{orders.customer}">Kunde</th>-->
-								<th th:text="#{db.date}">Datum</th>
+								<th >Datum</th>
 							</tr>
 						</thead>
 						<tbody>

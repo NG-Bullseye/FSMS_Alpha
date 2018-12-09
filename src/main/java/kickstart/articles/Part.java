@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.salespointframework.core.Currencies.*;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Metric;
@@ -60,7 +62,7 @@ public class Part extends Article {
 		
 		this.colour = colour;
 
-		this.setPrice(Money.of(price, "EUR"));
+		this.setPrice(Money.of(price, EURO));
 		
 		this.quantity = Quantity.of(weight, Metric.KILOGRAM);
 
@@ -104,9 +106,6 @@ public class Part extends Article {
 	@Override
 	public void setColour(@NotNull String colour)
 			throws IllegalArgumentException	{
-		if(colour == null)	{
-			throw new NullPointerException("Part.colour shouldn't be null");
-		}
 		
 		if(colour.equals("")) {
 			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");

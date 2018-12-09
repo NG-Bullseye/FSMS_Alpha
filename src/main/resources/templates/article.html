@@ -16,17 +16,17 @@
 
     <div id="rightspace" class="twelve wide column">
         <div id="textnhead">
-            <tnorm th:text="${article.name}">Name</tnorm>
+            <t1 th:text="${article.name}">Name</t1>
         </div>
         <div id="textnhead">
             <div class="meta">
-                <tnorm th:text="${article.price}">Preis</tnorm>
+                <t2 th:text="${article.price}">Preis</t2>
             </div>
         </div>
         <div class="description">
-            <p th:text="${article.description}">Beschreibung</p>
+            <t th:text="${article.description}">Beschreibung</t>
         </div>
-        <div th:switch="${article.type}">
+        <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
         <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).PART}">
             <a class="item" th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
             </a>
@@ -35,8 +35,9 @@
             <a class="item" th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">Bearbeiten</a>
         </div>
         </div>
-        <div class="ui button">
-            <a class="item" th:href="@{/hide/{id}(id=${article.getId()})}" target="_self">Für Kunden verbergen</a>
+        <div class="ui button" th:switch="${hidden}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+            <a class="item" th:case="false" th:href="@{/hide/{id}(id=${article.getId()})}" target="_self">Für Kunden verbergen</a>
+            <a class="item" th:case="true" th:href="@{/show/{id}(id=${article.getId()})}" target="_self">Für Kunden sichtbar machen</a>
         </div>
     </div>
 </div>
@@ -44,7 +45,7 @@
     <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
         <div class="ui labeled input">
             <div class="ui label">Anzahl:</div>
-            <input name="count" type="number" min="1" max="10" value="1">
+            <input name="count" type="number" min="1" th:max="${max}" value="1">
             <input name="part" type="hidden" th:value="${article.id}">
             <input class="ui button" type="submit" value="Artikel hinzufügen">
         </div>
@@ -94,9 +95,9 @@
     </div>
 </div>
 
-    <form class="ui reply form" role="form" th:action="@{/artikel/{id}/comment(id=${article.id})}" method="post">
-        <div class="field">
-            <textarea id="comment" name="comment" cols="40" rows="5"></textarea><br/>
+    <form class="ui reply form" role="form" th:action="@{/article/{id}/comment(id=${article.id})}" method="post">
+        <div class="field" id="textnhead">
+            <textarea id="comment" name="comment" cols="40" rows="5" placeholder="Geben sie hier bitte ihren Kommentar ein"></textarea><br/>
         </div>
         <div class="field">
             <label for="rating">Bewertung</label>

@@ -20,12 +20,6 @@
  			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
   			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
-
-		<!--<form th:action="@{/addcustomertocart}">
-            <button type="submit" class="ui button" th:text="Auswählen">choose</button>
-            <input name="customer" type="hidden" th:value="${customer.userAccount.id}">
-			    </form>-->
-  
 		<div id="tablespace">
 		<div class="ui grid">
 			<div class="four wide column">
@@ -56,7 +50,6 @@
 					</a>
 				</div>
 			</div>
-		</div>
 		<div class="twelve wide column">
 			<t2>Bestellübersicht</t2>
 			<table class="ui inverted grey table">
@@ -109,11 +102,12 @@
 					</tr>
 					</tbody>
 				</table>
-				<form th:action="@{/showcustomerorders}">
+				<form th:action="@{/showcustomerorders}" sec:authorize="hasRole('ROLE_CUSTOMER')">
 					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
 					<input name="theabsoluteorderer" type="hidden" th:value="${name} + ' ' + ${email} + ' ' + ${address}">
 				</form>
 			</div>
+		</div>
 		</div>
 		<div class="ui tiny modal" id="deactivateAccount">
 			<div class="ui icon header">

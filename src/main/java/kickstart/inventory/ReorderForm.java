@@ -1,11 +1,11 @@
 package kickstart.inventory;
 
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 public interface ReorderForm {
 
-	@NotNull(message = "Bitte geben sie eine Zahl ein")
-	@Positive(message = "Bitte geben sie eine positive Zahl ein.")
-	public int getAmount();
+	@NotEmpty(message = "Bitte geben sie eine Zahl ein")
+	@Pattern(regexp = "^\\d{1,4}|$", message = "Ungültige Anzahl!")
+	public String getAmount();
 }

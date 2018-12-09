@@ -7,11 +7,9 @@
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
-<div class="ui page grid">
-    <div class=" ui segment">
 
     <form method="post" th:action="@{/edit/composite/{id}(id=${article.id})}" th:object="${compositeForm}">
-        <table id="tablespace" class="ui table">
+        <table id="editspace" class="ui definition table ">
             <thead>
             <th></th>
             <th><t3>Bisherige Werte</t3></th>
@@ -33,25 +31,31 @@
                     <input type="text" th:field="*{description}" required="required"/>
                 </td>
             </tr>
+            <tr>
+                <td><t3>Artikel:</t3></td>
+                <td></td>
+                <td></td>
+            </tr>
             <tr th:each="article : ${catalog}">
-                    <td class="ui label" th:text="${article.name}"></td>
+                <td th:text="${article.key.name}"></td>
+                <td th:text="${article.value}"></td>
                 <td>
-                    <input type="number" value="0" th:name="article_+${article.id}" >
+                    <input type="number" value="0" th:name="article_+${article.key.id}" >
                 </td>
 
             </tr>
             </tbody>
-
+            <tfoot class="full width">
+            <tr>
+                <th></th>
+                <th colspan="4">
+                    <div>
+                        <input type="submit" value="Ändern" class="ui fluid button" />
+                    </div>
+                </th>
+            </tr>
+            </tfoot>
         </table>
-        <div class="ui vertical segment">
-
-            <a class="item">
-                <input type="submit" value="Ändern" class="ui button"/>
-            </a>
-
-        </div>
     </form>
-    </div>
-</div>
 </body>
 </html>
