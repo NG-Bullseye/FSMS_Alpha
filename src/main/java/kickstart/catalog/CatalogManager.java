@@ -20,8 +20,6 @@ public class CatalogManager {
 	private HashSet<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
 	private HashSet<Article> availableForNewComposite;
-	private HashSet<Article>Articles;
-	private List<Article> unusedArticles;
 
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
@@ -48,7 +46,7 @@ public class CatalogManager {
 			}
 		});
 
-		HashSet<Article> unusedArticles = new HashSet<Article>();
+		HashSet<Article> unusedArticles = new HashSet<>();
 		
 		catalog.findAll().forEach(article -> {
 
@@ -193,10 +191,13 @@ public class CatalogManager {
 		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 
 		HashSet<Article> result = rightType;
-		result.retainAll(rightColours);
+		if(!filterform.getSelectedColours().isEmpty()) {
+			result.retainAll(rightColours);
+		}
 		result.retainAll(rightPrice);
-		result.retainAll(rightCategories);
-
+		if(!filterform.getSelectedCategories().isEmpty()) {
+			result.retainAll(rightCategories);
+		}
 		return result;
 	}
 	public void newPart(Form form){
@@ -246,6 +247,9 @@ public class CatalogManager {
 		hiddenArticles.add(catalog.findById(identifier).get());
 	}
 
+	public void makeArticleVisible(ProductIdentifier identifier){
+		hiddenArticles.remove(catalog.findById(identifier).get());
+	}
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
 		return availableForNewComposite;
@@ -277,9 +281,7 @@ public class CatalogManager {
 		LinkedList<ProductIdentifier> parents = new LinkedList<>();
 
 		HashSet<Article> allComposites = new HashSet<>();
-		catalog.findComposite().forEach(composite ->{
-			allComposites.add(composite);
-		});
+		catalog.findComposite().forEach(allComposites::add);
 		for (Article composite: allComposites
 			 ) {
 			if(composite.getPartIds().containsKey(article)){
@@ -305,4 +307,12 @@ public class CatalogManager {
 
 		return amount.intValue();
 	}
+	public boolean isHidden(ProductIdentifier identifier){
+		if(hiddenArticles.contains(catalog.findById(identifier).get())){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

@@ -87,6 +87,8 @@ public class CatalogController {
 
 		model.addAttribute("article", manager.getArticle(identifier));
 		model.addAttribute("max",manager.maximumOrderAmount(identifier));
+		model.addAttribute("hidden",manager.isHidden(identifier));
+		System.out.println(manager.isHidden(identifier));
 		return "article";
 	}
 	@PostMapping("article/{identifier}/comment")
@@ -153,6 +155,11 @@ public class CatalogController {
 	@GetMapping("hide/{identifier}")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model){
 		manager.hideArticle(identifier);
+		return "redirect:/catalog/";
+	}
+	@GetMapping("show/{identifier}")
+	public String visible(@PathVariable ProductIdentifier identifier, Model model){
+		manager.makeArticleVisible(identifier);
 		return "redirect:/catalog/";
 	}
 

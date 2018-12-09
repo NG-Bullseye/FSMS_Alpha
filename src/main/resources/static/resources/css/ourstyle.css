@@ -52,7 +52,10 @@ body {
 	width: 425px;
 }
 #editspace {
-    padding: 5%;
+    padding: 1%;
+}
+#typebutton {
+    margin: 5px 1em 5px 1em;
 }
 
 /*fonts*/
