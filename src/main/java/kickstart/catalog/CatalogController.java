@@ -97,7 +97,7 @@ public class CatalogController {
 		article.addComment(payload.toComment(businessTime.getTime()));
 		manager.saveArticle(article);
 
-		return "redirect:/artikel/"+ article.getId();
+		return "redirect:/article/"+ article.getId();
 
 
 	}

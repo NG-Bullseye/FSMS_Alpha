@@ -16,15 +16,15 @@
 
     <div id="rightspace" class="twelve wide column">
         <div id="textnhead">
-            <tnorm th:text="${article.name}">Name</tnorm>
+            <t1 th:text="${article.name}">Name</t1>
         </div>
         <div id="textnhead">
             <div class="meta">
-                <tnorm th:text="${article.price}">Preis</tnorm>
+                <t2 th:text="${article.price}">Preis</t2>
             </div>
         </div>
         <div class="description">
-            <p th:text="${article.description}">Beschreibung</p>
+            <t th:text="${article.description}">Beschreibung</t>
         </div>
         <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
         <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).PART}">
@@ -95,9 +95,9 @@
     </div>
 </div>
 
-    <form class="ui reply form" role="form" th:action="@{/artikel/{id}/comment(id=${article.id})}" method="post">
-        <div class="field">
-            <textarea id="comment" name="comment" cols="40" rows="5"></textarea><br/>
+    <form class="ui reply form" role="form" th:action="@{/article/{id}/comment(id=${article.id})}" method="post">
+        <div class="field" id="textnhead">
+            <textarea id="comment" name="comment" cols="40" rows="5" placeholder="Geben sie hier bitte ihren Kommentar ein"></textarea><br/>
         </div>
         <div class="field">
             <label for="rating">Bewertung</label>
