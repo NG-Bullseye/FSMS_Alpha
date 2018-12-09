@@ -1,6 +1,7 @@
 package kickstart.accountancy;
 
 
+import kickstart.order.CartOrderManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
@@ -37,31 +38,31 @@ public class AccountancyManager {
 	private Accountancy accountancy;
 	private BusinessTime businessTime;
 	private Cart cart;
-	private OrderManager<Order> orderManager;
 	private UserAccountManager userAccountManager;
 	private Catalog catalog;
 	private Product product;
 	private UserAccount userAccount;
+	//private final CartOrderManager cartOrderManager;
 	@Autowired
-	public AccountancyManager(Catalog catalog, UserAccountManager userAccountManager, OrderManager<Order> orderManager, Accountancy accountancy, BusinessTime businessTime) {
+	public AccountancyManager(Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy=accountancy;
 		this.catalog=catalog;
 		this.userAccountManager=userAccountManager;
 		this.cart=new Cart();
 		this.businessTime=businessTime;
-		this.orderManager=orderManager;
-		Assert.notNull(orderManager, "OrderManager must not be null!");
+
+
 		Assert.notNull(accountancy, "accountancy must not be null!");
 	}
 
-	void initOrder(){
+	/*void initOrder(){
 		this.product=new Product("Stuhl", Money.of(20, EURO));
 		catalog.save(product);
 		catalog.save(new InventoryItem(product, Quantity.of(1000)));
 
 		Role customerRole = Role.of("ROLE_CUSTOMER");
 		this.userAccount = userAccountManager.create("dummy"+(new Random()).nextInt(999999), "123", customerRole);
-	}
+	}*/
 
 	//<editor-fold desc="Time Skipp Logic">
 	public LocalDateTime getTime(){
@@ -70,10 +71,13 @@ public class AccountancyManager {
 
 	void skippDay(){
 		businessTime.forward(Duration.ofDays(1));
+
 	}
 
 	void skippMonth(){
+
 		businessTime.forward(Duration.ofDays(30));
+
 	}
 	//</editor-fold>
 

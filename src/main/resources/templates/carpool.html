@@ -9,7 +9,7 @@
         <nav th:include="navbar :: navbar"></nav>
 
 
-        <h1 class="display-4" th:text="#{cp.header}"></h1>
+        <h1 class="display-4">Lkw Ausleihe</h1>
 
 
         <div class="ui container">
@@ -83,8 +83,8 @@
 
                 </div>
                 <!--</editor-fold>-->
+                <!--
 
-                <!--<editor-fold desc="Rent">-->
                 <div class="card" sec:authorize="hasRole('ROLE_BOSS')">
 
                     <div class="content">
@@ -102,18 +102,20 @@
                     <div class="extra content">
                         <div class="ui two buttons">
                             <form class="item" th:action="@{/rentTruck1Dummy}" method="post">
-                                <button class="ui basic green button" th:text="#{cp.rent1}">
+                                <button class="ui basic green button">
                                     addTruckToInventory
                                 </button>
                             </form>
 
                             <form class="item" th:action="@{/rentTruck2Dummy}" method="post">
-                                <button class="ui basic green button" th:text="#{cp.rent2}">
+                                <button class="ui basic green button">
                                     addTruckToInventory
                                 </button>
                             </form>
                         </div>
                     </div>
+                    -->
+
                 </div>
                 <!--</editor-fold>-->
 
@@ -121,13 +123,13 @@
 
             <!--<editor-fold desc="Bestand Table">-->
             <div class="ui container">
-                <h2 th:text="#{cp.bestand}"></h2>
+                <h2 >Bestand</h2>
                 <table class="ui celled table">
                     <thead>
 
                     <tr>
-                        <th th:text="#{cp.free}"></th>
-                        <th th:text="#{cp.taken}"></th>
+                        <th >Freie Lkws</th>
+                        <th >Ausleihbare Lkws</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -140,12 +142,12 @@
             </div>
 
             <div class="ui container">
-                <h2 th:text="#{cp.freeTrucks}"></h2>
+                <h2 >Freie Lkws</h2>
                 <table class="ui celled table">
                      <thead>
                     <tr>
-                        <th th:text="#{cp.freeTrucksName}"></th>
-                        <th th:text="#{cp.freeTrucksCapacity}"></th>
+                        <th >Lkw Bezeichnung</th>
+                        <th >Kapazität</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -159,13 +161,13 @@
             </div>
 
             <div class="ui container">
-                <h2 th:text="#{cp.takenTrucks}"></h2>
+                <h2 >Ausgeliehene Lkws</h2>
                 <table class="ui celled table">
                     <thead>
                     <tr>
                         <th >Ausgeliehen von</th>
-                        <th th:text="#{cp.takenTrucksName}"></th>
-                        <th th:text="#{cp.takenTrucksCapacity}"></th>
+                        <th >Lkw Bezeichung</th>
+                        <th >Kapazität</th>
                         <th >Ausgeliehen am</th>
                     </tr>
                     </thead>

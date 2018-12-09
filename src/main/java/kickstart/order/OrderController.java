@@ -124,7 +124,7 @@ public class OrderController {
 		model.addAttribute("name", listofstring[0]+ " " + listofstring[1]);
 		model.addAttribute("email", listofstring[2]);
 		model.addAttribute("address", listofstring[3] + " " + listofstring[4] + " " + listofstring[5] + " " + listofstring[6]);
-		cartordermanager.changeStatus(userAccount);
+		cartordermanager.changeStatus();
 
 		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
 		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
