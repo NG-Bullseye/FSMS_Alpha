@@ -144,8 +144,8 @@ public abstract class Article extends Product{
 	}
 
 	public double getAverageRating() {
-		double amount = comments.size();
-		if(amount==0) {return 0;}
+		int amount = comments.size();
+		if(amount == 0) {return 0;}
 		else {
 			double rating = 0;
 			for (Comment c : comments) {

@@ -86,8 +86,9 @@ public class CatalogController {
 	public String detail(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
-		System.out.println(manager.getArticle(identifier).getDescription());
-
+		model.addAttribute("max",manager.maximumOrderAmount(identifier));
+		model.addAttribute("hidden",manager.isHidden(identifier));
+		System.out.println(manager.isHidden(identifier));
 		return "article";
 	}
 	@PostMapping("article/{identifier}/comment")
@@ -96,7 +97,7 @@ public class CatalogController {
 		article.addComment(payload.toComment(businessTime.getTime()));
 		manager.saveArticle(article);
 
-		return "redirect:/artikel/"+ article.getId();
+		return "redirect:/article/"+ article.getId();
 
 
 	}
@@ -154,6 +155,11 @@ public class CatalogController {
 	@GetMapping("hide/{identifier}")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model){
 		manager.hideArticle(identifier);
+		return "redirect:/catalog/";
+	}
+	@GetMapping("show/{identifier}")
+	public String visible(@PathVariable ProductIdentifier identifier, Model model){
+		manager.makeArticleVisible(identifier);
 		return "redirect:/catalog/";
 	}
 

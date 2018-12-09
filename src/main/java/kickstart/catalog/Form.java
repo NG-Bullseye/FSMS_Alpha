@@ -38,7 +38,6 @@ public class Form {
 		this.name = name;
 	}
 
-	@DecimalMin("1.0") @DecimalMax("50000")
 	public double getPrice() {
 		return price;
 	}
