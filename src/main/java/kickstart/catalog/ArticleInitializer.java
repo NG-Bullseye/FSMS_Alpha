@@ -3,19 +3,13 @@ package kickstart.catalog;
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
-import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
-import org.salespointframework.inventory.InventoryItem;
-import org.salespointframework.quantity.Quantity;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-
-import static org.salespointframework.core.Currencies.EURO;
 
 @Component
 @Order(20)
@@ -46,8 +40,8 @@ public class ArticleInitializer implements DataInitializer {
 		Part p1 = new Part("mittelhohes Tischbein","ein mittelhohes Tischbein",15,20.0, c1,cat1);
 		Part p2 = new Part("mittelgroße Tischplatte","eine mittelgroße Tischplatte",55,70.0, c1,cat1);
 
-		catalog.save(new Part("Matratze 140x190","eine 140x190 große Matratze",18,200.0, c1,cat2));
-		catalog.save(new Part("Bettgestell 140x190","ein Bettgestell für eine 140x190 große Matratze",30,75.0, c1,cat1));
+		catalog.save(new Part("Matratze 140x190","eine 140x190 große Matratze",75,55, c1,cat2));
+		catalog.save(new Part("Bettgestell 140x190","ein Bettgestell für eine 140x190 große Matratze",32,75.0, c1,cat1));
 
 		LinkedList<Article> l1 = new LinkedList<>();
 		for(int i=0;i<4;i++){

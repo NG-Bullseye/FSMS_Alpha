@@ -44,7 +44,7 @@
     <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
         <div class="ui labeled input">
             <div class="ui label">Anzahl:</div>
-            <input name="count" type="number" min="1" max="10" value="1">
+            <input name="count" type="number" min="1" th:max="${max}" value="1">
             <input name="part" type="hidden" th:value="${article.id}">
             <input class="ui button" type="submit" value="Artikel hinzufügen">
         </div>

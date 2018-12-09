@@ -86,8 +86,7 @@ public class CatalogController {
 	public String detail(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
-		System.out.println(manager.getArticle(identifier).getDescription());
-
+		model.addAttribute("max",manager.maximumOrderAmount(identifier));
 		return "article";
 	}
 	@PostMapping("article/{identifier}/comment")

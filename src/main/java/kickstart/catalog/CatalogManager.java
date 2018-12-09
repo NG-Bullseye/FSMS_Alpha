@@ -1,17 +1,16 @@
 package kickstart.catalog;
 
 import kickstart.articles.*;
-import kickstart.inventory.InventoryManager;
+import static org.salespointframework.core.Currencies.*;
 import kickstart.inventory.ReorderableInventoryItem;
-
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -27,7 +26,7 @@ public class CatalogManager {
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
-		this.hiddenArticles = new HashSet<Article>();
+		this.hiddenArticles = new HashSet<>();
 /*
 	@Autowired
 	private InventoryManager inventory;
@@ -52,12 +51,12 @@ public class CatalogManager {
 		HashSet<Article> unusedArticles = new HashSet<Article>();
 		
 		catalog.findAll().forEach(article -> {
-			System.out.println(article.getParents());
+
 			if(article.getParents().isEmpty()){
 				unusedArticles.add(article);
 			}
 		});
-		System.out.println(unusedArticles);
+
 		return visible;
 	}
 
@@ -72,8 +71,9 @@ public class CatalogManager {
 		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
-		afterEdit.setPrice(Money.of(article.getPrice(), "EUR"));
+		afterEdit.setPrice(Money.of(article.getPrice(),EURO));
 		afterEdit.setWeight(article.getWeight());
+		afterEdit.getCategories().forEach(afterEdit::removeCategory);
 		article.getSelectedCategories().forEach(afterEdit::addCategory);
 		article.getSelectedColours().forEach(afterEdit::setColour);
 
@@ -187,7 +187,7 @@ public class CatalogManager {
 		catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
 
 		HashSet<Article> rightPrice = new HashSet<>();
-		catalog.findByPrice(Money.of(filterform.getMinPrice(),"EUR"),Money.of(filterform.getMaxPrice(),"EUR")).forEach(rightPrice::add);
+		catalog.findByPrice(Money.of(filterform.getMinPrice(),EURO),Money.of(filterform.getMaxPrice(),EURO)).forEach(rightPrice::add);
 
 		HashSet<Article> rightCategories = new HashSet<>();
 		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
@@ -298,5 +298,11 @@ public class CatalogManager {
 		parts.remove(catalog.findById(identifier).get()); //Damit man den Artikel nicht sich selbst hinzufügen kann
 
 		return parts;
+	}
+
+	public int maximumOrderAmount(ProductIdentifier identifier){
+		BigDecimal amount = inventory.findByProductIdentifier(identifier).get().getQuantity().getAmount();
+
+		return amount.intValue();
 	}
 }
