@@ -10,6 +10,7 @@ import kickstart.carManagement.Truck;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
+import org.salespointframework.order.OrderStatus;
 import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
@@ -43,6 +44,7 @@ public class CartOrderManager {
 	}
 
 	public UserAccount getAccount(){
+		changeStatus();
 		return account;
 	}
 
@@ -52,6 +54,8 @@ public class CartOrderManager {
 	}
 
 	public String cancelorpayOrder(Order order, String choose){
+
+		changeStatus();
 
 		if(choose.equals("bezahlen")){
 			orderManager.payOrder(order);
@@ -97,6 +101,7 @@ public class CartOrderManager {
 
 
 	public String addCostumer(UserAccount account){
+		changeStatus();
 		this.account = account;
 		return "redirect:/cart";
 	}
@@ -116,11 +121,11 @@ public class CartOrderManager {
 		return "redirect:/catalog";
 	}
 
-	public void changeStatus(UserAccount account){
+	public void changeStatus(){
 
 		LocalDateTime date = businesstime.getTime();
 
-		for(Order order: orderManager.findBy(account)){
+		for(Order order: orderManager.findBy(OrderStatus.PAID)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 
 			if(order.isPaid() && !order.isCompleted()){

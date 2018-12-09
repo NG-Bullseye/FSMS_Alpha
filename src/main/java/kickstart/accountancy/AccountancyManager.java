@@ -1,6 +1,7 @@
 package kickstart.accountancy;
 
 
+import kickstart.order.CartOrderManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
@@ -41,6 +42,7 @@ public class AccountancyManager {
 	private Catalog catalog;
 	private Product product;
 	private UserAccount userAccount;
+	//private final CartOrderManager cartOrderManager;
 	@Autowired
 	public AccountancyManager(Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy=accountancy;
@@ -48,6 +50,7 @@ public class AccountancyManager {
 		this.userAccountManager=userAccountManager;
 		this.cart=new Cart();
 		this.businessTime=businessTime;
+
 
 		Assert.notNull(accountancy, "accountancy must not be null!");
 	}
@@ -68,10 +71,13 @@ public class AccountancyManager {
 
 	void skippDay(){
 		businessTime.forward(Duration.ofDays(1));
+
 	}
 
 	void skippMonth(){
+
 		businessTime.forward(Duration.ofDays(30));
+
 	}
 	//</editor-fold>
 
