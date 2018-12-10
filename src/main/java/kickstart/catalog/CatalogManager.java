@@ -66,6 +66,7 @@ public class CatalogManager {
 
 		this.createAvailableForNewComposite();
 		Article afterEdit = catalog.findById(identifier).get();
+		catalog.delete(afterEdit);
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
 		afterEdit.setPrice(Money.of(article.getPrice(),EURO));
@@ -80,6 +81,7 @@ public class CatalogManager {
 
 	public void editComposite(ProductIdentifier identifier, CompositeForm form,Map<String, String> partsCount){
 		Article afterEdit = catalog.findById(identifier).get();
+		catalog.delete(afterEdit);
 		afterEdit.setName(form.getName());
 		afterEdit.setDescription(form.getDescription());
 		LinkedList<Article> partsBefore = new LinkedList<>();
