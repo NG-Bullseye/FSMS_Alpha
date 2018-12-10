@@ -78,6 +78,10 @@ public class User {
 	}
 
 	public void setSalary(int salary) {
+		if (salary < 0) {
+			throw new IllegalArgumentException();
+			
+		}
 		this.salary = salary;
 	}
 
