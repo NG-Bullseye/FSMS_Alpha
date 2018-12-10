@@ -9,7 +9,7 @@
 <div class="ui attached stackable menu">
 
     <div class="ui container left attached">
-        <select id="typebutton" class="ui simple search dropdown item" th:field="*{type}">
+        <select class="ui simple search dropdown item" th:field="*{type}">
                 <option th:value="all" >Alle Artikel</option>
                 <option th:value="part" >Möbelteile</option>
                 <option th:value="composite">Möbel</option>
@@ -88,8 +88,7 @@
 
 </div>
 </form>
-<br>
-<br>
+<div id="tablespace">
 <div class="ui segment pushable">
 <div class="pusher">
     <div class="ui link cards" th:remove="all-but-first">
@@ -104,6 +103,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 

@@ -68,6 +68,10 @@ public User findUserById (long id) {
 		User user = users.findById(id);
 		return user;
 	}
+
+	public Streamable<User> findAll() {
+		return Streamable.of(users.findAll());
+	}
 	
 	public Streamable<User> findAllCustomers() {
 		Iterable<User> userList = users.findAll();
