@@ -14,14 +14,12 @@
           <i class="bug icon"></i>
         </t1>
         <br/>
-        <p>
           <a href="index.html" th:href="@{/}">
-        <div class="ui primary basic button">
-        <i class="terminal icon"></i>
-        Zurück zur Startseite
-        </div>
-        </a>
-        </p>
+	        <div id="modalbutton" class="ui primary basic button">
+	        	<i class="terminal icon"></i>
+	        	Zurück zur Startseite
+	        </div>
+        	</a>
       </div>
       <div id="tablespace">
         <table class="ui celled table">
@@ -33,11 +31,11 @@
           </thead>
           <tbody>
             <tr>
-              <td>Date</td>
+              <td>Datum</td>
               <td th:text="${timestamp}"/>
             </tr>
             <tr>
-              <td>Path</td>
+              <td>Adresse</td>
               <td th:text="${path}"/>
             </tr>
             <tr>
@@ -45,18 +43,19 @@
               <td th:text="${error}"/>
             </tr>
             <tr>
-              <td>Status</td>
+              <td>Fehler Code</td>
               <td th:text="${status}"/>
             </tr>
             <tr>
-              <td>Message</td>
+              <td>Beschreibung</td>
               <td th:text="${message}"/>
             </tr>
             <tr>
               <td>Exception</td>
               <td th:text="${exception}"/>
             </tr>
-            <tr>
+<!--             sec:authorize="hasRole('ROLE_BOSS')" -->
+            <tr> 
               <td>Trace</td>
               <td>
                 <pre th:text="${trace}"/>
