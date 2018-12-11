@@ -44,6 +44,18 @@
 									Feuern!
 								</div>
 							</a>
+							<a th:href="@{'/changeRole'(user=${customer.id}, type=2)}" sec:authorize="hasRole('ROLE_BOSS')">
+								<div class="ui button" th:if="!${customer.userAccount.hasRole('ROLE_BOSS')} AND ${customer.userAccount.hasRole('ROLE_EMPLOYEE')}">
+									<i class="user md icon"></i>
+									Zum Admin machen
+								</div>
+							</a>
+							<a th:href="@{'/changeRole'(user=${customer.id}, type=3)}" sec:authorize="hasRole('ROLE_BOSS')">
+								<div class="ui button" th:if="${customer.userAccount.hasRole('ROLE_BOSS')} AND !(${customer.id} == ${loggedin})">
+									<i class="angle double down icon"></i>
+									Zum Mitarbeiter machen
+								</div>
+							</a>
 						</td>
 					</tr>
 				</tbody>

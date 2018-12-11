@@ -2,7 +2,6 @@ package kickstart.user;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.salespointframework.useraccount.Role;
@@ -46,14 +45,53 @@ public class UserTest {
 	
 	@Test
 	@Transient
-	@DisplayName("User Test running")
-	public void Salary () {
+	public void Salary() {
 		
 		Assertions.assertEquals(0, user.getSalary(), "Gehalt sollte nach Initialisierung 0 sein!");
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			user.setSalary(negativeSalary);
 	    }, "Gehalt sollte nicht negativ sein!");
 		Assertions.assertEquals(0, user.getSalary(), "Gehalt sollte nach Initialisierung 0 sein!");
+		
+	}
+	
+	@Test
+	@Transient
+	public void Address() {
+		
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			user.setAddress(null);
+	    }, "Adresse muss spezifiziert sein!");
+		
+	}
+	
+	@Test
+	@Transient
+	public void Email() {
+		
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			user.setEmail(null);
+	    }, "Email muss spezifiziert sein!");
+		
+	}
+	
+	@Test
+	@Transient
+	public void Firstname() {
+		
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			user.setFirstname(null);
+	    }, "Vorname muss spezifiziert sein!");
+		
+	}
+	
+	@Test
+	@Transient
+	public void Lastname() {
+		
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			user.setLastname(null);
+	    }, "Nachname muss spezifiziert sein!");
 		
 	}
 }
