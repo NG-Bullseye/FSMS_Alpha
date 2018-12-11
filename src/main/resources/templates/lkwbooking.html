@@ -37,7 +37,9 @@
 
 <div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
 <div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
-<div th:align="center"><h2>Wollen sie einen LKW mieten?</h2></div>
+<div><h2>Wollen sie einen LKW mieten?</h2></div>
+<div th:align="right"><h2>Bitte Lieferort auswählen</h2></div>
+
 <div>
     <form th:action="@{/renttruck}">
         <button type="submit" class="ui button" th:text="'LKW' +' '+ 'mieten'">button</button>
@@ -45,6 +47,12 @@
     <form th:action="@{/addorder}">
         <button id="buttonspace" type="submit" class="ui button" th:text="Nein">button</button>
     </form>
+   <!-- <select th:align="right" th:object="${CustomerOrder}">
+        <option th:field="*{destination}" th:value="home">Home</option>
+        <option th:field="*{destination}" value="flatland">Flatland</option>
+        <option th:field="*{destination}" value="otherplace">Otherplace</option>
+
+    </select>-->
 </div>
 </body>
 </html>

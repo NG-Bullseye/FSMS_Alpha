@@ -29,12 +29,12 @@ import org.salespointframework.time.BusinessTime;
 public class OrderController {
 
 	private final CartOrderManager cartordermanager;
-	private final OrderManager<Order> orderManager;
+	private final OrderManager<CustomerOrder> orderManager;
 	private final BusinessTime businesstime;
 	private final CarpoolManager carpoolManager;
 	private final UserManagement userManagement;
 
-	OrderController(OrderManager<Order> orderManager, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement){
+	OrderController(OrderManager<CustomerOrder> orderManager, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
@@ -116,33 +116,30 @@ public class OrderController {
 	}
 
 	@RequestMapping("/showcustomerorders")
-	String showcostumerorder(@RequestParam("theabsoluteorderer") String orderer, @LoggedIn UserAccount userAccount, Model model){
+	String showcostumerorder(@RequestParam(value = "theabsoluteorderer") long orderer,
+							 @RequestParam("username") String name,
+							 @RequestParam("usermail") String mail,
+							 @RequestParam("useraddress") String living,Model model){
 
-		String[] listofstring = orderer.split(" ");
+		UserAccount userAccount = userManagement.findUserById(orderer).getUserAccount();
 
+		model.addAttribute("name", name);
+		model.addAttribute("email",mail);
+		model.addAttribute("address", living);
 
-		model.addAttribute("name", listofstring[0]+ " " + listofstring[1]);
-		model.addAttribute("email", listofstring[2]);
-		model.addAttribute("address", listofstring[3] + " " + listofstring[4] + " " + listofstring[5] + " " + listofstring[6]);
 		cartordermanager.changeStatus();
 
-		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted));
+		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isversendet));
 		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
 		model.addAttribute("ordersofthedudepaid", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
-		//muss gefixed werden
-		//model.addAttribute("ordersofthedudedeliverd",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
+		model.addAttribute("ordersofthedudedeliverd",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isabholbereit));
+		model.addAttribute("orderscomplete",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isabgeholt));
 
-		return "/customeraccount";
+		return "customeraccount";
 	}
 
 	@RequestMapping("/cancelthatorder")
-	String cancelOrder(@RequestParam("orderidentity") Order order, @RequestParam("choose") String choose, @RequestParam("theabsoluteorderer") String orderer , Model model){
-
-		String[] listofstring = orderer.split(" ");
-
-		model.addAttribute("name", listofstring[0]+ " " + listofstring[1]);
-		model.addAttribute("email", listofstring[2]);
-		model.addAttribute("address", listofstring[3] + " " + listofstring[4] + " " + listofstring[5] + " " + listofstring[6]);
+	String cancelOrder(@RequestParam("orderidentity") CustomerOrder order, @RequestParam("choose") String choose, Model model){
 
 		return cartordermanager.cancelorpayOrder(order ,choose);
 	}
