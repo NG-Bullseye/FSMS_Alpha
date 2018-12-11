@@ -7,6 +7,8 @@ import javax.persistence.OneToOne;
 
 import org.salespointframework.useraccount.UserAccount;
 
+import lombok.NonNull;
+
 @Entity
 public class User {
 
@@ -45,7 +47,7 @@ public class User {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(@NonNull String address) {
 		this.address = address;
 	}
 
@@ -53,7 +55,7 @@ public class User {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(@NonNull String email) {
 		this.email = email;
 	}
 
@@ -61,7 +63,7 @@ public class User {
 		return firstname;
 	}
 
-	public void setFirstname(String firstname) {
+	public void setFirstname(@NonNull String firstname) {
 		this.firstname = firstname;
 	}
 
@@ -69,7 +71,7 @@ public class User {
 		return lastname;
 	}
 
-	public void setLastname(String lastname) {
+	public void setLastname(@NonNull String lastname) {
 		this.lastname = lastname;
 	}
 
