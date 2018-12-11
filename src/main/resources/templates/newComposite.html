@@ -27,7 +27,7 @@
                 <div th:each="article : ${catalog}">
                     <div class="ui labeled input">
                         <div class="ui label" th:text="${article.name}"></div>
-                        <input type="number" value="0" th:name="article_+${article.id}" >
+                        <input type="number" min="0" value="0" th:name="article_+${article.id}" >
                     </div>
                 </div>
 
