@@ -26,7 +26,7 @@ public class User {
 	@SuppressWarnings("unused")
 	public User() {}
 
-	public User(UserAccount userAccount, String firstname, String lastname, String email, String address) {
+	public User(UserAccount userAccount, @NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull String address) {
 		this.userAccount = userAccount;
 		this.firstname = firstname;
 		this.lastname =lastname;

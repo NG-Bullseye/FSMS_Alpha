@@ -2,7 +2,6 @@ package kickstart.user;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.salespointframework.useraccount.Role;
@@ -46,7 +45,6 @@ public class UserTest {
 	
 	@Test
 	@Transient
-	@DisplayName("User Test running")
 	public void Salary() {
 		
 		Assertions.assertEquals(0, user.getSalary(), "Gehalt sollte nach Initialisierung 0 sein!");
@@ -59,7 +57,6 @@ public class UserTest {
 	
 	@Test
 	@Transient
-	@DisplayName("User Test running")
 	public void Address() {
 		
 		Assertions.assertThrows(NullPointerException.class, () -> {
@@ -70,7 +67,6 @@ public class UserTest {
 	
 	@Test
 	@Transient
-	@DisplayName("User Test running")
 	public void Email() {
 		
 		Assertions.assertThrows(NullPointerException.class, () -> {
@@ -81,7 +77,6 @@ public class UserTest {
 	
 	@Test
 	@Transient
-	@DisplayName("User Test running")
 	public void Firstname() {
 		
 		Assertions.assertThrows(NullPointerException.class, () -> {
@@ -92,7 +87,6 @@ public class UserTest {
 	
 	@Test
 	@Transient
-	@DisplayName("User Test running")
 	public void Lastname() {
 		
 		Assertions.assertThrows(NullPointerException.class, () -> {
