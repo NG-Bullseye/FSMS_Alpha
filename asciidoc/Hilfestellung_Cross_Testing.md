@@ -4,7 +4,7 @@ Dieses Dokument soll ein paar Hilfestellungen und Tipps für das Testing geben. 
 
 ## User Account Verwaltung
 
--Es gibt 3 Arten von Nutzern:
+- Es gibt 3 Arten von Nutzern:
   - Kunde (Login: Daniel, Passwort: 123)
   - Mitarbeiter (Login: mitarbeitah, Passwort: 123)
   - Admin/Chef (Login: chef, Passwort: 123)
