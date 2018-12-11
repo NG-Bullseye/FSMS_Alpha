@@ -97,9 +97,15 @@
                 <a class="header" th:href="@{/article/{id}(id=${article.id})}" th:text="${article.name}">Artikel</a>
             </div>
             <div class="content">
-                <div class="description" th:text="${article.price}">9.99 €</div>
-                <div class="description" th:text="${article.colour}">schwarz</div>
-                <div class="description" th:text="${article.getAllCategories()}">Kategorie</div>
+                <div class="description" th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">9.99 €</div>
+                <div class="description">
+                    <p>verfügbare Farben:</p>
+                    <span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
+                </div>
+                <div class="description">
+                    <p>Kategorie</p>
+                    <span th:each="category :${article.getAllCategories()}"></span>
+                </div>
             </div>
         </div>
     </div>

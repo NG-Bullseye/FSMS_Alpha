@@ -8,7 +8,7 @@
 <body>
 <nav th:include="navbar :: navbar"></nav>
 
-<form method="post" th:action="@{/catalog/part/new}" th:object="${form}">
+<form method="post" th:action="@{/edit/{id}(id=${article.id})}" th:object="${form}">
     <table id="editspace" class="ui definition table">
     <thead>
         <th></th>
