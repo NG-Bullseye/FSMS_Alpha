@@ -81,7 +81,6 @@ public class CatalogManager {
 
 	public void editComposite(ProductIdentifier identifier, CompositeForm form,Map<String, String> partsCount){
 		Article afterEdit = catalog.findById(identifier).get();
-		catalog.delete(afterEdit);
 		afterEdit.setName(form.getName());
 		afterEdit.setDescription(form.getDescription());
 		LinkedList<Article> partsBefore = new LinkedList<>();
@@ -102,8 +101,8 @@ public class CatalogManager {
 				afterEdit.addPart(article);
 			}
 		});
-		if(!partsBefore.isEmpty()){
-			for(int i = 0; i < partsBefore.size()-1; i++){
+		if(!partsBefore.isEmpty()) {
+			for (int i = 0; i <= partsBefore.size() - 1; i++) {
 				afterEdit.removePart(partsBefore.get(i));
 			}
 		}
@@ -191,6 +190,8 @@ public class CatalogManager {
 		HashSet<Article> rightCategories = new HashSet<>();
 		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 
+		HashSet<Article> visible = new HashSet<>();
+		this.getVisibleCatalog().forEach(visible::add);
 		HashSet<Article> result = rightType;
 		if(!filterform.getSelectedColours().isEmpty()) {
 			result.retainAll(rightColours);
@@ -199,6 +200,7 @@ public class CatalogManager {
 		if(!filterform.getSelectedCategories().isEmpty()) {
 			result.retainAll(rightCategories);
 		}
+		result.retainAll(visible);
 		return result;
 	}
 	public void newPart(Form form){

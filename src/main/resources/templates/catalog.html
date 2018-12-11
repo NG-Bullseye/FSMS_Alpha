@@ -104,7 +104,7 @@
                 </div>
                 <div class="description">
                     <p>Kategorie</p>
-                    <span th:each="category :${article.getAllCategories()}"></span>
+                    <span th:each="category :${article.getAllCategories()}" th:text="${category}"></span>
                 </div>
             </div>
         </div>

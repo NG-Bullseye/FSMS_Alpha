@@ -38,9 +38,9 @@
             </tr>
             <tr th:each="article : ${catalog}">
                 <td th:text="${article.key.name}"></td>
-                <td th:text="${article.value}"></td>
+                <td class="center aligned" th:text="${article.value}"></td>
                 <td>
-                    <input type="number" value="0" th:name="article_+${article.key.id}" >
+                    <input type="number" min="0" value="0" th:name="article_+${article.key.id}" >
                 </td>
 
             </tr>

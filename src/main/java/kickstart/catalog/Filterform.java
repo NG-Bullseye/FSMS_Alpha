@@ -14,6 +14,7 @@ public class Filterform {
 	private String type;
 	private ArrayList<String> selectedCategories;
 
+
 	public Filterform(){}
 
 	public void setSelectedColours(ArrayList<String> selectedColours) {

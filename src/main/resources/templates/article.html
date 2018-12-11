@@ -20,7 +20,7 @@
         </div>
         <div id="textnhead">
             <div class="meta">
-                <t2 th:text="${article.price}">Preis</t2>
+                <t2 th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Preis</t2>
             </div>
         </div>
         <div class="description">
