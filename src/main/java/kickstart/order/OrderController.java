@@ -8,6 +8,7 @@ import kickstart.carManagement.CarpoolManager;
 import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
+import org.salespointframework.order.OrderIdentifier;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
 import org.salespointframework.quantity.Quantity;
@@ -142,5 +143,24 @@ public class OrderController {
 	String cancelOrder(@RequestParam("orderidentity") CustomerOrder order, @RequestParam("choose") String choose, Model model){
 
 		return cartordermanager.cancelorpayOrder(order ,choose);
+	}
+	
+	@GetMapping("/sideinventory")
+	public String showSideInventory(Model model) {
+		
+		model.addAttribute("sideInventories", cartordermanager.getSideInventories());
+		
+		return "sideinventory";
+	}
+	
+	@PostMapping("pickup/{id}")
+	public String pickUpOrder(@PathVariable OrderIdentifier id,Model model) {
+		if(orderManager.contains(id)) {
+			CustomerOrder order = orderManager.get(id).get();
+			
+			order.setStatus(Status.abgeholt);
+		}
+		
+		return "redirect:/sideinventory";
 	}
 }

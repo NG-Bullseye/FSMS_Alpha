@@ -20,6 +20,10 @@ import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.TimerTask;
 
 
@@ -29,6 +33,9 @@ public class CartOrderManager {
 	private final BusinessTime businesstime;
 	private Quantity wight = Quantity.of(0, Metric.KILOGRAM);
 	private final CarpoolManager carpoolManager;
+	
+	private final List<String> destinations;
+	
 	TimerTask timerTask = new TimerTask() {
 		@Override
 		public void run() {
@@ -42,6 +49,11 @@ public class CartOrderManager {
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
 		this.timerTask.run();
+		this.destinations = new ArrayList<String>();
+		
+		this.destinations.add("Berlin");
+		this.destinations.add("Hamburg");
+		this.destinations.add("Stuttgart");
 
 	}
 
@@ -61,6 +73,10 @@ public class CartOrderManager {
 	public Cart initializeCart() {
 
 		return new Cart();
+	}
+	
+	public List<String> getDestinations() {
+		return destinations;
 	}
 
 	public void updateStatus(CustomerOrder order){
@@ -167,6 +183,26 @@ public class CartOrderManager {
 				}
 			}
 		}
+		
+	}
+	
+	public Map<String, List<Order>> getSideInventories() {
+		Map<String, List<Order>> sideInventories = new HashMap<String, List<Order>>();
+		
+		for(String destination: destinations) {
+			sideInventories.put(destination, new ArrayList<Order>());
+		}
+		
+		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)) {
+			if(order.isabholbereit()) {
+				List<Order> orders = sideInventories.get(order.getDestination());
+				orders.add(order);
+				
+				sideInventories.put(order.getDestination(), orders);
+			}
+		}
+		
+		return sideInventories;
 	}
 
 
