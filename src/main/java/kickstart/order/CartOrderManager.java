@@ -29,19 +29,13 @@ public class CartOrderManager {
 	private final BusinessTime businesstime;
 	private Quantity wight = Quantity.of(0, Metric.KILOGRAM);
 	private final CarpoolManager carpoolManager;
-	TimerTask timerTask = new TimerTask() {
-		@Override
-		public void run() {
-			changeStatus();
-		}
-	};
-
+	private String destination = "Home";
 
 	CartOrderManager(OrderManager<CustomerOrder> ordermanager, BusinessTime businesstime, CarpoolManager carpoolManager){
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
-		this.timerTask.run();
+
 
 	}
 
@@ -58,13 +52,14 @@ public class CartOrderManager {
 		return account;
 	}
 
+	public String setDestination(String destination){
+		this.destination = destination;
+		return "redirect:/lkwbooking";
+	}
+
 	public Cart initializeCart() {
 
 		return new Cart();
-	}
-
-	public void updateStatus(CustomerOrder order){
-
 	}
 
 	public String cancelorpayOrder(CustomerOrder order, String choose){
@@ -125,8 +120,10 @@ public class CartOrderManager {
 		if(!cart.isEmpty() ) {
 			CustomerOrder order = new CustomerOrder(account, Cash.CASH);
 			cart.addItemsTo(order);
+			order.setDestination(destination);
 			orderManager.save(order);
 
+			destination = "Home";
 			wight = Quantity.of(0,Metric.KILOGRAM);
 			cart.clear();
 
@@ -135,7 +132,7 @@ public class CartOrderManager {
 		return "redirect:/catalog";
 	}
 
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(fixedRate = 5000L)
 	public void changeStatus(){
 
 		LocalDateTime date = businesstime.getTime();

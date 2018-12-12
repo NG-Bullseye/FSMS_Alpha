@@ -108,6 +108,10 @@ public class OrderController {
 
 	}
 
+	@RequestMapping("/choosedestination")
+	String choosedestination(@RequestParam("destination")String destination){
+		return cartordermanager.setDestination(destination);
+	}
 
 	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart){

@@ -74,7 +74,7 @@
 							</form>
 						</td>
 						<td align="center" th:width="50">
-							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_CUSTOMER')">
+							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 								<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
 								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
 								<input name="choose" type="hidden" th:value="stornieren">

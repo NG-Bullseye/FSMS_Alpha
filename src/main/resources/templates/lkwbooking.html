@@ -37,22 +37,26 @@
 
 <div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
 <div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
-<div><h2>Wollen sie einen LKW mieten?</h2></div>
-<div th:align="right"><h2>Bitte Lieferort auswählen</h2></div>
+<div><h2>Wollen sie einen LKW mieten?</h2>
+    <h2 th:align="center">Bitte Lieferort auswählen</h2>
+</div>
 
 <div>
+    <form th:align="center" th:action="@{/choosedestination}">
+        <select name="destination">
+            <option th:value="Home">Home</option>
+            <option th:value="Flatland">Flatland</option>
+            <option th:value="Otherplace">Otherplace</option>
+
+        </select>
+        <input type="submit" value="Auswählen">
+    </form>
     <form th:action="@{/renttruck}">
         <button type="submit" class="ui button" th:text="'LKW' +' '+ 'mieten'">button</button>
     </form>
     <form th:action="@{/addorder}">
         <button id="buttonspace" type="submit" class="ui button" th:text="Nein">button</button>
     </form>
-   <!-- <select th:align="right" th:object="${CustomerOrder}">
-        <option th:field="*{destination}" th:value="home">Home</option>
-        <option th:field="*{destination}" value="flatland">Flatland</option>
-        <option th:field="*{destination}" value="otherplace">Otherplace</option>
-
-    </select>-->
 </div>
 </body>
 </html>
