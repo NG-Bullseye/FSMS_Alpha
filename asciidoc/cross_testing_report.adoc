@@ -12,6 +12,9 @@ Welche Aufgabe/Problemstellung löst die Anwendung.
 |===
 |Pfad |Parameter |Beschreibung |Rückgabe
 | … | … | … | … |
+| Registrierung | - | Eingabe einer belibigen Zeichenkette in das E-Mail Feld. | Fehler wird nicht abgefangen, es erschint ein Stack-Trace. Laut Pflichtenheft sollen fehlerhafte Felder markiert werden. |
+| Registrierung | - | Deaktivierung der Browserseitigen Validierung, Anschließende Registrierung | Fehler wird nicht abgefangen. Inputs sollte man nicht nur mit 'required="required"' absichern! Laut Pflichtenheft sollen fehlerhafte Felder markiert werden. |
+| Organisation Admins | - | Der Admin kann seinen Account selbst löschen. Es sollte allerdings gewährleistet sein, dass es immer einen Admin gibt. Das steht so zwar nicht im Pflichtenheft, anders wäre es aber unlogisch. | - |
 |===
 
 == Sonstiges
