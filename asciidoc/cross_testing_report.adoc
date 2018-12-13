@@ -4,10 +4,12 @@ __Durchführende Gruppe: 34__
 
 __Anwendung von Gruppe: 31__
 
-== Getestetes System
-Welche Aufgabe/Problemstellung löst die Anwendung.
+== Getestetes System (Kurzfassung)
 DDancing - beinhaltet auf der Startseite eine Kalenderansicht für alle Tanzveranstaltungen der Region Dresden.
 Darunter verstehen sich Tanzbälle, Tanzabende, Tanzkurse und Tanzwettbewerbe.
+Gäste der Webseite sind in der Lage, sich auf dieser zu registrieren und somit einen Account zu erstellen.
+Eingeloggt können Nutzer zusätzlich Bewertungen abgeben und in der Accountverwaltung ihre Daten ändern.
+Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigenes Profil veröffentlichen und die Profile anderer besichtigen.
 
 == Fehler-Report
 // See http://asciidoctor.org/docs/user-manual/#tables
