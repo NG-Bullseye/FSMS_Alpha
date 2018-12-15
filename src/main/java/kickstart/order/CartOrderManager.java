@@ -193,6 +193,8 @@ public class CartOrderManager {
 			sideInventories.put(destination, new ArrayList<Order>());
 		}
 		
+		sideInventories.put("home", new ArrayList<Order>());
+		
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)) {
 			if(order.isabholbereit()) {
 				List<Order> orders = sideInventories.get(order.getDestination());

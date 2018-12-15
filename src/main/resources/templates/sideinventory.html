@@ -7,21 +7,20 @@
 	<nav th:include="navbar :: navbar"></nav>
 	<h2 th:text="#{sideinventory.title}">Lagerübersicht</h2>
 	
-	<table>
-	<tr th:each="inventory : ${sideInventories}">
-		<td th:text="${inventory.key}">Nebenlager</td>
-		<table>
-		<tr th:each="order : ${inventory.value}">
-			<td th:text="${order.toString}">Order</td>
-			<td> 
+	<div th:each="inventory: ${sideInventories}">
+		<h3 th:text="${inventory.key}">Nebenlager</h3>
+		<div class="ui celled table">
+			<table>
+				<tr th:each="order : ${inventory.value}">
+				<td th:text="${order.toString()}">Order</td>
+				<td> 
 				<form action=# th:action="@{/pickup/{id}(id=${order.id})}" method="post">
-					<button th:id="'table_entry_orderbutton_' + ${entry.id}" type="submit">
-                    	<i>Abholen</i>
-                	</button>	
+					<button type="submit" name="pickup" th:text="#{sideinventory.pickup}"></button>
 				</form>
-			</td>
-		</table>
-	</tr>
-	</table>
+				</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </body>
 </html>

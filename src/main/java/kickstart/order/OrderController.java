@@ -15,6 +15,7 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.web.LoggedIn;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -145,6 +146,7 @@ public class OrderController {
 		return cartordermanager.cancelorpayOrder(order ,choose);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@GetMapping("/sideinventory")
 	public String showSideInventory(Model model) {
 		
@@ -153,12 +155,15 @@ public class OrderController {
 		return "sideinventory";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("pickup/{id}")
 	public String pickUpOrder(@PathVariable OrderIdentifier id,Model model) {
 		if(orderManager.contains(id)) {
 			CustomerOrder order = orderManager.get(id).get();
 			
 			order.setStatus(Status.abgeholt);
+			
+			orderManager.save(order);
 		}
 		
 		return "redirect:/sideinventory";
