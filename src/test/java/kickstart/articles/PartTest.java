@@ -1,9 +1,12 @@
 package kickstart.articles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.javamoney.moneta.Money;
@@ -27,28 +30,16 @@ public class PartTest {
 		colours1.add("brown");
 		
 		HashSet<String> colours2 = new HashSet<String>();
-		colours1.add("black");
+		colours2.add("black");
 		
 		HashSet<String> colours3 = new HashSet<String>();
-		colours1.add("grey");
+		colours3.add("grey");
 		
 		categories= new HashSet<String>();
 		
 		part1 = new Part("wall", "wall for a wardrobe", 100, 5, colours1, categories);
 		part2 = new Part("chair leg", "for a kitchen chair", 20, 2, colours2, categories);
 		part3 = new Part("shelf", "for a book shelf", 30, 1, colours3, categories);
-	}
-
-	
-	@Test
-	public void testConstructorNullArgument()
-	{
-		try
-		{
-			@SuppressWarnings("unused")
-			Part p = new Part("Name","description", 100, 100,null, categories);
-			fail("Part should throw a NullPointerException when colour is null");
-		}catch(NullPointerException e) {}
 	}
 	
 	@Test
@@ -137,34 +128,23 @@ public class PartTest {
 	
 	}
 
-
 	@Test
 	public void testGetColour()
 	{
+		HashSet<String> colours1 = new HashSet<String>();
+		colours1.add("brown");
 		
-		assertEquals(part1.getColour().size(), 1, "Part should have just one colour");
+		assertEquals(colours1, part1.getColour());
 		
-		assertEquals(part1.getColour().iterator().next(), "brown", "Part should return the correct colour");
+		HashSet<String> colours2 = new HashSet<String>();
+		colours2.add("black");
 		
-		assertEquals(part2.getColour().size(), 1, "Part should have just one colour");
-		
-		assertEquals(part2.getColour().iterator().next(), "black",  "Part should return the correct colour");
-
-		assertEquals(part3.getColour().size(), 1, "Part should have just one colour");
-		
-		assertEquals(part3.getColour().iterator().next(), "grey",  "Part should return the correct colour");
-	
+		assertEquals(colours2, part2.getColour());
 	}
 
 	@Test
 	public void testSetColour()
 	{
-		try
-		{
-			part1.setColour(null);
-			fail("Part should throw a NullPointerException when trying to set null as a colour");
-		}catch(NullPointerException e) {}
-		
 		try
 		{
 			part1.setColour("");
@@ -173,15 +153,11 @@ public class PartTest {
 		
 		part1.setColour("green");
 		
-		assertEquals(part1.getColour().size(), 1, "Part should have just one colour");
+		HashSet<String> colours1 = new HashSet<String>();
+		colours1.add("brown");
+		colours1.add("green");
 		
-		assertEquals(part1.getColour().iterator().next(), "green", "Part should return the correct colour");
-		
-		part2.setColour("red");
-		
-		assertEquals(part2.getColour().size(), 1, "Part should have just one colour");
-		
-		assertEquals(part2.getColour().iterator().next(), "red", "Part should return the correct colour");
+		assertEquals(colours1, part1.getColour());
 	}
 	
 	@Test
@@ -193,6 +169,35 @@ public class PartTest {
 		assertEquals(part1.getType(), ArticleType.PART, "Parts should always have the type PART");
 		
 		assertEquals(new Part("name", "description", 1, 1, colours, categories).getType(), ArticleType.PART, "Parts should always have the type PART");
+	}
+
+	@Test
+	public void testGetAllCategories() {
+		assertTrue(part1.getAllCategories().isEmpty(), "Part should return the right categories");
+		
+		HashSet<String> categories = new HashSet<String>();
+		categories.add("Tisch");
+		categories.add("Teil");
+		
+		part1.addCategory("Tisch");
+		part1.addCategory("Teil");
+		
+		assertEquals(part1.getAllCategories(), categories, "Part should return the right categories");
+		
+	}
+
+	@Test
+	public void testUpdate() {
+		assertTrue(part1.update(new ArrayList<Article>()), "Part.update should always return true");
+		
+		assertTrue(part2.update(new ArrayList<Article>()), "Part.update should always return true");
+	}
+
+	@Test
+	public void testGetPartIds() {
+		assertTrue(part1.getPartIds().isEmpty(), "A part should have no parts");
+		
+		assertTrue(part2.getPartIds().isEmpty(), "A part should have no parts");
 	}
 }
 

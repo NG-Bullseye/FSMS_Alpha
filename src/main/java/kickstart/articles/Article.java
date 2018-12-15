@@ -82,6 +82,9 @@ public abstract class Article extends Product{
 		this.parents = new LinkedList<>();
 	}
 	
+	/**
+	 * @return Returns the description
+	 */
 	public String getDescription() {
 		return description;
 	}
@@ -100,20 +103,41 @@ public abstract class Article extends Product{
 		this.description = description;
 	}
 	
+	/**
+	 * Updates the article after changes in this article or in it's parts
+	 * @param parts The parts of this article
+	 * @return Returns true if it could get updated. False otherwise
+	 */
 	public abstract boolean update(@NotNull List<Article> parts);
 	
+	/**
+	 * 
+	 * @return Returns whether the article is updated after changes
+	 */
 	public boolean getUpdateStatus() {
 		return updateStatus;
 	}
 	
+	/**
+	 * 
+	 * @param status The new update status
+	 */
 	public void setUpdateStatus(boolean status) {
 		this.updateStatus = status;
 	}
 	
+	/**
+	 * 
+	 * @param id The id of a parent(i.e. an article that has this article as it's part)
+	 */
 	public void setParent(@NotNull ProductIdentifier id) {
 		parents.add(id);
 	}
 	
+	/**
+	 * 
+	 * @return Returns the list of all articles, that have this article as a part.
+	 */
 	public List<ProductIdentifier> getParents() {
 		return parents;
 	}
@@ -130,13 +154,25 @@ public abstract class Article extends Product{
 
 	public abstract Map<ProductIdentifier, Integer> getPartIds();
 
+	/**
+	 * 
+	 * @return A list of all comments to this article
+	 */
 	public List<Comment> getComments() {
 		return comments;
 	}
+	/**
+	 * 
+	 * @param comment The comment that should get added
+	 */
 	public void addComment(@NotNull Comment comment){
 		comments.add(comment);
 	}
 
+	/**
+	 * 
+	 * @return Returns the average rating based on all comments rounded to 2 decimal places
+	 */
 	public double getAverageRating() {
 		int amount = comments.size();
 		if(amount == 0) {
