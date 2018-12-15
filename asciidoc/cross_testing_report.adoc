@@ -17,6 +17,10 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 |===
 |Pfad |Parameter |Beschreibung |Rückgabe
 | … | … | … | …
+| /events  |Filtern nach Datum|Eingabe des Datums in dem Format DD.MM.YYYY beim Filtern|Internal Server Error 500
+| /events  |Filtern nach Datum|Datum im Feld letzter Tag liegt vor dem Datum bei erster Tag|Internal Server Error 500
+| /events  |Anzeige des Preises|Nachdem man eine neue Veranstaltung mit einem gültigen Preis ertellt hat, wird der Preis falsch angezeigt|EUR 1E+2
+| /events  |Zurücksetzen des Datums|Nachdem man nach bestimmten Daten gefiltert hat und dann die beiden Daten löscht, um sie zurückzusetzen, werden trotzdem die vorigen Daten weiter übernommen|
 | Registrierung | - | Eingabe einer belibigen Zeichenkette in das E-Mail Feld. | Fehler wird nicht abgefangen, es erschint ein Stack-Trace. Laut Pflichtenheft sollen fehlerhafte Felder markiert werden.
 | Registrierung | - | Deaktivierung der Browserseitigen Validierung, Anschließende Registrierung | Fehler wird nicht abgefangen. Inputs sollte man nicht nur mit 'required="required"' absichern! Laut Pflichtenheft sollen fehlerhafte Felder markiert werden.
 | addevent | - | Erstellen einer neuen Veranstaltung. Eingaben egal, Beschreibung leer | Error 500: Exception:java.lang.IllegalArgumentException: Given string must not be empty!: Given string must not be empty!
@@ -33,8 +37,17 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 
 == Sonstiges
 * Optik der Anwendung
+- Checkbox unter dem Filtern-Button bei der Veranstaltungssuche entfernen
+- in der Kalenderübersicht die Namen der Monate, wie den Rest der Website, auf deutsch umstellen
+
 * Fehlende Features
+
+
 * Interaktion mit der Anwendung (Usability)
+- Vorgabe beim Filtern in welchem Format das Datum eingegeben werden soll
+- Button, um alle Filtereingaben auf einmal zurückzusetzen
+- Durch das Drücken des "December 2018"-Button in der Kalenderübersicht springt man schnell auf den aktuellen Monat zurück
+
 
 == Verbesserungsvorschläge
 * Der Admin kann seinen Account selbst löschen. Es sollte allerdings gewährleistet sein, dass es immer einen Admin gibt. Das steht so zwar nicht im Pflichtenheft, anders wäre es aber unlogisch.
