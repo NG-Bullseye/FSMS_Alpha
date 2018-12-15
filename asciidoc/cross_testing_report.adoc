@@ -19,10 +19,11 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 | … | … | … | …
 | Registrierung | - | Eingabe einer belibigen Zeichenkette in das E-Mail Feld. | Fehler wird nicht abgefangen, es erschint ein Stack-Trace. Laut Pflichtenheft sollen fehlerhafte Felder markiert werden.
 | Registrierung | - | Deaktivierung der Browserseitigen Validierung, Anschließende Registrierung | Fehler wird nicht abgefangen. Inputs sollte man nicht nur mit 'required="required"' absichern! Laut Pflichtenheft sollen fehlerhafte Felder markiert werden.
-| addevent | - | Erstellen einer neuen Veranstaltung. Eingaben egal. | Error 500: Exception:java.lang.IllegalArgumentException: Given string must not be empty!: Given string must not be empty!
+| addevent | - | Erstellen einer neuen Veranstaltung. Eingaben egal, Beschreibung leer | Error 500: Exception:java.lang.IllegalArgumentException: Given string must not be empty!: Given string must not be empty!
+| add event| -| Erstellen einer neuen Veranstaltung. Eingabe mit vergangenem Datum| erzeugt Veranstaltung an vergangenem Datum|
 | dancepartners | - | Suche nach männlichen Tanzpartnern (eingeloggt als peter@foo.de): Peter erscheint in der Liste der Tanzpartner. Es ist aber unlogisch, dass die aktuell eingeloggte Person mit in der Liste der Tanzpartner erscheint. | -
 | register | - | Als eingeloggter Admin einen beliebigen Account erstellen (User, Orga, ...) | Error 500: Exception:org.thymeleaf.exceptions.TemplateInputException: Error resolving template [register], template might not exist
-|Bewertung| - |Beschreibung ändert sich in "Hallo Peter"|
+|Bewertung| -|Bewertung eingegeben als Organisator |Beschreibung ändert sich in "Hallo Peter"|
 |Bewertung|-|Nichtangemeldete User können Bewertungen erstellen|
 |Bewertung|Leere Beschreibung| Nach Pflichtenheft sollte nun eine Möglichkeit zur Korrektur erscheinen| Statusmeldung: 400 bad request
 |Favoriten|-|Nach Pflichtenheft soll nach dem Speichern als Favorit auf die Startseite weitergeleitet werden. Stattdessen landet man erneut auf der Veranstaltungsseite|
