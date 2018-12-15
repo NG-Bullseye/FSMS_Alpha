@@ -21,6 +21,7 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 | Registrierung | - | Deaktivierung der Browserseitigen Validierung, Anschließende Registrierung | Fehler wird nicht abgefangen. Inputs sollte man nicht nur mit 'required="required"' absichern! Laut Pflichtenheft sollen fehlerhafte Felder markiert werden.
 | addevent | - | Erstellen einer neuen Veranstaltung. Eingaben egal. | Error 500: Exception:java.lang.IllegalArgumentException: Given string must not be empty!: Given string must not be empty!
 | dancepartners | - | Suche nach männlichen Tanzpartnern (eingeloggt als peter@foo.de): Peter erscheint in der Liste der Tanzpartner. Es ist aber unlogisch, dass die aktuell eingeloggte Person mit in der Liste der Tanzpartner erscheint. | -
+| register | - | Als eingeloggter Admin einen beliebigen Account erstellen (User, Orga, ...) | Error 500: Exception:org.thymeleaf.exceptions.TemplateInputException: Error resolving template [register], template might not exist
 |===
 
 == Sonstiges
