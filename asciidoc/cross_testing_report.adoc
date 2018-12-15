@@ -31,3 +31,4 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 
 == Verbesserungsvorschläge
 * Der Admin kann seinen Account selbst löschen. Es sollte allerdings gewährleistet sein, dass es immer einen Admin gibt. Das steht so zwar nicht im Pflichtenheft, anders wäre es aber unlogisch.
+* Nicht nur auf Browserseitige Validierung setzten. Hat der Nutzer diese in seinem Browser deaktiviert, funktioniert das nicht mehr.
