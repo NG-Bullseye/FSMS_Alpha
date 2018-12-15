@@ -73,6 +73,20 @@ public class OrderController {
 		if(cartordermanager.getAccount() == null){
 			return "redirect:/customers";
 		}
+		if(cartordermanager.checkLKW() == null){
+			model.addAttribute("available", false);
+		}
+		else{
+			model.addAttribute("available", true);
+			model.addAttribute("lkwprice",cartordermanager.checkLKW().getPrice());
+		}
+		if(cartordermanager.getDestination().equals("Home")){
+			model.addAttribute("ishome", true);
+		}
+		else {
+			model.addAttribute("ishome", false);
+			model.addAttribute("destination", cartordermanager.getDestination());
+		}
 		model.addAttribute("wightofcart", cartordermanager.getWight());
 		UserAccount accountname = cartordermanager.getAccount();
 		model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
@@ -130,6 +144,9 @@ public class OrderController {
 		model.addAttribute("name", name);
 		model.addAttribute("email",mail);
 		model.addAttribute("address", living);
+		model.addAttribute("onpoint", true);
+
+		System.out.println("itse me le customer");
 
 		cartordermanager.changeStatus();
 

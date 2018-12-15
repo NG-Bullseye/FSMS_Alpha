@@ -8,7 +8,6 @@ import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
 import org.salespointframework.order.Cart;
-import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
 import org.salespointframework.payment.Cash;
@@ -18,11 +17,12 @@ import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.TimerTask;
 
 
+@Component
 public class CartOrderManager {
 	private final OrderManager<CustomerOrder> orderManager;
 	private UserAccount account;
@@ -38,6 +38,8 @@ public class CartOrderManager {
 
 
 	}
+
+	public String getDestination(){return destination;}
 
 	public Quantity getWight(){
 		return wight;
@@ -94,6 +96,9 @@ public class CartOrderManager {
 		return "redirect:/catalog";
 	}
 
+	public Truck checkLKW(){
+		return carpoolManager.checkTruckavailable(wight);
+	}
 
 	public String addLKW(Cart cart){
 
@@ -134,7 +139,7 @@ public class CartOrderManager {
 
 	@Scheduled(fixedRate = 5000L)
 	public void changeStatus(){
-
+		System.out.println("checked");
 		LocalDateTime date = businesstime.getTime();
 
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)){
@@ -153,6 +158,7 @@ public class CartOrderManager {
 
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.PAID)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
+
 
 			if(order.isPaid() && !order.isCompleted()){
 
