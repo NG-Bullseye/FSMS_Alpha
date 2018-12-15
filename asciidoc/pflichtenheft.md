@@ -1251,7 +1251,22 @@ Was das zu erstellende Programm auf alle Fälle leisten muss.
 
 ## 7.2. Kann-Kriterien
 
-Anforderungen die das Programm leisten können soll, aber für den korrekten Betrieb entbehrlich sind.
+<table>
+    <thead>
+        <th>Name</th>
+        <th>Beschreibung<th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>GUI Anpassung</td>
+            <td>Anpassung und Verschönerung der Website</td>
+        </tr>
+        <tr>
+            <td>Fotoupload</td>
+            <td>Zu jedem neu erstellten Artikel soll man auch ein Bild hochladen müssen</td>
+        </tr>
+    </tbody>
+</table>
 
 # 8. Nicht-Funktionale Anforderungen
 

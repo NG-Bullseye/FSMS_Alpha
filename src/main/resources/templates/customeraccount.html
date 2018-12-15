@@ -15,10 +15,10 @@
 			<a class="ui button" id="deactivateMyself" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
 		</div>
 
-		<div id="customerbox" th:switch="${enableDeactivation}">
-			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')" th:href="@{'/addcostumertocart'(user=${id})}" th:text="Auswählen">choose</a>
- 			<a th:case="true" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
-  			<a th:case="false" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
+		<div id="customerbox">
+			<a th:if="${enableDeactivation}" class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')" th:href="@{'/addcostumertocart'(user=${id})}" th:text="Bestellen">choose</a>
+ 			<a th:if="${enableDeactivation}" class="ui button" sec:authorize="hasRole('ROLE_BOSS')"  id="deactivate" th:text="${'Account ' + 'deaktivieren'}">Account deaktivieren</a>
+  			<a th:if="!${enableDeactivation}" class="ui button" sec:authorize="hasRole('ROLE_BOSS')" id="activate" th:text="${'Account ' + 'aktivieren'}">Account aktivieren</a>
 		</div>
 		<div id="tablespace">
 		<div class="ui grid">

@@ -57,6 +57,7 @@ class UserController {
 		model.addAttribute("email", loggedInUser.getEmail());
 		model.addAttribute("address", loggedInUser.getAddress());
 		model.addAttribute("id", loggedInUser.getId());
+		model.addAttribute("enableDeactivation", false);
 		return "customeraccount";
 	}
 	
@@ -87,8 +88,9 @@ class UserController {
 }
 	@GetMapping("/employees")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
-	String employees(Model model) {
-
+	String employees(@LoggedIn UserAccount loggedInUserWeb, Model model) {
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		model.addAttribute("loggedin", loggedInUser.getId());
 		model.addAttribute("customerList", userManagement.findAllEmployees());
 
 		return "employees";

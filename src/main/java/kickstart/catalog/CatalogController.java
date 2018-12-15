@@ -82,13 +82,12 @@ public class CatalogController {
 		model.addAttribute("filterform",new Filterform());
 		return "catalog";
 	}
-	@GetMapping("article/{identifier}")
+	@GetMapping("/article/{identifier}")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
 		model.addAttribute("max",manager.maximumOrderAmount(identifier));
 		model.addAttribute("hidden",manager.isHidden(identifier));
-		System.out.println(manager.isHidden(identifier));
 		return "article";
 	}
 	@PostMapping("article/{identifier}/comment")
@@ -101,7 +100,7 @@ public class CatalogController {
 
 
 	}
-	@GetMapping("edit/{identifier}")
+	@GetMapping("/edit/{identifier}")
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
@@ -112,9 +111,9 @@ public class CatalogController {
 		return "edit";
 	}
 
-	@PostMapping("edit/{identifier}")
+	@PostMapping("/edit/{identifier}")
 	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form, BindingResult bindingResult, Model model){
-		model.addAttribute("article",manager.getArticle(identifier));
+		//model.addAttribute("article",manager.getArticle(identifier));
 		if(bindingResult.hasErrors()){
 			return "edit";
 		}
