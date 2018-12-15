@@ -20,7 +20,7 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 | /events  |Filtern nach Datum|Eingabe des Datums in dem Format DD.MM.YYYY beim Filtern|Internal Server Error 500
 | /events  |Filtern nach Datum|Datum im Feld letzter Tag liegt vor dem Datum bei erster Tag|Internal Server Error 500
 | /events  |Anzeige des Preises|Nachdem man eine neue Veranstaltung mit einem gültigen Preis ertellt hat, wird der Preis falsch angezeigt|EUR 1E+2
-| /events  |Zurücksetzen des Datums|Nachdem man nach bestimmten Daten gefiltert hat und dann die beiden Daten löscht, um sie zurückzusetzen, werden trotzdem die vorigen Daten weiter übernommen|
+| /events  |Zurücksetzen des Datums|Zurücksetzen des Datumfilters|Nachdem man nach bestimmten Daten gefiltert hat und dann die beiden Daten löscht, um sie zurückzusetzen, werden trotzdem die vorigen Daten weiter übernommen
 | Registrierung | - | Eingabe einer belibigen Zeichenkette in das E-Mail Feld. | Fehler wird nicht abgefangen, es erschint ein Stack-Trace. Laut Pflichtenheft sollen fehlerhafte Felder markiert werden.
 | Registrierung | - | Deaktivierung der Browserseitigen Validierung, Anschließende Registrierung | Fehler wird nicht abgefangen. Inputs sollte man nicht nur mit 'required="required"' absichern! Laut Pflichtenheft sollen fehlerhafte Felder markiert werden.
 | addevent | - | Erstellen einer neuen Veranstaltung. Eingaben egal, Beschreibung leer | Error 500: Exception:java.lang.IllegalArgumentException: Given string must not be empty!: Given string must not be empty!
