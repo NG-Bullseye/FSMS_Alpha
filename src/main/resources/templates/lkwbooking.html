@@ -37,12 +37,11 @@
 
 <div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
 <div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
-<div  th:if="${available}==true"><h2>Wollen sie einen LKW mieten?</h2>
-    <h2 th:align="center">Bitte Lieferort auswählen</h2>
-</div>
-<div  th:if="${available}==false"><h2>Leider kein LKW verfügbar.</h2>
-    <h2 th:align="center">Bitte Lieferort auswählen</h2>
-</div>
+<div  th:if="${available}==true"><h2>Wollen sie einen LKW mieten?</h2></div>
+<div th:if="${ishome}==true" >   <h2 th:align="center">Bitte Lieferort auswählen</h2></div>
+<div  th:if="${available}==false"><h2>Leider kein LKW verfügbar.</h2></div>
+<div th:if="${ishome}==false" >  <h2 th:align="center" th:text="'Lieferort:'+' '+${finaldestination}">Lieferort</h2></div>
+
 
 <div>
     <form th:align="center" th:action="@{/choosedestination}">

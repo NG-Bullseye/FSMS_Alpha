@@ -85,7 +85,7 @@ public class OrderController {
 		}
 		else {
 			model.addAttribute("ishome", false);
-			model.addAttribute("destination", cartordermanager.getDestination());
+			model.addAttribute("finaldestination", cartordermanager.getDestination());
 		}
 		model.addAttribute("wightofcart", cartordermanager.getWight());
 		UserAccount accountname = cartordermanager.getAccount();
