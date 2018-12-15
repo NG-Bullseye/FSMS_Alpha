@@ -22,6 +22,11 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 | addevent | - | Erstellen einer neuen Veranstaltung. Eingaben egal. | Error 500: Exception:java.lang.IllegalArgumentException: Given string must not be empty!: Given string must not be empty!
 | dancepartners | - | Suche nach männlichen Tanzpartnern (eingeloggt als peter@foo.de): Peter erscheint in der Liste der Tanzpartner. Es ist aber unlogisch, dass die aktuell eingeloggte Person mit in der Liste der Tanzpartner erscheint. | -
 | register | - | Als eingeloggter Admin einen beliebigen Account erstellen (User, Orga, ...) | Error 500: Exception:org.thymeleaf.exceptions.TemplateInputException: Error resolving template [register], template might not exist
+|Bewertung|-|Nichtangemeldete User können Bewertungen erstellen|
+|Bewertung|Leere Beschreibung| Nach Pflichtenheft sollte nun eine Möglichkeit zur Korrektur erscheinen| Statusmeldung: 400 bad request
+|Favoriten|-|Nach Pflichtenheft soll nach dem Speichern als Favorit auf die Startseite weitergeleitet werden. Stattdessen landet man erneut auf der Veranstaltungsseite|
+|Anmeldung zu Veranstaltung|Auswählen der Veranstaltung nach Anmeldung eines Nutzers| Keine Anzeige über Anmeldungen von Nutzern wie in [F0035] gefordert.|
+
 |===
 
 == Sonstiges
@@ -32,3 +37,5 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 == Verbesserungsvorschläge
 * Der Admin kann seinen Account selbst löschen. Es sollte allerdings gewährleistet sein, dass es immer einen Admin gibt. Das steht so zwar nicht im Pflichtenheft, anders wäre es aber unlogisch.
 * Nicht nur auf Browserseitige Validierung setzten. Hat der Nutzer diese in seinem Browser deaktiviert, funktioniert das nicht mehr.
+* Organisatoren können sich selbst bewerten. Diese Bewertung ist vielleicht aus Eigeninteresse nicht wirklich interessant für Nutzer
+* Momentan kann ein Benutzer einen Veranstalter mehrfach bewerten. Vielleicht sollte eher eine Veränderung der vorherigen Bewertung anstelle der neuen Bewertung dann verfügbar sein?
