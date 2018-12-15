@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import lombok.NonNull;
+
 
 @Service
 @Transactional
@@ -68,6 +70,10 @@ public User findUserById (long id) {
 		User user = users.findById(id);
 		return user;
 	}
+
+	public Streamable<User> findAll() {
+		return Streamable.of(users.findAll());
+	}
 	
 	public Streamable<User> findAllCustomers() {
 		Iterable<User> userList = users.findAll();
@@ -112,7 +118,7 @@ public User findUserById (long id) {
 		
 	}
 	
-	public void changeRole(User user, int type) {
+	public void changeRole(@NonNull User user, int type) {
 		UserAccount userAccount = user.getUserAccount();
 		if (type == 0) { // Kunde zum Mitarbeiter machen
 			userAccount.add(Role.of("ROLE_EMPLOYEE"));
@@ -123,6 +129,12 @@ public User findUserById (long id) {
 			userAccount.add(Role.of("ROLE_CUSTOMER"));
 			userAccount.remove(Role.of("ROLE_EMPLOYEE"));
 			user.setSalary(0);
+			return;
+		} else if (type == 2) { // Mitarbeiter zum Admin machen
+			userAccount.add(Role.of("ROLE_BOSS"));
+			return;
+		} else if (type == 3) { // Admin zum Mitarbeiter machen
+			userAccount.remove(Role.of("ROLE_BOSS"));
 			return;
 		} else {
 			throw new IllegalArgumentException("Parameter type has illegal value");

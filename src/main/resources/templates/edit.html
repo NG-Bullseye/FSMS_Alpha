@@ -8,7 +8,7 @@
 <body>
 <nav th:include="navbar :: navbar"></nav>
 
-<form method="post" th:action="@{/catalog/part/new}" th:object="${form}">
+<form method="post" th:action="@{/edit/{id}(id=${article.id})}" th:object="${form}">
     <table id="editspace" class="ui definition table">
     <thead>
         <th></th>
@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <td><t3>Preis:</t3></td>
-            <td th:text="${article.price}">Name</td>
+            <td th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Name</td>
             <td>
                 <input type="number" th:field="*{price}" min="1" max="50000" value="1" step="0.1" required="required"/>
                 <a th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Bitte richtigen Preis eingeben</a>
