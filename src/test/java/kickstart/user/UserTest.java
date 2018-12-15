@@ -26,6 +26,7 @@ public class UserTest {
 	public static final String email = "E-mail";
 	public static final String address = "Adresse";
 	public static final String password = "123";
+	public static final int salary = 12;
 	public static final int negativeSalary = -12;
 
 	
@@ -51,7 +52,8 @@ public class UserTest {
 		Assertions.assertThrows(IllegalArgumentException.class, () -> {
 			user.setSalary(negativeSalary);
 	    }, "Gehalt sollte nicht negativ sein!");
-		Assertions.assertEquals(0, user.getSalary(), "Gehalt sollte nach Initialisierung 0 sein!");
+		user.setSalary(salary);
+		Assertions.assertEquals(12, user.getSalary(), "Gehalt wurde nicht korrekt gesetzt!");
 		
 	}
 	
@@ -62,6 +64,7 @@ public class UserTest {
 		Assertions.assertThrows(NullPointerException.class, () -> {
 			user.setAddress(null);
 	    }, "Adresse muss spezifiziert sein!");
+		Assertions.assertEquals(address, user.getAddress(), "Adresse wurde nicht korrekt gesetzt!");
 		
 	}
 	
@@ -72,6 +75,7 @@ public class UserTest {
 		Assertions.assertThrows(NullPointerException.class, () -> {
 			user.setEmail(null);
 	    }, "Email muss spezifiziert sein!");
+		Assertions.assertEquals(email, user.getEmail(), "E-Mail wurde nicht korrekt gesetzt!");
 		
 	}
 	
@@ -82,6 +86,7 @@ public class UserTest {
 		Assertions.assertThrows(NullPointerException.class, () -> {
 			user.setFirstname(null);
 	    }, "Vorname muss spezifiziert sein!");
+		Assertions.assertEquals(firstname, user.getFirstname(), "Vorname wurde nicht korrekt gesetzt!");
 		
 	}
 	
@@ -92,6 +97,7 @@ public class UserTest {
 		Assertions.assertThrows(NullPointerException.class, () -> {
 			user.setLastname(null);
 	    }, "Nachname muss spezifiziert sein!");
+		Assertions.assertEquals(lastname, user.getLastname(), "Nachname wurde nicht korrekt gesetzt!");
 		
 	}
 }
