@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.javamoney.moneta.Money;
-import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -58,10 +57,9 @@ public abstract class Article extends Product{
 	 * 
 	 * @param name: The name of the article. Neither null nor an empty String(i.e. "")
 	 * @param description: The description of this artile. Neither null nor an empty String
-	 * @throws NullPointerException: If name or description are null
 	 * @throws IllegalArgumentException: If name or description equal the empty string
 	 */
-	public Article(String name, String description)
+	public Article(@NotNull String name, @NotNull String description)
 		throws  IllegalArgumentException {
 		// Here the name is just set to test later whether name is valid. Therefore a placeholder is
 		// used and later changed. We can't check this before calling the super constructor, since that 
@@ -95,8 +93,7 @@ public abstract class Article extends Product{
 	 */
 	public void setDescription(@NotNull String description)
 		throws  IllegalArgumentException {	
-		if(description.equals(""))
-		{
+		if(description.equals("")) {
 			throw new IllegalArgumentException("Article.description should not be empty");
 		}
 		
@@ -117,13 +114,10 @@ public abstract class Article extends Product{
 		parents.add(id);
 	}
 	
-	public List<ProductIdentifier> getParents()
-	{
+	public List<ProductIdentifier> getParents() {
 		return parents;
 	}
-	
-	// TODO:  Add comments and rating.
-	
+		
 	public abstract Quantity getWeight();
 	
 	public abstract Set<String> getColour();
@@ -139,19 +133,24 @@ public abstract class Article extends Product{
 	public List<Comment> getComments() {
 		return comments;
 	}
-	public void addComment(Comment comment){
+	public void addComment(@NotNull Comment comment){
 		comments.add(comment);
 	}
 
 	public double getAverageRating() {
 		int amount = comments.size();
-		if(amount == 0) {return 0;}
-		else {
+		if(amount == 0) {
+			return 0;
+		}else {
 			double rating = 0;
+			
 			for (Comment c : comments) {
 				rating += c.getRating();
 			}
-			double gerundet = Math.round((rating / amount) * 100.0) / 100.0;
+			
+			double c = (rating / amount) * 100.0;
+			
+			double gerundet = Math.round(c) / 100.0;
 
 			return gerundet;
 		}

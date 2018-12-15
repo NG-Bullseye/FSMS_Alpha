@@ -1,9 +1,7 @@
 package kickstart.articles;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +19,6 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -242,7 +239,6 @@ public class Composite extends Article {
 
 	}
 	
-	// TODO: Better way to convert Streamable to Set?
 	public Set<String> getAllCategories(){					//Hat ohne die Funktion einen Fehler ausgegeben
 		HashSet<String> categories = new HashSet<String>();
 		this.getCategories().forEach(categories::add);

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Modifier;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,6 +64,9 @@ public class ArticleTest {
 		@Override
 		public void removePart(Article article){}
 	}
+	
+	// Used to compare double values
+	private final static double epsilon = 0.001;
 	
 	@Test
 	void testAbstract()
@@ -137,5 +141,46 @@ public class ArticleTest {
 		a.setDescription("A new description");
 		
 		assertEquals("A new description", a.getDescription(), "A new description should get correctly set.");
+	}
+	
+	@Test
+	void testParents() {
+		Article article = new ArticleImpl("Name", "Description");
+		Article article2 = new ArticleImpl("Name", "Description");
+
+		
+		article.setParent(article2.getId());
+		
+		assertTrue(article.getParents().contains(article2.getId()), "Article should add a parent or return the right list.");
+	}
+	
+	@Test
+	void testAddComment() {
+		Comment c = new Comment("text", 2, LocalDateTime.of(1, 1, 1, 1, 1));
+		
+		Article a = new ArticleImpl("Name", "Description");
+		
+		a.addComment(c);
+		
+		assertTrue(a.getComments().contains(c), "Article should add comments after calling addComment.");
+	}
+	
+	@Test
+	void testGetAverageRating() {
+		Article a = new ArticleImpl("Name", "Description");
+
+		assertEquals(a.getAverageRating(), 0, epsilon, "Without comments the average rating should be zero.");
+		
+		Comment c = new Comment("text", 2, LocalDateTime.of(1, 1, 1, 1, 1));
+		
+		a.addComment(c);
+		
+		assertEquals(a.getAverageRating(), c.getRating(), epsilon, "getAverageRating should return the right value");
+		
+		Comment c2 = new Comment("text", 3, LocalDateTime.of(1, 1, 1, 1, 1));
+		
+		a.addComment(c2);
+		
+		assertEquals(a.getAverageRating(), (double)(c.getRating()+c2.getRating())/2, epsilon, "getAverageRating should return the right value");
 	}
 }
