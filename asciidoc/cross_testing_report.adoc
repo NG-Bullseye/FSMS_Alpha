@@ -34,7 +34,7 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 
 |/user/edit | unlogische Eingaben möglich| Tanzerfahrung kann Alter überschreiten | -
 
-|/user/edit | angezeigt Infos bearbeiten | Bild lässt sich nicht hinzufügen. Nach Pflichtenheft Zeile 59 muss jede angezeigte Info bearbeitbar sein. |-
+|/user/edit | angezeigte Infos bearbeiten | Bild lässt sich nicht hinzufügen. Nach Pflichtenheft Zeile 59 muss jede angezeigte Info bearbeitbar sein. |-
 
 | register | - | Als eingeloggter Admin einen beliebigen Account erstellen (User, Orga, ...) | Error 500: Exception:org.thymeleaf.exceptions.TemplateInputException: Error resolving template [register], template might not exist
 |Bewertung| -|Bewertung eingegeben |Beschreibung des Veranstalters ändert sich in "Hallo Peter"
