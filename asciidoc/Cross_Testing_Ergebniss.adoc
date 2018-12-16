@@ -1,0 +1,115 @@
+= Cross-Testing report Gruppe 34
+
+__Durchführende Gruppe:__ 
+	SWT18W31
+__Anwendung von Gruppe:__ 
+	SWT18W34
+
+== Getestetes System
+
+=== Möbelgeschäft
+
+Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihrer Firma mit
+einer neuen Kundensoftware(WEBSHOP) ausgestattet.
+
+Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER)
+und der Auslieferungsservice (FUHRPARK)enthalten.
+
+Besonderes Augenmerk soll auf die Warenbestellung, -auslieferung gelegt werden.
+Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nichtanmelden muss.
+Möbelstücke und Teile sind in Kategorien unterteilt.
+
+Die Möbel dort lassen sich nach Kategorisierungen filtern und sortieren.
+Möbel lassen sich vom Kunden ausschließlich telefonisch bestellen.
+Der Mitarbeiter verwaltet den Warenkorb(WARENKORB).
+
+Der Mitarbeiter soll Produkte ausblenden können.
+
+Einige Mitarbeiter sind Administratoren(ADMIN).
+
+Ausschließlich die Administratoren verwalten die Mitarbeiter.
+
+Die Lieferung erfolgt entweder in das Nebenlager(LAGER) oder direkt an den Kunden(KUNDE).
+
+Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er
+sie abholen kommen kann.
+
+Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich
+sein.
+
+Bezahlung ist nur andeutungsweise zu implementieren. Es muss nur eine Auswahl der
+Zahlungsoptionen geben.
+
+Der Kunde kann sich Teile(TEILE) einzeln bestellen, jedoch auch vorgefertigte Sätze an
+Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
+Variabilität ist über die Farbe möglich.
+
+Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park(FUHRPARK).
+
+Alternativ können sich Kunden zum Abtransport der Ware diese LKW's mieten.
+
+Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw. von der Firma
+genutzt werden.
+
+Die Software soll Stornieren bis zu einen Tag vor Versand berücksichtigen.
+
+Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)
+haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
+
+== Fehler-Report
+// See http://asciidoctor.org/docs/user-manual/#tables
+[options="header"]
+|===
+|/catalog/part/new|Name| String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/catalog/part/new|Gewicht| Eingabeinteger bei Gewicht < 0 | Eingabe kann negativ sein und wird als Preis erstellt.  
+|/catalog/part/new|Farbe| keine Eingabe möglich | wird als nicht vorhanden angezeigt
+|/catalog/part/new|Kategorie| keine Eingabe möglich | wird als nicht vorhanden angezeigt
+|/catalog/part/new|Gewicht| Eingabe möglich | wird nicht angezeigt. 
+|/catalog/part/new|Beschreibung| String größer 255 Zeichen eingegeben.| Internal Server Error 500
+|/catalog/part/new|Kategorie|Eingabe mehrer Kategorien möglich|  Kann das sein? 
+|/register|Username|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/register|Name|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/register|Vorname|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/register|Email|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/register|Passwort|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/register|Adresse|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/editData?user=1|Userdaten ändern: Username|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/editData?user=1|Userdaten ändern: Name|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/editData?user=1|Userdaten ändern: Vorname|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/editData?user=1|Userdaten ändern: Email|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/editData?user=1|Userdaten ändern: Passwort|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/editData?user=1|Userdaten ändern: Adresse|String größer 255 Zeichen eingegeben. | Internal Server Error 500
+|/customers|disabled User|Disabled User wird noch immer angezeigt bei Kundenkontos| K.K. 
+|/cart|leerer Warenkorb|Bestellbar|Man kann einen leeren Warenkorb bestellen. 
+|/cart|leerer Warenkorb|Gewicht vom letzten Warenkorb wird angezeigt| Ein leerer Warenkorb hat ein Gewicht.
+| /editData | keine | klick aud daten ändern. Dann keine Änderung der daten, klick auf übernehmen. Fehler das alle felder ausgefüllt werden sollen. | Bitte Felder ausfüllen
+| /customeraccount | keine | klick auf account aktivieren | werde nach bestätitgung umgeleitet auf customers
+| /customers | keine | es wird nur der (schon gefeuertete mitarbeiter) angezeigt, nicht der registrierte kunde | 
+| /employees | keine | der nutzer wird mit angezeigt |
+| /cart | keine | werde gebeten einen Kunden auszuwählen, es existiert jedoch keine Möglichkeit dazu |
+| /cart | mitarbeitah ausgewählt | keine möglichkeit zu warenkorb von anderen kunden zu wechseln |
+| /cart | angemeldet als mitarbeiter. bestellung für Kunden bearbeiten | auswahl der artikel. klick auf bestellen. lkw mieten bestätigen. Keine Auswahl des lkw möglich (auch kein LKW registriert im System). also warum wird angeboten eienn zu mieten | leerung des Warenkorbs
+| /changeRole?user=3&type=2 | direkte eingabe in addressleiste |Löschen des letzten admins | nach klick auf logout ist kein admin mehr im system und es gibt keine Möglichkeit dies rückgängig zu machen.
+| /cart |keine |Bestellung funktioniert nicht. Bestellung taucht nicht in der Buchhaltung auf| 
+| /inventory |Parameter beim Lkw: Bezeichnung "Hallo", Last: 4, Preis: 4 |Fehlermeldung, als Chef angemeldet, nachdem ich im Fuhrpark einen LKW hinzugefügt habe| 
+
+|===
+
+== Sonstiges
+* Optik der Anwendung
+- Erstes Dropdown im Katalog ist halb abgeschnitten
+- Beschreibungen von Artikeln gehen mit kleinem Buchstaben los (Satzanfänge Groß)
+- In Artikelansicht klebt alles links am Rand
+
+* Fehlende Features
+- Wie funktioniert die Lieferung an das Nebenlager oder Kunden? Keine Funktion dafür gefunden (Pflichtenheft Zeile 85)
+- Wie funktioniert im Allgemeinen die Bestellung und Auslieferung oder Statusabfrage und wo ist sie zu finden?
+
+* Interaktion mit der Anwendung (Usability)
+- Farbe, Preis, Kategorien auswahl ist nicht einsehbar, wenn es ausgewählt wurde
+- Monat und Tag nicht zurückspulbar
+
+== Verbesserungsvorschläge
+dringend aud postmapping umsteigen statt getmapping zum ändern von daten
+- Bei Feuern von Mitarbeitern eine Bestätigung einblenden lassen
+- komplett weiß mit schwarzem Text
