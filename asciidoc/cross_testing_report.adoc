@@ -54,3 +54,4 @@ Zudem gibt es für sie eine Tanzpartnerbörse. Auf dieser können sie ihr eigene
 * Nicht nur auf Browserseitige Validierung setzten. Hat der Nutzer diese in seinem Browser deaktiviert, funktioniert das nicht mehr.
 * Organisatoren können sich selbst bewerten. Diese Bewertung ist vielleicht aus Eigeninteresse nicht wirklich interessant für Nutzer
 * Momentan kann ein Benutzer einen Veranstalter mehrfach bewerten. Vielleicht sollte eher eine Veränderung der vorherigen Bewertung anstelle der neuen Bewertung dann verfügbar sein?
+* Als Organisator eigene Veranstaltungen sortieren können, z.B nach Datum
