@@ -50,12 +50,23 @@ public class UserManagement {
 		
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
-		user.setFirstname(form.getFirstname());
-		user.setLastname(form.getLastname());
-		user.setAddress(form.getAddress());
-		user.setEmail(form.getEmail());
-		UserAccount userAccount = user.getUserAccount();
-		userAccounts.changePassword(userAccount, form.getPassword());
+		
+		if (!form.getFirstname().isEmpty()) {
+			user.setFirstname(form.getFirstname());
+		}
+		if (!form.getLastname().isEmpty()) {
+			user.setLastname(form.getLastname());
+		}
+		if (!form.getAddress().isEmpty()) {
+			user.setAddress(form.getAddress());
+		}
+		if (!form.getEmail().isEmpty()) {
+			user.setEmail(form.getEmail());
+		}
+		if (!form.getPassword().isEmpty()) {
+			UserAccount userAccount = user.getUserAccount();
+			userAccounts.changePassword(userAccount, form.getPassword());
+		}
 		return;
 	}
 	

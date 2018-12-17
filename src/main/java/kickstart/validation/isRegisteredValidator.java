@@ -1,7 +1,10 @@
-package kickstart.user;
+package kickstart.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import kickstart.user.User;
+import kickstart.user.UserManagement;
 
 public class isRegisteredValidator implements ConstraintValidator<isRegistered, String> {
 	
