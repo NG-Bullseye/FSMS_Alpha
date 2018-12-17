@@ -17,29 +17,51 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
-import java.time.LocalDateTime;
+import org.springframework.scheduling.annotation.Scheduled;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimerTask;
 
 
 public class CartOrderManager {
-	private final OrderManager<Order> orderManager;
+	private final OrderManager<CustomerOrder> orderManager;
 	private UserAccount account;
 	private final BusinessTime businesstime;
 	private Quantity wight = Quantity.of(0, Metric.KILOGRAM);
 	private final CarpoolManager carpoolManager;
+	
+	private final List<String> destinations;
+	
+	TimerTask timerTask = new TimerTask() {
+		@Override
+		public void run() {
+			changeStatus();
+		}
+	};
 
 
-	CartOrderManager(OrderManager<Order> ordermanager, BusinessTime businesstime, CarpoolManager carpoolManager){
+	CartOrderManager(OrderManager<CustomerOrder> ordermanager, BusinessTime businesstime, CarpoolManager carpoolManager){
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
+		this.timerTask.run();
+		this.destinations = new ArrayList<String>();
+		
+		this.destinations.add("Berlin");
+		this.destinations.add("Hamburg");
+		this.destinations.add("Stuttgart");
+
 	}
 
 	public Quantity getWight(){
 		return wight;
 	}
 
-	public OrderManager<Order> getOrderManager(){
+	public OrderManager<CustomerOrder> getOrderManager(){
 		return orderManager;
 	}
 
@@ -52,8 +74,16 @@ public class CartOrderManager {
 
 		return new Cart();
 	}
+	
+	public List<String> getDestinations() {
+		return destinations;
+	}
 
-	public String cancelorpayOrder(Order order, String choose){
+	public void updateStatus(CustomerOrder order){
+
+	}
+
+	public String cancelorpayOrder(CustomerOrder order, String choose){
 
 		changeStatus();
 
@@ -65,7 +95,7 @@ public class CartOrderManager {
 			orderManager.cancelOrder(order);
 		}
 
-		return "customeraccount";
+		return "redirect:/customeraccount";
 	}
 
 	public String addComposite (Composite article, int count, Cart cart){
@@ -109,7 +139,7 @@ public class CartOrderManager {
 	public String newOrder(Cart cart){
 
 		if(!cart.isEmpty() ) {
-			Order order = new Order(account, Cash.CASH);
+			CustomerOrder order = new CustomerOrder(account, Cash.CASH);
 			cart.addItemsTo(order);
 			orderManager.save(order);
 
@@ -121,11 +151,26 @@ public class CartOrderManager {
 		return "redirect:/catalog";
 	}
 
+	@Scheduled(fixedRate = 10000)
 	public void changeStatus(){
 
 		LocalDateTime date = businesstime.getTime();
 
-		for(Order order: orderManager.findBy(OrderStatus.PAID)){
+		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)){
+			Interval interval = Interval.from(order.getDateCreated()).to(date);
+
+			if(order.isCompleted() && order.isversendet()){
+
+				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
+					order.setStatus(Status.abholbereit);
+				}
+				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
+					order.setStatus(Status.abholbereit);
+				}
+			}
+		}
+
+		for(CustomerOrder order: orderManager.findBy(OrderStatus.PAID)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 
 			if(order.isPaid() && !order.isCompleted()){
@@ -138,6 +183,28 @@ public class CartOrderManager {
 				}
 			}
 		}
+		
+	}
+	
+	public Map<String, List<Order>> getSideInventories() {
+		Map<String, List<Order>> sideInventories = new HashMap<String, List<Order>>();
+		
+		for(String destination: destinations) {
+			sideInventories.put(destination, new ArrayList<Order>());
+		}
+		
+		sideInventories.put("home", new ArrayList<Order>());
+		
+		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)) {
+			if(order.isabholbereit()) {
+				List<Order> orders = sideInventories.get(order.getDestination());
+				orders.add(order);
+				
+				sideInventories.put(order.getDestination(), orders);
+			}
+		}
+		
+		return sideInventories;
 	}
 
 

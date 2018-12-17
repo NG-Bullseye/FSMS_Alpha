@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+    <title id="pageTitle">Lager</title>
+</head>
+<body>
+	<nav th:include="navbar :: navbar"></nav>
+	<h2 th:text="#{sideinventory.title}">Lagerübersicht</h2>
+	
+	<div th:each="inventory: ${sideInventories}">
+		<h3 th:text="${inventory.key}">Nebenlager</h3>
+		<div class="ui celled table">
+			<table>
+				<tr th:each="order : ${inventory.value}">
+				<td th:text="${order.toString()}">Order</td>
+				<td> 
+				<form action=# th:action="@{/pickup/{id}(id=${order.id})}" method="post">
+					<button type="submit" name="pickup" th:text="#{sideinventory.pickup}"></button>
+				</form>
+				</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
