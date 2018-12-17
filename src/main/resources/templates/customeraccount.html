@@ -58,6 +58,7 @@
 						<th>Datum</th>
 						<th>Preis</th>
 						<th>Status</th>
+						<th>Zustellung</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -65,7 +66,7 @@
 						<td th:text="${#temporals.format(ordered.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Offen"></td>
-
+						<td th:text="${ordered.destination}"></td>
 						<td align="center" th:width="50">
 							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_CUSTOMER')">
 								<button type="submit" class="ui button" th:text="bezahlen">paying</button>
@@ -74,7 +75,7 @@
 							</form>
 						</td>
 						<td align="center" th:width="50">
-							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_CUSTOMER')">
+							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 								<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
 								<input name="orderidentity" type="hidden" th:value="${ordered.id}">
 								<input name="choose" type="hidden" th:value="stornieren">
@@ -103,7 +104,7 @@
 					</tr>
 					</tbody>
 				</table>
-				<form th:action="@{/showcustomerorders}">
+				<form th:action="@{/showcustomerorders}" th:unless="${onpoint} == true">
 					<button id="buttonspace" type="submit" class="ui button" th:text="Aktualisieren">buttonoforderview</button>
 					<input name="theabsoluteorderer" type="hidden" th:value="${id}">
 					<input name="useraddress" type="hidden" th:value="${address}">

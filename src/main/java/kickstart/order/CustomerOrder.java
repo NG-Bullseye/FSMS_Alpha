@@ -55,7 +55,7 @@ public class CustomerOrder extends Order {
 	public void  setDestination(String destination){
 		this.destination = destination;
 	}
-	
+  
 	@Override
 	public String toString() {
 		String out = this.getUserAccount().getFirstname() + " " + this.getUserAccount().getLastname()
