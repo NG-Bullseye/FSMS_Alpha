@@ -50,12 +50,23 @@ public class UserManagement {
 		
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
-		user.setFirstname(form.getFirstname());
-		user.setLastname(form.getLastname());
-		user.setAddress(form.getAddress());
-		user.setEmail(form.getEmail());
-		UserAccount userAccount = user.getUserAccount();
-		userAccounts.changePassword(userAccount, form.getPassword());
+		
+		if (!form.getFirstname().isEmpty()) {
+			user.setFirstname(form.getFirstname());
+		}
+		if (!form.getLastname().isEmpty()) {
+			user.setLastname(form.getLastname());
+		}
+		if (!form.getAddress().isEmpty()) {
+			user.setAddress(form.getAddress());
+		}
+		if (!form.getEmail().isEmpty()) {
+			user.setEmail(form.getEmail());
+		}
+		if (!form.getPassword().isEmpty()) {
+			UserAccount userAccount = user.getUserAccount();
+			userAccounts.changePassword(userAccount, form.getPassword());
+		}
 		return;
 	}
 	
@@ -76,8 +87,8 @@ public User findUserById (long id) {
 	}
 	
 	public Streamable<User> findAllCustomers() {
-		Iterable<User> userList = users.findAll();
-		List<User> customersList = new ArrayList();
+		Iterable<User> userList = findAll();
+		List<User> customersList = new ArrayList<User>();
 		
 		
 		for (User user : userList) {
@@ -91,8 +102,8 @@ public User findUserById (long id) {
 	}
 	
 	public Streamable<User> findAllEmployees() {
-		Iterable<User> userList = users.findAll();
-		List<User> employeesList = new ArrayList();
+		Iterable<User> userList = findAll();
+		List<User> employeesList = new ArrayList<User>();
 		
 		
 		for (User user : userList) {

@@ -54,7 +54,7 @@
 				</div>
 				<div class="inline field">
 					<label th:text="Passwort" for="password">Passwort</label><br/>
-					<input id="password" name="password" th:field="*{password}" th:errorclass="fieldError" type="text" placeholder="Passwort"/>
+					<input id="password" name="password" th:field="*{password}" th:errorclass="fieldError" type="password" placeholder="Passwort"/>
 					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
 						Das Passwort darf nicht leer sein.
 					</div>

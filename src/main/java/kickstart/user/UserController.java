@@ -1,12 +1,12 @@
 package kickstart.user;
 
-import org.salespointframework.useraccount.web.LoggedIn;
+import javax.validation.Valid;
+
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountIdentifier;
+import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -141,19 +141,28 @@ class UserController {
 	}
 	
 	@PostMapping("/editData")
-	String editNow(@Valid @ModelAttribute("form") EditForm form, BindingResult bindingResult, Model model, Errors result) {
+	String editNow(@Valid @ModelAttribute("form") EditForm form, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb ,Model model, Errors result) {
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		long requestedId = Long.parseLong(form.getId());
 		User requestedUser = userManagement.findUserById(requestedId);
 		
 		if (result.hasErrors()) {
+			model.addAttribute("unallowed", false);
 			model.addAttribute("user", requestedUser);
 			model.addAttribute("form", form);
 			return "editdata";
 		}
 		
 		userManagement.editData(form);
-
-		return "redirect:/";
+		
+		if (loggedInUser.getId() == requestedUser.getId()) {
+			return "redirect:/customeraccount";
+		} else {
+			StringBuilder url = new StringBuilder();
+			url.append("redirect:/managecustomer?user=");
+			url.append(requestedId);
+			return url.toString();
+		}
 	}
 	
 	@GetMapping("/salary")
