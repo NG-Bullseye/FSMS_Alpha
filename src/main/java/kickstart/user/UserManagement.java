@@ -87,8 +87,8 @@ public User findUserById (long id) {
 	}
 	
 	public Streamable<User> findAllCustomers() {
-		Iterable<User> userList = users.findAll();
-		List<User> customersList = new ArrayList();
+		Iterable<User> userList = findAll();
+		List<User> customersList = new ArrayList<User>();
 		
 		
 		for (User user : userList) {
@@ -102,8 +102,8 @@ public User findUserById (long id) {
 	}
 	
 	public Streamable<User> findAllEmployees() {
-		Iterable<User> userList = users.findAll();
-		List<User> employeesList = new ArrayList();
+		Iterable<User> userList = findAll();
+		List<User> employeesList = new ArrayList<User>();
 		
 		
 		for (User user : userList) {
