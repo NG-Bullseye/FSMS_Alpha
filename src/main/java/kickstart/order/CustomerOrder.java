@@ -1,6 +1,7 @@
 package kickstart.order;
 
 import org.salespointframework.order.Order;
+import org.salespointframework.order.OrderLine;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.payment.Cash;
 
@@ -53,6 +54,18 @@ public class CustomerOrder extends Order {
 
 	public void  setDestination(String destination){
 		this.destination = destination;
+	}
+  
+	@Override
+	public String toString() {
+		String out = this.getUserAccount().getFirstname() + " " + this.getUserAccount().getLastname()
+				+ ": ";
+		
+		for(OrderLine line: this.getOrderLines()) {
+			out += line.getProductName()+ " " + line.getQuantity().toString() + "; ";
+		}
+		
+		return out;
 	}
 
 

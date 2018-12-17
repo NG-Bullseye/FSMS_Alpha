@@ -18,8 +18,13 @@ import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimerTask;
 
 
 @Component
@@ -30,12 +35,27 @@ public class CartOrderManager {
 	private Quantity wight = Quantity.of(0, Metric.KILOGRAM);
 	private final CarpoolManager carpoolManager;
 	private String destination = "Home";
+	private final List<String> destinations;
+	
+	TimerTask timerTask = new TimerTask() {
+		@Override
+		public void run() {
+			changeStatus();
+		}
+	};
+
+
 
 	CartOrderManager(OrderManager<CustomerOrder> ordermanager, BusinessTime businesstime, CarpoolManager carpoolManager){
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
-
+		this.timerTask.run();
+		this.destinations = new ArrayList<String>();
+		
+		this.destinations.add("Berlin");
+		this.destinations.add("Hamburg");
+		this.destinations.add("Stuttgart");
 
 	}
 
@@ -62,6 +82,14 @@ public class CartOrderManager {
 	public Cart initializeCart() {
 
 		return new Cart();
+	}
+	
+	public List<String> getDestinations() {
+		return destinations;
+	}
+
+	public void updateStatus(CustomerOrder order){
+
 	}
 
 	public String cancelorpayOrder(CustomerOrder order, String choose){
@@ -157,6 +185,21 @@ public class CartOrderManager {
 		}
 
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.PAID)){
+      
+			Interval interval = Interval.from(order.getDateCreated()).to(date);
+
+			if(order.isCompleted() && order.isversendet()){
+
+				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
+					order.setStatus(Status.abholbereit);
+				}
+				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
+					order.setStatus(Status.abholbereit);
+				}
+			}
+		}
+
+		for(CustomerOrder order: orderManager.findBy(OrderStatus.PAID)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 
 
@@ -170,6 +213,28 @@ public class CartOrderManager {
 				}
 			}
 		}
+		
+	}
+	
+	public Map<String, List<Order>> getSideInventories() {
+		Map<String, List<Order>> sideInventories = new HashMap<String, List<Order>>();
+		
+		for(String destination: destinations) {
+			sideInventories.put(destination, new ArrayList<Order>());
+		}
+		
+		sideInventories.put("home", new ArrayList<Order>());
+		
+		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)) {
+			if(order.isabholbereit()) {
+				List<Order> orders = sideInventories.get(order.getDestination());
+				orders.add(order);
+				
+				sideInventories.put(order.getDestination(), orders);
+			}
+		}
+		
+		return sideInventories;
 	}
 
 

@@ -67,7 +67,6 @@
 						<td th:text="${ordered.totalPrice}"></td>
 						<td th:text="Offen"></td>
 						<td th:text="${ordered.destination}"></td>
-
 						<td align="center" th:width="50">
 							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_CUSTOMER')">
 								<button type="submit" class="ui button" th:text="bezahlen">paying</button>

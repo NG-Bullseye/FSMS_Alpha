@@ -8,12 +8,14 @@ import kickstart.carManagement.CarpoolManager;
 import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
+import org.salespointframework.order.OrderIdentifier;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.web.LoggedIn;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
@@ -146,8 +148,6 @@ public class OrderController {
 		model.addAttribute("address", living);
 		model.addAttribute("onpoint", true);
 
-		System.out.println("itse me le customer");
-
 		cartordermanager.changeStatus();
 
 		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isversendet));
@@ -163,5 +163,28 @@ public class OrderController {
 	String cancelOrder(@RequestParam("orderidentity") CustomerOrder order, @RequestParam("choose") String choose, Model model){
 
 		return cartordermanager.cancelorpayOrder(order ,choose);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@GetMapping("/sideinventory")
+	public String showSideInventory(Model model) {
+		
+		model.addAttribute("sideInventories", cartordermanager.getSideInventories());
+		
+		return "sideinventory";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PostMapping("pickup/{id}")
+	public String pickUpOrder(@PathVariable OrderIdentifier id,Model model) {
+		if(orderManager.contains(id)) {
+			CustomerOrder order = orderManager.get(id).get();
+			
+			order.setStatus(Status.abgeholt);
+			
+			orderManager.save(order);
+		}
+		
+		return "redirect:/sideinventory";
 	}
 }
