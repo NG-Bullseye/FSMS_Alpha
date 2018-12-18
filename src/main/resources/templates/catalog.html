@@ -10,7 +10,7 @@
 		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
 			<div class="ui attached stackable menu">
 				<div class="ui container left attached">
-					<select class="ui search dropdown" th:field="*{type}">
+					<select class="ui simple search dropdown item" th:field="*{type}">
 						<option th:value="all" >Alle Artikel</option>
 						<option th:value="part" >Möbelteile</option>
 						<option th:value="composite">Möbel</option>
