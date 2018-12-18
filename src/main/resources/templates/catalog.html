@@ -10,13 +10,13 @@
 		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
 			<div class="ui attached stackable menu">
 				<div class="ui container left attached">
-					<select class="ui simple search dropdown item" th:field="*{type}">
+					<select class="ui dropdown" th:field="*{type}">
 						<option th:value="all" >Alle Artikel</option>
 						<option th:value="part" >Möbelteile</option>
 						<option th:value="composite">Möbel</option>
 					</select>
-					<div class="ui simple dropdown item">
-						Farbe
+					<div class="ui simple dropdown">
+						<div class="text">Farbe</div>
 						<i class="dropdown icon"></i>
 						<div class="menu">
 							<ul>
@@ -31,8 +31,8 @@
 							</ul>
 						</div>
 					</div>
-					<div class="ui simple dropdown item">
-						Preis
+					<div class="ui simple dropdown">
+						<div class="text">Preis</div>
 						<i class="dropdown icon"></i>
 						<div class="menu">
 							<a class="item">
@@ -49,8 +49,8 @@
 							</a>
 						</div>
 					</div>
-					<div class="ui simple dropdown item">
-						Kategorien
+					<div class="ui simple dropdown">
+						<div class="text">Kategorien</div>
 						<i class="dropdown icon"></i>
 						<div class="menu">
 							<ul>
@@ -66,12 +66,8 @@
 							</ul>
 						</div>
 					</div>
-					<a class="item">
-					<input class="ui button" type="submit" value="Filtern" name="reset">
-					</a>
-					<a class="item">
-					<input class="ui button" type="submit" value="Filter zurücksetzen" name="reset">
-					</a>
+					<button class="ui button" type="submit" value="filter" name="reset">Filtern</button>
+					<button class="ui button" type="submit" value="reset" name="reset">Filter zurücksetzen</button>
 					<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 						<a id="editspace" class="ui button" th:href="@{/catalog/all}">gesamten Katalog anzeigen</a>
 					</div>

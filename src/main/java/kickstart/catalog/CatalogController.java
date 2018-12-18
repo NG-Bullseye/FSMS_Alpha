@@ -15,26 +15,30 @@
  */
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import kickstart.articles.Comment;
-import kickstart.inventory.ReorderableInventoryItem;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Map;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
-import org.salespointframework.time.BusinessTime;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import kickstart.articles.Article;
+import kickstart.articles.Comment;
+import kickstart.inventory.ReorderableInventoryItem;
 
 @Controller
 public class CatalogController {
@@ -71,7 +75,7 @@ public class CatalogController {
 	}
 	@PostMapping("/catalog")
 	String catalogFiltered (@Valid @ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset,BindingResult bindingResult, Model model){
-		if(reset.equals("Filter zurücksetzen")){
+		if(reset.equals("reset")){
 			return "redirect:/catalog/";
 		}
 		if(bindingResult.hasErrors()){
