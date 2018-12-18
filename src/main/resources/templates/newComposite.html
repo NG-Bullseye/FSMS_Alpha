@@ -12,16 +12,19 @@
 
 
         <form method="post" th:action="@{/catalog/composite/new}" th:object="${compositeForm}">
+            <div class="ui negative message" th:if="${#fields.hasErrors('*')}">
+                <p>Bitte überprüfen sie ihre Eingabe.</p>
+            </div>
             <div class=" ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Produktname</div>
-                    <input type="text" th:field="*{name}" required="required" />
+                    <input type="text" th:field="*{name}"/>
                 </div>
             </div>
             <div class="ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Beschreibung</div>
-                    <input type="text" th:field="*{description}" required="required" />
+                    <input type="text" th:field="*{description}"/>
                 </div>
             </div>
                 <div th:each="article : ${catalog}">

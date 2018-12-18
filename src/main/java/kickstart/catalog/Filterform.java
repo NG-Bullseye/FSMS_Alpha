@@ -2,16 +2,23 @@ package kickstart.catalog;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 
 public class Filterform {
+	@NotNull(message = "Bitte wählen Sie mindestens eine Farbe aus.")
 	private ArrayList<String> selectedColours;
-
-	private int minPrice = 1;
-
-	private int maxPrice = 10000;
+	@NotNull
+	@Min(1)
+	@Max(10000)
+	private Integer minPrice = 1;
+	@NotNull
+	@Min(1)
+	@Max(10000)
+	private Integer maxPrice = 10000;
+	@NotNull(message = "Bitte wählen Sie einen Produkttyp aus.")
 	private String type;
+	@NotNull(message = "Bitte wählen Sie mindestens eine Kategorie aus.")
 	private ArrayList<String> selectedCategories;
 
 

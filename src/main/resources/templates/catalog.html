@@ -85,7 +85,12 @@
 					</div>
 				</div>
 			</div>
+			<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">MaxPrice Error</a>
+			<a th:if="${#fields.hasErrors('maxPrice')}" th:errors="*{maxPrice}">MaxPrice Error</a>
+			<a th:if="${#fields.hasErrors('minPrice')}" th:errors="*{minPrice}">MaxPrice Error</a>
+			<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
 		</form>
+
 		<div id="tablespace">
 			<div class="ui cards">
 				<div class="ui link cards" th:remove="all-but-first">

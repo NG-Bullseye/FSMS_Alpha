@@ -25,6 +25,7 @@ import org.salespointframework.inventory.Inventory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.salespointframework.time.BusinessTime;
 
@@ -69,11 +70,16 @@ public class CatalogController {
 		return "catalog";
 	}
 	@PostMapping("/catalog")
-	String catalogFiltered (@ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset, Model model){
+	String catalogFiltered (@Valid @ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset,BindingResult bindingResult, Model model){
 		if(reset.equals("Filter zurücksetzen")){
 			return "redirect:/catalog/";
 		}
+		if(bindingResult.hasErrors()){
+			model.addAttribute("filterform", filterform);
+			return "catalog";
+		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
+
 		return "catalog";
 	}
 	@GetMapping("catalog/all")
@@ -141,10 +147,15 @@ public class CatalogController {
 		return "newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model,@RequestParam Map<String,String> partsMapping){
+	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeForm form, BindingResult bindingResult, Model model,@RequestParam Map<String,String> partsMapping){
 
 		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
 			return "redirect:/catalog/composite/new";
+		}
+		if(bindingResult.hasErrors()){
+			model.addAttribute("compositeForm",form);
+			model.addAttribute("catalog", manager.getAvailableForNewComposite());
+			return "newComposite";
 		}
 		model.addAttribute("compositeForm",new CompositeForm());
 
