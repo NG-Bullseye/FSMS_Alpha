@@ -67,6 +67,9 @@
                     </div>
                 </div>
             </div>
+                <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">
+                    Bitte geben Sie eine Beschreibung ein.
+                </div>
             </div>
             <div class="ui vertical segment" id="buttonspace">
             <div class="ui simple dropdown item">
@@ -84,6 +87,9 @@
                         </div>
                 </div>
             </div>
+                <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">
+                    Bitte geben Sie eine Beschreibung ein.
+                </div>
             </div>
             <div class="ui vertical segment">
 

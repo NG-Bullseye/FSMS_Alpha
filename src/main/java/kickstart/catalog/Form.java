@@ -20,7 +20,7 @@ public class Form {
 	@Min(1)
 	@Max(10000)
 	private double weight;
-	@NotNull(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
+	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
 
 
