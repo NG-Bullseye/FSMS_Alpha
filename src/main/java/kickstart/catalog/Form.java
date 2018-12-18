@@ -6,19 +6,21 @@ import javax.validation.constraints.*;
 import java.util.HashSet;
 
 public class Form {
-	@NotEmpty
+	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")
 	private String name;
 	@NotEmpty(message = "Bitte geben Sie eine Beschreibung für das Produkt ein.")
 	private String description;
-	@NotEmpty(message = "Bitte wählen sie mindestens eine Farbe aus")
+	@NotEmpty(message = "Bitte wählen Sie mindestens eine Farbe aus")
 	private HashSet<String> selectedColours;
-	@NotNull
+	@NotNull(message = "Bitte geben Sie einen Preis für das Produkt ein.")
 	@Min(1)
 	@Max(10000)
 	private double price;
-	@NotNull
+	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")
+	@Min(1)
+	@Max(10000)
 	private double weight;
-	@NotNull(message = "Bitte wählen sie mindestens eine Kategorie für den Artikel aus.")
+	@NotNull(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
 
 
@@ -27,11 +29,11 @@ public class Form {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@NotEmpty
+
 	public String getDescription() {
 		return description;
 	}
-	@NotEmpty
+
 	public String getName() {
 		return name;
 	}
@@ -48,7 +50,6 @@ public class Form {
 		this.price = price;
 	}
 
-	@DecimalMin("0.1") @DecimalMax("5000")
 	public double getWeight() {
 		return weight;
 	}
@@ -57,7 +58,6 @@ public class Form {
 		this.weight = weight;
 	}
 
-	@NotNull(message = "Bitte wählen sie eine Kategorie für den Artikel aus.")
 	public HashSet<String> getSelectedColours() {
 		return selectedColours;
 	}
@@ -65,7 +65,6 @@ public class Form {
 	public void setSelectedColours(HashSet<String> colour) {
 		this.selectedColours = colour;
 	}
-	@NotNull
 	public HashSet<String> getSelectedCategories() {
 		return selectedCategories;
 	}
