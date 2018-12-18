@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.javamoney.moneta.Money;
@@ -53,28 +52,28 @@ public class PartTest {
 		{
 			@SuppressWarnings("unused")
 			Part p = new Part("Name", "Description", -15, 100, colours, categories);
-			//fail("Part should throw an IllegalArgumentException when price is negative");
+			fail("Part should throw an IllegalArgumentException when price is negative");
 		}catch(IllegalArgumentException e) {}
 		
 		try
 		{
 			@SuppressWarnings("unused")
 			Part p = new Part("Name", "Description", 0, 100, colours, categories);
-			//fail("Part should throw an IllegalArgumentException when price is 0");
+			fail("Part should throw an IllegalArgumentException when price is 0");
 		}catch(IllegalArgumentException e) {}
 		
 		try
 		{
 			@SuppressWarnings("unused")
 			Part p = new Part("Name", "Description", 100, -15, colours, categories);
-			//fail("Part should throw an IllegalArgumentException when weight is negative");
+			fail("Part should throw an IllegalArgumentException when weight is negative");
 		}catch(IllegalArgumentException e) {}
 		
 		try
 		{
 			@SuppressWarnings("unused")
 			Part p = new Part("Name", "Description", 100, 0,colours, categories);
-			//fail("Part should throw an IllegalArgumentException when weight is 0");
+			fail("Part should throw an IllegalArgumentException when weight is 0");
 		}catch(IllegalArgumentException e) {}
 	}
 	
