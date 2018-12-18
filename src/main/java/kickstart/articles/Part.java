@@ -1,19 +1,24 @@
 package kickstart.articles;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.salespointframework.core.Currencies.*;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
 
 @Entity
 public class Part extends Article {
@@ -26,43 +31,38 @@ public class Part extends Article {
 	private Set<String> colour;
 	private ArticleType type;
 	
-	/**
-	 * 
-	 * @throws IllegalArgumentException: If price or weight are not positive or colour equals the empty string
-	 */
+	
 	private Part(){
 		super("a","b");
 	}
   
-	public Part(String name, String description, double price, double weight, HashSet<String> colour, Set<String> categories)
-		throws IllegalArgumentException, NullPointerException
-	{
-/* durch merge rausgefallen. Soll es drin bleiben?
-	public Part(@NotNull String name,@NotNull String description, double weight,
-			double price,@NotNull HashSet<String> colour,@NotNull Set<String> categories)
-		throws IllegalArgumentException {
-*/
-		super(name, description);
-		
-
-		
-/* Version vor Merge. Bitte Übergabeparameter Reihenfolge beachten!
-	public Part(String name, String description, double price, double weight, String colour)
-		throws IllegalArgumentException, NullPointerException
+	/**
+	 * 
+	 * @param name
+	 * @param description
+	 * @param price
+	 * @param weight
+	 * @param colour
+	 * @param categories
+	 * @throws IllegalArgumentException If the price or weight is not positive.
+	 */
+	public Part(@NotNull String name, @NotNull String description, double price, double weight,@NotNull HashSet<String> colour, @NotNull Set<String> categories)
+		throws IllegalArgumentException
 	{
 		super(name, description);
+		
 		if(price <= 0)
 		{
 			throw new IllegalArgumentException("Part.price should be positive.");
 		}
-*/
+
 		if(weight <= 0) {
 			throw new IllegalArgumentException("Part.weight should be positive");
 		}
 		
 		this.colour = colour;
 
-		this.setPrice(Money.of(price, EURO));
+		this.setPrice(Money.of(price, "EUR"));
 		
 		this.quantity = Quantity.of(weight, Metric.KILOGRAM);
 
@@ -101,7 +101,7 @@ public class Part extends Article {
 	
 	/**
 	 * 
-	 * @throws IllegalArgumentException: If colour is null
+	 * @throws IllegalArgumentException: If colour is an empty string
 	 */
 	@Override
 	public void setColour(@NotNull String colour)
@@ -122,24 +122,49 @@ public class Part extends Article {
 		return type;
 	}
 	
+	/**
+	 * 
+	 * @return A set of all categories as String
+	 */
 	public HashSet<String> getAllCategories(){
 		HashSet<String> returning = new HashSet<>();
 		this.getCategories().forEach(returning::add);
 		return returning;
 	}
 
+	/**
+	 * @return Returns always true, since parts only get directly updated and not by changing other articles
+	 */
 	@Override
 	public boolean update(@NotNull List<Article> parts) {
 		return true;
 	}
 
+	/**
+	 * @return Returns a empty Map, since this class never has parts
+	 */
 	@Override
 	public Map<ProductIdentifier, Integer> getPartIds(){
-		return null;
+		return new HashMap<ProductIdentifier, Integer>();
 	}
+	
+	/**
+	 * A part does not have parts of it's own.Therefore nothing gets changed.
+	 * This method is only to make casting in our composite tree not necessary.
+	 */
 	@Override
-	public void addPart(Article article){}
+	public void addPart(@NotNull Article article){
+		// A part does not have parts of it's own.Therefore nothing gets changed.
+		// This method is only to make casting in our composite tree not necessary.
+	}
 
+	/**
+	 * A part does not have parts of it's own.Therefore nothing gets changed.
+	 * This method is only to make casting in our composite tree not necessary.
+	 */
 	@Override
-	public void removePart(Article article){}
+	public void removePart(@NotNull Article article){
+		// A part does not have parts of it's own.Therefore nothing gets changed.
+		// This method is only to make casting in our composite tree not necessary.
+	}
 }
