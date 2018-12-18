@@ -35,7 +35,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 	default Iterable<Article> findByColours(ArrayList<String> colours){	//Optimierungsbedarf------------------------------------
 		HashSet<Article> rightColours = new HashSet<>();
 		for (Article article : this.findAll()) {
-			for (String colour: colours) {
+			for (String colour: article.getColour()) {
 				if(colours.contains(colour)) rightColours.add(article);
 			}
 
