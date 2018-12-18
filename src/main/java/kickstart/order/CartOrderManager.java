@@ -19,7 +19,6 @@ import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -216,18 +215,18 @@ public class CartOrderManager {
 		
 	}
 	
-	public Map<String, List<Order>> getSideInventories() {
-		Map<String, List<Order>> sideInventories = new HashMap<String, List<Order>>();
+	public Map<String, List<CustomerOrder>> getSideInventories() {
+		Map<String, List<CustomerOrder>> sideInventories = new HashMap<String, List<CustomerOrder>>();
 		
 		for(String destination: destinations) {
-			sideInventories.put(destination, new ArrayList<Order>());
+			sideInventories.put(destination, new ArrayList<CustomerOrder>());
 		}
 		
-		sideInventories.put("home", new ArrayList<Order>());
+		sideInventories.put("home", new ArrayList<CustomerOrder>());
 		
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)) {
 			if(order.isabholbereit()) {
-				List<Order> orders = sideInventories.get(order.getDestination());
+				List<CustomerOrder> orders = sideInventories.get(order.getDestination());
 				orders.add(order);
 				
 				sideInventories.put(order.getDestination(), orders);
