@@ -1,6 +1,5 @@
 package kickstart.inventory;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -14,17 +13,17 @@ import org.salespointframework.catalog.Catalog;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
-import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.annotation.Transient;
 import org.springframework.transaction.annotation.Transactional;
 
+import kickstart.accountancy.AccountancyManager;
 import kickstart.articles.Article;
 import kickstart.articles.Part;
 
-/*
+
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @Transactional
@@ -34,7 +33,7 @@ public class InventoryManagerTest {
 
 	private  @Autowired Inventory<ReorderableInventoryItem> inventory;
 		
-	private  @Autowired BusinessTime time;
+	private  @Autowired AccountancyManager accountancy;
 	
 	// The part that is in the inventory
 	private Part p;
@@ -59,7 +58,7 @@ public class InventoryManagerTest {
 		
 		q = new Part("Part2", "Description", 5, 5, colours, new HashSet<String>());
 		
-		manager = new InventoryManager(inventory, time);
+		manager = new InventoryManager(inventory, accountancy);
 	}
 	
 	@Test
@@ -148,7 +147,7 @@ public class InventoryManagerTest {
 		assertThat(manager.isPresent(q)).as("InventoryManager should return false if an article isn't present ").isFalse();
 	}
 	
-	/*
+	
 	@Test
 	@Transient
 	public void testUpdate() {
@@ -156,13 +155,13 @@ public class InventoryManagerTest {
 		
 		Quantity before = manager.getInventory().findByProduct(p).get().getQuantity();
 		
-		manager.getTime().forward(Interval.from(time.getTime()).to(time.getTime().plusDays(manager.getReorderTime())).getDuration());
+		manager.getTime().forward(Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(manager.getReorderTime())).getDuration());
 		
 		manager.update();
 		
 		assertThat(before.add(Quantity.of(5, Metric.UNIT)).getAmount().compareTo(manager.getInventory().findByProduct(p).get().getQuantity().getAmount()) == 0)
 		.as("InventoryManager should increase the amount after the reordertime has passed").isTrue();
 		
-		time.reset();
+		manager.getTime().reset();
 	}	
-}*/
+}

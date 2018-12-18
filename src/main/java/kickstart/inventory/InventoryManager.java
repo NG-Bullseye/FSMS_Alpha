@@ -4,7 +4,6 @@ package kickstart.inventory;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
-import javax.money.MonetaryAmount;
 
 
 import org.salespointframework.catalog.ProductIdentifier;
@@ -14,10 +13,10 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import kickstart.accountancy.AccountancyManager;
 import kickstart.articles.Article;
+import lombok.Getter;
 
 /**
  * 
@@ -28,11 +27,14 @@ import kickstart.articles.Article;
 public class InventoryManager {
 
 	// Stores the amount of each article.
+	@Getter
 	private final Inventory<ReorderableInventoryItem> inventory;
 	
+	@Getter
 	private AccountancyManager accountancy;
 	
 	// The time difference (in days) until a reorder is completed 
+	@Getter
 	private final long reorderTime = 6;
 	
 		
@@ -48,16 +50,8 @@ public class InventoryManager {
 		this.accountancy = accountancy;
 	}
 	
-	/**
-	 * 
-	 * @return time until a reorder arrives at the inventory in days.
-	 */
-	public long getReorderTime() {
-		return reorderTime;
-	}
-	
-	public Inventory<ReorderableInventoryItem> getInventory() {
-		return inventory;
+	public BusinessTime getTime() {
+		return accountancy.getBusinessTime();
 	}
 	
 	/**
@@ -69,9 +63,6 @@ public class InventoryManager {
 	public void addArticle(@NotNull Article newArticle) {
 		if(!inventory.findByProductIdentifier(newArticle.getId()).isPresent()) {
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
-		}
-		else {
-
 		}
 	}
 	
@@ -100,7 +91,8 @@ public class InventoryManager {
 	}
 	
 	/**
-	 * 
+	 * Creates a new reorder for the article so that after the specified reorder time,
+	 * the quantity increases
 	 * 
 	 * @param article The article that should get reordered.
 	 * @param quantity The desired quantity
@@ -119,6 +111,13 @@ public class InventoryManager {
 		
 	}
 	
+	/**
+	 * Creates a new reorder for the article so that after the specified reorder time,
+	 * the quantity increases
+	 * 
+	 * @param id The ProductIdentifier of the article that should get reordered.
+	 * @param quantity The desired quantity
+	 */
 	public void reorder(@NotNull ProductIdentifier id, @NotNull Quantity quantity)
 	{
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);
@@ -165,6 +164,10 @@ public class InventoryManager {
 		return inventory.findByProduct(article).isPresent();
 	}
 	
+	/**
+	 * @param id The ProductIdentifier of the asked id
+	 * @return Returns if there exists an InventoryItem for this article. Otherwise false
+	 */
 	public boolean isPresent(@NotNull ProductIdentifier id) {
 		return inventory.findByProductIdentifier(id).isPresent();
 	}
