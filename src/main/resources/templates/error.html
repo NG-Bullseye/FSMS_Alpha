@@ -54,11 +54,10 @@
               <td>Exception</td>
               <td th:text="${exception}"/>
             </tr>
-<!--             sec:authorize="hasRole('ROLE_BOSS')" -->
-            <tr> 
+            <tr sec:authorize="hasRole('ROLE_BOSS')"> 
               <td>Trace</td>
               <td>
-                <pre th:text="${trace}"/>
+                <pre th:text="${trace}"></pre>
               </td>
             </tr>
           </tbody>
