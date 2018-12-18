@@ -108,6 +108,17 @@ public class InventoryManagerTest {
 		
 		assertThat(manager.getInventory().findByProduct(p).get().getReorders().keySet().size() == size + 1)
 		.as("InventoryManager should add a reorder after reordering").isTrue();
+		
+		Article a = new Part("Name", "Description", 2, 2, new HashSet<String>(), new HashSet<String>());
+				
+		catalog.save(a);
+		
+		manager.addArticle(a);
+		
+		manager.reorder(a.getId(), Quantity.of(1, Metric.UNIT));
+		
+		assertThat(manager.getInventory().findByProduct(a).get().getReorders().keySet().size() == 1)
+			.as("InventoryManager should add a reorder after reordering").isTrue();
 	}
 	
 	@Test
@@ -145,6 +156,10 @@ public class InventoryManagerTest {
 		assertThat(manager.isPresent(p)).as("InventoryManager should return true if an article is present").isTrue();
 		
 		assertThat(manager.isPresent(q)).as("InventoryManager should return false if an article isn't present ").isFalse();
+	
+		assertThat(manager.isPresent(p.getId())).as("InventoryManager should return true if an article is present").isTrue();
+		
+		assertThat(manager.isPresent(q.getId())).as("InventoryManager should return false if an article isn't present ").isFalse();
 	}
 	
 	
