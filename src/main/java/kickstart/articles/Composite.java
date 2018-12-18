@@ -1,9 +1,7 @@
 package kickstart.articles;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +19,6 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -89,8 +86,7 @@ public class Composite extends Article {
 			
 			if(partIds.containsKey(article.getId())) {
 				partIds.put(article.getId(), partIds.get(article.getId()) + 1);
-			}
-			else {
+			}else {
 				article.setParent(this.getId());
 				partIds.put(article.getId(), 1);
 			}
@@ -104,12 +100,11 @@ public class Composite extends Article {
 	 * Adds a new part to the list of parts.
 	 * @param article The new part to get added to parts
 	 */
-	public void addPart(Article article) {
-		//parts.add(article);
+	public void addPart(@NotNull Article article) {
+		parts.add(article);
 		if(partIds.containsKey(article.getId())) {
 			partIds.put(article.getId(), partIds.get(article.getId()) + 1);
-		}
-		else {
+		}else {
 			partIds.put(article.getId(), 1);
 		}
 	}
@@ -120,7 +115,7 @@ public class Composite extends Article {
 	 *  to an empty list, the article won't get removed.
 	 * @param article The article that should get removed.
 	 */
-	public void removePart(Article article) {
+	public void removePart(@NotNull Article article) {
 		// A Composite should always have at least one part
 		if(partIds.size() > 1) {
 			// Removes only the first appearance of this article. To remove it multiple times
@@ -128,8 +123,7 @@ public class Composite extends Article {
 			//parts.remove(article);
 			if(partIds.get(article.getId()) == 1) {
 				partIds.remove(article.getId());
-			}
-			else {
+			}else {
 				partIds.put(article.getId(),partIds.get(article.getId()) - 1 );
 			}
 		}
@@ -155,7 +149,7 @@ public class Composite extends Article {
 	
 	/**
 	 * @param parts The list of all parts obtained from the catalog, since they aren't saved in 
-	 *  the article. Use the saved articles to get all parts from the catalog
+	 *  the article. Use the method getPartIds to get the information which articles to get from the catalog
 	 *  @return Returns true if the attributes got updated. Returns false if a part needs to get
 	 *   updated before
 	 */
@@ -176,11 +170,10 @@ public class Composite extends Article {
 				return false;
 			}
 			
-			for(int factor = partIds.get(article.getId()); factor > 0; factor--) {
-				weight = weight.add(article.getWeight());
+			weight = weight.add(article.getWeight());
 
-				price = price.add(article.getPrice());
-			}
+			price = price.add(article.getPrice());
+			
 			colours.addAll(article.getColour());
 			for(String category: article.getCategories()) {
 				this.addCategory(category);
@@ -232,18 +225,31 @@ public class Composite extends Article {
 		return type;
 	}
 
+	/**
+	 * This method is only for the composite structure and doesn't change the composite.
+	 * The colours are determined by the parts
+	 */
 	@Override
 	public void setColour(String colour) {
-
+		// This method is only for the composite structure and doesn't change the composite.
+		// The colours are determined by the parts
 	}
 
+	/**
+	 * This method is only for the composite structure and doesn't change the composite.
+	 * The weight is determined by the parts
+	 */
 	@Override
 	public void setWeight(double weight) {
-
+		// This method is only for the composite structure and doesn't change the composite.
+		// The weight is determined by the parts
 	}
 	
-	// TODO: Better way to convert Streamable to Set?
-	public Set<String> getAllCategories(){					//Hat ohne die Funktion einen Fehler ausgegeben
+	/**
+	 * 
+	 * @return Returns all categories as a Set
+	 */
+	public Set<String> getAllCategories(){					
 		HashSet<String> categories = new HashSet<String>();
 		this.getCategories().forEach(categories::add);
 		return categories;

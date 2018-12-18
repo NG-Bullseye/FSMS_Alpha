@@ -96,6 +96,34 @@ public class CarpoolManager {
 		carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
+	public Truck checkTruckavailable(Quantity weight){
+		List<Truck> filteredTrucks=new ArrayList<>();
+		for (Truck t:
+				freeTrucks) {
+			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
+				filteredTrucks.add(t);
+		}
+
+		if (filteredTrucks.size()<=0){
+			return null;
+		}
+		else{
+			Truck possible = null;
+			for (Truck t: filteredTrucks){
+				if(possible == null){
+					possible = t;
+				}
+				else{
+					if(weight.getAmount().intValue() - t.getCapacity().getAmount().intValue()
+							< weight.getAmount().intValue() - possible.getCapacity().getAmount().intValue()){
+						possible = t;
+					}
+				}
+			}
+			return possible;
+		}
+	}
+
 	public Truck rentTruckByWight(Quantity weight,UserAccount rentedBy){
 
 		Assert.notNull(rentedBy, "useraccount must not be null!");

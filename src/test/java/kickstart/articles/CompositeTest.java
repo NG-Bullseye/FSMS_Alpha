@@ -1,9 +1,10 @@
 package kickstart.articles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +12,10 @@ import java.util.Set;
 
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Quantity;
 
 import kickstart.articles.Article.ArticleType;
@@ -25,15 +28,21 @@ public class CompositeTest {
 	private Composite composite2;
 	LinkedList<Article> parts1;
 	LinkedList<Article> parts2;
+	HashSet<String> colours1;
+	HashSet<String> colours2;
+	HashSet<String> categories1;
+	HashSet<String> categories2;
+	
 	
 	@BeforeEach
 	public void setUp()
 	{
-		HashSet<String> colours1 = new HashSet<String>();
+		colours1 = new HashSet<String>();
 		colours1.add("brown");
 		
-		HashSet<String> colours2 = new HashSet<String>();
+		colours2 = new HashSet<String>();
 		colours2.add("black");
+		
 		
 		part1 = new Part("Frame", "Frame for a book shelf", 25.75, 6, colours1, new HashSet<String>());
 		part2 = new Part("Board", "Board for a book shelf", 14.33, 2, colours2,  new HashSet<String>());
@@ -44,14 +53,14 @@ public class CompositeTest {
 		
 		parts2 = new LinkedList<Article>();
 		parts2.addAll(parts1);
-		parts2.addAll(parts2);
+		parts2.add(part2);
 		
 		composite1 = new Composite("Bookshelf 1", "The standart bookshelf", parts1 );
 		
 		composite2 = new Composite("Bookshelf 2", "A larger bookshelf", parts2);
 	}
 	
-	/*
+	
 	@Test
 	public void testConstructorEmptyList()
 	{
@@ -64,128 +73,101 @@ public class CompositeTest {
 	}
 	
 	@Test
-	public void testAdd()
-	{
-		try
-		{
-			composite1.addPart(null);
-			fail("Composite should throw a NullPointerException when trying to add null");
-		}catch(NullPointerException e) {}
+	public void testAddPart() {
+		List<Article> list = new ArrayList<Article>();
+		list.add(part1);
 		
+		Composite c = new Composite("Name", "Description", list);
 		
-		// Remember that the order matters when comparing lists.
+		c.addPart(part2);
 		
-		composite1.addPart(part1);
+		assertThat(c.getParts().contains(part1)).as( "Composite should add an article to the part list after addPart").isTrue();
 		
-		List<Article> partList = new ArrayList<Article>();
-		partList.add(part1);
-		partList.add(part2);
-		partList.add(part1);
+		assertThat(c.getPartIds().keySet().contains(part2.getId())).as("Composite should add the articles id after addPart").isTrue();
 		
-		assertEquals(partList, composite1.getParts(), "Composite should be able to add part if the part is already present.");
+		int amount = c.getPartIds().get(part2.getId());
 		
+		c.addPart(part2);
 		
-		List<Article> partList2 = new ArrayList<Article>();
-		partList2.add(part1);
-		partList2.add(part2);
-		partList2.add(part1);
-		partList2.add(part2);
-		partList2.add(composite1);
+		assertThat(c.getPartIds().get(part2.getId())).as("Composite should increase the amount of a present article after adding it again.").isEqualByComparingTo(Integer.valueOf(amount+1));
 		
-		composite2.addPart(composite1);
-		
-		assertEquals(partList2, composite2.getParts(), "Composite should be able to add Composites as parts");
 	}
 
 	@Test
 	public void testRemove()
 	{
-		LinkedList<Article> partList = new LinkedList<Article>();
-		partList.add(part1);
+		List<Article> list = new ArrayList<Article>();
+		list.add(part1);
 		
-		composite1.removePart(part2);
-		
-		assertEquals(partList, composite1.getParts(), "Composite should remove the part ");
-		
-		Composite c = new Composite("Name", "Description", partList);
+		Composite c = new Composite("Name", "Description", list);
 		
 		c.removePart(part1);
 		
-		assertEquals(partList, c.getParts(), "Composite should never remove it's only part");
+		assertThat(c.getParts().size() != 0).as("Composite should never delete the last object").isTrue();
 		
-		LinkedList<Article> partList2 = new LinkedList<Article>();
+		assertThat(c.getPartIds().keySet().size() != 0).as("Composite should never delete the last object").isTrue();
 		
-		partList2.add(part2);
-		partList2.add(part2);
-		partList2.add(part2);
+		c.addPart(part2);
+		c.addPart(part2);
 		
-		Composite d = new Composite("Name", "Description", partList2);
+		c.removePart(part2);
 		
-		d.removePart(part2);
+		assertThat(c.getParts().contains(part2)).as("Composite should only delete one part if a part is multiple times present.").isTrue();
 		
-		assertEquals(2, d.getParts().size(), "Composite should remove an article just once");
+		assertThat(c.getPartIds().get(part2.getId()).equals(Integer.valueOf(1))).as("Composite should decrease the quantity of that element after removing it").isTrue();
 	}
 
 	@Test
 	public void testGetParts()
 	{
-		assertEquals(parts1, composite1.getParts(), "Composite should return the correct list of parts");
+		assertThat(composite1.getParts()).as("Composite should return the correct list of parts").isEqualTo(parts1);
 		
-		assertEquals(parts2, composite2.getParts(), "Composite should return the correct list of parts");
+		
+		assertThat(composite2.getParts()).as("Composite should return the correct list of parts").isEqualTo(parts2);
+	}
+	
+	@Test
+	public void testGetPartIds() {
+		HashMap<ProductIdentifier, Integer> partIds = new HashMap<ProductIdentifier, Integer>();
+		partIds.put(part1.getId(), 2);
+		partIds.put(part2.getId(), 1);
+		
+		List<Article> list = new ArrayList<Article>();
+		list.add(part1);
+		list.add(part1);
+		list.add(part2);
+		
+		Composite c = new Composite("Name", "description", list);
+		
+		for(ProductIdentifier id: c.getPartIds().keySet()) {
+			assertThat(partIds).containsKey(id)
+			.as("Composite should contain the identifier for each of it's elements.");
+			assertThat(partIds.get(id)).as("Composite should have the right amount for each id")
+			.isEqualByComparingTo(c.getPartIds().get(id));
+		}
+		
 	}
 	
 	@Test
 	public void testGetWeight()
 	{
-		Quantity weight1 = parts1.get(0).getWeight();
+		assertThat(composite1.getWeight().getAmount())
+		.as("A composite's weight should equal the weight of all it's parts.")
+		.isEqualByComparingTo(part1.getWeight().add(part2.getWeight()).getAmount());
 		
-		for(Article part: parts1)
-		{
-			weight1 = weight1.add(part.getWeight());
-		}
-		
-		assertEquals(weight1, composite1.getWeight(), "Composite should return the right weight");
-		
-		Quantity weight2 = parts2.get(0).getWeight();
-		
-		for(Article part: parts2)
-		{
-			weight2 = weight2.add(part.getWeight());
-		} 
-		
-		assertEquals(weight2, composite2.getWeight(), "Composite should return the right weight");
-		
-		composite2.addPart(composite1);
-		
-		assertEquals(weight2.add(weight1), composite2.getWeight(), "Composite should return the right weight with Composites as parts");
-
+		assertThat(composite2.getWeight().getAmount())
+		.as("A composite's weight should equal the weight of all it's parts.")
+		.isEqualByComparingTo(composite1.getWeight().add(part2.getWeight()).getAmount());
 	}
 	
 	@Test
 	public void testGetPrice()
-	{
-		MonetaryAmount price1 = parts1.get(0).getPrice();
+	{		
+		assertThat(composite1.getPrice()).as("A composite's price should equal the price of all it's parts.")
+			.isEqualByComparingTo(part1.getPrice().add(part2.getPrice()));
 		
-		for(Article part: parts1)
-		{
-			price1 = price1.add(part.getPrice());
-		}
-		
-		assertEquals(price1, composite1.getPrice(), "Composite should return the right price");
-		
-		MonetaryAmount price2 = parts2.get(0).getPrice();
-		
-		for(Article part: parts2)
-		{
-			price2 = price2.add(part.getPrice());
-		} 
-		
-		assertEquals(price2, composite2.getPrice(), "Composite should return the right price");
-		
-		composite2.addPart(composite1);
-		
-		assertEquals(price2.add(price1), composite2.getPrice(), "Composite should return the right price with Composites as parts");
-
+		assertThat(composite2.getPrice()).as("A composite's price should equal the price of all it's parts.")
+			.isEqualByComparingTo(composite1.getPrice().add(part2.getPrice()));
 	}
 
 	@Test
@@ -195,7 +177,7 @@ public class CompositeTest {
 		colour1.add("brown");
 		colour1.add("black");
 		
-		assertEquals(colour1, composite1.getColour(), "Composite should return the right colours");
+		assertThat(composite1.getColour()).as("Composite should return the right colours").isEqualTo(colour1);
 		
 		Set<String> colour2 = new HashSet<String>();
 		colour2.add("brown");
@@ -206,17 +188,98 @@ public class CompositeTest {
 		
 		Composite c = new Composite("Name", "Description", parts);
 		
-		assertEquals(colour2, c.getColour(), "Composite should return the right colours");
+		assertThat(c.getColour()).as("Composite should return the right colours").isEqualTo(colour2);
 		
-		assertEquals(1, c.getColour().size(), "Composite should return each colour just once");
+		assertThat(c.getColour().size()==1).as("Composite should return each colour just once").isTrue();
 		
 	}
 
 	@Test
 	public void testGetType()
 	{
-		assertEquals(ArticleType.COMPOSITE, composite1.getType(), "Composite should always return ArticleType.COMPOSITE");
+		assertThat(composite1.getType()).as("Composite should always return ArticleType.COMPOSITE")
+		.isEqualTo(ArticleType.COMPOSITE);
 		
-		assertEquals(ArticleType.COMPOSITE, composite2.getType(), "Composite should always return ArticleType.COMPOSITE");
-	}*/
+		assertThat(composite2.getType()).as("Composite should always return ArticleType.COMPOSITE")
+		.isEqualTo(ArticleType.COMPOSITE);	}
+	
+	@Test
+	public void testSetWeight() {
+		Quantity before = composite1.getWeight();
+		
+		composite1.setWeight(before.getAmount().doubleValue() +200);
+		
+		assertThat(composite1.getWeight().getAmount()).as("SetWeight shouldn't change the weight of a composite")
+		.isEqualByComparingTo(before.getAmount());
+	}
+	
+	@Test
+	public void testSetPrice() {
+		MonetaryAmount before = composite1.getPrice();
+		
+		composite1.setPrice(Money.of(before.getNumber().doubleValue() +200 , before.getCurrency()));
+		
+		assertThat(composite1.getPrice()).as("SetPrice shouldn't change the price of a composite")
+			.isEqualByComparingTo(before);
+	}
+	
+	@Test
+	public void testSetColour() {
+		String[] colours = {"a", "b", "green", "yellow", "grey"};
+		
+		for(String colour: colours) {
+			if(!composite1.getColour().contains(colour)) {
+				composite1.setColour(colour);
+				
+				assertThat(!composite1.getColour().contains(colour))
+				.as("SetColour shouldn't change the colours of a Composite").isTrue();
+			}
+		}
+	}
+	
+	@Test
+	public void testUpdate() {
+		part1.setPrice(Money.of(100,"EUR"));
+		part2.setWeight(200);
+		part1.addCategory("Kitchen");
+		part2.setColour("yellow");
+		
+		part1.setUpdateStatus(true);
+		part2.setUpdateStatus(true);
+		
+		try {
+			composite2.update(new ArrayList<Article>());
+			fail("Composite should throw an IllegalArgumentException when trying to update with an empty list");
+		}catch(IllegalArgumentException e) {}
+		
+		List<Article> parts = new ArrayList<Article>();
+		
+		parts.add(part1);
+		parts.add(part2);
+		
+		
+		assertThat(composite1.update(parts)).as("Composite should return true after updating").isTrue();
+		
+		assertThat(composite1.getPrice()).as("Composite should update the price correctly")
+			.isEqualByComparingTo(part1.getPrice().add(part2.getPrice()));
+		
+		assertThat(composite1.getWeight().getAmount()).as("Composite should update the weight correctly")
+		.isEqualByComparingTo(part1.getWeight().add(part2.getWeight()).getAmount());
+		
+		HashSet<String> colours = new HashSet<String>();
+		colours.addAll(part1.getColour());
+		colours.addAll(part2.getColour());
+		
+		for(String colour: colours) {
+			assertThat(composite1.getColour()).as("Composite should contains it's parts colours").contains(colour);
+		}
+		
+		HashSet<String> categories = new HashSet<String>();
+		colours.addAll(part1.getAllCategories());
+		colours.addAll(part2.getAllCategories());
+
+		for(String category: categories) {
+			assertThat(composite1.getAllCategories()).as("Composite should contains it's parts colours").contains(category);
+		}
+	}
 }
