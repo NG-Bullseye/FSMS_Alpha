@@ -8,13 +8,16 @@
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
 		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
-			<div class="ui attached stackable menu">
-				<div class="ui container left attached">
+			<div class="ui attached menu">
+				
+				<div class="item">
 					<select class="ui dropdown" th:field="*{type}">
 						<option th:value="all" >Alle Artikel</option>
 						<option th:value="part" >Möbelteile</option>
 						<option th:value="composite">Möbel</option>
 					</select>
+					</div>
+					<div class="item">
 					<div class="ui simple dropdown">
 						<div class="text">Farbe</div>
 						<i class="dropdown icon"></i>
@@ -31,6 +34,8 @@
 							</ul>
 						</div>
 					</div>
+					</div>
+					<div class="item">
 					<div class="ui simple dropdown">
 						<div class="text">Preis</div>
 						<i class="dropdown icon"></i>
@@ -49,6 +54,8 @@
 							</a>
 						</div>
 					</div>
+					</div>
+					<div class="item">
 					<div class="ui simple dropdown">
 						<div class="text">Kategorien</div>
 						<i class="dropdown icon"></i>
@@ -66,26 +73,42 @@
 							</ul>
 						</div>
 					</div>
-					<button class="ui button" type="submit" value="filter" name="reset">Filtern</button>
-					<button class="ui button" type="submit" value="reset" name="reset">Filter zurücksetzen</button>
-					<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-						<a id="editspace" class="ui button" th:href="@{/catalog/all}">gesamten Katalog anzeigen</a>
+					</div>
+					<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">MaxPrice Error</a>
+					<a th:if="${#fields.hasErrors('maxPrice')}" th:errors="*{maxPrice}">MaxPrice Error</a>
+					<a th:if="${#fields.hasErrors('minPrice')}" th:errors="*{minPrice}">MaxPrice Error</a>
+					<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
+					<div class="item">
+						<button class="ui button" type="submit" value="filter" name="reset">
+						<i class="filter icon"></i>
+						Filtern
+					</button>
+					</div>
+					<div class="item">
+						<button class="ui button" type="submit" value="reset" name="reset">
+						<i class="recycle icon"></i>
+						Filter zurücksetzen
+					</button>
+					</div>
+					
+					<a class="item" th:href="@{/catalog/all}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+						<div class="ui button">gesamten Katalog anzeigen</div>
+					</a>
+					<div class="right menu">
+					<div class="item">
+						<div sec:authorize="hasRole('ROLE_EMPLOYEE')" class="ui simple dropdown">
+							neues Möbelstück
+							<i class="dropdown icon"></i>
+							<div class="menu">
+								<a class="item" th:href="@{/catalog/part/new}">neues Möbelteil</a>
+								<a class="item" th:href="@{/catalog/composite/new}">neues Möbelstück</a>
+							</div>
+						</div>
+						</div>
 					</div>
 				</div>
-				<div sec:authorize="hasRole('ROLE_EMPLOYEE')" class="ui right attached simple dropdown item">
-					neues Möbelstück
-					<i class="dropdown icon"></i>
-					<div class="menu">
-						<a class="item" th:href="@{/catalog/part/new}">neues Möbelteil</a>
-						<a class="item" th:href="@{/catalog/composite/new}">neues Möbelstück</a>
-					</div>
-				</div>
-			</div>
-			<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">MaxPrice Error</a>
-			<a th:if="${#fields.hasErrors('maxPrice')}" th:errors="*{maxPrice}">MaxPrice Error</a>
-			<a th:if="${#fields.hasErrors('minPrice')}" th:errors="*{minPrice}">MaxPrice Error</a>
-			<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
-		</form>
+				</form>
+		
 
 		<div id="tablespace">
 			<div class="ui cards">
