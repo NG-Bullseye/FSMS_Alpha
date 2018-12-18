@@ -22,17 +22,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import lombok.Getter;
 @Entity
 @Table(name = "COMMENTS")
 public class Comment implements Serializable {
 
+	@Getter
 	private @Id @GeneratedValue long id;
 
+	@Getter
 	private String text;
+	
+	@Getter
 	private int rating;
 
+	@Getter
 	private LocalDateTime date;
 
+	@SuppressWarnings("unused")
 	private Comment() {}
 
 	public Comment(String text, int rating, LocalDateTime dateTime) {
@@ -42,21 +50,7 @@ public class Comment implements Serializable {
 		this.date = dateTime;
 	}
 
-	public long getId() {
-		return id;
-	}
 
-	public String getText() {
-		return text;
-	}
-
-	public LocalDateTime getDate() {
-		return date;
-	}
-
-	public int getRating() {
-		return rating;
-	}
 
 	@Override
 	public String toString() {
