@@ -8,15 +8,17 @@ import java.util.HashSet;
 public class Form {
 	@NotEmpty
 	private String name;
-	@NotEmpty
+	@NotEmpty(message = "Bitte geben Sie eine Beschreibung für das Produkt ein.")
 	private String description;
-	@NotEmpty(message = "Bitte wählen sie eine Farbe aus")
+	@NotEmpty(message = "Bitte wählen sie mindestens eine Farbe aus")
 	private HashSet<String> selectedColours;
 	@NotNull
+	@Min(1)
+	@Max(10000)
 	private double price;
 	@NotNull
 	private double weight;
-	@NotNull(message = "Bitte wählen sie eine Kategorie für den Artikel aus.")
+	@NotNull(message = "Bitte wählen sie mindestens eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
 
 
