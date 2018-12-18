@@ -8,7 +8,7 @@
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
 		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
-			<div class="ui attached menu">
+			<div class="ui menu">
 				
 				<div class="item">
 					<select class="ui dropdown" th:field="*{type}">
@@ -90,13 +90,14 @@
 						Filter zurücksetzen
 					</button>
 					</div>
-					
-					<a class="item" th:href="@{/catalog/all}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-						<div class="ui button">gesamten Katalog anzeigen</div>
-					</a>
-					<div class="right menu">
+					<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+						<a th:href="@{/catalog/all}">
+							<div class="ui button">gesamten Katalog anzeigen</div>
+						</a>
+					</div>
+					<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<div class="item">
-						<div sec:authorize="hasRole('ROLE_EMPLOYEE')" class="ui simple dropdown">
+						<div class="ui simple dropdown">
 							neues Möbelstück
 							<i class="dropdown icon"></i>
 							<div class="menu">
@@ -111,7 +112,6 @@
 		
 
 		<div id="tablespace">
-			<div class="ui cards">
 				<div class="ui link cards" th:remove="all-but-first">
 					<div class="card" th:each="article : ${catalog}">
 						<div class="content">
@@ -129,6 +129,5 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</body>
 </html>
