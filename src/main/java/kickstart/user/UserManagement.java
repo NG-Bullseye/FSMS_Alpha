@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import kickstart.exception.UnAllowedException;
 import lombok.NonNull;
 
 
@@ -129,17 +130,21 @@ public User findUserById (long id) {
 		
 	}
 	
-	public void changeRole(@NonNull User user, int type) {
-		UserAccount userAccount = user.getUserAccount();
+	public void changeRole(@NonNull User requestedUser, @NonNull User loggedIn,int type) throws UnAllowedException {
+		if (requestedUser.getId() == loggedIn.getId()) { // Nutzer möchte sich selbst befördern oder herabstufen
+			throw new UnAllowedException("You are not allowed to change your own Role!");
+		}
+		
+		UserAccount userAccount = requestedUser.getUserAccount();
 		if (type == 0) { // Kunde zum Mitarbeiter machen
 			userAccount.add(Role.of("ROLE_EMPLOYEE"));
 			userAccount.remove(Role.of("ROLE_CUSTOMER"));
-			user.setSalary(50);
+			requestedUser.setSalary(50);
 			return;
 		} else if (type == 1) { // Mitarbeiter zum Kunde machen
 			userAccount.add(Role.of("ROLE_CUSTOMER"));
 			userAccount.remove(Role.of("ROLE_EMPLOYEE"));
-			user.setSalary(0);
+			requestedUser.setSalary(0);
 			return;
 		} else if (type == 2) { // Mitarbeiter zum Admin machen
 			userAccount.add(Role.of("ROLE_BOSS"));

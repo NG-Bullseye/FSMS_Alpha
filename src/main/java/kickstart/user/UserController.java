@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kickstart.exception.UnAllowedException;
+
 @Controller
 class UserController {
 
@@ -116,9 +118,10 @@ class UserController {
 	
 	@GetMapping("/changeRole")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
-	String changeRole(@RequestParam(value = "user") long requestId, @RequestParam(value = "type") int type) {
+	String changeRole(@RequestParam(value = "user") long requestId, @LoggedIn UserAccount loggedInUserWeb, @RequestParam(value = "type") int type) throws UnAllowedException {
 		User requestedUser = userManagement.findUserById(requestId);
-		userManagement.changeRole(requestedUser, type);
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		userManagement.changeRole(requestedUser, loggedInUser, type);
 		return "redirect:/employees";
 	}
 	
