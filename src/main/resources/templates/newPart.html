@@ -3,7 +3,7 @@
 <!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
 
 <head th:include="header :: head">
-    <title id="pageTitle">Startseite</title>
+    <title id="pageTitle">neues Möbelteil</title>
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
@@ -51,9 +51,9 @@
                     </div>
                 </div>
             </div>
-            <div class="ui vertical segment" id="editspace">
-            <div class="ui simple dropdown item">
-                Farben
+            <div class="ui vertical segment" id="buttonspace">
+            <div class="ui simple dropdown">
+                <div class="text"> Farben </div>
                 <i class="dropdown icon"></i>
                 <div class="menu">
                     <div th:each="colour: ${colours}">
@@ -68,7 +68,7 @@
                 </div>
             </div>
             </div>
-            <div class="ui vertical segment" id="editspace">
+            <div class="ui vertical segment" id="buttonspace">
             <div class="ui simple dropdown item">
                 Kategorien
                 <i class="dropdown icon"></i>
