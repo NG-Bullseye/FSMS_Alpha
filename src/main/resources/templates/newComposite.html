@@ -1,16 +1,13 @@
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
-
-<!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
-
-<head th:include="header :: head">
-    <title id="pageTitle">Startseite</title>
-</head>
-<body>
-<nav th:include="navbar :: navbar"></nav>
-<div class="ui  center aligned page grid">
-    <div class=" ui segment">
-
-
+	<!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
+	<head th:include="header :: head">
+		<title id="pageTitle">Möbel hinzufügen</title>
+	</head>
+	<body>
+		<nav th:include="navbar :: navbar"></nav>
+		<div class="ui  center aligned page grid">
+			<div class=" ui segment">
         <form method="post" th:action="@{/catalog/composite/new}" th:object="${compositeForm}">
             <div class="ui negative message" th:if="${#fields.hasErrors('*')}">
                 <p>Bitte überprüfen Sie ihre Eingabe.</p>
@@ -44,9 +41,3 @@
                     <input type="submit" value="Artikel erstellen" class="ui button"/>
                 </a>
 
-
-        </form>
-</div>
-</div>
-</body>
-</html>

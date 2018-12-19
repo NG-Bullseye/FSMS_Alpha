@@ -64,9 +64,8 @@ public class CatalogController {
 		};
 	}
 
-	@RequestMapping("/catalog")
+	@GetMapping("/catalog")
 	String catalog(Model model){
-
 
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
@@ -76,7 +75,7 @@ public class CatalogController {
 	@PostMapping("/catalog")
 	String catalogFiltered (@Valid @ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset,BindingResult bindingResult, Model model){
 		if(reset.equals("reset")){
-			return "redirect:/catalog/";
+			return "redirect:/catalog";
 		}
 		if(bindingResult.hasErrors()){
 			model.addAttribute("filterform", filterform);
