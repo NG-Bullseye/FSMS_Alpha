@@ -12,23 +12,16 @@ import org.springframework.util.Assert;
 public class CarpoolInitializer implements DataInitializer {
 
 
-	private  Cart cart;
-	private  OrderManager<Order> orderManager;
-	private  UserAccountManager userAccountManager;
-	private  Catalog catalog;
+	private CarpoolManager carpoolManager;
 
+	public CarpoolInitializer(CarpoolManager carpoolManager) {
 
-	public CarpoolInitializer(Catalog catalog, UserAccountManager userAccountManager, OrderManager<Order> orderManager, BusinessTime businessTime) {
-		this.catalog=catalog;
-		this.userAccountManager=userAccountManager;
-		this.cart=new Cart();
-		this.orderManager=orderManager;
-		Assert.notNull(orderManager, "OrderManager must not be null!");
-
+		this.carpoolManager = carpoolManager;
 	}
 
 	@Override
 	public void initialize() {
+
 	}
 
 
