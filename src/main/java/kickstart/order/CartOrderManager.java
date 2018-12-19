@@ -7,6 +7,7 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
+import org.salespointframework.order.Order;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;

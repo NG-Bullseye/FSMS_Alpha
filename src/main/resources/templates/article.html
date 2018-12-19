@@ -2,7 +2,6 @@
 <!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
 <head th:include="header :: head">
     <title id="pageTitle">Katalog</title>
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/icon.css'>
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
@@ -41,6 +40,7 @@
         </div>
     </div>
 </div>
+
 <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
     <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
         <div class="ui labeled input">
@@ -60,8 +60,8 @@
     </form>
 </div>
 
-<a th:href="@{/reorder/{id}(id=${article.id})}">
-	<div class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+<a th:href="@{/reorder/{id}(id=${article.id})}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+	<div class="ui button">
 		<tnorm th:text="#{article.reorder}">Nachbestellen</tnorm>
 	</div>
 </a>
@@ -80,44 +80,47 @@
         <div class="ui label">in den Warenkorb</div>
         <input class="ui labeled button" type="submit" name="in den Warenkorb">
     </form></div>
-<div class="ui comments">
-    <h3 class="ui dividing header">Bewertungen</h3>
-    <h4 th:text="'durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' " >5</h4>
-    <div class="comment" th:each="comment : ${article.comments}">
-        <div class="content">
-            <div class="metadata">
-                <div class="rating">
-                    <span th:text="'★ '+${comment.rating}">5</span>
-                </div>
-            </div>
-            <div class="text" th:text="${comment.text}">Eins tolles Ding</div>
-        </div>
-    </div>
+    
+<div id="article">
+	<div class="ui comments">
+	    <h3 class="ui dividing header">Bewertungen</h3>
+	    <h4 th:text="'Durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' " >5</h4>
+	    <div class="comment" th:each="comment : ${article.comments}">
+	        <div class="content">
+	            <div class="metadata">
+	                <div class="rating">
+	                    <span th:text="'★ '+${comment.rating}">5</span>
+	                </div>
+	            </div>
+	            <div class="text" th:text="${comment.text}">Eins tolles Ding</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<form class="ui reply form" role="form" th:action="@{/article/{id}/comment(id=${article.id})}" method="post">
+	    <div class="field" id="textnhead">
+	        <textarea id="comment" name="comment" cols="40" rows="5" placeholder="Geben sie hier bitte ihren Kommentar ein"></textarea><br/>
+	    </div>
+	    <div class="field">
+	        <label for="rating">Bewertung</label>
+	        <select id="rating" name="rating">
+	            <option value=1> 1 </option>
+	            <option value=2> 2 </option>
+	            <option value=3> 3 </option>
+	            <option value=4> 4 </option>
+	            <option value=5> 5 </option>
+	            <option value=6> 6 </option>
+	            <option value=7> 7 </option>
+	            <option value=8> 8 </option>
+	            <option value=9> 9</option>
+	            <option value=10> 10 </option>
+	        </select>
+	    </div>
+	    <button type="submit" class="ui labeled button">
+	        <div class="ui label">Bewertung abgeben</div>
+	    </button>
+	</form>
 </div>
 
-    <form class="ui reply form" role="form" th:action="@{/article/{id}/comment(id=${article.id})}" method="post">
-        <div class="field" id="textnhead">
-            <textarea id="comment" name="comment" cols="40" rows="5" placeholder="Geben sie hier bitte ihren Kommentar ein"></textarea><br/>
-        </div>
-        <div class="field">
-            <label for="rating">Bewertung</label>
-            <select id="rating" name="rating">
-                <option value=1> 1 </option>
-                <option value=2> 2 </option>
-                <option value=3> 3 </option>
-                <option value=4> 4 </option>
-                <option value=5> 5 </option>
-                <option value=6> 6 </option>
-                <option value=7> 7 </option>
-                <option value=8> 8 </option>
-                <option value=9> 9</option>
-                <option value=10> 10 </option>
-            </select>
-        </div>
-        <button type="submit" class="ui labeled button">
-            <div class="ui label">Bewertung abgeben</div>
-        </button>
-    </form>
-</div>
 </body>
 </html>

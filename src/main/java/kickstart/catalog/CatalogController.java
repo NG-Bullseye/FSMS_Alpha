@@ -15,25 +15,30 @@
  */
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import kickstart.articles.Comment;
-import kickstart.inventory.ReorderableInventoryItem;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Map;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
+import org.salespointframework.time.BusinessTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.salespointframework.time.BusinessTime;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import kickstart.articles.Article;
+import kickstart.articles.Comment;
+import kickstart.inventory.ReorderableInventoryItem;
 
 @Controller
 public class CatalogController {
@@ -59,9 +64,8 @@ public class CatalogController {
 		};
 	}
 
-	@RequestMapping("/catalog")
+	@GetMapping("/catalog")
 	String catalog(Model model){
-
 
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
@@ -69,11 +73,16 @@ public class CatalogController {
 		return "catalog";
 	}
 	@PostMapping("/catalog")
-	String catalogFiltered (@ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset, Model model){
-		if(reset.equals("Filter zurücksetzen")){
-			return "redirect:/catalog/";
+	String catalogFiltered (@Valid @ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset,BindingResult bindingResult, Model model){
+		if(reset.equals("reset")){
+			return "redirect:/catalog";
+		}
+		if(bindingResult.hasErrors()){
+			model.addAttribute("filterform", filterform);
+			return "catalog";
 		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
+
 		return "catalog";
 	}
 	@GetMapping("catalog/all")
@@ -127,7 +136,11 @@ public class CatalogController {
 		return"newPart";
 	}
 	@PostMapping("catalog/part/new")
-	public String editNew(@ModelAttribute("form") Form form, Model model){
+	public String editNew(@Valid @ModelAttribute("form") Form form,BindingResult bindingResult, Model model){
+		if(bindingResult.hasErrors()){
+			model.addAttribute("form",form);
+			return "newPart";
+		}
 		manager.newPart(form);
 		model.addAttribute("catalog", manager.getWholeCatalog());
 		return"redirect:/catalog";
@@ -141,10 +154,15 @@ public class CatalogController {
 		return "newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@ModelAttribute("compositeForm") CompositeForm form, Model model,@RequestParam Map<String,String> partsMapping){
+	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeForm form, BindingResult bindingResult, Model model,@RequestParam Map<String,String> partsMapping){
 
 		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
 			return "redirect:/catalog/composite/new";
+		}
+		if(bindingResult.hasErrors()){
+			model.addAttribute("compositeForm",form);
+			model.addAttribute("catalog", manager.getAvailableForNewComposite());
+			return "newComposite";
 		}
 		model.addAttribute("compositeForm",new CompositeForm());
 

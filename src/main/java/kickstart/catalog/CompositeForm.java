@@ -1,9 +1,11 @@
 package kickstart.catalog;
 
-import kickstart.articles.Article;
+import javax.validation.constraints.NotEmpty;
 
 public class CompositeForm {
+	@NotEmpty(message = "Bitte einen Namen eingeben.")
 	private String name;
+	@NotEmpty(message = "Bitte eine Beschreibung eingeben.")
 	private String description;
 
 

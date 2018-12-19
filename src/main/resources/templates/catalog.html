@@ -8,103 +8,118 @@
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
 		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
-			<div class="ui attached stackable menu">
-				<div class="ui container left attached">
-					<select class="ui simple search dropdown item" th:field="*{type}">
+			<div class="ui menu">
+				<div class="item">
+					<select class="ui dropdown" th:field="*{type}">
 						<option th:value="all" >Alle Artikel</option>
 						<option th:value="part" >Möbelteile</option>
 						<option th:value="composite">Möbel</option>
 					</select>
-					<div class="ui simple dropdown item">
-						Farbe
+				</div>
+				<div class="item">
+					<div class="ui simple dropdown">
+						<div class="text">Farbe</div>
 						<i class="dropdown icon"></i>
 						<div class="menu">
-							<ul>
-								<a th:each="colour: ${colours}">
-								<a class="item"> <input type="checkbox"
+							<div class="item" th:each="colour: ${colours}">
+								<input type="checkbox"
 									th:field="*{selectedColours}"
-									th:value="${colour}" />
-								<label
-									th:text="${colour}"></label>
-								</a>
-								</a>
-							</ul>
+									th:value="${colour}">
+								<label th:text="${colour}"></label>
+							</div>
 						</div>
 					</div>
-					<div class="ui simple dropdown item">
-						Preis
+				</div>
+				<div class="item">
+					<div class="ui simple dropdown">
+						<div class="text">Preis</div>
 						<i class="dropdown icon"></i>
 						<div class="menu">
-							<a class="item">
+							<div class="item">
 								<div class="ui labeled input">
 									<div class="ui label">Mindestpreis</div>
 									<input type="number" th:value="1" th:field="*{minPrice}">
 								</div>
-							</a>
-							<a class="item">
+							</div>
+							<div class="item">
 								<div class="ui labeled input">
 									<div class="ui label">Maximalpreis</div>
 									<input type="number" th:value="50000.0" th:field="*{maxPrice}">
 								</div>
-							</a>
+							</div>
 						</div>
 					</div>
-					<div class="ui simple dropdown item">
-						Kategorien
+				</div>
+				<div class="item">
+					<div class="ui simple dropdown">
+						<div class="text">Kategorien</div>
 						<i class="dropdown icon"></i>
 						<div class="menu">
-							<ul>
-								<a th:each="category: ${categories}">
-								<a class="item">
+							<div class="item" th:each="category: ${categories}">
 								<input type="checkbox"
 									th:field="*{selectedCategories}"
 									th:value="${category}" />
-								<label
-									th:text="${category}"></label>
-								</a>
-								</a>
-							</ul>
+								<label th:text="${category}"></label>
+							</div>
 						</div>
 					</div>
-					<a class="item">
-					<input class="ui button" type="submit" value="Filtern" name="reset">
-					</a>
-					<a class="item">
-					<input class="ui button" type="submit" value="Filter zurücksetzen" name="reset">
-					</a>
-					<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-						<a id="editspace" class="ui button" th:href="@{/catalog/all}">gesamten Katalog anzeigen</a>
-					</div>
 				</div>
-				<div sec:authorize="hasRole('ROLE_EMPLOYEE')" class="ui right attached simple dropdown item">
-					neues Möbelstück
-					<i class="dropdown icon"></i>
-					<div class="menu">
-						<a class="item" th:href="@{/catalog/part/new}">neues Möbelteil</a>
-						<a class="item" th:href="@{/catalog/composite/new}">neues Möbelstück</a>
+				<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">MaxPrice Error</a>
+				<a th:if="${#fields.hasErrors('maxPrice')}" th:errors="*{maxPrice}">MaxPrice Error</a>
+				<a th:if="${#fields.hasErrors('minPrice')}" th:errors="*{minPrice}">MaxPrice Error</a>
+				<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
+				<div class="item">
+					<button class="ui button" type="submit" value="filter" name="reset">
+					<i class="filter icon"></i>
+					Filtern
+					</button>
+				</div>
+				<div class="item">
+					<button class="ui button" type="submit" value="reset" name="reset">
+					<i class="recycle icon"></i>
+					Filter zurücksetzen
+					</button>
+				</div>
+				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+					<a th:href="@{/catalog/all}">
+						<div class="ui button">
+							<i class="eye icon"></i>
+							Gesamter Katalog
+						</div>
+					</a>
+				</div>
+				<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+					<div class="item">
+						<div class="ui simple dropdown">
+							neues Möbelstück
+							<i class="dropdown icon"></i>
+							<div class="menu">
+								<a class="item" th:href="@{/catalog/part/new}">neues Möbelteil</a>
+								<a class="item" th:href="@{/catalog/composite/new}">neues Möbelstück</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</form>
 		<div id="tablespace">
-			<div class="ui cards">
-				<div class="ui link cards" th:remove="all-but-first">
-					<div class="card" th:each="article : ${catalog}">
-						<div class="content">
-							<a class="header" th:href="@{/article/{id}(id=${article.id})}" th:text="${article.name}">Artikel</a>
-							<div class="meta" th:text="${article.getAllCategories()}">
-                <p>Kategorie</p>
-                <span th:each="category :${article.getAllCategories()}" th:text="${category}"></span>
-              </div>
-							<div class="description">
-                    <p>verfügbare Farben:</p>
-                    <span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
-                </div>
-							<div class="description" th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">9.99 €</div>
+			<div class="ui link cards" th:remove="all-but-first">
+				<div class="card" th:each="article : ${catalog}">
+					<div class="content">
+						<a class="header" th:href="@{/article/{id}(id=${article.id})}" th:text="${article.name}">Artikel</a>
+						<div class="meta" th:text="${article.getAllCategories()}">
+							<p>Kategorie</p>
+							<span th:each="category :${article.getAllCategories()}" th:text="${category}"></span>
 						</div>
+						<div class="description">
+							<p>verfügbare Farben:</p>
+							<span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
+						</div>
+						<div class="description" th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">9.99 €</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</body>
 </html>
+
