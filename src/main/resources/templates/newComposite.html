@@ -1,5 +1,4 @@
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
 	<!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
 	<head th:include="header :: head">
@@ -9,40 +8,36 @@
 		<nav th:include="navbar :: navbar"></nav>
 		<div class="ui  center aligned page grid">
 			<div class=" ui segment">
-				<form method="post" th:action="@{/catalog/composite/new}" th:object="${compositeForm}">
-					<div class="ui negative message" th:if="${#fields.hasErrors('*')}">
-						<p>Bitte überprüfen Sie ihre Eingabe.</p>
-					</div>
-					<div class=" ui vertical segment">
-						<div class="ui labeled input">
-							<div class="ui label">Produktname</div>
-							<input type="text" th:field="*{name}"/>
-							<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
-								Bitte geben Sie einen Namen ein.
-							</div>
-						</div>
-					</div>
-					<div class="ui vertical segment">
-						<div class="ui labeled input">
-							<div class="ui label">Beschreibung</div>
-							<input type="text" th:field="*{description}"/>
-						</div>
-						<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
-							Bitte geben Sie eine Beschreibung ein.
-						</div>
-					</div>
-					<div th:each="article : ${catalog}">
-						<div class="ui labeled input">
-							<div class="ui label" th:text="${article.name}"></div>
-							<input type="number" min="0" value="0" th:name="article_+${article.id}" >
-						</div>
-					</div>
-					<button type="submit" value="Artikel erstellen" class="ui button">
-					Artikel erstellen
-					</button>
-				</form>
-			</div>
-		</div>
-	</body>
-</html>
+        <form method="post" th:action="@{/catalog/composite/new}" th:object="${compositeForm}">
+            <div class="ui negative message" th:if="${#fields.hasErrors('*')}">
+                <p>Bitte überprüfen Sie ihre Eingabe.</p>
+            </div>
+            <div class=" ui vertical segment">
+                <div class="ui labeled input">
+                    <div class="ui label">Produktname</div>
+                    <input type="text" th:field="*{name}"/>
+                    <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                        Bitte geben Sie einen Namen ein.
+                    </div>
+                </div>
+            </div>
+            <div class="ui vertical segment">
+                <div class="ui labeled input">
+                    <div class="ui label">Beschreibung</div>
+                    <input type="text" th:field="*{description}"/>
+                    <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+                        Bitte geben Sie eine Beschreibung ein.
+                    </div>
+                </div>
+            </div>
+                <div th:each="article : ${catalog}">
+                    <div class="ui labeled input">
+                        <div class="ui label" th:text="${article.name}"></div>
+                        <input type="number" min="0" value="0" th:name="article_+${article.id}" >
+                    </div>
+                </div>
+
+                <a class="item">
+                    <input type="submit" value="Artikel erstellen" class="ui button"/>
+                </a>
 

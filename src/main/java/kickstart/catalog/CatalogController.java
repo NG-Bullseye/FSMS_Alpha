@@ -136,7 +136,11 @@ public class CatalogController {
 		return"newPart";
 	}
 	@PostMapping("catalog/part/new")
-	public String editNew(@ModelAttribute("form") Form form, Model model){
+	public String editNew(@Valid @ModelAttribute("form") Form form,BindingResult bindingResult, Model model){
+		if(bindingResult.hasErrors()){
+			model.addAttribute("form",form);
+			return "newPart";
+		}
 		manager.newPart(form);
 		model.addAttribute("catalog", manager.getWholeCatalog());
 		return"redirect:/catalog";
