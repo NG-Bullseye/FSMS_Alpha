@@ -2,6 +2,8 @@ package kickstart.accountancy;
 
 
 import kickstart.order.CartOrderManager;
+import kickstart.user.User;
+import kickstart.user.UserManagement;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
@@ -38,16 +40,15 @@ public class AccountancyManager {
 	private Accountancy accountancy;
 	private BusinessTime businessTime;
 	private Cart cart;
-	private UserAccountManager userAccountManager;
+	private UserManagement userManager;
 	private Catalog catalog;
-	private Product product;
-	private UserAccount userAccount;
+	private Month lastMonth;
 	//private final CartOrderManager cartOrderManager;
 	@Autowired
-	public AccountancyManager(Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
+	public AccountancyManager(UserManagement userManagemer, Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy=accountancy;
 		this.catalog=catalog;
-		this.userAccountManager=userAccountManager;
+		this.userManager=userManager;
 		this.cart=new Cart();
 		this.businessTime=businessTime;
 
@@ -187,6 +188,27 @@ public class AccountancyManager {
 
 	public BusinessTime getBusinessTime() {
 		return businessTime;
+	}
+
+	void checkForPayDay(){
+		Month thisMonth=businessTime.getTime().getMonth();
+		int differenz = lastMonth.getValue()-thisMonth.getValue();
+		int monthlySalary=0;
+		if(differenz>0){
+			for(;differenz>0;differenz--){
+				try{
+					List<User> list=	userManager.findAllEmployees().stream().collect(Collectors.toList());
+					for (User u:
+							list) {
+						monthlySalary+=u.getSalary();
+					}
+				}catch(NullPointerException e){
+					e.printStackTrace();
+				}
+
+			}
+		}
+		addEntry(Money.of(monthlySalary,"EUR"));
 	}
 
 //</editor-fold>

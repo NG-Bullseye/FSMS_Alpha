@@ -70,7 +70,7 @@ public class AccountancyController {
 
 		model.addAttribute("monthlyAccountancy",accountancyManager.fetchThisMonthAccountancy());
 		//model.addAttribute("monthlyOrders", accountancyManager.fetchMonthlyOrders());
-
+		accountancyManager.checkForPayDay();
 		return "accountancy";
 	}
 

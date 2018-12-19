@@ -23,6 +23,7 @@ import org.springframework.util.Assert;
 
 import javax.money.MonetaryAmount;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -39,6 +40,7 @@ public class CarpoolManager {
 	private List<Truck> userTruckList;
 	private AccountancyManager accountancyManager;
 	private Map<UserAccount,List<Truck>> userAccountTruckMap;
+
 
 	public CarpoolManager(CarManagmentWrapper carManagmentWrapper, AccountancyManager accountancyManager, OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog, BusinessTime businessTime ) {
 		this.accountancyManager=accountancyManager;
@@ -96,8 +98,11 @@ public class CarpoolManager {
 		//carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
+
+
 	public Truck checkTruckavailable(Quantity weight){
 		List<Truck> filteredTrucks=new ArrayList<>();
+
 		for (Truck t:
 				carManagmentWrapper.getFreeTrucks()) {
 			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
@@ -107,21 +112,17 @@ public class CarpoolManager {
 		if (filteredTrucks.size()<=0){
 			return null;
 		}
-		else{
-			Truck possible = null;
-			for (Truck t: filteredTrucks){
-				if(possible == null){
-					possible = t;
+
+		//<editor-fold desc="FilterLogic">
+		if (filteredTrucks.size()>1){
+			Collections.sort(filteredTrucks, new Comparator<Truck>() {
+				@Override
+				public int compare(Truck o1, Truck o2) {
+					return o1.getPrice().compareTo(o2.getPrice());
 				}
-				else{
-					if(weight.getAmount().intValue() - t.getCapacity().getAmount().intValue()
-							< weight.getAmount().intValue() - possible.getCapacity().getAmount().intValue()){
-						possible = t;
-					}
-				}
-			}
-			return possible;
+			});
 		}
+		return filteredTrucks.get(0);
 	}
 
 	public Truck rentTruckByWight(Quantity weight,UserAccount rentedBy){
@@ -215,6 +216,9 @@ public class CarpoolManager {
 		}
 		return true;
 	}
+
+
+
 
 	Map<Truck,UserAccount> getTruckUserAccountMap() {
 
