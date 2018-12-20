@@ -63,13 +63,15 @@
 				</thead>
 				<tbody th:remove="all-but-first">
 					<tr th:each="order : ${allOrders} ">
-						<td th:text="${order.DateCreated}"></td>
+						<td th:text="${#temporals.format(order.dateCreated, 'dd.MM.yyyy HH:mm')}"></td>
 						<td th:text="${order.TotalPrice}"></td>
-<!-- 						<td th:if="${order.isOpen}">Offen</td> -->
-<!-- 						<td th:if="${order.isPaid}">Bezahlt</td> -->
-<!-- 						<td th:if="${order.isCompleted}">Ageschlossen</td> -->
-<!-- 						<td th:if="${order.isCanceled}">Storniert</td> -->
-						</tr>
+ 						<td th:if="${#strings.equals(order.OrderStatus, 'OPEN')}" th:text="Offen">Offen</td>
+						<td th:if="${#strings.equals(order.OrderStatus, 'PAID')}" th:text="Bezahlt">Offen</td>
+						<td th:if="${#strings.equals(order.OrderStatus, 'COMPLETE')}" th:text="najadamüssmaunsnochwasausdenken">Offen</td>
+
+
+
+					</tr>
 
 					</tbody>
 				</table>

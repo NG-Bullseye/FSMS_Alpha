@@ -7,7 +7,6 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
-import org.salespointframework.order.Order;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
@@ -19,12 +18,9 @@ import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimerTask;
+import java.util.*;
 
 
 @Component
