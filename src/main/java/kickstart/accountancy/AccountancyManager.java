@@ -1,24 +1,18 @@
 package kickstart.accountancy;
 
 
-import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.catalog.Catalog;
-import org.salespointframework.catalog.Product;
-import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
-import org.salespointframework.order.OrderManager;
-import org.salespointframework.payment.Cash;
-import org.salespointframework.quantity.Quantity;
+
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
-import org.salespointframework.useraccount.Role;
-import org.salespointframework.useraccount.UserAccount;
+
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +24,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.salespointframework.core.Currencies.EURO;
 
 @Service
 
@@ -51,7 +42,7 @@ public class AccountancyManager {
 		this.userManager=userManager;
 		this.cart=new Cart();
 		this.businessTime=businessTime;
-
+		this.lastMonth=businessTime.getTime().getMonth();
 
 		Assert.notNull(accountancy, "accountancy must not be null!");
 	}
@@ -192,10 +183,10 @@ public class AccountancyManager {
 
 	void checkForPayDay(){
 		Month thisMonth=businessTime.getTime().getMonth();
-		int differenz = lastMonth.getValue()-thisMonth.getValue();
+		int differenz =(thisMonth.getValue() -lastMonth.getValue())%12;
 		int monthlySalary=0;
 		if(differenz>0){
-			for(;differenz>0;differenz--){
+			for(;differenz>=0;differenz--){
 				try{
 					List<User> list=	userManager.findAllEmployees().stream().collect(Collectors.toList());
 					for (User u:
@@ -207,6 +198,7 @@ public class AccountancyManager {
 				}
 
 			}
+			lastMonth=thisMonth;
 		}
 		addEntry(Money.of(monthlySalary,"EUR"));
 	}
