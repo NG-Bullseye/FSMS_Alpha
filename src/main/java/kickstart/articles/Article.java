@@ -13,8 +13,10 @@ import java.util.Set;
 
 import org.javamoney.moneta.Money;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 

@@ -7,7 +7,6 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
-import org.salespointframework.order.Order;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
@@ -19,12 +18,12 @@ import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimerTask;
 
 
 @Component
@@ -37,12 +36,7 @@ public class CartOrderManager {
 	private String destination = "Home";
 	private final List<String> destinations;
 	
-	TimerTask timerTask = new TimerTask() {
-		@Override
-		public void run() {
-			changeStatus();
-		}
-	};
+
 
 
 
@@ -50,7 +44,6 @@ public class CartOrderManager {
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
-		this.timerTask.run();
 		this.destinations = new ArrayList<String>();
 		
 		this.destinations.add("Berlin");
@@ -184,20 +177,6 @@ public class CartOrderManager {
 			}
 		}
 
-		for(CustomerOrder order: orderManager.findBy(OrderStatus.PAID)){
-      
-			Interval interval = Interval.from(order.getDateCreated()).to(date);
-
-			if(order.isCompleted() && order.isversendet()){
-
-				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
-					order.setStatus(Status.abholbereit);
-				}
-				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
-					order.setStatus(Status.abholbereit);
-				}
-			}
-		}
 
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.PAID)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
