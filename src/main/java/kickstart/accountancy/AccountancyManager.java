@@ -36,7 +36,7 @@ public class AccountancyManager {
 	private Month lastMonth;
 	//private final CartOrderManager cartOrderManager;
 	@Autowired
-	public AccountancyManager(UserManagement userManagemer, Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
+	public AccountancyManager(UserManagement userManager, Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy=accountancy;
 		this.catalog=catalog;
 		this.userManager=userManager;
@@ -183,10 +183,14 @@ public class AccountancyManager {
 
 	void checkForPayDay(){
 		Month thisMonth=businessTime.getTime().getMonth();
-		int differenz =(thisMonth.getValue() -lastMonth.getValue())%12;
+		int differenz =(thisMonth.getValue()-lastMonth.getValue())%12;
+		if (differenz < 0)
+		{
+			differenz += lastMonth.getValue();
+		}
 		int monthlySalary=0;
 		if(differenz>0){
-			for(;differenz>=0;differenz--){
+			for(;differenz>0;differenz--){
 				try{
 					List<User> list=	userManager.findAllEmployees().stream().collect(Collectors.toList());
 					for (User u:
@@ -199,8 +203,8 @@ public class AccountancyManager {
 
 			}
 			lastMonth=thisMonth;
+			addEntry(Money.of(monthlySalary,"EUR"));
 		}
-		addEntry(Money.of(monthlySalary,"EUR"));
 	}
 
 //</editor-fold>
