@@ -105,7 +105,7 @@ public class CartOrderManager {
 			orderManager.cancelOrder(order);
 		}
 
-		return "redirect:/customeraccount";
+		return "redirect:/";
 	}
 
 	public String addComposite (Composite article, int count, Cart cart){

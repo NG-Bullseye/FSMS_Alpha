@@ -69,6 +69,19 @@
 						<td th:if="${order.isPaid()}">Bezahlt</td>
 						<td th:if="${order.isCompleted()}">Abgeschlossen</td>
 						<td th:if="${order.isCanceled()}">Storniert</td>
+<!-- 						Das muss in ein paar ordentliche anchor umgewandelt werden!! -->
+						<td th:if="${order.isOpen()}">
+							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_CUSTOMER')">
+								<button type="submit" class="ui button" th:text="bezahlen">paying</button>
+								<input name="orderidentity" type="hidden" th:value="${order.id}">
+								<input name="choose" type="hidden" th:value="bezahlen">
+							</form>	
+							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+								<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
+								<input name="orderidentity" type="hidden" th:value="${order.id}">
+								<input name="choose" type="hidden" th:value="stornieren">
+							</form>
+						</td>
 					</tr>
 
 					</tbody>
