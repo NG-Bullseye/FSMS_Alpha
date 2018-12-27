@@ -20,14 +20,14 @@ public class UserTest {
 	
 	User user;
 	UserAccount userAccount;
-	public static final String username = "test1545649854";
-	public static final String firstname = "Daniel";
-	public static final String lastname = "Tester";
-	public static final String email = "E-mail";
-	public static final String address = "Adresse";
-	public static final String password = "123";
-	public static final int salary = 12;
-	public static final int negativeSalary = -12;
+	private static final String username = "test1545649854";
+	private static final String firstname = "Daniel";
+	private static final String lastname = "Tester";
+	private static final String email = "E-mail";
+	private static final String address = "Adresse";
+	private static final String password = "123";
+	private static final int salary = 12;
+	private static final int negativeSalary = -12;
 
 	
 	@Autowired
