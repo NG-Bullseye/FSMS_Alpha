@@ -1,6 +1,12 @@
 package kickstart.order;
 
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimerTask;
 
 
 import kickstart.articles.Composite;
@@ -19,6 +25,10 @@ import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
+import kickstart.carManagement.CarpoolManager;
+import kickstart.carManagement.Truck;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,7 +107,7 @@ public class CartOrderManager {
 			orderManager.cancelOrder(order);
 		}
 
-		return "redirect:/customeraccount";
+		return "redirect:/";
 	}
 
 	public String addComposite (Composite article, int count, Cart cart){

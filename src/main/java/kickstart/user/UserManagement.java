@@ -73,12 +73,16 @@ public class UserManagement {
 	
 	public User findUser (UserAccount userAccount) {
 		
+		Assert.notNull(userAccount, "UserAccount must not be null!");
+		
 		User user = users.findByUserAccount(userAccount);
 		return user;
 	}
 	
 public User findUserById (long id) {
 		
+	Assert.notNull(id, "Id must not be null!");
+	
 		User user = users.findById(id);
 		return user;
 	}
@@ -118,6 +122,10 @@ public User findUserById (long id) {
 	}
 	
 	public void useraccountActivation(UserAccountIdentifier accountId, int type) {
+		
+		Assert.notNull(accountId, "AccountId must not be null!");
+		Assert.notNull(type, "Type must not be null!");
+		
 		if (type == 0) { // deaktivieren
 			userAccounts.disable(accountId);
 			return;
