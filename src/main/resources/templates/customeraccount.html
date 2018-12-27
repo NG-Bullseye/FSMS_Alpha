@@ -52,7 +52,7 @@
 			</div>
 		<div class="twelve wide column">
 			<t2>Bestellübersicht</t2>
-			<table class="ui inverted grey table">
+			<table class="ui sortable inverted grey table">
 				<thead>
 					<tr>
 						<th>Datum</th>
@@ -71,16 +71,21 @@
 						<td th:if="${order.isCanceled()}">Storniert</td>
 <!-- 						Das muss in ein paar ordentliche anchor umgewandelt werden!! -->
 						<td th:if="${order.isOpen()}">
-							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_CUSTOMER')">
-								<button type="submit" class="ui button" th:text="bezahlen">paying</button>
-								<input name="orderidentity" type="hidden" th:value="${order.id}">
-								<input name="choose" type="hidden" th:value="bezahlen">
-							</form>	
-							<form th:action="@{/cancelthatorder}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-								<button type="submit" class="ui button" th:text="stornieren">stronieren</button>
-								<input name="orderidentity" type="hidden" th:value="${order.id}">
-								<input name="choose" type="hidden" th:value="stornieren">
-							</form>
+							<a th:href="@{'/cancelthatorder'(orderidentity=${order.id}, choose=bezahlen)}" sec:authorize="hasRole('ROLE_CUSTOMER')">
+								<div class="positive ui button">
+									<i class="euro sign icon"></i>
+									Jetzt bezahlen
+								</div>
+							</a>
+							<a th:href="@{'/cancelthatorder'(orderidentity=${order.id}, choose=stornieren)}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+								<div class="negative ui button">
+									<i class="remove icon"></i>
+									Stornieren
+								</div>
+							</a>
+						</td>
+						<td th:if="!${order.isOpen()}">
+							Keine Aktion verfügbar
 						</td>
 					</tr>
 
@@ -167,6 +172,7 @@
 			$('#activate').click(function(){
 				$('#activateAccount').modal('show');
 			});
+			$('table').tablesort()
 		});
 	</script>
 </html>
