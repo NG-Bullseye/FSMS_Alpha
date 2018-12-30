@@ -17,20 +17,14 @@ import java.util.*;
 @Component
 public class CatalogManager {
 	private final WebshopCatalog catalog;
-	private HashSet<Article> hiddenArticles;
+	private Set<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
 	private HashSet<Article> availableForNewComposite;
 
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
 		this.inventory = inventory;
-		this.hiddenArticles = new HashSet<>();
-/*
-	@Autowired
-	private InventoryManager inventory;
-	public CatalogManager(WebshopCatalog catalog) {
-		this.catalog = catalog;
-		hiddenArticles = new HashSet<>();*/
+		this.hiddenArticles = catalog.findHidden();
 	}
 
 	public Iterable<Article> getWholeCatalog() {
@@ -73,6 +67,7 @@ public class CatalogManager {
 		afterEdit.setWeight(article.getWeight());
 		afterEdit.getCategories().forEach(afterEdit::removeCategory);
 		article.getSelectedCategories().forEach(afterEdit::addCategory);
+		afterEdit.removeColours();
 		article.getSelectedColours().forEach(afterEdit::setColour);
 
 		catalog.save(afterEdit);
@@ -247,11 +242,28 @@ public class CatalogManager {
 	}
 
 	public void hideArticle(ProductIdentifier identifier){
-		hiddenArticles.add(catalog.findById(identifier).get());
+		if(catalog.findById(identifier).isPresent()) {
+			Article article = catalog.findById(identifier).get();
+			
+			article.hide();
+			
+			hiddenArticles.add(article);
+			
+			catalog.save(article);
+
+		}		
 	}
 
 	public void makeArticleVisible(ProductIdentifier identifier){
-		hiddenArticles.remove(catalog.findById(identifier).get());
+		if(catalog.findById(identifier).isPresent()) {
+			Article article = catalog.findById(identifier).get();
+			
+			article.hide();
+			
+			hiddenArticles.remove(article);
+			
+			catalog.save(article);
+		}	
 	}
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
