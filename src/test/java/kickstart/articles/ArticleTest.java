@@ -189,4 +189,19 @@ public class ArticleTest {
 		
 		assertEquals(a.getAverageRating(), (double)(c.getRating()+c2.getRating())/2, epsilon, "getAverageRating should return the right value");
 	}
+	
+	@Test
+	public void testHide() {
+		Article a = new ArticleImpl("Name", "Description");
+		
+		assertFalse(a.isHidden(), "Newly created articles should never be hidden.");
+		
+		a.hide();
+		
+		assertTrue(a.isHidden(), "Not hidden articles should be hidden after calling hide");
+		
+		a.hide();
+		
+		assertFalse(a.isHidden(), "Hidden articles should be visible again after calling hide");
+	}
 }
