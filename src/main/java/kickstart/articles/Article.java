@@ -153,6 +153,8 @@ public abstract class Article extends Product{
 	public abstract void setWeight(double weight);
 
 	public abstract void setColour(@NotNull String colour);
+	
+	public abstract void removeColours();
 
 	public abstract Map<ProductIdentifier, Integer> getPartIds();
 

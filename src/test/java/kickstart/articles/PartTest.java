@@ -1,5 +1,6 @@
 package kickstart.articles;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -197,6 +198,14 @@ public class PartTest {
 		assertTrue(part1.getPartIds().isEmpty(), "A part should have no parts");
 		
 		assertTrue(part2.getPartIds().isEmpty(), "A part should have no parts");
+	}
+	
+	@Test
+	public void testRemoveColours() {
+		part1.removeColours();
+		
+		assertThat(part1.getColour().size()).as("Remove colours should make the colour set empty")
+		.isEqualTo(0);
 	}
 }
 

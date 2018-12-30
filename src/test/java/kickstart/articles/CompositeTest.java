@@ -73,6 +73,13 @@ public class CompositeTest {
 	}
 	
 	@Test
+	public void testEmptyConstructor() {
+		Composite c = new Composite();
+		
+		assertThat(c.getParts()).as("The Part list shouldn't be null").isNotNull();
+	}
+	
+	@Test
 	public void testAddPart() {
 		List<Article> list = new ArrayList<Article>();
 		list.add(part1);
@@ -281,5 +288,13 @@ public class CompositeTest {
 		for(String category: categories) {
 			assertThat(composite1.getAllCategories()).as("Composite should contains it's parts colours").contains(category);
 		}
+	}
+	
+	@Test
+	public void testRemoveColours() {
+		composite1.removeColours();
+		
+		assertThat(composite1.getColour().size()).as("Remove colours should make the colour set empty")
+		.isEqualTo(0);
 	}
 }

@@ -63,6 +63,12 @@ public class ArticleTest {
 
 		@Override
 		public void removePart(Article article){}
+
+		@Override
+		public void removeColours() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	// Used to compare double values

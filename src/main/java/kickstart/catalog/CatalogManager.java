@@ -73,6 +73,7 @@ public class CatalogManager {
 		afterEdit.setWeight(article.getWeight());
 		afterEdit.getCategories().forEach(afterEdit::removeCategory);
 		article.getSelectedCategories().forEach(afterEdit::addCategory);
+		afterEdit.removeColours();
 		article.getSelectedColours().forEach(afterEdit::setColour);
 
 		catalog.save(afterEdit);
