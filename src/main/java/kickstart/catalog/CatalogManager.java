@@ -248,6 +248,8 @@ public class CatalogManager {
 			article.hide();
 			
 			hiddenArticles.add(article);
+			
+			catalog.save(article);
 
 		}		
 	}
@@ -259,6 +261,8 @@ public class CatalogManager {
 			article.hide();
 			
 			hiddenArticles.remove(article);
+			
+			catalog.save(article);
 		}	
 	}
 	public Iterable<Article> getAvailableForNewComposite() {
