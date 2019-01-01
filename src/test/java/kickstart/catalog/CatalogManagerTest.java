@@ -3,6 +3,7 @@ package kickstart.catalog;
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
+import kickstart.inventory.InventoryManager;
 import kickstart.inventory.ReorderableInventoryItem;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.*;
@@ -31,7 +32,7 @@ class CatalogManagerTest {
 	private @Autowired WebshopCatalog catalog;
 
 	private @Autowired CatalogManager manager;
-	private @Autowired Inventory<ReorderableInventoryItem> inventory;
+	private @Autowired InventoryManager inventory;
 	private Part tester1;
 	private Part tester2;
 	private Composite com1;
@@ -136,34 +137,6 @@ class CatalogManagerTest {
 
 	@Test
 	@Transient
-	void editPart() {
-		manager.saveArticle(tester1);
-		catalog.save(new Part(form1.getName(),form1.getDescription(),form1.getPrice(),form1.getWeight(),form1.getSelectedColours(),form1.getSelectedCategories()));
-
-		manager.editPart(form1,tester1.getId());
-		assertThat(manager.getWholeCatalog()).as("Der Artikel wurde nicht richtig verändert.").isEqualTo(catalog.findAll());				//TODO: Nochmal drüberschauen
-
-	}
-
-	@Test
-	@Transient
-	void editComposite() {
-		manager.saveArticle(com1);
-		manager.saveArticle(tester2);
-		manager.saveArticle(tester1);
-		HashMap<String, String> input = new HashMap<>();
-		input.put("article_"+tester2.getId().toString(),"2");			//Simulierter Input der Website
-		manager.editComposite(com1.getId(),form2,input);
-		LinkedList<Article> l2 = new LinkedList<>();
-		l2.add(tester2);
-		l2.add(tester2);
-		Composite com2 = new Composite(form2.getName(),form2.getDescription(),l2);
-		catalog.save(com2);
-		assertThat(manager.getWholeCatalog()).as("Das Composite wurde nicht korrekt geändert.").isEqualTo(catalog.findAll());
-	}
-
-	@Test
-	@Transient
 	void editAffectedArticles() {
 	}
 
@@ -191,9 +164,17 @@ class CatalogManagerTest {
 	@Transient
 	void filteredCatalog() {
 		manager.saveArticle(tester1);
+		inventory.reorder(tester1,Quantity.of(10,Metric.UNIT));
 		Filterform form = new Filterform();
 		form.setMaxPrice(66);
 		form.setMinPrice(64);
+		ArrayList<String> category = new ArrayList<>();
+		category.add("Schrank");
+		form.setSelectedCategories(category);
+		form.setType("All");
+		ArrayList<String> colour = new ArrayList<>();
+		colour.add("schwarz");
+		form.setSelectedColours(colour);
 		manager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
@@ -214,17 +195,34 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void newComposite() {
-		catalog.save(tester1);
-		catalog.save(tester2);
+		manager.saveArticle(tester1);
+		manager.saveArticle(tester2);
+		HashSet<Article> before = new HashSet<>();
+		manager.getWholeCatalog().forEach(before::add);
+
 		HashMap<String, String> input = new HashMap<>();
 		input.put("article_"+Objects.requireNonNull(tester2.getId()).getIdentifier(),"2");
 		manager.newComposite(form2,input);
+
 		LinkedList<Article> l2 = new LinkedList<>();
 		l2.add(tester2);
 		l2.add(tester2);
-		Composite com2 = new Composite(form2.getName(),form2.getDescription(),l2);
-		catalog.save(com2);
-		assertEquals(manager.getWholeCatalog(),catalog.findAll(),"Der Artikel wurde nicht korrekt erzeugt.");
+		Composite expected = new Composite(form2.getName(),form2.getDescription(),l2);
+
+		LinkedList<Article> actualList = new LinkedList<>();
+		manager.getWholeCatalog().forEach(article -> {
+			if(!before.contains(article)){
+				actualList.add(article);
+			}
+		});
+		Article actual = actualList.get(0);
+
+		assertEquals(expected.getName(), actual.getName(),"Der Artikel wurde nicht richtig erzeugt.");
+		assertEquals(expected.getDescription(), actual.getDescription(),"Der Artikel wurde nicht richtig erzeugt.");
+		assertEquals(expected.getPartIds(), actual.getPartIds(),"Der Artikel wurde nicht richtig erzeugt.");
+		assertEquals(expected.getType(), actual.getType(),"Der Artikel wurde nicht richtig erzeugt.");
+		assertEquals(expected.getWeight(), actual.getWeight(),"Der Artikel wurde nicht richtig erzeugt.");
+		assertEquals(expected.getPrice(), actual.getPrice(),"Der Artikel wurde nicht richtig erzeugt.");
 
 	}
 
@@ -290,9 +288,9 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void getParents() {
-		manager.saveArticle(com1);
 		manager.saveArticle(tester1);
 		manager.saveArticle(tester2);
+		manager.saveArticle(com1);
 
 		LinkedList<ProductIdentifier> test = new LinkedList<>();
 		test.add(com1.getId());
@@ -305,20 +303,23 @@ class CatalogManagerTest {
 	void getArticlesForCompositeEdit() {
 		HashSet<ProductIdentifier> test = new HashSet<>();
 
-		manager.getArticlesForCompositeEdit(com1.getId()).forEach((article,count) -> {
+
+		manager.getWholeCatalog().forEach(article -> {
 			test.add(article.getId());
 		});
 
+		manager.saveArticle(com1);
 		manager.saveArticle(tester1);
 		manager.saveArticle(tester2);
 
-		manager.saveArticle(com1);
 
 
-		manager.getAvailableForNewComposite().forEach(article ->{
+
+		manager.getArticlesForCompositeEdit(com1.getId()).forEach((article,count) ->{
 			if(!test.contains(article.getId()))
 				result.add(article.getId());
 		});
+
 		test.clear();
 		test.add(tester2.getId());
 		test.add(tester1.getId());
@@ -338,4 +339,33 @@ class CatalogManagerTest {
 		assertTrue(manager.isHidden(tester1.getId()),"Der Artikel wurde nicht für den Kunden unsichtbar gemacht.");
 
 	}
+	@Test
+	@Transient
+	void editPart() {
+		manager.saveArticle(tester1);
+		catalog.save(new Part(form1.getName(),form1.getDescription(),form1.getPrice(),form1.getWeight(),form1.getSelectedColours(),form1.getSelectedCategories()));
+
+		manager.editPart(form1,tester1.getId());
+		assertThat(manager.getWholeCatalog()).as("Der Artikel wurde nicht richtig verändert.").isEqualTo(catalog.findAll());				//TODO: Nochmal drüberschauen
+
+	}
+
+	@Test
+	@Transient
+	void editComposite() {
+		manager.saveArticle(com1);
+		manager.saveArticle(tester2);
+		manager.saveArticle(tester1);
+		HashMap<String, String> input = new HashMap<>();
+		input.put("article_"+tester2.getId().toString(),"2");			//Simulierter Input der Website
+		manager.editComposite(com1.getId(),form2,input);
+
+		assertThat(manager.getArticle(com1.getId()).getName()).as("Der Name des Composites wurde nicht korrekt geändert.").isEqualTo("Peter");
+		assertThat(manager.getArticle(com1.getId()).getDescription()).as("Die Beschreibung des Composites wurde nicht korrekt geändert.").isEqualTo("Lustig");
+
+		Map<ProductIdentifier, Integer> partIds = new HashMap<>();
+		partIds.put(tester2.getId(),2);
+		assertThat(manager.getArticle(com1.getId()).getPartIds()).as("Das Composite wurde nicht korrekt geändert.").isEqualTo(partIds);
+	}
+
 }

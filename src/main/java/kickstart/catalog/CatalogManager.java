@@ -35,19 +35,13 @@ public class CatalogManager {
 	public Iterable<Article> getVisibleCatalog(){
 		HashSet<Article> visible = new HashSet<>();
 		catalog.findAll().forEach(article -> {
-			if(!hiddenArticles.contains(article)&&!inventory.findByProductIdentifier(article.getId()).get().getQuantity().equals(0)){
-				visible.add(article);
+			if(article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()) {
+				if (!hiddenArticles.contains(article) && !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
+					visible.add(article);
+				}
 			}
 		});
 
-		HashSet<Article> unusedArticles = new HashSet<>();
-		
-		catalog.findAll().forEach(article -> {
-
-			if(article.getParents().isEmpty()){
-				unusedArticles.add(article);
-			}
-		});
 		return visible;
 	}
 
@@ -279,10 +273,11 @@ public class CatalogManager {
 			for (Article composite: allComposites) {
 				Map<ProductIdentifier, Integer> parts = composite.getPartIds();
 				parts.forEach((articleId,count)->{
+					if(catalog.findById(articleId).isPresent()){
 					Article article = catalog.findById(articleId).get();
 					if(articlesWithoutParents.contains(article)){
 						articlesWithoutParents.remove(article);
-					}
+					}}
 				});
 			}
 		} catch (NullPointerException n){
@@ -297,10 +292,9 @@ public class CatalogManager {
 
 		HashSet<Article> allComposites = new HashSet<>();
 		catalog.findComposite().forEach(allComposites::add);
-		for (Article composite: allComposites
-			 ) {
-			if(composite.getPartIds().containsKey(article)){
-				parents.add(article.getId());
+		for (Article composite: allComposites) {
+			if(composite.getPartIds().containsKey(article.getId())){
+				parents.add(composite.getId());
 			}
 		}
 	return parents;
@@ -309,11 +303,13 @@ public class CatalogManager {
 	public Map<Article,Integer> getArticlesForCompositeEdit(ProductIdentifier identifier){
 		HashMap<Article, Integer> parts = new HashMap<>();
 		this.getAvailableForNewComposite().forEach(article->parts.put(article,0));
-		catalog.findById(identifier).get().getPartIds().forEach((article,count)->{
-			parts.put(catalog.findById(article).get(),count);
-		});
-		parts.remove(catalog.findById(identifier).get()); //Damit man den Artikel nicht sich selbst hinzufügen kann
-
+		if(catalog.findById(identifier).isPresent()) {
+			catalog.findById(identifier).get().getPartIds().forEach((article, count) -> {
+				if(catalog.findById(article).isPresent()){
+				parts.put(catalog.findById(article).get(), count);}
+			});
+			parts.remove(catalog.findById(identifier).get()); //Damit man den Artikel nicht sich selbst hinzufügen kann
+		}
 		return parts;
 	}
 
