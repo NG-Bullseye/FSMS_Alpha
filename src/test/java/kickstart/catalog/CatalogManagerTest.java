@@ -54,7 +54,7 @@ class CatalogManagerTest {
 
 		tester1 = new Part("Test1","Test1",65,15.0, c1,cat1);
 
-		tester2 = new Part("Test2","Test2",55,50.0, c1,cat1);
+		tester2 = new Part("Test2","Test2",63,50.0, c1,cat1);
 
 		LinkedList<Article> l1 = new LinkedList<>();
 		for(int i=0;i<4;i++){
@@ -163,9 +163,10 @@ class CatalogManagerTest {
 	@Transient
 	void filteredCatalog() {
 		manager.saveArticle(tester1);
+		manager.saveArticle(tester2);
+		manager.saveArticle(com1);
+
 		Filterform form = new Filterform();
-		form.setMaxPrice(66);
-		form.setMinPrice(64);
 		ArrayList<String> category = new ArrayList<>();
 		category.add("Schrank");
 		form.setSelectedCategories(category);
@@ -173,12 +174,74 @@ class CatalogManagerTest {
 		ArrayList<String> colour = new ArrayList<>();
 		colour.add("schwarz");
 		form.setSelectedColours(colour);
+		form.setMaxPrice(66);
+		form.setMinPrice(64);
+
 		manager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 		HashSet<ProductIdentifier> expected = new HashSet<>();
 		expected.add(tester1.getId());
 		assertEquals(expected,result, "Beim Filtern des Preises wird nicht der richtige Artikel angezeigt.");
+
+		form.setMinPrice(63);
+		expected.clear();
+		expected.add(tester1.getId());
+		expected.add(tester2.getId());
+		result.clear();
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		assertEquals(expected,result,"Es werden nicht alle Artikel in diesem Preisbereich angezeigt");
+
+		form.setMinPrice(61);
+		form.setMaxPrice(62);
+		expected.clear();
+		result.clear();
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		assertEquals(expected,result,"Es werden nicht alle Artikel in diesem Preisbereich angezeigt");
+
+		form.setType("part");
+		form.setMinPrice(61);
+		form.setMaxPrice(65);
+		expected.clear();
+		expected.add(tester1.getId());
+		expected.add(tester2.getId());
+		result.clear();
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		assertEquals(expected,result,"Es gibt einen Fehler, wenn der Mindestpreis höher als der Maximalpreis ist.");
+
+		form.setType("composite");
+		expected.clear();
+		result.clear();
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		expected.add(com1.getId());
+		assertEquals(expected,result,"Es werden nicht die richtigen Artikel angezeigt.");
+		form.setMinPrice(127);
+		form.setMaxPrice(128);
+		expected.clear();
+		expected.add(tester1.getId());
+		expected.add(tester2.getId());
+		result.clear();
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		assertEquals(expected,result,"Es gibt einen Fehler, wenn der Mindestpreis höher als der Maximalpreis ist.");
+
+		form.setType("composite");
+		expected.clear();
+		result.clear();
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		expected.add(com1.getId());
+		assertEquals(expected,result,"Es werden nicht die richtigen Artikel angezeigt.");
 //TODO----------------------------------------------------------
 	}
 

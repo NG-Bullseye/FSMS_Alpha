@@ -174,7 +174,11 @@ public class CatalogManager {
 		catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
 
 		HashSet<Article> rightPrice = new HashSet<>();
-		catalog.findByPrice(Money.of(filterform.getMinPrice(),EURO),Money.of(filterform.getMaxPrice(),EURO)).forEach(rightPrice::add);
+		if(filterform.getMaxPrice()>filterform.getMinPrice()){
+			catalog.findByPrice(Money.of(filterform.getMinPrice(),EURO),Money.of(filterform.getMaxPrice(),EURO)).forEach(rightPrice::add);}
+		else {
+			catalog.findByPrice(Money.of(filterform.getMaxPrice(),EURO),Money.of(filterform.getMinPrice(),EURO)).forEach(rightPrice::add);
+		}
 
 		HashSet<Article> rightCategories = new HashSet<>();
 		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
