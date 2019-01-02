@@ -32,7 +32,7 @@ class CatalogManagerTest {
 	private @Autowired WebshopCatalog catalog;
 
 	private @Autowired CatalogManager manager;
-	private @Autowired InventoryManager inventory;
+	private @Autowired Inventory<ReorderableInventoryItem> inventory;
 	private Part tester1;
 	private Part tester2;
 	private Composite com1;
@@ -108,12 +108,15 @@ class CatalogManagerTest {
 			test.add(article.getId());
 		});
 
-		manager.saveArticle(tester1); //TODO Mit newPart() versuchen
-		//inventory.save(new ReorderableInventoryItem(tester1, Quantity.of(1,Metric.UNIT)));
+		manager.saveArticle(tester1);
 		manager.saveArticle(tester2);
-		//inventory.save(new ReorderableInventoryItem(tester2, Quantity.of(1,Metric.UNIT)));
-
-		manager.hideArticle(tester2.getId());
+		if(inventory.findByProductIdentifier(tester1.getId()).isPresent()){
+		inventory.findByProductIdentifier(tester1.getId()).get().increaseQuantity(Quantity.of(5,Metric.UNIT));}
+		if(inventory.findByProductIdentifier(tester2.getId()).isPresent()){
+			inventory.findByProductIdentifier(tester2.getId()).get().increaseQuantity(Quantity.of(5,Metric.UNIT));}
+		System.out.println("Tester1: "+inventory.findByProductIdentifier(tester1.getId()).get().getQuantity().toString());
+		System.out.println("Tester2: "+inventory.findByProductIdentifier(tester2.getId()).get().getQuantity().toString());
+		manager.changeVisibility(tester2.getId());
 
 
 		manager.getVisibleCatalog().forEach(article -> {
@@ -164,7 +167,6 @@ class CatalogManagerTest {
 	@Transient
 	void filteredCatalog() {
 		manager.saveArticle(tester1);
-		inventory.reorder(tester1,Quantity.of(10,Metric.UNIT));
 		Filterform form = new Filterform();
 		form.setMaxPrice(66);
 		form.setMinPrice(64);
@@ -248,13 +250,13 @@ class CatalogManagerTest {
 
 	@Test
 	@Transient
-	void hideArticle() {
+	void changeVisibility() {
+		manager.saveArticle(tester1);
+		manager.changeVisibility(tester1.getId());
+		tester1.hide();
+		assertEquals(tester1,manager.getArticle(tester1.getId()),"Der Artikel wurde nicht richtig versteckt.");
 	}
 
-	@Test
-	@Transient
-	void makeArticleVisible() {
-	}
 
 	@Test
 	@Transient
@@ -335,7 +337,7 @@ class CatalogManagerTest {
 	@Transient
 	void isHidden() {
 		manager.saveArticle(tester1);
-		manager.hideArticle(tester1.getId());
+		manager.changeVisibility(tester1.getId());
 		assertTrue(manager.isHidden(tester1.getId()),"Der Artikel wurde nicht für den Kunden unsichtbar gemacht.");
 
 	}

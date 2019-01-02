@@ -235,29 +235,20 @@ public class CatalogManager {
 		catalog.save(article);
 	}
 
-	public void hideArticle(ProductIdentifier identifier){
-		if(catalog.findById(identifier).isPresent()) {
+	public void changeVisibility(ProductIdentifier identifier){
+		if(catalog.findById(identifier).isPresent()){
 			Article article = catalog.findById(identifier).get();
-			
-			article.hide();
-			
-			hiddenArticles.add(article);
-			
+			if(!article.isHidden()){
+				article.hide();
+				hiddenArticles.add(article); }
+			else {
+				article.hide();
+				hiddenArticles.remove(article);
+			}
 			catalog.save(article);
-
-		}		
-	}
-
-	public void makeArticleVisible(ProductIdentifier identifier){
-		if(catalog.findById(identifier).isPresent()) {
-			Article article = catalog.findById(identifier).get();
-			
-			article.hide();
-			
-			hiddenArticles.remove(article);
-			
-			catalog.save(article);
-		}	
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
@@ -319,11 +310,7 @@ public class CatalogManager {
 		return amount.intValue();
 	}
 	public boolean isHidden(ProductIdentifier identifier){
-		if(hiddenArticles.contains(catalog.findById(identifier).get())){
-			return true;
-		} else {
-			return false;
-		}
+		return catalog.findById(identifier).isPresent() && hiddenArticles.contains(catalog.findById(identifier).get());  //Verkürztes If Statement
 	}
 
 }

@@ -174,12 +174,12 @@ public class CatalogController {
 	}
 	@GetMapping("hide/{identifier}")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model){
-		manager.hideArticle(identifier);
+		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 	@GetMapping("show/{identifier}")
 	public String visible(@PathVariable ProductIdentifier identifier, Model model){
-		manager.makeArticleVisible(identifier);
+		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 
