@@ -104,8 +104,7 @@ public class CatalogManager {
 	public void editAffectedArticles(Article afterEdit){
 		List<Article> affectedArticles = new ArrayList<>();
 
-		List<ProductIdentifier> articleList = new ArrayList<>();
-		articleList.addAll(this.getParents(afterEdit));
+		List<ProductIdentifier> articleList = new ArrayList<>(this.getParents(afterEdit));
 		afterEdit.setUpdateStatus(false);
 
 		while(!articleList.isEmpty()) {
@@ -125,7 +124,7 @@ public class CatalogManager {
 		}
 
 		while(!affectedArticles.isEmpty()) {
-			List<Article> parts = new ArrayList<Article>();
+			List<Article> parts = new ArrayList<>();
 
 			if(affectedArticles.get(0).getType() == Article.ArticleType.COMPOSITE) {
 				Composite c = (Composite) affectedArticles.get(0);
