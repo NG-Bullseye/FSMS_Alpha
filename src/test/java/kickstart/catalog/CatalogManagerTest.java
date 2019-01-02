@@ -110,8 +110,8 @@ class CatalogManagerTest {
 
 		manager.saveArticle(tester1);
 		manager.saveArticle(tester2);
-		inventory.save(new ReorderableInventoryItem(tester1,Quantity.of(5,Metric.UNIT)));
-		inventory.save(new ReorderableInventoryItem(tester2,Quantity.of(5,Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(tester1,Quantity.of(5)));
+		inventory.save(new ReorderableInventoryItem(tester2,Quantity.of(5)));
 		if (inventory.findByProductIdentifier(tester1.getId()).isPresent()) {
 
 			manager.changeVisibility(tester2.getId());
