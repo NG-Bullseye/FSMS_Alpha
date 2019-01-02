@@ -110,25 +110,24 @@ class CatalogManagerTest {
 
 		manager.saveArticle(tester1);
 		manager.saveArticle(tester2);
-		if(inventory.findByProductIdentifier(tester1.getId()).isPresent()){
-		inventory.findByProductIdentifier(tester1.getId()).get().increaseQuantity(Quantity.of(5,Metric.UNIT));}
-		if(inventory.findByProductIdentifier(tester2.getId()).isPresent()){
-			inventory.findByProductIdentifier(tester2.getId()).get().increaseQuantity(Quantity.of(5,Metric.UNIT));}
-		System.out.println("Tester1: "+inventory.findByProductIdentifier(tester1.getId()).get().getQuantity().toString());
-		System.out.println("Tester2: "+inventory.findByProductIdentifier(tester2.getId()).get().getQuantity().toString());
-		manager.changeVisibility(tester2.getId());
+		inventory.save(new ReorderableInventoryItem(tester1,Quantity.of(5,Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(tester2,Quantity.of(5,Metric.UNIT)));
+		if (inventory.findByProductIdentifier(tester1.getId()).isPresent()) {
+
+			manager.changeVisibility(tester2.getId());
 
 
-		manager.getVisibleCatalog().forEach(article -> {
-			if(!test.contains(article.getId())){
-				result.add(article.getId());
-			}
-		});
+			manager.getVisibleCatalog().forEach(article -> {
+				if (!test.contains(article.getId())) {
+					result.add(article.getId());
+				}
+			});
 
-		test.clear();
-		test.add(tester1.getId());
+			test.clear();
+			test.add(tester1.getId());
 
-		assertEquals(test, result, "Der Artikel wird nicht richtig versteckt.");
+			assertEquals(test, result, "Der Artikel wird nicht richtig versteckt.");
+		}
 	}
 
 	@Test
