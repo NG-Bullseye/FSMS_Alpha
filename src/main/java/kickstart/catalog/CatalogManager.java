@@ -233,8 +233,8 @@ public class CatalogManager {
 	}
 	public void saveArticle(Article article){
 		catalog.save(article);
-		if(!inventory.findByProductIdentifier(article.getId()).isPresent()){
-		inventory.save(new ReorderableInventoryItem(article,Quantity.of(5,Metric.UNIT)));}
+		/*if(!inventory.findByProductIdentifier(article.getId()).isPresent()){
+		inventory.save(new ReorderableInventoryItem(article,Quantity.of(5,Metric.UNIT)));}*/
 	}
 
 	public void changeVisibility(ProductIdentifier identifier){

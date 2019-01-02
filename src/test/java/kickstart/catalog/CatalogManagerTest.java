@@ -110,9 +110,6 @@ class CatalogManagerTest {
 
 		manager.saveArticle(tester1);
 		manager.saveArticle(tester2);
-		inventory.save(new ReorderableInventoryItem(tester1,Quantity.of(5)));
-		inventory.save(new ReorderableInventoryItem(tester2,Quantity.of(5)));
-		if (inventory.findByProductIdentifier(tester1.getId()).isPresent()) {
 
 			manager.changeVisibility(tester2.getId());
 
@@ -127,7 +124,7 @@ class CatalogManagerTest {
 			test.add(tester1.getId());
 
 			assertEquals(test, result, "Der Artikel wird nicht richtig versteckt.");
-		}
+
 	}
 
 	@Test
@@ -189,8 +186,12 @@ class CatalogManagerTest {
 	@Transient
 	void newPart() {
 		manager.newPart(form1);
-		catalog.save(new Part(form1.getName(),form1.getDescription(),form1.getPrice(),form1.getWeight(),form1.getSelectedColours(),form1.getSelectedCategories()));
-		assertThat(manager.getWholeCatalog()).as("Der Artikel wurde nicht hinzugefügt.").isEqualTo(catalog.findAll());
+		assertFalse(catalog.findByName(form1.getName()).isEmpty(),"Der Artikel wurde nicht dem Katalog hinzugefügt.");
+
+		LinkedList<Article> test = new LinkedList<>();
+		catalog.findByName(form1.getName()).forEach(test::add);
+		Article article = test.get(0);
+		assertTrue(inventory.findByProduct(article).isPresent());
 	}
 
 	@Test
