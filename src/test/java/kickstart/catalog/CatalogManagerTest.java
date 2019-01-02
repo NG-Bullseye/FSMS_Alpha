@@ -242,6 +242,39 @@ class CatalogManagerTest {
 		});
 		expected.add(com1.getId());
 		assertEquals(expected,result,"Es werden nicht die richtigen Artikel angezeigt.");
+
+		tester1.setColour("blau");
+		expected.clear();
+		result.clear();
+		colour.clear();
+		colour.add("blau");
+		form.setSelectedColours(colour);
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		expected.add(tester1.getId());
+		assertEquals(expected,result,"Es werden nicht die richtigen Artikel mit dieser Farbe angezeigt.");
+
+		colour.add("weiß");
+		expected.add(tester2.getId());
+		expected.add(com1.getId());
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		assertEquals(expected,result,"Es werden nicht die richtigen Artikel beim Filtern nach Farben angezeigt.");
+
+		tester1.addCategory("Bett");
+		category.clear();
+		category.add("Bett");
+		form.setSelectedCategories(category);
+		expected.clear();
+		result.clear();
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		expected.add(tester1.getId());
+		assertEquals(expected,result,"Es werden nicht die richtigen Artikel beim Filtern nach Kategorien angezeigt.");
+
 //TODO----------------------------------------------------------
 	}
 
