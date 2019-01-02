@@ -49,7 +49,7 @@ class CatalogManagerTest {
 	@Transient
 	void setUp() {
 
-		//manager = new CatalogManager(catalog,inventory);
+		manager = new CatalogManager(catalog,inventory);
 		HashSet<String> c1 = new HashSet<>();
 		c1.add("schwarz");
 		c1.add("weiß");
@@ -152,7 +152,7 @@ class CatalogManagerTest {
 		catalog.save(com2);
 		HashMap<String, String> input = new HashMap<>();
 		input.put("article_"+tester2.getId().toString(),"2");			//Simulierter Input der Website
-		//manager.editComposite(com1.getId(),form2,input);
+		manager.editComposite(com1.getId(),form2,input);
 		form1.setPrice(100);
 
 
@@ -255,21 +255,37 @@ class CatalogManagerTest {
 		});
 		assertEquals(expected,result,"Es gibt einen Fehler, wenn der Mindestpreis höher als der Maximalpreis ist.");
 
-		tester1.setColour("blau");
-		catalog.save(tester1);
+		form1.setName("Test1");
+		form1.setDescription("Test1");
+		form1.setPrice(25);
+		HashSet<String> c2 = new HashSet<>();
+		c2.add("blau");
+		HashSet<String> cat2 = new HashSet<>();
+		cat2.add("Tisch");
+		form1.setSelectedColours(c2);
+		form1.setSelectedCategories(cat2);
+		form1.setWeight(50);
+		manager.editPart(form1,tester1.getId());
 		expected.clear();
 		result.clear();
 		colour.clear();
 		colour.add("blau");
 		form.setSelectedColours(colour);
+		System.out.println(tester1.getColour());
+		System.out.println(tester2.getColour());
+		System.out.println(form.getSelectedColours());
 		manager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
+		result.forEach(identifier -> {
+			System.out.println(manager.getArticle(identifier).getName());
+		});
 		expected.add(tester1.getId());
-		expected.add(com1.getId());
+
 		assertEquals(expected,result,"Es werden nicht die richtigen Artikel mit dieser Farbe angezeigt.");
 
 		colour.add("weiß");
+		form.setSelectedColours(colour);
 		expected.add(tester2.getId());
 		expected.add(com1.getId());
 		manager.filteredCatalog(form).forEach(article -> {
@@ -278,6 +294,7 @@ class CatalogManagerTest {
 		assertEquals(expected,result,"Es werden nicht die richtigen Artikel beim Filtern nach Farben angezeigt.");
 
 		tester1.addCategory("Bett");
+		catalog.save(tester1);
 		category.clear();
 		category.add("Bett");
 		form.setSelectedCategories(category);
@@ -289,7 +306,6 @@ class CatalogManagerTest {
 		expected.add(tester1.getId());
 		assertEquals(expected,result,"Es werden nicht die richtigen Artikel beim Filtern nach Kategorien angezeigt.");
 
-//TODO----------------------------------------------------------
 	}
 
 	@Test
@@ -359,7 +375,7 @@ class CatalogManagerTest {
 		HashSet<String> cat1 = new HashSet<>();
 		cat1.add("Tisch");
 		manager.saveArticle(new Part("Test3","Test3",10,10,c1,cat1));
-		assertEquals(catalog.findAll(),manager.getWholeCatalog(),"Der Artikel wurde nicht hinzugefügt.");
+		assertEquals(catalog.findAll(),manager.getWholeCatalog(),"Der Artikel wurde nicht hinzugefügt.");  //TODO-------------------------------------------
 	}
 
 	@Test
@@ -415,7 +431,8 @@ class CatalogManagerTest {
 
 
 		manager.getWholeCatalog().forEach(article -> {
-			test.add(article.getId());
+			if(article.getId()!=tester1.getId()&&article.getId()!=tester2.getId()&&article.getId()!=com1.getId()){
+				test.add(article.getId());}
 		});
 
 
@@ -458,7 +475,7 @@ class CatalogManagerTest {
 		categories.add("braun");
 		categories.add("rot");
 		form1.setSelectedColours(colours);
-		//manager.editPart(form1,tester1.getId());
+		manager.editPart(form1,tester1.getId());
 		assertTrue(manager.getArticle(tester1.getId()).getPrice().isEqualTo(Money.of(25,EURO)),"Der Preis wurde nicht richtig geändert.");
 		assertEquals(manager.getArticle(tester1.getId()).getWeight().getAmount().intValue(), 20,"Das Gewicht wird nicht richtig geändert.");
 
@@ -470,7 +487,7 @@ class CatalogManagerTest {
 	void editComposite() {
 		HashMap<String, String> input = new HashMap<>();
 		input.put("article_"+tester2.getId().toString(),"2");			//Simulierter Input der Website
-		//manager.editComposite(com1.getId(),form2,input);
+		manager.editComposite(com1.getId(),form2,input);
 
 		assertThat(manager.getArticle(com1.getId()).getName()).as("Der Name des Composites wurde nicht korrekt geändert.").isEqualTo("Peter");
 		assertThat(manager.getArticle(com1.getId()).getDescription()).as("Die Beschreibung des Composites wurde nicht korrekt geändert.").isEqualTo("Lustig");

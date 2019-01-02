@@ -35,11 +35,12 @@ public interface WebshopCatalog extends Catalog<Article> {
 			if(article.getType()==Article.ArticleType.PART) categories.add(article);});
 		return categories;
 	}
-	default Iterable<Article> findByColours(ArrayList<String> colours){	//Optimierungsbedarf------------------------------------
+	default Iterable<Article> findByColours(ArrayList<String> colours){
 		HashSet<Article> rightColours = new HashSet<>();
 		for (Article article : this.findAll()) {
-			for (String colour: article.getColour()) {
-				if(colours.contains(colour)) rightColours.add(article);
+			for (String colour: colours) {
+				if(article.getColour().contains(colour))
+					rightColours.add(article);
 			}
 
 		}
@@ -64,7 +65,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 	}
 	
 	default Set<Article> findHidden() {
-		HashSet<Article> articles = new HashSet<Article>();
+		HashSet<Article> articles = new HashSet<>();
 		
 		for(Article a: this.findAll()) {
 			if(a.isHidden()) {
