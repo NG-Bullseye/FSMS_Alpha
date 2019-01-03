@@ -1,7 +1,5 @@
 package kickstart.catalog;
 
-import org.springframework.format.annotation.NumberFormat;
-
 import javax.validation.constraints.*;
 import java.util.HashSet;
 
