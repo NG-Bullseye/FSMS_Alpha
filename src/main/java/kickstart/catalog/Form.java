@@ -1,5 +1,7 @@
 package kickstart.catalog;
 
+import org.springframework.format.annotation.NumberFormat;
+
 import javax.validation.constraints.*;
 import java.util.HashSet;
 
@@ -15,8 +17,8 @@ public class Form {
 	@Max(10000)
 	private double price;
 	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")
-	@Min(1)
-	@Max(10000)
+	@Min(0)
+	@Max(1500)
 	private double weight;
 	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
