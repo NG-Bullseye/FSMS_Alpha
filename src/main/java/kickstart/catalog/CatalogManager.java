@@ -26,12 +26,16 @@ public class CatalogManager {
 		this.inventory = inventory;
 		this.hiddenArticles = catalog.findHidden();
 	}
-
+	/**
+	 * This method returns a Iterable<Article> of all Articles in the Catalog.
+	 */
 	public Iterable<Article> getWholeCatalog() {
 		return catalog.findAll();
 
 	}
-
+	/**
+	 * This method returns a Iterable<Article> of all visible articles for the customer.
+	 */
 	public Iterable<Article> getVisibleCatalog(){
 		HashSet<Article> visible = new HashSet<>();
 		catalog.findAll().forEach(article -> {
@@ -44,15 +48,31 @@ public class CatalogManager {
 
 		return visible;
 	}
-
-	public Article getArticle(ProductIdentifier id) {
+	/**
+	 * Returns the searched article.
+	 *
+	 * @param id The ProductIdentifier of the searched article.
+ 	 * @throws IllegalArgumentException If the article is not present.
+	 */
+	public Article getArticle(ProductIdentifier id) throws IllegalArgumentException {
 		Optional<Article> returning = catalog.findById(id);
-		return returning.get();
+		if(returning.isPresent()){
+		return returning.get();}
+		else {
+			throw new IllegalArgumentException();
+		}
 	}
-
-	public void editPart(Form article, ProductIdentifier identifier) {
+	/**
+	 * Changes the information of the part, such as name, description, colours, categories.
+	 *
+	 * @param article The form containing information like the new name,description,colours and categories for the edited article.
+	 * @param identifier The ProductIdentifier of the article,which will be edited.
+	 * @throws IllegalArgumentException If the article is not present in the catalog.
+	 */
+	public void editPart(Form article, ProductIdentifier identifier) throws IllegalArgumentException {
 
 		this.createAvailableForNewComposite();
+		if(catalog.findById(identifier).isPresent()){
 		Article afterEdit = catalog.findById(identifier).get();
 		afterEdit.setName(article.getName());
 		afterEdit.setDescription(article.getDescription());
@@ -64,39 +84,54 @@ public class CatalogManager {
 		article.getSelectedColours().forEach(afterEdit::setColour);
 
 		catalog.save(afterEdit);
-		this.editAffectedArticles(afterEdit);
-	}
-
-	public void editComposite(ProductIdentifier identifier, CompositeForm form,Map<String, String> partsCount){
-		Article afterEdit = catalog.findById(identifier).get();
-		afterEdit.setName(form.getName());
-		afterEdit.setDescription(form.getDescription());
-		LinkedList<Article> partsBefore = new LinkedList<>();
-		afterEdit.getPartIds().forEach((article,count) ->{
-			int i = count;
-			while(i>0) {
-				partsBefore.add(catalog.findById(article).get());
-				i--;
-			}
-		});
-		LinkedList<Article> partsAfter = new LinkedList<>();
-		partsAfter.addAll(this.compositeMapFiltering(partsCount));
-
-		partsAfter.forEach(article -> {
-			if(partsBefore.contains(article)){
-				partsBefore.remove(article);
-			}else{
-				afterEdit.addPart(article);
-			}
-		});
-		if(!partsBefore.isEmpty()) {
-			for (int i = 0; i <= partsBefore.size() - 1; i++) {
-				afterEdit.removePart(partsBefore.get(i));
-			}
+		this.editAffectedArticles(afterEdit);}
+		else {
+			throw new  IllegalArgumentException();
 		}
-		afterEdit.update(partsAfter);
-		catalog.save(afterEdit);
-		this.editAffectedArticles(afterEdit);
+
+	}
+	/**
+	 * Changes the information of the composite, such as name, description, included articles.
+	 *
+	 * @param form The form containing information like the new name and description.
+	 * @param identifier The ProductIdentifier of the article,which will be edited.
+	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 * @throws IllegalArgumentException If the article is not present in the catalog.
+	 */
+	public void editComposite(ProductIdentifier identifier, CompositeForm form,Map<String, String> partsCount) throws IllegalArgumentException{
+		if(catalog.findById(identifier).isPresent()) {
+			Article afterEdit = catalog.findById(identifier).get();
+			afterEdit.setName(form.getName());
+			afterEdit.setDescription(form.getDescription());
+			LinkedList<Article> partsBefore = new LinkedList<>();
+			afterEdit.getPartIds().forEach((article, count) -> {
+				int i = count;
+				while (i > 0) {
+					partsBefore.add(catalog.findById(article).get());
+					i--;
+				}
+			});
+			LinkedList<Article> partsAfter = new LinkedList<>();
+			partsAfter.addAll(this.compositeMapFiltering(partsCount));
+
+			partsAfter.forEach(article -> {
+				if (partsBefore.contains(article)) {
+					partsBefore.remove(article);
+				} else {
+					afterEdit.addPart(article);
+				}
+			});
+			if (!partsBefore.isEmpty()) {
+				for (int i = 0; i <= partsBefore.size() - 1; i++) {
+					afterEdit.removePart(partsBefore.get(i));
+				}
+			}
+			afterEdit.update(partsAfter);
+			catalog.save(afterEdit);
+			this.editAffectedArticles(afterEdit);
+		} else {
+			throw new IllegalArgumentException();
+		}
 
 	}
 
@@ -141,8 +176,13 @@ public class CatalogManager {
 		}
 
 	}
+	/**
+	 * Returns all articles with the given ProductIdentifiers.
+	 *
+	 * @param set A set containing all ProductIdentifiers which have to be searched.
+	 */
 	public List<Article> getArticlesFromIdentifiers(Set<ProductIdentifier> set) {
-		List<Article> articles = new ArrayList<Article>();
+		List<Article> articles = new ArrayList<>();
 		
 		for(ProductIdentifier id: set) {
 			Optional<Article> a = this.catalog.findById(id);
@@ -153,7 +193,11 @@ public class CatalogManager {
 		
 		return articles;
 	}
-
+	/**
+	 * Returns all articles which fit to the given filter.
+	 *
+	 * @param filterform A Form containing all filter settings, such as type,price,colours,categories.
+	 */
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
 		HashSet<Article> rightType = new HashSet<>();
