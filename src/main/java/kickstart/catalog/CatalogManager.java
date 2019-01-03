@@ -302,10 +302,9 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Creates a new Composite and saves it in the catalog.
+	 * Changes if an Article is visible for the customer or not.
 	 *
-	 * @param form A Form containing all information about the new Composite, such as name and description.
-	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 * @param identifier The ProductIdentifier of the Article, which has to be  changed to visible or hidden.
 	 */
 	public void changeVisibility(ProductIdentifier identifier){
 		if(catalog.findById(identifier).isPresent()){
@@ -322,6 +321,10 @@ public class CatalogManager {
 			throw new IllegalArgumentException();
 		}
 	}
+	/**
+	 * Creates a new Composite and saves it in the catalog.
+	 * 	 
+	 */
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
 		return availableForNewComposite;
