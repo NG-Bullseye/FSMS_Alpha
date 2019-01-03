@@ -322,13 +322,17 @@ public class CatalogManager {
 		}
 	}
 	/**
-	 * Creates a new Composite and saves it in the catalog.
-	 * 	 
+	 * Returns all Articles which can be used for a new Composite.
+	 *
 	 */
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
 		return availableForNewComposite;
 	}
+	/**
+	 * Creates a list with all Articles which can be used for a new Composite.
+	 *
+	 */
 	public void createAvailableForNewComposite(){
 		HashSet<Article> articlesWithoutParents = new HashSet<>();
 		catalog.findAll().forEach(articlesWithoutParents::add);
@@ -353,6 +357,11 @@ public class CatalogManager {
 		this.availableForNewComposite = articlesWithoutParents;
 	}
 
+	/**
+	 * Returns a list with all Articles in which the given Article is included.
+	 *
+	 * @param article The Article whose parents are searched.
+	 */
 	public List<ProductIdentifier> getParents(Article article){
 		LinkedList<ProductIdentifier> parents = new LinkedList<>();
 
@@ -366,6 +375,11 @@ public class CatalogManager {
 	return parents;
 	}
 
+	/**
+	 * Returns a Map with all Articles that are not already included in another Composite or included in the given Composite.
+	 *
+	 * @param identifier The ProductIdentifier of the Composite that will be edited.
+	 */
 	public Map<Article,Integer> getArticlesForCompositeEdit(ProductIdentifier identifier){
 		HashMap<Article, Integer> parts = new HashMap<>();
 		this.getAvailableForNewComposite().forEach(article->parts.put(article,0));
@@ -378,12 +392,22 @@ public class CatalogManager {
 		}
 		return parts;
 	}
-
+	/**
+	 * Returns the number of units in stock of the given Article.
+	 *
+	 * @param identifier The ProductIdentifier of the Article.
+	 */
 	public int maximumOrderAmount(ProductIdentifier identifier){
 		BigDecimal amount = inventory.findByProductIdentifier(identifier).get().getQuantity().getAmount();
 
 		return amount.intValue();
 	}
+
+	/**
+	 * Returns if the Article is hidden or not.
+	 *
+	 * @param identifier The ProductIdentifier of the Article.
+	 */
 	public boolean isHidden(ProductIdentifier identifier){
 		return catalog.findById(identifier).isPresent() && hiddenArticles.contains(catalog.findById(identifier).get());  //Verkürztes If Statement
 	}
