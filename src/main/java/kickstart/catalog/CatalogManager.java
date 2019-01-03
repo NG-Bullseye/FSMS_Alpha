@@ -63,7 +63,7 @@ public class CatalogManager {
 		}
 	}
 	/**
-	 * Changes the information of the part, such as name, description, colours, categories.
+	 * Changes the information of the part, such as name, description, price, weight colours, categories.
 	 *
 	 * @param article The form containing information like the new name,description,colours and categories for the edited article.
 	 * @param identifier The ProductIdentifier of the article,which will be edited.
@@ -91,11 +91,11 @@ public class CatalogManager {
 
 	}
 	/**
-	 * Changes the information of the composite, such as name, description, included articles.
+	 * Changes the information of the Composite, such as name, description, included articles.
 	 *
 	 * @param form The form containing information like the new name and description.
 	 * @param identifier The ProductIdentifier of the article,which will be edited.
-	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 * @param partsCount The user's input which articles and how many of them are included in the Composite.
 	 * @throws IllegalArgumentException If the article is not present in the catalog.
 	 */
 	public void editComposite(ProductIdentifier identifier, CompositeForm form,Map<String, String> partsCount) throws IllegalArgumentException{
@@ -238,19 +238,34 @@ public class CatalogManager {
 		result.retainAll(visible);
 		return result;
 	}
+	/**
+	 * Creates a new Part and saves it in the catalog.
+	 *
+	 * @param form A Form containing all information about the new Part, such as name, description, weight, price, colours, categories.
+	 */
 	public void newPart(Form form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
-	public void newComposite(CompositeForm form, Map<String,String> partsCount) {//-----------------------WEITERMACHEN----------------------------------
+	/**
+	 * Creates a new Composite and saves it in the catalog.
+	 *
+	 * @param form A Form containing all information about the new Composite, such as name and description.
+	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 */
+	public void newComposite(CompositeForm form, Map<String,String> partsCount) {
 
 		Composite newArticle = new Composite(form.getName(),form.getDescription(),this.compositeMapFiltering(partsCount));
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
 
-
+	/**
+	 * Handles the user's input from the website about which articles and how many of them are included in a Composite.
+	 *
+	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 */
 	//Eingabe von der Website Spring-seitig als Map<String,String>, weswegen in dieser Funktion die Map in eine Liste von Artikeln umgewandelt wird
 	public LinkedList<Article> compositeMapFiltering(Map<String,String> partsCount){
 		HashMap<String,Integer> rightMap = new HashMap<>();
@@ -277,10 +292,21 @@ public class CatalogManager {
 		} );
 		return parts;
 	}
+	/**
+	 * Saves an Article in the catalog.
+	 *
+	 * @param article The Article, which has to be saved in the catalog.
+	 */
 	public void saveArticle(Article article){
 		catalog.save(article);
 	}
 
+	/**
+	 * Creates a new Composite and saves it in the catalog.
+	 *
+	 * @param form A Form containing all information about the new Composite, such as name and description.
+	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 */
 	public void changeVisibility(ProductIdentifier identifier){
 		if(catalog.findById(identifier).isPresent()){
 			Article article = catalog.findById(identifier).get();
