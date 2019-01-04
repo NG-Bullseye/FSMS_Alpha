@@ -137,10 +137,15 @@ public class CatalogManager {
 
 	public void editAffectedArticles(Article afterEdit){
 		List<Article> affectedArticles = new ArrayList<>();
-
-		List<ProductIdentifier> articleList = new ArrayList<>(this.getParents(afterEdit));
+		affectedArticles.add(afterEdit);
 		afterEdit.setUpdateStatus(false);
 
+		// Contains all the articles whose parents are not yet determined and added to affected articles
+		List<ProductIdentifier> articleList = new ArrayList<>(this.getParents(afterEdit));
+
+		// Get all the articles that are affected by the change, since they have the article as a
+		// part or a part of them has this article as a part.
+		// Inspired by Depth-First-Search
 		while(!articleList.isEmpty()) {
 			Optional<Article> a = catalog.findById(articleList.get(0));
 			if(a.isPresent()) {
@@ -157,19 +162,25 @@ public class CatalogManager {
 			}
 		}
 
+		// Update all articles
 		while(!affectedArticles.isEmpty()) {
 			List<Article> parts = new ArrayList<>();
 
+			// Get the parts for the composite update
 			if(affectedArticles.get(0).getType() == Article.ArticleType.COMPOSITE) {
 				Composite c = (Composite) affectedArticles.get(0);
 				parts = getArticlesFromIdentifiers(c.getPartIds().keySet());
 			}
 
+			// Update was successful. Remove it from the list and save the changes
 			if(affectedArticles.get(0).update(parts)) {
 				affectedArticles.get(0).setUpdateStatus(true);
+				catalog.save(affectedArticles.get(0));
 				affectedArticles.remove(0);
-			}
-			else {
+			} else {
+				// It couldn't yet updated, because a part needs an update first.
+				// Therefore it gets added to the end, so the other part gets updated first.
+				// Note that cycles in parts would lead to a never ending loop. 
 				affectedArticles.add(affectedArticles.get(0));
 				affectedArticles.remove(0);
 			}
