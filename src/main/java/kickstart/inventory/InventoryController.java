@@ -21,16 +21,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import kickstart.accountancy.AccountancyManager;
+import lombok.Getter;
 
 @Controller
 public class InventoryController {
 
+	@Getter
 	private InventoryManager manager;
 		
 	public class TableElement
 	{
+		@Getter
 		private String name;
+		@Getter
 		private String amount;
+		@Getter
 		private String time;
 		
 		TableElement(String name, String amount, String time)
@@ -39,29 +44,12 @@ public class InventoryController {
 			this.amount = amount;
 			this.time = time;
 		}
-		
-		public String getName()
-		{
-			return name;
-		}
-		
-		public String getAmount()
-		{
-			return amount;
-		}
-		
-		public String getTime()
-		{
-			return time;
-		}
 	}
 	
 	public InventoryController(Inventory<ReorderableInventoryItem> inventory, 
 			AccountancyManager accountancy)
 	{
 		manager = new InventoryManager(inventory, accountancy);
-		
-		manager.getInventory().deleteAll();
 	}
 	
 	@GetMapping("/inventory")
