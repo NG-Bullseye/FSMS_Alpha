@@ -169,7 +169,18 @@ public class CatalogManager {
 			// Get the parts for the composite update
 			if(affectedArticles.get(0).getType() == Article.ArticleType.COMPOSITE) {
 				Composite c = (Composite) affectedArticles.get(0);
-				parts = getArticlesFromIdentifiers(c.getPartIds().keySet());
+				c.getPartIds().forEach((article,count)->{
+					//create a list with all parts of the composite
+					if(catalog.findById(article).isPresent()) {
+						if (count == 1) {
+							parts.add(catalog.findById(article).get());
+						} else {
+							for (int i = count; i > 0; i--) {
+								parts.add(catalog.findById(article).get());
+							}
+						}
+					}
+				});
 			}
 
 			// Update was successful. Remove it from the list and save the changes

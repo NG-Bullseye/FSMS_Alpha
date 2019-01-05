@@ -145,18 +145,22 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void editAffectedArticles() {
+		form1.setPrice(100);
+		manager.editPart(form1,tester1.getId());
+
+		assertEquals(Money.of(400,EURO), manager.getArticle(com1.getId()).getPrice(), "Der Artikel wurde nicht verändert, obwohl ein Teil von ihm geändert wurde.");
+
 		LinkedList<Article> parts = new LinkedList<>();
 		parts.add(com1);
 		parts.add(com1);
 		Composite com2 = new Composite("Testcomposite","Composite",parts);
 		catalog.save(com2);
-		HashMap<String, String> input = new HashMap<>();
-		input.put("article_"+tester2.getId().toString(),"2");			//Simulierter Input der Website
-		manager.editComposite(com1.getId(),form2,input);
-		form1.setPrice(100);
+
+		form1.setPrice(50);
+		manager.editPart(form1,tester1.getId());
 
 
-		assertEquals(manager.getArticle(com1.getId()).getPrice(), Money.of(400,EURO),"Der Artikel wurde nicht verändert, obwohl ein Teil von ihm geändert wurde.");
+		assertEquals(Money.of(400,EURO), manager.getArticle(com2.getId()).getPrice(), "Der Artikel wurde nicht verändert, obwohl ein Teil von ihm geändert wurde.");
 
 
 	}
