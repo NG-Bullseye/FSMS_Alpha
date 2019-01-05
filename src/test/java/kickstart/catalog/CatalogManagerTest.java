@@ -9,6 +9,7 @@ import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.*;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
+import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,12 +49,15 @@ class CatalogManagerTest {
 	@BeforeEach
 	@Transient
 	void setUp() {
-
 		manager = new CatalogManager(catalog,inventory);
 		HashSet<String> c1 = new HashSet<>();
 		c1.add("schwarz");
 		c1.add("weiß");
-		c1.add("braun");
+		c1.add("lila");
+
+		HashSet<String> c2 = new HashSet<>();
+		c2.add("schwarz");
+		c2.add("braun");
 
 		HashSet<String> cat1 = new HashSet<>();
 		cat1.add("Tisch");
@@ -61,7 +65,7 @@ class CatalogManagerTest {
 		tester1 = new Part("Test1","Test1",65,15.0, c1,cat1);
 		catalog.save(tester1);
 		inventory.save(new ReorderableInventoryItem(tester1,Quantity.of(5)));
-		tester2 = new Part("Test2","Test2",63,50.0, c1,cat1);
+		tester2 = new Part("Test2","Test2",63,50.0, c2,cat1);
 		catalog.save(tester2);
 		inventory.save(new ReorderableInventoryItem(tester2,Quantity.of(5)));
 
@@ -73,7 +77,7 @@ class CatalogManagerTest {
 		catalog.save(com1);
 		inventory.save(new ReorderableInventoryItem(com1,Quantity.of(5)));
 
-		HashSet<String> c2 = new HashSet<>();
+		HashSet<String> c3 = new HashSet<>();
 		c2.add("rot");
 		HashSet<String> cat2 = new HashSet<>();
 		cat2.add("Bett");
@@ -81,7 +85,7 @@ class CatalogManagerTest {
 		form1.setName("Peter");
 		form1.setDescription("Lustig");
 		form1.setPrice(25);
-		form1.setSelectedColours(c2);
+		form1.setSelectedColours(c3);
 		form1.setSelectedCategories(cat2);
 		form1.setWeight(50);
 
@@ -90,7 +94,6 @@ class CatalogManagerTest {
 		form2.setDescription("Lustig");
 
 		result = new HashSet<>();
-
 
 
 	}
@@ -187,12 +190,54 @@ class CatalogManagerTest {
 	@Transient
 	void filteredCatalog() {
 
+
 		Filterform form = new Filterform();
 		ArrayList<String> category = new ArrayList<>();
+		ArrayList<String> colour = new ArrayList<>();
+		HashSet<ProductIdentifier> expected = new HashSet<>();
+
+		HashSet<String> c2 = new HashSet<>();
+		c2.add("orange");
+		HashSet<String> cat2 = new HashSet<>();
+		cat2.add("Tisch");
+		Part tester3 = new Part("Test3","Test3",67,12,c2,cat2);
+		manager.saveArticle(tester3);
+		inventory.save(new ReorderableInventoryItem(tester3,Quantity.of(5)));
+
+		expected.clear();
+		result.clear();
+		colour.clear();
+		category.clear();
+		category.add("Tisch");
+		colour.add("orange");
+		form.setType("All");
+		form.setSelectedCategories(category);
+		form.setSelectedColours(colour);
+		form.setMinPrice(61);
+		form.setMaxPrice(69);
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+		});
+		expected.add(tester3.getId());
+
+		assertEquals(expected,result,"Es werden nicht die richtigen Artikel mit dieser Farbe angezeigt.");
+		form.setMaxPrice(1000);
+		colour.clear();
+		colour.add("lila");
+		form.setSelectedColours(colour);
+		expected.clear();
+		result.clear();
+		expected.add(tester1.getId());
+		expected.add(com1.getId());
+		manager.filteredCatalog(form).forEach(article -> {
+			result.add(article.getId());
+			System.out.println(article.getName());
+		});
+		assertEquals(expected,result,"Es werden nicht die richtigen Artikel beim Filtern nach Farben angezeigt.");
+
+
 		category.add("Tisch");
 		form.setSelectedCategories(category);
-		form.setType("All");
-		ArrayList<String> colour = new ArrayList<>();
 		colour.add("schwarz");
 		form.setSelectedColours(colour);
 		form.setMaxPrice(66);
@@ -201,7 +246,7 @@ class CatalogManagerTest {
 		manager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
-		HashSet<ProductIdentifier> expected = new HashSet<>();
+
 		expected.add(tester1.getId());
 		assertEquals(expected,result, "Beim Filtern des Preises wird nicht der richtige Artikel angezeigt.");
 
@@ -259,43 +304,6 @@ class CatalogManagerTest {
 		});
 		assertEquals(expected,result,"Es gibt einen Fehler, wenn der Mindestpreis höher als der Maximalpreis ist.");
 
-		form1.setName("Test1");
-		form1.setDescription("Test1");
-		form1.setPrice(25);
-		HashSet<String> c2 = new HashSet<>();
-		c2.add("blau");
-		HashSet<String> cat2 = new HashSet<>();
-		cat2.add("Tisch");
-		form1.setSelectedColours(c2);
-		form1.setSelectedCategories(cat2);
-		form1.setWeight(50);
-		manager.editPart(form1,tester1.getId());
-		expected.clear();
-		result.clear();
-		colour.clear();
-		colour.add("blau");
-		form.setSelectedColours(colour);
-		System.out.println(tester1.getColour());
-		System.out.println(tester2.getColour());
-		System.out.println(form.getSelectedColours());
-		manager.filteredCatalog(form).forEach(article -> {
-			result.add(article.getId());
-		});
-		result.forEach(identifier -> {
-			System.out.println(manager.getArticle(identifier).getName());
-		});
-		expected.add(tester1.getId());
-
-		assertEquals(expected,result,"Es werden nicht die richtigen Artikel mit dieser Farbe angezeigt.");
-
-		colour.add("weiß");
-		form.setSelectedColours(colour);
-		expected.add(tester2.getId());
-		expected.add(com1.getId());
-		manager.filteredCatalog(form).forEach(article -> {
-			result.add(article.getId());
-		});
-		assertEquals(expected,result,"Es werden nicht die richtigen Artikel beim Filtern nach Farben angezeigt.");
 
 		tester1.addCategory("Bett");
 		catalog.save(tester1);
