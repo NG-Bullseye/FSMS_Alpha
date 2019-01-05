@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -23,12 +24,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import kickstart.accountancy.AccountancyManager;
 import lombok.Getter;
 
+/**
+ * This controller is responsible for all interactions to the inventory. For example this includes
+ * showing the current amounts or reordering.
+ * 
+ * Note that all methods always return a String, which is the name of the shown html file. Therefore 
+ * this isn't specified further in the individual javadoc. Also are all methods only accessable for 
+ * users with the role employee
+ */
 @Controller
 public class InventoryController {
 
 	@Getter
 	private InventoryManager manager;
 		
+	/**
+	 * An inner class to easier combine information from the classes ReorderableInventoryItem
+	 * and Article. 
+	 */
 	public class TableElement
 	{
 		@Getter
@@ -38,7 +51,7 @@ public class InventoryController {
 		@Getter
 		private String time;
 		
-		TableElement(String name, String amount, String time)
+		TableElement(@NotNull String name,@NotNull String amount,@NotNull String time)
 		{
 			this.name = name;
 			this.amount = amount;
@@ -46,12 +59,23 @@ public class InventoryController {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param inventory The inventory where the ReorderableInventoryItems are saved
+	 * @param accountancy This allows to add expenses and gives the current time
+	 */
 	public InventoryController(Inventory<ReorderableInventoryItem> inventory, 
 			AccountancyManager accountancy)
 	{
 		manager = new InventoryManager(inventory, accountancy);
 	}
 	
+	/**
+	 * This method shows a web site where for each item the name and current amount in the inventory
+	 * is shown
+	 * @param model Stores the information for the view
+	 * @return  
+	 */
 	@GetMapping("/inventory")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String inventoryView(Model model)
@@ -68,6 +92,11 @@ public class InventoryController {
 		return "inventory";
 	}
 	
+	/**
+	 * This method shows all reorders that are currently active(that means they have to yet arrive).
+	 * @param model Stores the information for the view
+	 * @return
+	 */
 	@GetMapping("/reorders")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String reorderView(Model model)
@@ -88,6 +117,14 @@ public class InventoryController {
 		return "reorders";
 	}
 	
+	/**
+	 * This method shows a website where the desired amount for that reorder can be entered. 
+	 * If the identifier is unknown, then an error page is shown instead.
+	 * @param identifier The identifier of the desired article.
+	 * @param form The form stores the amount that should be ordered and verifies the input.
+	 * @param model Stores the information for the view
+	 * @return
+	 */
 	@GetMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String showReorder(@PathVariable ProductIdentifier identifier, ReorderForm form, Model model) {
@@ -103,9 +140,20 @@ public class InventoryController {
 		return "error";
 	}
 	
+	/**
+	 * This method adds an reorder for the article. If the form contains error, it leads instead back
+	 * to the input side
+	 * @param identifier The identifier for the desired article, so that the ReorderableInventoryItem can be found
+	 * @param form Contains the user input
+	 * @param bindingResult Needed for validation
+	 * @param model Stores the information for the view
+	 * @param result Needed for validation
+	 * @return
+	 */
 	@PostMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String reorder(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form")ReorderForm form, BindingResult bindingResult, Model model, Errors result) {
+	public String reorder(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form")ReorderForm form
+			, BindingResult bindingResult, Model model, Errors result) {
 		
 		if(result.hasErrors()) {
 			model.addAttribute("form", form);
@@ -121,6 +169,10 @@ public class InventoryController {
 		return "redirect:/reorders";
 	}
 	
+	/**
+	 * This method calls the update function for every ReorderableInventoryItem
+	 * @return
+	 */
 	@GetMapping("inventory/update")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String updateInventory() {
