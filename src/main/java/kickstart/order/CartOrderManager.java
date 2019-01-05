@@ -18,6 +18,7 @@ import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
@@ -26,6 +27,7 @@ import kickstart.carManagement.Truck;
 
 
 @Component
+@Transactional
 public class CartOrderManager {
 	private final OrderManager<CustomerOrder> orderManager;
 	private UserAccount account;
@@ -159,7 +161,6 @@ public class CartOrderManager {
 
 	@Scheduled(fixedRate = 5000L)
 	public void changeStatus(){
-		System.out.println("checked");
 		LocalDateTime date = businesstime.getTime();
 
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)){
@@ -214,9 +215,4 @@ public class CartOrderManager {
 		
 		return sideInventories;
 	}
-
-
-
-
-
 }
