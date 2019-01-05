@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import javax.money.MonetaryAmount;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 public interface WebshopCatalog extends Catalog<Article> {
 	static final Sort DEFAULT_SORT = new Sort(Sort.Direction.DESC, "productIdentifier");
@@ -58,5 +59,16 @@ public interface WebshopCatalog extends Catalog<Article> {
 			}
 		});
 		return rightCategories;
+	}
+	
+	default Set<Article> findHidden() {
+		HashSet<Article> articles = new HashSet<Article>();
+		
+		for(Article a: this.findAll()) {
+			if(a.isHidden()) {
+				articles.add(a);
+			}
+		}
+		return articles;
 	}
 }

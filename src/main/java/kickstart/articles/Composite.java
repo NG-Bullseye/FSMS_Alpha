@@ -1,5 +1,6 @@
 package kickstart.articles;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -49,9 +50,13 @@ public class Composite extends Article {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity weight;
 	
-
-	private Composite(){
+	/**
+	 * Empty constructor for data base interactions. Shouldn't used otherwise.
+	 */
+	public Composite(){
 		super("a","b");
+		
+		this.parts = new ArrayList<Article>();
 	}
 	
 	private MonetaryAmount price;
@@ -253,6 +258,14 @@ public class Composite extends Article {
 		HashSet<String> categories = new HashSet<String>();
 		this.getCategories().forEach(categories::add);
 		return categories;
+	}
+
+	/**
+	 * This method removes all colours that this part contains
+	 */
+	@Override
+	public void removeColours() {
+		this.colours.clear();
 	}
 
 }

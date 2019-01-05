@@ -12,7 +12,9 @@ import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import kickstart.accountancy.AccountancyManager;
 import kickstart.articles.Article;
@@ -24,6 +26,7 @@ import lombok.Getter;
  *  amount by reorders to the stock or by orders of a customer. 
  */
 @Component
+@Transactional
 public class InventoryManager {
 
 	// Stores the amount of each article.
@@ -176,6 +179,7 @@ public class InventoryManager {
 	 * This functions runs the update method of the class {@link Reorder} for all currently stored reorders.
 	 * If update on a reorders returns true, the reorder is deleted from the repository.
 	 */
+	@Scheduled(fixedRate = 5000)
 	public void update() {
 		Iterable<ReorderableInventoryItem> items = inventory.findAll();
 		

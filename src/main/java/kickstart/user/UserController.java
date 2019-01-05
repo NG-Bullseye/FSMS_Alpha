@@ -23,12 +23,14 @@ import kickstart.exception.UnAllowedException;
 class UserController {
 
 	private final UserManagement userManagement;
+	private final OrderCollector orders;
 
-	UserController(UserManagement userManagement) {
+	UserController(UserManagement userManagement, OrderCollector orders) {
 
 		Assert.notNull(userManagement, "UserManagement must not be null!");
 
 		this.userManagement = userManagement;
+		this.orders = orders;
 	}
 
 	@PostMapping("/register")
@@ -60,6 +62,7 @@ class UserController {
 		model.addAttribute("address", loggedInUser.getAddress());
 		model.addAttribute("id", loggedInUser.getId());
 		model.addAttribute("enableDeactivation", false);
+		model.addAttribute("allOrders", orders.findOrder(loggedInUser.getUserAccount()));
 		return "customeraccount";
 	}
 	
@@ -77,6 +80,7 @@ class UserController {
 		model.addAttribute("email", requestedUser.getEmail());
 		model.addAttribute("address", requestedUser.getAddress());
 		model.addAttribute("id", requestedUser.getId());
+		model.addAttribute("allOrders", orders.findOrder(requestedUser.getUserAccount()));
 		return "customeraccount";
 	}
 	

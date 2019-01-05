@@ -16,6 +16,8 @@ class UserDataInitializer implements DataInitializer {
 
 	private final UserAccountManager userAccountManager;
 	private final UserRepository customerRepository;
+	private static final int salary = 150;
+	private static final int bigSalary = 300;
 
 	UserDataInitializer(UserAccountManager userAccountManager, UserRepository customerRepository) {
 
@@ -41,6 +43,8 @@ class UserDataInitializer implements DataInitializer {
 		User c1 = new User(ua1, "Daniel", "Körsten", "daniel@beispiel.de", "Coole Straße 18, Gera");
 		User c2 = new User(ua2, "Alfons", "Zitterbacke", "alfons@moebl-hier.de", "Arbeiterstraße 1, Dresden");
 		User c3 = new User(ua3, "Daniel", "Matusek", "besterTutor@tu-dresden.de", "Private Straße 15, Dresden");
+		c2.setSalary(salary);
+		c3.setSalary(bigSalary);
 
 		customerRepository.saveAll(Arrays.asList(c1, c2, c3));
 	}

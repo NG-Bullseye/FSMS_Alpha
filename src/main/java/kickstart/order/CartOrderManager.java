@@ -1,12 +1,12 @@
 package kickstart.order;
 
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
-import kickstart.carManagement.CarpoolManager;
-import kickstart.carManagement.Truck;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
@@ -18,15 +18,16 @@ import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
+import kickstart.carManagement.CarpoolManager;
+import kickstart.carManagement.Truck;
 
 
 @Component
+@Transactional
 public class CartOrderManager {
 	private final OrderManager<CustomerOrder> orderManager;
 	private UserAccount account;
@@ -97,7 +98,7 @@ public class CartOrderManager {
 			orderManager.cancelOrder(order);
 		}
 
-		return "redirect:/customeraccount";
+		return "redirect:/";
 	}
 
 	public String addComposite (Composite article, int count, Cart cart){
@@ -160,7 +161,6 @@ public class CartOrderManager {
 
 	@Scheduled(fixedRate = 5000L)
 	public void changeStatus(){
-		System.out.println("checked");
 		LocalDateTime date = businesstime.getTime();
 
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)){
@@ -215,9 +215,4 @@ public class CartOrderManager {
 		
 		return sideInventories;
 	}
-
-
-
-
-
 }
