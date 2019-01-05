@@ -169,18 +169,7 @@ public class CatalogManager {
 			// Get the parts for the composite update
 			if(affectedArticles.get(0).getType() == Article.ArticleType.COMPOSITE) {
 				Composite c = (Composite) affectedArticles.get(0);
-				c.getPartIds().forEach((article,count)->{
-					//create a list with all parts of the composite
-					if(catalog.findById(article).isPresent()) {
-						if (count == 1) {
-							parts.add(catalog.findById(article).get());
-						} else {
-							for (int i = count; i > 0; i--) {
-								parts.add(catalog.findById(article).get());
-							}
-						}
-					}
-				});
+				parts = getArticlesFromIdentifiers(c.getPartIds());
 			}
 
 			// Update was successful. Remove it from the list and save the changes
@@ -201,15 +190,17 @@ public class CatalogManager {
 	/**
 	 * Returns all articles with the given ProductIdentifiers.
 	 *
-	 * @param set A set containing all ProductIdentifiers which have to be searched.
+	 * @param map A map that contains the identifier of an article and the amount of occurences in the list 
 	 */
-	public List<Article> getArticlesFromIdentifiers(Set<ProductIdentifier> set) {
+	public List<Article> getArticlesFromIdentifiers(Map<ProductIdentifier, Integer> map) {
 		List<Article> articles = new ArrayList<>();
 		
-		for(ProductIdentifier id: set) {
+		for(ProductIdentifier id: map.keySet()) {
 			Optional<Article> a = this.catalog.findById(id);
 			if(a.isPresent()) {
-				articles.add(a.get());
+				for(int i = map.get(id); i > 0; i--) {
+					articles.add(a.get());
+				}
 			}
 		}
 		

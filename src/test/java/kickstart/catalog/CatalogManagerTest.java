@@ -5,11 +5,12 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.inventory.ReorderableInventoryItem;
 import org.javamoney.moneta.Money;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
-import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,13 +21,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Map;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.salespointframework.core.Currencies.EURO;
 
 @SpringBootTest
@@ -171,19 +175,40 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void getArticlesFromIdentifiers() {
-		HashSet<ProductIdentifier> set = new HashSet<>();
-		set.add(tester1.getId());
-		set.add(tester2.getId());
-		HashSet<ProductIdentifier> test = new HashSet<>();
-		test.add(tester1.getId());
-		test.add(tester2.getId());
-
-		manager.getArticlesFromIdentifiers(set).forEach(article -> {
-			result.add(article.getId());
+		int tester1Amount = 2;
+		int tester2Amount = 1;
+		
+		Map<ProductIdentifier, Integer> map = new HashMap<ProductIdentifier, Integer>();
+		map.put(tester1.getId(), tester1Amount);
+		map.put(tester2.getId(), tester2Amount);
+		
+		int count = 0;
+		
+		List<Article> list = manager.getArticlesFromIdentifiers(map);
+		
+		for(ProductIdentifier id: map.keySet()) {
+			Optional<Article> a = catalog.findById(id);
+			
+			if(a.isPresent()) {
+				assertThat(list)
+					.as("The List should contain for each identifier the article").contains(a.get());
+				
+				int elementCount = 0;
+				
+				for(Article article: list) {
+					if(article.getId().equals(id)) {
+						++elementCount;
+					}
 				}
-		);
-		assertEquals(test, result, "Es werden nicht die richtigen Artikel herausgesucht.");
-
+				
+				assertThat(elementCount).as("Every element should occur with the right"
+						+ " amount in the list").isEqualTo(map.get(id));
+				
+				count += map.get(id);
+			}
+		}
+		
+		assertThat(list.size()).as("The list should not have additional elements").isEqualTo(count);
 	}
 
 	@Test
