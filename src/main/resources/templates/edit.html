@@ -8,7 +8,7 @@
 <body>
 <nav th:include="navbar :: navbar"></nav>
 
-<form method="post" th:action="@{/edit/{id}(id=${article.id})}" th:object="${form}">
+<form method="post" th:action="@{/edit/{id}(id=${article.getId()})}" th:object="${form}">
     <table id="editspace" class="ui definition table">
     <thead>
         <th></th>
@@ -35,7 +35,7 @@
             <td><t3>Preis:</t3></td>
             <td th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Name</td>
             <td>
-                <input type="number" th:field="*{price}" min="1" max="50000" value="1" step="0.1" required="required"/>
+                <input type="number" th:field="*{price}" min="1" max="50000" value="1" step="0.01" required="required"/>
                 <a th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Bitte richtigen Preis eingeben</a>
             </td>
         </tr>
@@ -43,7 +43,7 @@
             <td><t3>Gewicht:</t3></td>
             <td th:text="${article.weight}">Name</td>
             <td>
-                <input type="number" th:field="*{weight}" min="0.1" max="5000" value="0.1"  step="0.1" required="required"/>
+                <input type="number" th:field="*{weight}" min="0.1" max="5000" value="0.1"  step="0.01" required="required"/>
                 <a th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}">Bitte richtiges Gewicht eingeben</a>
             </td>
         </tr>
@@ -77,7 +77,7 @@
                 <td></td>
                 <div th:switch="${articleCategories.contains(category)}">
                 <td th:case="true" th:text="${category}"></td>
-                <td th:case="*"></td>
+                <td th:case="false"></td>
                 </div>
                 <td>
                     <div class="ui labeled input">

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.salespointframework.core.Currencies.EURO;
+
 public interface WebshopCatalog extends Catalog<Article> {
 	static final Sort DEFAULT_SORT = new Sort(Sort.Direction.DESC, "productIdentifier");
 
@@ -33,11 +35,12 @@ public interface WebshopCatalog extends Catalog<Article> {
 			if(article.getType()==Article.ArticleType.PART) categories.add(article);});
 		return categories;
 	}
-	default Iterable<Article> findByColours(ArrayList<String> colours){	//Optimierungsbedarf------------------------------------
+	default Iterable<Article> findByColours(ArrayList<String> colours){
 		HashSet<Article> rightColours = new HashSet<>();
 		for (Article article : this.findAll()) {
-			for (String colour: article.getColour()) {
-				if(colours.contains(colour)) rightColours.add(article);
+			for (String colour: colours) {
+				if(article.getColour().contains(colour))
+					rightColours.add(article);
 			}
 
 		}
@@ -46,7 +49,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 	default Iterable<Article> findByPrice(MonetaryAmount minPrice, MonetaryAmount maxPrice){
 		HashSet<Article> rightPrice = new HashSet<>();
 		this.findAll().forEach(article -> {
-			if(article.getPrice().isGreaterThan(minPrice)&&article.getPrice().isLessThan(maxPrice))
+			if(article.getPrice().isGreaterThan(minPrice.subtract(Money.of(1,EURO)))&&article.getPrice().isLessThan(maxPrice.add(Money.of(1,EURO))))
 				rightPrice.add(article);
 		});
 		return rightPrice;
@@ -62,7 +65,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 	}
 	
 	default Set<Article> findHidden() {
-		HashSet<Article> articles = new HashSet<Article>();
+		HashSet<Article> articles = new HashSet<>();
 		
 		for(Article a: this.findAll()) {
 			if(a.isHidden()) {
