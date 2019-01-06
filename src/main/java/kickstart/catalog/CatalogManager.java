@@ -6,6 +6,7 @@ import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.inventory.ReorderableInventoryItem;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -41,6 +43,9 @@ public class CatalogManager {
 	 * This method returns a Iterable<Article> of all Articles in the Catalog.
 	 */
 	public Iterable<Article> getWholeCatalog() {
+		LinkedList<Article> output = new LinkedList<>();
+		catalog.findAll().forEach(output::add);
+		output.sort(Comparator.comparing(Article::getName));
 		return catalog.findAll();
 
 	}
@@ -48,7 +53,7 @@ public class CatalogManager {
 	 * This method returns a Iterable<Article> of all visible articles for the customer.
 	 */
 	public Iterable<Article> getVisibleCatalog(){
-		HashSet<Article> visible = new HashSet<>();
+		LinkedList<Article> visible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
 			if(article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()) {
 				if (!hiddenArticles.contains(article) && !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
@@ -56,7 +61,7 @@ public class CatalogManager {
 				}
 			}
 		});
-
+		visible.sort(Comparator.comparing(Article::getName));
 		return visible;
 	}
 	/**
@@ -251,7 +256,9 @@ public class CatalogManager {
 
 		HashSet<Article> visible = new HashSet<>();
 		this.getVisibleCatalog().forEach(visible::add);
-		HashSet<Article> result = rightType;
+		LinkedList<Article> result = new LinkedList<>();
+		result.addAll(rightType);
+		result.retainAll(visible);
 		if(!filterform.getSelectedColours().isEmpty()) {
 			result.retainAll(rightColours);
 		}
@@ -259,7 +266,8 @@ public class CatalogManager {
 		if(!filterform.getSelectedCategories().isEmpty()) {
 			result.retainAll(rightCategories);
 		}
-		result.retainAll(visible);
+
+		result.sort(Comparator.comparing(Article::getName));
 		return result;
 	}
 	/**

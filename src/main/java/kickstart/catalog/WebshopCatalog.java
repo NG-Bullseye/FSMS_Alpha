@@ -3,12 +3,17 @@ package kickstart.catalog;
 import kickstart.articles.Article;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Catalog;
+import org.salespointframework.catalog.Product;
 import org.springframework.data.domain.Sort;
 
 import javax.money.MonetaryAmount;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -73,5 +78,13 @@ public interface WebshopCatalog extends Catalog<Article> {
 			}
 		}
 		return articles;
+	}
+
+	default Iterable<Article> mostBought(){
+		HashSet<Article> notSorted = new HashSet<>();
+		this.findAll().forEach(notSorted::add);
+		List<Article> sorted = new ArrayList<>(notSorted);
+		sorted.sort(Comparator.comparing(Article::getOrderedAmount).reversed());
+		return sorted;
 	}
 }

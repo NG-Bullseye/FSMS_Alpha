@@ -15,14 +15,30 @@
  */
 package kickstart.controller;
 
+import kickstart.catalog.WebshopCatalog;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.HashSet;
+import java.util.LinkedList;
 
 @Controller
 public class WelcomeController {
+	private final WebshopCatalog catalog;
+
+	public WelcomeController(WebshopCatalog catalog){
+		this.catalog = catalog;
+	}
 
 	@RequestMapping("/")
-	public String index() {
+	public String index(Model model) {
+		LinkedList mostBought = new LinkedList();
+		catalog.mostBought().forEach(mostBought::add);
+		for(int i = mostBought.size()-1;i>2;i--){
+			mostBought.remove(i);
+		}
+		model.addAttribute("catalog",mostBought);
 		return "index";
 	}
 	
