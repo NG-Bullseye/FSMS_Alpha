@@ -1,6 +1,5 @@
 package kickstart.carManagement;
 
-
 import kickstart.accountancy.AccountancyManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Catalog;
@@ -23,7 +22,6 @@ import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
 
-
 @Service
 public class CarpoolManager {
 
@@ -38,7 +36,6 @@ public class CarpoolManager {
 	private AccountancyManager accountancyManager;
 	private Map<UserAccount,List<Truck>> userAccountTruckMap;
 
-
 	public CarpoolManager(CarManagmentWrapper carManagmentWrapper, AccountancyManager accountancyManager, OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog, BusinessTime businessTime ) {
 		this.accountancyManager=accountancyManager;
 		userAccountTruckMap =new HashMap<>();
@@ -50,24 +47,7 @@ public class CarpoolManager {
 		this.userAccountManager=userAccountManager;
 	}
 
-
-
-	public String rentTruck1Dummy(){
-		this.userAccount = userAccountManager.findByUsername("chef").get();
-		Quantity weight =Quantity.of(20,Metric.KILOGRAM);
-		rentTruckByWight(weight,userAccount);
-		return "Erfolgreich";
-	}
-
-	public String rentTruck2Dummy(){
-		this.userAccount = userAccountManager.findByUsername("daniel").get();
-		Quantity weight =Quantity.of(100,Metric.KILOGRAM);
-		rentTruckByWight(weight,userAccount);
-		return "Erfolgreich";
-	}
-
 	public void addFreeTruck(TruckClassForm form){
-
 		int price;
 		int capacity;
 		MonetaryAmount money;
@@ -95,9 +75,7 @@ public class CarpoolManager {
 		//carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
-
-
-	public Truck checkTruckavailable(Quantity weight){
+	public Truck checkTruckAvailable(Quantity weight){
 		List<Truck> filteredTrucks=new ArrayList<>();
 
 		for (Truck t:
@@ -184,7 +162,7 @@ public class CarpoolManager {
 		return truckToRent;
 	}
 
-	 boolean returnTruckToFreeTrucks(ReturnForm form){
+	boolean returnTruckToFreeTrucks(ReturnForm form){
 		try{
 			UserAccount rentedBy;
 			if(userAccountManager.findByUsername(form.getName()).isPresent()){
@@ -214,9 +192,6 @@ public class CarpoolManager {
 		return true;
 	}
 
-
-
-
 	Map<Truck,UserAccount> getTruckUserAccountMap() {
 
 		 Map<Truck,UserAccount> myNewHashMap = new HashMap<>();
@@ -245,5 +220,4 @@ public class CarpoolManager {
 		}
 		return list;*/
 	}
-
 }

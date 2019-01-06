@@ -12,6 +12,9 @@ public class CarpoolInitializer implements DataInitializer {
 	private final int CAPACITY_SMALL =30;
 	private final int CAPACITY_MEDIUM =100;
 	private final int CAPACITY_LARGE =300;
+	private final int PRICE_SMALL =30;
+	private final int PRICE_MEDIUM =100;
+	private final int PRICE_LARGE =300;
 	private CarpoolManager carpoolManager;
 	private CarManagmentWrapper carManagmentWrapper;
 
@@ -29,19 +32,19 @@ public class CarpoolInitializer implements DataInitializer {
 		truckForm=new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_SMALL);
 		truckForm.setName("Kleiner Lkw");
-		truckForm.setPrice(CAPACITY_SMALL);
+		truckForm.setPrice(PRICE_SMALL);
 		carpoolManager.addFreeTruck(truckForm);
 
 		truckForm=new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_MEDIUM);
 		truckForm.setName("Mittlerer Lkw");
-		truckForm.setPrice(CAPACITY_MEDIUM);
+		truckForm.setPrice(PRICE_MEDIUM);
 		carpoolManager.addFreeTruck(truckForm);
 
 		truckForm=new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_LARGE);
 		truckForm.setName("Großer Lkw");
-		truckForm.setPrice(CAPACITY_LARGE);
+		truckForm.setPrice(PRICE_LARGE);
 		carpoolManager.addFreeTruck(truckForm);
 	}
 

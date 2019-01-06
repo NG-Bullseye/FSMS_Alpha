@@ -90,14 +90,12 @@ public class AccountancyManager {
 
 	}
 
-	public boolean addEntry(MonetaryAmount amount){
+	public void addEntry(MonetaryAmount amount){
 		try{
 			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime());
 			accountancy.add(entry);
-			return true;
 		}catch (Exception e){
 			e.printStackTrace();
-			return false;
 		}
 
 	}
@@ -153,9 +151,7 @@ public class AccountancyManager {
 		return intervalBuilder.to(endOfMonthToFetch);
 	}
 
-
-
-	public List<AccountancyEntry> getFilteredYearList(YearFilterForm form) {
+	List<AccountancyEntry> getFilteredYearList(YearFilterForm form) {
 		return accountancy
 				.find(fetchOneYearSinceInterval(form.getYear()))
 				.get()

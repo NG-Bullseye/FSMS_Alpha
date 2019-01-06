@@ -33,11 +33,11 @@ public class CarpoolController {
 	}
 
 	@PostMapping("/addTruck")
-	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) { // Hier habe ich festgelegt, dass er die Form als Eingabe erwartet
+	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) {
 
 		try{
 			model.addAttribute("newForm",truckClassForm);
-			carpoolManager.addFreeTruck(form);   //hier wird die korrekte Form an deine Manager-Funktion übergeben
+			carpoolManager.addFreeTruck(form);
 		}catch (Exception r){
 			r.printStackTrace();
 			return "redirect:carpool";
@@ -65,19 +65,6 @@ public class CarpoolController {
 	}
 
 
-
-	@RequestMapping("/rentTruck1Dummy")
-	public String capacity1(Model model){
-		carpoolManager.rentTruck1Dummy();
-		return "redirect:carpool";
-	}
-	@RequestMapping("/rentTruck2Dummy")
-	public String capacity2(Model model){
-		carpoolManager.rentTruck2Dummy();
-		return "redirect:carpool";
-	}
-
-
 	/*@RequestMapping("/addTruckToInventory")
 	public String addTruckToInventory(){
 		carpoolManager.addTruckToInventory();
@@ -90,6 +77,8 @@ public class CarpoolController {
 		return "redirect:pricing";
 	}*/
 
-
+	public CarpoolManager getManager(){
+		return carpoolManager;
+	}
 
 }

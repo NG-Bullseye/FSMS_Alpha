@@ -47,7 +47,7 @@ public class AccountancyController {
 	}
 
 	@RequestMapping("/accountancy")
-	public String accountancy(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm,Model model) {
+	public String show(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm,Model model) {
 		model.addAttribute("time", accountancyManager.getTime());
 
 		model.addAttribute("yearFilterForm",yearFilterForm);
@@ -99,4 +99,7 @@ public class AccountancyController {
 		return "redirect:/accountancy";
 	}
 
+	public AccountancyManager getManager(){
+		return accountancyManager;
+	}
 }

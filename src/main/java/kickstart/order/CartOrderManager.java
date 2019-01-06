@@ -119,7 +119,7 @@ public class CartOrderManager {
 	}
 
 	public Truck checkLKW(){
-		return carpoolManager.checkTruckavailable(wight);
+		return carpoolManager.checkTruckAvailable(wight);
 	}
 
 	public String addLKW(Cart cart){
