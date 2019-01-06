@@ -35,9 +35,9 @@
         <div id="registration">
             <t2>Unsere beliebtesten Artikel:</t2>
         </div>
-		<div id="tablespace" >
-			<div class="ui link cards" th:remove="all-but-first">
-				<div id="buttonspace" class="card" th:each="article : ${catalog}">
+        <div id="registration">
+			<div class="ui link cards justified" th:remove="all-but-first">
+				<div class="card" th:each="article : ${catalog}">
 					<div class="content">
 						<a class="header" th:href="@{/article/{id}(id=${article.id})}" th:text="${article.name}">Artikel</a>
 						<div class="meta" th:text="${article.getAllCategories()}">

@@ -15,13 +15,13 @@
  */
 package kickstart.controller;
 
-import kickstart.catalog.WebshopCatalog;
+import java.util.LinkedList;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashSet;
-import java.util.LinkedList;
+import kickstart.catalog.WebshopCatalog;
 
 @Controller
 public class WelcomeController {
