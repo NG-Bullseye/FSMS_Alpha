@@ -46,6 +46,9 @@ public abstract class Article extends Product{
 	// one of it's children was edited. Update means in this context that attributes
 	// like the price have to get updated. True means that no updates are needed.
 	private boolean updateStatus;
+	
+	// This variable saves whether the article is visible at the web shop.
+	private boolean hidden;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
@@ -79,6 +82,8 @@ public abstract class Article extends Product{
 		setName(name);
 		
 		this.description = description;
+		
+		hidden = false;
 		
 		updateStatus = true;
 		this.parents = new LinkedList<>();
@@ -153,6 +158,8 @@ public abstract class Article extends Product{
 	public abstract void setWeight(double weight);
 
 	public abstract void setColour(@NotNull String colour);
+	
+	public abstract void removeColours();
 
 	public abstract Map<ProductIdentifier, Integer> getPartIds();
 
@@ -193,7 +200,23 @@ public abstract class Article extends Product{
 			return gerundet;
 		}
 	}
+	
+	/**
+	 * 
+	 * @return Returns whether the article is hidden to customer and normal users. True
+	 * means that the article is hidden
+	 */
+	public boolean isHidden() {
+		return hidden;
+	}
 
+	/**
+	 * This method hides an article to customers. If the article is already hidden,
+	 * it will be visible again.
+	 */
+	public void hide() {
+		hidden = !hidden;
+	}
 	public abstract void addPart(@NotNull Article article);
 	public abstract void removePart(@NotNull Article article);
 }

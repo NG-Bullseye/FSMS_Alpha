@@ -28,7 +28,7 @@ public class Part extends Article {
 	private Quantity quantity;
 
 	@ElementCollection
-	private Set<String> colour;
+	private Set<String> colours;
 	private ArticleType type;
 	
 	
@@ -60,7 +60,7 @@ public class Part extends Article {
 			throw new IllegalArgumentException("Part.weight should be positive");
 		}
 		
-		this.colour = colour;
+		this.colours = colour;
 
 		this.setPrice(Money.of(price, "EUR"));
 		
@@ -96,7 +96,7 @@ public class Part extends Article {
 	 */
 	@Override
 	public Set<String> getColour() {
-		return colour;
+		return colours;
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class Part extends Article {
 			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");
 		}
 		
-		this.colour.add(colour);
+		this.colours.add(colour);
 	}
 
 	/**
@@ -166,5 +166,13 @@ public class Part extends Article {
 	public void removePart(@NotNull Article article){
 		// A part does not have parts of it's own.Therefore nothing gets changed.
 		// This method is only to make casting in our composite tree not necessary.
+	}
+	
+	/**
+	 * This method removes all colours that this part contains
+	 */
+	@Override
+	public void removeColours() {
+		this.colours.clear();
 	}
 }

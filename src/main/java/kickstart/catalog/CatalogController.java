@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kickstart.articles.Article;
@@ -122,13 +121,16 @@ public class CatalogController {
 
 	@PostMapping("/edit/{identifier}")
 	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form, BindingResult bindingResult, Model model){
-		//model.addAttribute("article",manager.getArticle(identifier));
+		model.addAttribute("article",manager.getArticle(identifier));
+		HashSet<String> articleCategories = new HashSet<>();
+		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+		model.addAttribute("articleCategories", articleCategories);
 		if(bindingResult.hasErrors()){
 			return "edit";
 		}
 		manager.editPart(form, identifier);
 
-		return "redirect:/article/"+ identifier;
+		return "redirect:/catalog/";
 	}
 	@GetMapping("catalog/part/new")
 	public String showNew(Model model){
@@ -143,7 +145,7 @@ public class CatalogController {
 		}
 		manager.newPart(form);
 		model.addAttribute("catalog", manager.getWholeCatalog());
-		return"redirect:/catalog";
+		return"redirect:/catalog/";
 	}
 	@GetMapping("catalog/composite/new")
 	public String newComposite(Model model){
@@ -170,16 +172,16 @@ public class CatalogController {
 
 		model.addAttribute("catalog", manager.getWholeCatalog());
 
-		return"redirect:/catalog";
+		return"redirect:/catalog/";
 	}
 	@GetMapping("hide/{identifier}")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model){
-		manager.hideArticle(identifier);
+		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 	@GetMapping("show/{identifier}")
 	public String visible(@PathVariable ProductIdentifier identifier, Model model){
-		manager.makeArticleVisible(identifier);
+		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 
