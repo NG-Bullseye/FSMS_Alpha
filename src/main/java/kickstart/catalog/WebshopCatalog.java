@@ -84,7 +84,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 		HashSet<Article> notSorted = new HashSet<>();
 		this.findAll().forEach(notSorted::add);
 		List<Article> sorted = new ArrayList<>(notSorted);
-		sorted.sort(Comparator.comparing(Article::getOrderedAmount).reversed());
+		sorted.sort(Comparator.comparingInt(Article::getOrderedAmount).reversed());
 		return sorted;
 	}
 }
