@@ -1,8 +1,5 @@
 package kickstart.carManagement;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 public class TruckClassForm {
 
 	private String name;

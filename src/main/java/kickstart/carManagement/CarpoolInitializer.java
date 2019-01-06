@@ -1,17 +1,17 @@
 package kickstart.carManagement;
 
-import org.salespointframework.catalog.Catalog;
+
 import org.salespointframework.core.DataInitializer;
-import org.salespointframework.order.*;
-import org.salespointframework.time.BusinessTime;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+
 
 @Service
 public class CarpoolInitializer implements DataInitializer {
 
 
+	private final int CAPACITY_SMALL =30;
+	private final int CAPACITY_MEDIUM =100;
+	private final int CAPACITY_LARGE =300;
 	private CarpoolManager carpoolManager;
 	private CarManagmentWrapper carManagmentWrapper;
 
@@ -27,21 +27,21 @@ public class CarpoolInitializer implements DataInitializer {
 
 		TruckClassForm truckForm;
 		truckForm=new TruckClassForm();
-		truckForm.setCapacity(30);
+		truckForm.setCapacity(CAPACITY_SMALL);
 		truckForm.setName("Kleiner Lkw");
-		truckForm.setPrice(30);
+		truckForm.setPrice(CAPACITY_SMALL);
 		carpoolManager.addFreeTruck(truckForm);
 
 		truckForm=new TruckClassForm();
-		truckForm.setCapacity(100);
+		truckForm.setCapacity(CAPACITY_MEDIUM);
 		truckForm.setName("Mittlerer Lkw");
-		truckForm.setPrice(100);
+		truckForm.setPrice(CAPACITY_MEDIUM);
 		carpoolManager.addFreeTruck(truckForm);
 
 		truckForm=new TruckClassForm();
-		truckForm.setCapacity(300);
+		truckForm.setCapacity(CAPACITY_LARGE);
 		truckForm.setName("Großer Lkw");
-		truckForm.setPrice(300);
+		truckForm.setPrice(CAPACITY_LARGE);
 		carpoolManager.addFreeTruck(truckForm);
 	}
 
