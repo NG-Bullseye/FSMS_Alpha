@@ -23,7 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.time.Month;
 
 
@@ -70,7 +69,7 @@ public class AccountancyController {
 
 		model.addAttribute("monthlyAccountancy",accountancyManager.fetchThisMonthAccountancy());
 		//model.addAttribute("monthlyOrders", accountancyManager.fetchMonthlyOrders());
-
+		accountancyManager.checkForPayDay();
 		return "accountancy";
 	}
 

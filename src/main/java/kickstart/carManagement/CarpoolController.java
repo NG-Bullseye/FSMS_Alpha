@@ -1,7 +1,5 @@
 package kickstart.carManagement;
 
-import kickstart.accountancy.YearFilterForm;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,24 +10,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CarpoolController {
 
 	private CarpoolManager carpoolManager;
-	private UserAccountManager userAccountManager;
 	private TruckClassForm truckClassForm;
+	private CarManagmentWrapper carManagmentWrapper;
 
-	public CarpoolController(CarpoolManager carpoolManager,UserAccountManager userAccountManager) {
+	public CarpoolController(CarpoolManager carpoolManager, CarManagmentWrapper carManagmentWrapper) {
 		this.carpoolManager = carpoolManager;
-		this.userAccountManager=userAccountManager;
+		this.carManagmentWrapper = carManagmentWrapper;
 	}
-
 
 	@RequestMapping("/carpool")
 	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
 		truckClassForm= new TruckClassForm();
 		model.addAttribute("newForm",truckClassForm);
 
-		model.addAttribute("freeTrucks",carpoolManager.getFreeTrucks() );
-		model.addAttribute("takenTrucks",carpoolManager.getTakenTrucks() );
-		model.addAttribute("freeTrucksNumber",carpoolManager.getFreeTrucks().size() );
-		model.addAttribute("takenTrucksNumber",carpoolManager.getTakenTrucks().size() );
+		model.addAttribute("freeTrucks",carManagmentWrapper.getFreeTrucks() );
+		model.addAttribute("takenTrucks",carManagmentWrapper.getTakenTrucks() );
+		model.addAttribute("freeTrucksNumber",carManagmentWrapper.getFreeTrucks().size() );
+		model.addAttribute("takenTrucksNumber",carManagmentWrapper.getTakenTrucks().size() );
 		model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
 
 		return "carpool";
