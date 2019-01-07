@@ -13,9 +13,9 @@ public class CarpoolController {
 	private TruckClassForm truckClassForm;
 	private CarManagmentWrapper carManagmentWrapper;
 
-	public CarpoolController(CarpoolManager carpoolManager, CarManagmentWrapper carManagmentWrapper) {
+	public CarpoolController(CarpoolManager carpoolManager) {
 		this.carpoolManager = carpoolManager;
-		this.carManagmentWrapper = carManagmentWrapper;
+		carManagmentWrapper=carpoolManager.getCarManagmentWrapper();
 	}
 
 	/**
@@ -26,13 +26,11 @@ public class CarpoolController {
 	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
 		truckClassForm= new TruckClassForm();
 		model.addAttribute("newForm",truckClassForm);
-
 		model.addAttribute("freeTrucks",carManagmentWrapper.getFreeTrucks() );
 		model.addAttribute("takenTrucks",carManagmentWrapper.getTakenTrucks() );
 		model.addAttribute("freeTrucksNumber",carManagmentWrapper.getFreeTrucks().size() );
 		model.addAttribute("takenTrucksNumber",carManagmentWrapper.getTakenTrucks().size() );
 		model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
-
 		return "carpool";
 	}
 
@@ -42,7 +40,6 @@ public class CarpoolController {
 	 */
 	@PostMapping("/addTruck")
 	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) {
-
 		try{
 			model.addAttribute("newForm",truckClassForm);
 			carpoolManager.addFreeTruck(form);
@@ -50,8 +47,6 @@ public class CarpoolController {
 			r.printStackTrace();
 			return "redirect:carpool";
 		}
-
-
 		return "redirect:carpool";
 	}
 
@@ -61,7 +56,6 @@ public class CarpoolController {
 	 */
 	@PostMapping("/returnTruck")
 	String returnTruck(@ModelAttribute("returnForm") ReturnForm form, Model model) {
-
 		try{
 			carpoolManager.returnTruckToFreeTrucks(form); //auswahl treffen anhand von useraccount
 		}catch (Exception r){

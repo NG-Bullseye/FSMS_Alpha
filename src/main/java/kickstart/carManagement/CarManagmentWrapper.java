@@ -1,25 +1,21 @@
 package kickstart.carManagement;
 
-
-
-import org.springframework.stereotype.Component;
-
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Entity
+@Table(name="car_Table")
 public class CarManagmentWrapper {
 	private List<Truck> freeTrucks;
 	private List<Truck> takenTrucks;
 
-
-
-	/**
-	 * @param
-	 * @return
-	 */
-	public CarManagmentWrapper(CarCatalog carCatalog, CarInventory carInventory) {
+		/**
+         * @param
+         * @return
+         */
+	public CarManagmentWrapper() {
 		this.freeTrucks = new ArrayList<>();
 		this.takenTrucks = new ArrayList<>();
 	}

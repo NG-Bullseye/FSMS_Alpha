@@ -1,11 +1,6 @@
 package kickstart.carManagement;
 
-import kickstart.accountancy.AccountancyManager;
 import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.Catalog;
-import org.salespointframework.order.Cart;
-import org.salespointframework.order.Order;
-import org.salespointframework.order.OrderManager;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
@@ -27,27 +22,17 @@ public class CarpoolManager {
 
 	private CarManagmentWrapper carManagmentWrapper;
 	private BusinessTime businessTime;
-	private Cart cart;
-	private OrderManager<Order> orderManager;
-	private UserAccountManager userAccountManager; //dummy
-	private UserAccount userAccount;
-	private Catalog carCatalog;
-	private List<Truck> userTruckList;
-	private AccountancyManager accountancyManager;
+	private UserAccountManager userAccountManager;
 	private Map<UserAccount,List<Truck>> userAccountTruckMap;
 
 	/**
 	 * @param
 	 * @return
 	 */
-	public CarpoolManager(CarManagmentWrapper carManagmentWrapper, AccountancyManager accountancyManager, OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog, BusinessTime businessTime ) {
-		this.accountancyManager=accountancyManager;
+	public CarpoolManager(UserAccountManager userAccountManager, BusinessTime businessTime ) {
 		userAccountTruckMap =new HashMap<>();
 		this.businessTime=businessTime;
-		this.carCatalog=carCatalog;
-		this.carManagmentWrapper=carManagmentWrapper;
-
-		this.orderManager = orderManager;
+		this.carManagmentWrapper=new CarManagmentWrapper();
 		this.userAccountManager=userAccountManager;
 	}
 
@@ -66,21 +51,16 @@ public class CarpoolManager {
 
 			money=Money.of(price,"EUR");
 			quantityCapapacity=Quantity.of(capacity, Metric.KILOGRAM);
-
 		}catch (Exception e){
 			System.out.println("money or capacity is not entered as number");
 			return;
 		}
-
 		Truck truck= new Truck(
 				form.getName()
 				,money
 				,quantityCapapacity
 				,businessTime.getTime());
-
 		carManagmentWrapper.addFreeTrucks(truck);
-		//carCatalog.save(truck);
-		//carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
 	/**
@@ -162,9 +142,9 @@ public class CarpoolManager {
 			}
 			//if user has no truck at the moment
 			else{
-				userTruckList=new ArrayList<>();
+				List<Truck> userTruckList = new ArrayList<>();
 				userTruckList.add(truckToRent);
-				userAccountTruckMap.put(rentedBy,userTruckList);
+				userAccountTruckMap.put(rentedBy, userTruckList);
 			}
 
 			//<editor-fold desc="Bestellung">
@@ -199,11 +179,7 @@ public class CarpoolManager {
 				Truck truckCopie= new Truck(t.getName(),t.getPrice(), t.getCapacity(),t.getDayOfRent());
 				carManagmentWrapper.addFreeTrucks(truckCopie);
 				carManagmentWrapper.getTakenTrucks().remove(t);
-				//carCatalog.save(truckCopie);
-				//carCatalog.save(new InventoryItem(truckCopie,Quantity.of(1)));
 			}
-
-
 		}catch (Exception e){
 			System.out.println("MyError: Truck can not be returned: ");
 			e.getCause();
@@ -212,8 +188,10 @@ public class CarpoolManager {
 		return true;
 	}
 
+	public CarManagmentWrapper getCarManagmentWrapper() {
+		return carManagmentWrapper;
+	}
 	Map<Truck,UserAccount> getTruckUserAccountMap() {
-
 		 Map<Truck,UserAccount> myNewHashMap = new HashMap<>();
 		 for(Map.Entry<UserAccount, List<Truck>> entry : userAccountTruckMap.entrySet()){
 		 	for(Truck t:entry.getValue()){
@@ -227,17 +205,5 @@ public class CarpoolManager {
 
 		}
 		return  myNewHashMap;
-		/*List<Map<Truck,UserAccount>> list=new ArrayList<>();
-		for (Map.Entry<Truck, List<UserAccount>> entry: myNewHashMap.entrySet()
-		){
-			for (UserAccount u:entry.getValue()
-				 ) {
-
-				Map<Truck, UserAccount> map=new Hashtable<>();
-				map.put(entry.getKey(),u);
-				list.add(map);
-			}
-		}
-		return list;*/
 	}
 }

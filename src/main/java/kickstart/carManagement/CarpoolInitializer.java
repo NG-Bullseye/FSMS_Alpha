@@ -2,10 +2,9 @@ package kickstart.carManagement;
 
 
 import org.salespointframework.core.DataInitializer;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-
-@Service
+@Component
 public class CarpoolInitializer implements DataInitializer {
 
 
@@ -16,22 +15,17 @@ public class CarpoolInitializer implements DataInitializer {
 	private final int PRICE_MEDIUM =100;
 	private final int PRICE_LARGE =300;
 	private CarpoolManager carpoolManager;
-	private CarManagmentWrapper carManagmentWrapper;
-
 
 	/**
 	 * @param
 	 * @return
 	 */
-	public CarpoolInitializer(CarpoolManager carpoolManager, CarManagmentWrapper carManagmentWrapper) {
+	public CarpoolInitializer(CarpoolManager carpoolManager) {
 		this.carpoolManager = carpoolManager;
-		this.carManagmentWrapper = carManagmentWrapper;
 	}
 
 	@Override
 	public void initialize() {
-		carManagmentWrapper.clear();
-
 		TruckClassForm truckForm;
 		truckForm=new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_SMALL);
