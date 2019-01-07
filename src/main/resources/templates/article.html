@@ -50,7 +50,7 @@
             <div class="ui label">Anzahl:</div>
             <input name="count" type="number" min="1" th:max="${max}" value="1">
             <input name="part" type="hidden" th:value="${article.id}">
-            <input class="ui button" type="submit" value="Artikel hinzufügen">
+            <input class="ui button" type="submit" value="dem Warenkorb hinzufügen">
         </div>
     </form>
     <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
@@ -58,7 +58,7 @@
             <div  class="ui label">Anzahl:</div>
             <input name="count" type="number" min="1" max="10" value="1">
             <input name="article" type="hidden" th:value="${article.id}">
-            <input class="ui button" type="submit" value="Artikel hinzufügen">
+            <input class="ui button" type="submit" value="dem Warenkorb hinzufügen">
         </div>
     </form>
 </div>
@@ -68,21 +68,6 @@
 		<tnorm th:text="#{article.reorder}">Nachbestellen</tnorm>
 	</div>
 </a>
-
-<div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
-        <label class="ui label">Anzahl:</label>
-        <input name="count" type="number" min="1" max="10" value="1">
-        <input name="part" type="hidden" th:value="${article.id}">
-        <input class="ui button" type="submit" th:text="Hinzufügen">
-    </form>
-    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
-        <label class="ui label">Anzahl</label>
-        <input name="count" type="number" min="1" max="10" value="1">
-        <input name="article" type="hidden" th:value="${article.id}">
-        <div class="ui label">in den Warenkorb</div>
-        <input class="ui labeled button" type="submit" name="in den Warenkorb">
-    </form></div>
     
 <div sec:authorize="hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_CUSTOMER')" id="article">
 	<div class="ui comments">
