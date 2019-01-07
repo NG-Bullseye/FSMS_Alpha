@@ -33,17 +33,39 @@
         </tbody>
     </table>
 </div>
+<div class="ui grid">
+    <div class="eight wide column">
+        <div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+    </div>
 
+<div class="eight wide column">
 
 <div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
-<div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+</div>
+</div>
+<div class="ui grid">
+<div class="eight wide column">
+
 <div  th:if="${available}==true"><h2>Wollen sie einen LKW mieten?</h2></div>
-<div th:if="${ishome}==true" >   <h2 th:align="center">Bitte Lieferort auswählen</h2></div>
 <div  th:if="${available}==false"><h2>Leider kein LKW verfügbar.</h2></div>
-<div th:if="${ishome}==false" >  <h2 th:align="center" th:text="'Lieferort:'+' '+${finaldestination}">Lieferort</h2></div>
+
 
 <div>
-    <form th:align="center" th:action="@{/choosedestination}">
+    <form th:action="@{/renttruck}" th:if="${available}==true">
+        <button type="submit" class="ui button" th:text="'LKW' +' '+ 'mieten'+' '+${lkwprice}">button</button>
+    </form>
+    <form th:action="@{/addorder}">
+        <button id="buttonspace" type="submit" class="ui button" th:text="'Ohne'+' '+'LKW'+' '+'Bestellen'">button</button>
+    </form>
+</div>
+</div>
+
+<div class="eight wide column">
+
+    <div th:if="${ishome}==true" >   <h2>Bitte Lieferort auswählen</h2></div>
+    <div th:if="${ishome}==false" >  <h2 th:text="'Lieferort:'+' '+${finaldestination}">Lieferort</h2></div>
+<div>
+    <form th:action="@{/choosedestination}">
         <select name="destination">
             <option th:value="home">home</option>
             <option th:value="Berlin">Berlin</option>
@@ -54,12 +76,8 @@
         </select>
         <input type="submit" value="Auswählen">
     </form>
-    <form th:action="@{/renttruck}" th:if="${available}==true">
-        <button type="submit" class="ui button" th:text="'LKW' +' '+ 'mieten'+' '+${lkwprice}">button</button>
-    </form>
-    <form th:action="@{/addorder}">
-        <button id="buttonspace" type="submit" class="ui button" th:text="'Ohne'+' '+'LKW'+' '+'Bestellen'">button</button>
-    </form>
+</div>
+</div>
 </div>
 </body>
 </html>
