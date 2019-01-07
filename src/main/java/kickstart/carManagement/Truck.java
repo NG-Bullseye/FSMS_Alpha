@@ -4,7 +4,12 @@ import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Quantity;
 
 import javax.money.MonetaryAmount;
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Column;
+
 import java.time.LocalDateTime;
 
 @Entity
