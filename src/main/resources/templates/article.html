@@ -84,7 +84,7 @@
         <input class="ui labeled button" type="submit" name="in den Warenkorb">
     </form></div>
     
-<div sec:authorize="hasRole('Customer')" id="article">
+<div sec:authorize="hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_CUSTOMER')" id="article">
 	<div class="ui comments">
 	    <h3 class="ui dividing header">Bewertungen</h3>
 	    <h4 th:text="'Durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' " >5</h4>
