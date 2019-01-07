@@ -18,6 +18,10 @@ public class CarpoolController {
 		this.carManagmentWrapper = carManagmentWrapper;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	@RequestMapping("/carpool")
 	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
 		truckClassForm= new TruckClassForm();
@@ -32,6 +36,10 @@ public class CarpoolController {
 		return "carpool";
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	@PostMapping("/addTruck")
 	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) {
 
@@ -47,12 +55,10 @@ public class CarpoolController {
 		return "redirect:carpool";
 	}
 
-	/*@RequestMapping("/addTruck")
-	public String addFreeTruckDummy(){
-		carpoolManager.addFreeTruck("Dummy Lkw ", Money.of(30,EURO), 20);
-		return "redirect:carpool";
-	}*/
-
+	/**
+	 * @param
+	 * @return
+	 */
 	@PostMapping("/returnTruck")
 	String returnTruck(@ModelAttribute("returnForm") ReturnForm form, Model model) {
 
@@ -63,19 +69,6 @@ public class CarpoolController {
 		}
 		return "redirect:carpool";
 	}
-
-
-	/*@RequestMapping("/addTruckToInventory")
-	public String addTruckToInventory(){
-		carpoolManager.addTruckToInventory();
-		return "redirect:pricing";
-	}*/
-
-	/*@RequestMapping("/returnTruck")
-	public String returnTruckToCatalog(){
-		carpoolManager.returnTruckToCatalog();
-		return "redirect:pricing";
-	}*/
 
 	public CarpoolManager getManager(){
 		return carpoolManager;

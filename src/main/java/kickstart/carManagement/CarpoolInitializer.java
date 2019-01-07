@@ -19,6 +19,10 @@ public class CarpoolInitializer implements DataInitializer {
 	private CarManagmentWrapper carManagmentWrapper;
 
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public CarpoolInitializer(CarpoolManager carpoolManager, CarManagmentWrapper carManagmentWrapper) {
 		this.carpoolManager = carpoolManager;
 		this.carManagmentWrapper = carManagmentWrapper;
@@ -47,7 +51,4 @@ public class CarpoolInitializer implements DataInitializer {
 		truckForm.setPrice(PRICE_LARGE);
 		carpoolManager.addFreeTruck(truckForm);
 	}
-
-
-
 }

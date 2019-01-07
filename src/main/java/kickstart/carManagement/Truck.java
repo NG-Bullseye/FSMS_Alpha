@@ -14,10 +14,14 @@ public class Truck extends Product {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity capacity;
 	private LocalDateTime rentDay;
-	public Truck() {
 
+	public Truck() {
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public Truck(String truckName, MonetaryAmount price, Quantity capacity,LocalDateTime dayOfRent) {
 		super(truckName, price);
 		this.capacity=capacity;
@@ -33,6 +37,10 @@ public class Truck extends Product {
 		return rentDay;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public void setRentDay(LocalDateTime rentDay) {
 		this.rentDay = rentDay;
 	}

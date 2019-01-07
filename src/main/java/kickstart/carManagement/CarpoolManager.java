@@ -36,6 +36,10 @@ public class CarpoolManager {
 	private AccountancyManager accountancyManager;
 	private Map<UserAccount,List<Truck>> userAccountTruckMap;
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public CarpoolManager(CarManagmentWrapper carManagmentWrapper, AccountancyManager accountancyManager, OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog, BusinessTime businessTime ) {
 		this.accountancyManager=accountancyManager;
 		userAccountTruckMap =new HashMap<>();
@@ -47,6 +51,10 @@ public class CarpoolManager {
 		this.userAccountManager=userAccountManager;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public void addFreeTruck(TruckClassForm form){
 		int price;
 		int capacity;
@@ -75,6 +83,10 @@ public class CarpoolManager {
 		//carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public Truck checkTruckAvailable(Quantity weight){
 		List<Truck> filteredTrucks=new ArrayList<>();
 
@@ -100,6 +112,10 @@ public class CarpoolManager {
 		return filteredTrucks.get(0);
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public Truck rentTruckByWight(Quantity weight,UserAccount rentedBy){
 
 		Assert.notNull(rentedBy, "useraccount must not be null!");
@@ -162,6 +178,10 @@ public class CarpoolManager {
 		return truckToRent;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	boolean returnTruckToFreeTrucks(ReturnForm form){
 		try{
 			UserAccount rentedBy;

@@ -26,30 +26,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.Month;
 
 
-/*
-	Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung haben,
- 	in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
+/**
+ *  Diese Klasse bietet eine monatliche Abrechnung,
+ *  in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
  */
+
 @Controller
 public class AccountancyController {
 
 
 	private AccountancyManager accountancyManager;
-	//YearFilterForm yearFilterForm=new YearFilterForm() ;
 
 	private UserAccount userAccount;
+
+	/**
+	 * @param accountancyManager Managerklasse welche die Logik für die Finanzüberischt beinhaltet
+	 */
 	@Autowired
-	public AccountancyController(AccountancyManager accountancyManager, UserAccountManager userAccountManager)
+	public AccountancyController(AccountancyManager accountancyManager)
 	{
 		this.accountancyManager = accountancyManager;
-		//iniziiert das Prudukt "stuhl", den Useracount und fügt produkt dem catalog hinzu
-	//	accountancyManager.initOrder();
 	}
 
+	/**
+	 * @param yearFilterForm
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/accountancy")
 	public String show(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm,Model model) {
-		model.addAttribute("time", accountancyManager.getTime());
 
+		model.addAttribute("time", accountancyManager.getTime());
 		model.addAttribute("yearFilterForm",yearFilterForm);
 		model.addAttribute("filteredYear",yearFilterForm.getYear());
 		model.addAttribute("filteredYearList",accountancyManager.getFilteredYearList(yearFilterForm));
@@ -73,29 +80,16 @@ public class AccountancyController {
 		return "accountancy";
 	}
 
+
 	@RequestMapping("/skippDay")
 	public String skippDay() {
 		accountancyManager.skippDay();
-
 		return "redirect:/accountancy";
 	}
 
 	@RequestMapping("/skippMonth")
 	public String skippMonth() {
 		accountancyManager.skippMonth();
-		return "redirect:/accountancy";
-	}
-
-	/*  */
-	@RequestMapping("/plus")
-	public String order() {
-		accountancyManager.addEntry(Money.of(20,"EUR"));
-		return "redirect:/accountancy";
-	}
-
-	@RequestMapping("/minus")
-	public String payDay() {
-		accountancyManager.addEntry(Money.of(-20,"EUR"));
 		return "redirect:/accountancy";
 	}
 

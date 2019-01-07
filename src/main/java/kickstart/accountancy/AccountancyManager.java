@@ -38,7 +38,11 @@ public class AccountancyManager {
 	private UserManagement userManager;
 	private Catalog catalog;
 	private Month lastMonth;
-	//private final CartOrderManager cartOrderManager;
+
+	/**
+	 * @param
+	 * @return
+	 */
 	@Autowired
 	public AccountancyManager(UserManagement userManager, Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy=accountancy;
@@ -51,14 +55,6 @@ public class AccountancyManager {
 		Assert.notNull(accountancy, "accountancy must not be null!");
 	}
 
-	/*void initOrder(){
-		this.product=new Product("Stuhl", Money.of(20, EURO));
-		catalog.save(product);
-		catalog.save(new InventoryItem(product, Quantity.of(1000)));
-
-		Role customerRole = Role.of("ROLE_CUSTOMER");
-		this.userAccount = userAccountManager.create("dummy"+(new Random()).nextInt(999999), "123", customerRole);
-	}*/
 
 	//<editor-fold desc="Time Skipp Logic">
 	public LocalDateTime getTime(){
@@ -78,6 +74,10 @@ public class AccountancyManager {
 	//</editor-fold>
 
 	//<editor-fold desc="Schnittstelle für zusatzkosten">
+	/**
+	 * @param
+	 * @return
+	 */
 	public boolean addEntry(Order order){
 		try{
 			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(order.getTotalPrice(),order.getDateCreated());
@@ -90,6 +90,9 @@ public class AccountancyManager {
 
 	}
 
+	/**
+	 * @param
+	 */
 	public void addEntry(MonetaryAmount amount){
 		try{
 			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime());
@@ -101,6 +104,10 @@ public class AccountancyManager {
 	}
 	//</editor-fold>
 
+	/**
+	 * @param
+	 * @return
+	 */
 	int fetchMonthlyAccountancyValue(Month sinceMonth){
 		int value=0;
 		Interval interval=fetchIntervalToNow(sinceMonth);
@@ -115,15 +122,12 @@ public class AccountancyManager {
 
 	List<AccountancyEntry> fetchThisMonthAccountancy(){
 		Set<AccountancyEntry> results;
-
 		results=accountancy.find(fetchIntervalToNow(businessTime
 				.getTime()
 				.getMonth()))
 				.stream()
 				.collect(Collectors.toSet());
-
 		List list = new ArrayList<>(results);
-
 		Collections.sort(list, new Comparator<AccountancyEntry>() {
 			@Override
 			public int compare(AccountancyEntry entry2, AccountancyEntry entry1)
@@ -131,11 +135,13 @@ public class AccountancyManager {
 				return  entry1.getDate().get().compareTo(entry2.getDate().get());
 			}
 		});
-
 		return list;
-
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	private Interval fetchIntervalToNow(Month sinceMonth){
 		LocalDateTime now=businessTime.getTime();
 		int nowMonthNumber=now.getMonthValue();
@@ -151,6 +157,10 @@ public class AccountancyManager {
 		return intervalBuilder.to(endOfMonthToFetch);
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	List<AccountancyEntry> getFilteredYearList(YearFilterForm form) {
 		return accountancy
 				.find(fetchOneYearSinceInterval(form.getYear()))
@@ -158,6 +168,10 @@ public class AccountancyManager {
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	private Interval fetchOneYearSinceInterval(int sinceYear){
 		LocalDateTime now=businessTime.getTime();
 		int nowYearNumber=now.getYear();
@@ -173,13 +187,22 @@ public class AccountancyManager {
 		return intervalBuilder.to(endOfYearToFetch);
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public Accountancy getAccountancy() {
 		return accountancy;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public BusinessTime getBusinessTime() {
 		return businessTime;
 	}
+
 
 	void checkForPayDay(){
 		Month thisMonth=businessTime.getTime().getMonth();
@@ -200,7 +223,6 @@ public class AccountancyManager {
 				}catch(NullPointerException e){
 					e.printStackTrace();
 				}
-
 			}
 			lastMonth=thisMonth;
 			addEntry(Money.of(monthlySalary,"EUR"));

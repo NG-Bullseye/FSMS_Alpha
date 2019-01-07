@@ -10,6 +10,10 @@ public class YearFilterForm {
 		return year;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public void setYear(int year) {
 		this.year = year;
 	}

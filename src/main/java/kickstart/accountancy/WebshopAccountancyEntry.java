@@ -11,6 +11,10 @@ public class WebshopAccountancyEntry extends AccountancyEntry {
 
 	private  LocalDateTime creationTime;
 
+	/**
+	 * @param
+	 * @return
+	 */
 	WebshopAccountancyEntry(MonetaryAmount value, LocalDateTime creationTime) {
 		super(value);
 		this.creationTime =creationTime;

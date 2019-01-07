@@ -11,6 +11,10 @@ public class TruckClassForm {
 		return name;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -19,6 +23,10 @@ public class TruckClassForm {
 		return price;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public void setPrice(int price) {
 		this.price = price;
 	}
@@ -27,6 +35,10 @@ public class TruckClassForm {
 		return capacity;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
