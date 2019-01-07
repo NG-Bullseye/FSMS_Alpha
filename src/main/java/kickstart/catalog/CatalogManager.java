@@ -40,7 +40,7 @@ public class CatalogManager {
 		this.hiddenArticles = catalog.findHidden();
 	}
 	/**
-	 * This method returns a Iterable<Article> of all Articles in the Catalog.
+	 * This method returns all Articles in the Catalog.
 	 */
 	public Iterable<Article> getWholeCatalog() {
 		LinkedList<Article> output = new LinkedList<>();
@@ -50,7 +50,7 @@ public class CatalogManager {
 
 	}
 	/**
-	 * This method returns a Iterable<Article> of all visible articles for the customer.
+	 * This method returns all visible articles for the customer.
 	 */
 	public Iterable<Article> getVisibleCatalog(){
 		LinkedList<Article> visible = new LinkedList<>();
