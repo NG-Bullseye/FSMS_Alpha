@@ -27,14 +27,16 @@ public class CatalogManager {
 		this.hiddenArticles = catalog.findHidden();
 	}
 	/**
-	 * This method returns a Iterable<Article> of all Articles in the Catalog.
+	 * This method returns a Iterable of all Articles in the Catalog.
+	 * @return Every Article in the Catalog.
 	 */
 	public Iterable<Article> getWholeCatalog() {
 		return catalog.findAll();
 
 	}
 	/**
-	 * This method returns a Iterable<Article> of all visible articles for the customer.
+	 * This method returns an Iterable of all visible articles for the customer.
+	 * @return Every Article that is visible for the customer.
 	 */
 	public Iterable<Article> getVisibleCatalog(){
 		HashSet<Article> visible = new HashSet<>();
@@ -53,6 +55,7 @@ public class CatalogManager {
 	 *
 	 * @param id The ProductIdentifier of the searched article.
  	 * @throws IllegalArgumentException If the article is not present.
+	 * @return Returns the concrete Article.
 	 */
 	public Article getArticle(ProductIdentifier id) throws IllegalArgumentException {
 		Optional<Article> returning = catalog.findById(id);
@@ -188,9 +191,11 @@ public class CatalogManager {
 
 	}
 	/**
-	 * Returns all articles with the given ProductIdentifiers.
+	 * Returns all articles with the given ProductIdentifiers and how many times they are contained in the Map.
 	 *
-	 * @param map A map that contains the identifier of an article and the amount of occurences in the list 
+	 * @param map A map that contains the identifier of an article and the amount of occurrences in the list
+	 * @return All articles that there mapped.
+	 *
 	 */
 	public List<Article> getArticlesFromIdentifiers(Map<ProductIdentifier, Integer> map) {
 		List<Article> articles = new ArrayList<>();
@@ -210,6 +215,7 @@ public class CatalogManager {
 	 * Returns all articles which fit to the given filter.
 	 *
 	 * @param filterform A Form containing all filter settings, such as type,price,colours,categories.
+	 * @return Iterable of all articles that fit to the given filter.
 	 */
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
@@ -278,6 +284,7 @@ public class CatalogManager {
 	 * Handles the user's input from the website about which articles and how many of them are included in a Composite.
 	 *
 	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 * @return List off all articles, which where chosen by the user.
 	 */
 	//Eingabe von der Website Spring-seitig als Map<String,String>, weswegen in dieser Funktion die Map in eine Liste von Artikeln umgewandelt wird
 	public LinkedList<Article> compositeMapFiltering(Map<String,String> partsCount){
@@ -336,7 +343,7 @@ public class CatalogManager {
 	}
 	/**
 	 * Returns all Articles which can be used for a new Composite.
-	 *
+	 * @return Iterable containing all articles, that are available for a new Composite.
 	 */
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
@@ -374,6 +381,7 @@ public class CatalogManager {
 	 * Returns a list with all Articles in which the given Article is included.
 	 *
 	 * @param article The Article whose parents are searched.
+	 * @return List of the ProductIdentifiers of the articles, which include the given Article.
 	 */
 	public List<ProductIdentifier> getParents(Article article){
 		LinkedList<ProductIdentifier> parents = new LinkedList<>();
@@ -389,9 +397,10 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Returns a Map with all Articles that are not already included in another Composite or included in the given Composite.
+	 * Returns all Articles that are not already included in another Composite or included in the given Composite.
 	 *
 	 * @param identifier The ProductIdentifier of the Composite that will be edited.
+	 * @return Map of all articles that are already included in the Composite and how often or available to include in the Composite.
 	 */
 	public Map<Article,Integer> getArticlesForCompositeEdit(ProductIdentifier identifier){
 		HashMap<Article, Integer> parts = new HashMap<>();
@@ -409,6 +418,7 @@ public class CatalogManager {
 	 * Returns the number of units in stock of the given Article.
 	 *
 	 * @param identifier The ProductIdentifier of the Article.
+	 * @return How many units of the article you can buy at the same time, depending on how many units are in stock right now.
 	 */
 	public int maximumOrderAmount(ProductIdentifier identifier){
 		BigDecimal amount = inventory.findByProductIdentifier(identifier).get().getQuantity().getAmount();
@@ -420,6 +430,7 @@ public class CatalogManager {
 	 * Returns if the Article is hidden or not.
 	 *
 	 * @param identifier The ProductIdentifier of the Article.
+	 * @return True if the article is visible for the customer.
 	 */
 	public boolean isHidden(ProductIdentifier identifier){
 		return catalog.findById(identifier).isPresent() && hiddenArticles.contains(catalog.findById(identifier).get());  //Verkürztes If Statement

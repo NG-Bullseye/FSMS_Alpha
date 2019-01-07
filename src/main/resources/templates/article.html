@@ -58,16 +58,14 @@
             <div  class="ui label">Anzahl:</div>
             <input name="count" type="number" min="1" max="10" value="1">
             <input name="article" type="hidden" th:value="${article.id}">
-            <input class="ui button" type="submit" value="dem Warenkorb hinzufügen">
+            <input class="ui  button" type="submit" value="dem Warenkorb hinzufügen">
         </div>
     </form>
 </div>
+<div class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+    <a th:href="@{/reorder/{id}(id=${article.id})}">Nachbestellen</a>
 
-<a th:href="@{/reorder/{id}(id=${article.id})}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-	<div class="ui button">
-		<tnorm th:text="#{article.reorder}">Nachbestellen</tnorm>
-	</div>
-</a>
+</div>
     
 <div sec:authorize="hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_CUSTOMER')" id="article">
 	<div class="ui comments">
