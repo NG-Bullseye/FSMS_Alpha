@@ -26,6 +26,7 @@ import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.time.BusinessTime;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -85,6 +86,7 @@ public class CatalogController {
 		return "catalog";
 	}
 	@GetMapping("catalog/all")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String completeCatalog(Model model){
 		model.addAttribute("catalog", manager.getWholeCatalog());
 		model.addAttribute("filterform",new Filterform());
@@ -99,6 +101,7 @@ public class CatalogController {
 		return "article";
 	}
 	@PostMapping("article/{identifier}/comment")
+	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_EMPLOYEE')")
 	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload, Model model){
 		Article article = manager.getArticle(identifier);
 		article.addComment(payload.toComment(businessTime.getTime()));
@@ -109,6 +112,7 @@ public class CatalogController {
 
 	}
 	@GetMapping("/edit/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
 
 		model.addAttribute("article", manager.getArticle(identifier));
@@ -133,6 +137,7 @@ public class CatalogController {
 		return "redirect:/catalog/";
 	}
 	@GetMapping("catalog/part/new")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String showNew(Model model){
 		model.addAttribute("form",new Form());
 		return"newPart";
@@ -148,6 +153,7 @@ public class CatalogController {
 		return"redirect:/catalog/";
 	}
 	@GetMapping("catalog/composite/new")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String newComposite(Model model){
 
 		CompositeForm composite = new CompositeForm();
@@ -175,17 +181,20 @@ public class CatalogController {
 		return"redirect:/catalog/";
 	}
 	@GetMapping("hide/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model){
 		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 	@GetMapping("show/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String visible(@PathVariable ProductIdentifier identifier, Model model){
 		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 
 	@GetMapping("/edit/composite/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String editComposite(@PathVariable ProductIdentifier identifier, Model model){
 		model.addAttribute("article",manager.getArticle(identifier));
 		model.addAttribute("compositeForm",new CompositeForm());
