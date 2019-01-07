@@ -257,7 +257,7 @@ public class CatalogManager {
 	 * @param form A Form containing all information about the new Part, such as name, description, weight, price, colours, categories.
 	 */
 	public void newPart(Form form){
-			Part newArticle = new Part(form.getName(),form.getDescription(),form.getWeight(),form.getPrice(),form.getSelectedColours(),form.getSelectedCategories());
+			Part newArticle = new Part(form.getName(),form.getDescription(),form.getPrice(),form.getWeight(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}

@@ -7,10 +7,10 @@ import java.util.HashSet;
 
 public class Form {
 	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")
-	@Max(255)
+	@Size(min = 2,max = 255,message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
 	private String name;
 	@NotEmpty(message = "Bitte geben Sie eine Beschreibung für das Produkt ein.")
-	@Max(255)
+	@Size(min = 2,max = 255,message = "Die Beschreibung muss zwischen 2 und 255 Zeichen lang sein.")
 	private String description;
 	@NotEmpty(message = "Bitte wählen Sie mindestens eine Farbe aus")
 	private HashSet<String> selectedColours;
