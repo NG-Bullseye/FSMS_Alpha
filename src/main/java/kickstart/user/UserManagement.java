@@ -1,7 +1,5 @@
 package kickstart.user;
 
-import org.springframework.data.util.Streamable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +7,7 @@ import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountIdentifier;
 import org.salespointframework.useraccount.UserAccountManager;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -38,16 +37,12 @@ public class UserManagement {
 
 	public User createUser(RegistrationForm form) {
 
-		Assert.notNull(form, "Registration form must not be null!");
-
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
 		mailSender.sendCustomerRegistrationMessage(form.getEmail());
 		return users.save(new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
 	
 	public void editData(EditForm form) {
-
-		Assert.notNull(form, "Registration form must not be null!");
 		
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
@@ -73,15 +68,11 @@ public class UserManagement {
 	
 	public User findUser (UserAccount userAccount) {
 		
-		Assert.notNull(userAccount, "UserAccount must not be null!");
-		
 		User user = users.findByUserAccount(userAccount);
 		return user;
 	}
 	
 public User findUserById (long id) {
-		
-	Assert.notNull(id, "Id must not be null!");
 	
 		User user = users.findById(id);
 		return user;
@@ -123,9 +114,6 @@ public User findUserById (long id) {
 	
 	public void useraccountActivation(UserAccountIdentifier accountId, int type) {
 		
-		Assert.notNull(accountId, "AccountId must not be null!");
-		Assert.notNull(type, "Type must not be null!");
-		
 		if (type == 0) { // deaktivieren
 			userAccounts.disable(accountId);
 			return;
@@ -166,8 +154,6 @@ public User findUserById (long id) {
 	}
 	
 	public void changeSalary(MoneyForm form) {
-		
-		Assert.notNull(form, "Money form must not be null!");
 		
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
