@@ -43,6 +43,7 @@ public class User {
 	public User() {}
 
 	public User(@NonNull UserAccount userAccount, @NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull String address) {
+		this.userAccount = userAccount;
 		this.firstname = firstname;
 		this.lastname =lastname;
 		this.email = email;
