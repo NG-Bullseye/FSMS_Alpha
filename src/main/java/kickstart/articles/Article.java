@@ -1,12 +1,8 @@
 package kickstart.articles;
 
-import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.quantity.Quantity;
 
 import lombok.Getter;
 
-import org.salespointframework.quantity.Metric;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,13 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.javamoney.moneta.Money;
-
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+
+import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
 
 
 /** 

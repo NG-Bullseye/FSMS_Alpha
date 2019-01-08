@@ -1,10 +1,11 @@
 package kickstart.accountancy;
 
-import org.salespointframework.accountancy.AccountancyEntry;
+import java.time.LocalDateTime;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
-import java.time.LocalDateTime;
+
+import org.salespointframework.accountancy.AccountancyEntry;
 
 @Entity
 public class WebshopAccountancyEntry extends AccountancyEntry {

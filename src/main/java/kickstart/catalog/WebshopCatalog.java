@@ -1,12 +1,9 @@
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.Catalog;
-import org.salespointframework.catalog.Product;
-import org.springframework.data.domain.Sort;
 
-import javax.money.MonetaryAmount;
+import org.salespointframework.catalog.Product;
+import static org.salespointframework.core.Currencies.EURO;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,7 +12,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.salespointframework.core.Currencies.EURO;
+import javax.money.MonetaryAmount;
+
+import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Catalog;
+import org.springframework.data.domain.Sort;
+
+import kickstart.articles.Article;
 
 public interface WebshopCatalog extends Catalog<Article> {
 	static final Sort DEFAULT_SORT = new Sort(Sort.Direction.DESC, "productIdentifier");

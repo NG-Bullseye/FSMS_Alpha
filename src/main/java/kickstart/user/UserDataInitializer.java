@@ -10,24 +10,41 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+
+/**
+ * Initalizes {@link User}.
+ * 
+ * @author Daniel Koersten
+ */
 @Component
 @Order(10)
 class UserDataInitializer implements DataInitializer {
 
 	private final UserAccountManager userAccountManager;
-	private final UserRepository customerRepository;
+	private final UserRepository userRepository;
 	private static final int salary = 150;
 	private static final int bigSalary = 300;
 
-	UserDataInitializer(UserAccountManager userAccountManager, UserRepository customerRepository) {
+	/**
+	 * Creates a new {@link UserDataInitializer} with the given
+	 * {@link UserAccountManager} and {@link UserRepository}.
+	 * 
+	 * @param userAccountManager must not be {@literal null}.
+	 * @param userRepository must not be {@literal null}.
+	 */
+	UserDataInitializer(UserAccountManager userAccountManager, UserRepository userRepository) {
 
-		Assert.notNull(customerRepository, "UserRepository must not be null!");
+		Assert.notNull(userRepository, "UserRepository must not be null!");
 		Assert.notNull(userAccountManager, "UserAccountManager must not be null!");
 
 		this.userAccountManager = userAccountManager;
-		this.customerRepository = customerRepository;
+		this.userRepository = userRepository;
 	}
 
+	/* 
+	 * (non-Javadoc)
+	 * @see org.salespointframework.core.DataInitializer#initialize()
+	 */
 	@Override
 	public void initialize() {
 
@@ -46,6 +63,6 @@ class UserDataInitializer implements DataInitializer {
 		c2.setSalary(salary);
 		c3.setSalary(bigSalary);
 
-		customerRepository.saveAll(Arrays.asList(c1, c2, c3));
+		userRepository.saveAll(Arrays.asList(c1, c2, c3));
 	}
 }
