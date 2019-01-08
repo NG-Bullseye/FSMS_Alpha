@@ -1,11 +1,18 @@
 package kickstart.order;
 
 
+
+import kickstart.articles.Article;
+
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
+import kickstart.catalog.WebshopCatalog;
+import org.salespointframework.catalog.ProductIdentifier;
+
 import org.salespointframework.order.Cart;
+import org.salespointframework.order.OrderLine;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
 import org.salespointframework.payment.Cash;
@@ -21,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +45,10 @@ public class CartOrderManager {
 	private String destination = "home";
 	private final List<String> destinations;
 
+	private final WebshopCatalog catalog;
+	
+
+
 
 	/**
 	 *
@@ -45,11 +58,12 @@ public class CartOrderManager {
 	 */
 
 
-	CartOrderManager(OrderManager<CustomerOrder> ordermanager, BusinessTime businesstime, CarpoolManager carpoolManager){
+	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager){
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
 		this.destinations = new ArrayList<String>();
+		this.catalog = catalog;
 		
 		this.destinations.add("Berlin");
 		this.destinations.add("Hamburg");
@@ -107,10 +121,24 @@ public class CartOrderManager {
 
 		if(choose.equals("bezahlen")){
 			orderManager.payOrder(order);
+			orderManager.save(order);
+			Iterator<OrderLine> orderLineIterator = order.getOrderLines().iterator();
+			if(orderLineIterator.hasNext()) {
+				ProductIdentifier s = orderLineIterator.next().getProductIdentifier();
+				if(catalog.findById(s).isPresent()) {
+					Article a = catalog.findById(s).get();
+					a.increaseOrderedAmount(1);
+					catalog.save(a);
+				}
+				
+			}
+
+
 		}
 
 		if(choose.equals("stornieren")) {
 			orderManager.cancelOrder(order);
+			orderManager.save(order);
 		}
 
 		changeStatus();

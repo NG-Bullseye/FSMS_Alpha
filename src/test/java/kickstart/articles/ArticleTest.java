@@ -4,6 +4,7 @@ import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Quantity;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ArticleTest {
 
@@ -203,5 +205,28 @@ public class ArticleTest {
 		a.hide();
 		
 		assertFalse(a.isHidden(), "Hidden articles should be visible again after calling hide");
+	}
+	
+	@Test
+	public void testIncreaseOrderedAmount() {
+		Article a = new ArticleImpl("Name", "Description");
+		
+		try {
+			a.increaseOrderedAmount(-3);
+			fail("Increase order should throw an IllegalArgumentException when the amount is negative");
+		}catch(IllegalArgumentException e) {
+			
+		}
+		
+		for(int i = 0; i < 10; i++) {
+			int before = a.getOrderedAmount();
+			
+			int amount = ThreadLocalRandom.current().nextInt(0, 100);
+			
+			a.increaseOrderedAmount(amount);
+			
+			assertThat(a.getOrderedAmount()).as("Increase should increase to the right amount")
+				.isEqualTo(before + amount);
+		}
 	}
 }

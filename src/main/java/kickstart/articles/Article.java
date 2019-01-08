@@ -3,6 +3,9 @@ package kickstart.articles;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Quantity;
+
+import lombok.Getter;
+
 import org.salespointframework.quantity.Metric;
 
 import java.util.ArrayList;
@@ -57,6 +60,10 @@ public abstract class Article extends Product{
 	@ElementCollection
 	@javax.persistence.Transient
 	private List<ProductIdentifier> parents;
+	
+	// This variable stores the number of orders of this item
+	@Getter
+	private int orderedAmount;
   
 	/**
 	 * 
@@ -86,7 +93,9 @@ public abstract class Article extends Product{
 		hidden = false;
 		
 		updateStatus = true;
-		this.parents = new LinkedList<>();
+		this.parents = new LinkedList<ProductIdentifier>();
+		
+		orderedAmount = 0;
 	}
 	
 	/**
@@ -219,4 +228,17 @@ public abstract class Article extends Product{
 	}
 	public abstract void addPart(@NotNull Article article);
 	public abstract void removePart(@NotNull Article article);
+	
+	/**
+	 * 
+	 * @param amount The amount that gets added to the current amount
+	 * @throws IllegalArgumentException If amount is negative
+	 */
+	public void increaseOrderedAmount(int amount) throws IllegalArgumentException{
+		if(amount < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		orderedAmount += amount;
+	}
 }
