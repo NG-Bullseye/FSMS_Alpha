@@ -22,8 +22,10 @@
                 <t2 th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Preis</t2>
             </div>
         </div>
-        <div class="description">
+        <div class="description" id="textnhead">
             <t th:text="${article.description}">Beschreibung</t>
+            <p>verfügbare Farben: </p>
+            <span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
             <div th:switch="${article.type}">
                 <br>
                 <t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
