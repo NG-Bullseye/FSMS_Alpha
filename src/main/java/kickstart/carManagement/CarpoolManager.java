@@ -2,35 +2,32 @@ package kickstart.carManagement;
 
 
 import kickstart.accountancy.AccountancyManager;
-import kickstart.accountancy.YearFilterForm;
 import org.javamoney.moneta.Money;
-import org.salespointframework.accountancy.Accountancy;
-import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.catalog.Catalog;
-import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
-import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
-import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.money.MonetaryAmount;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
+
 
 @Service
 public class CarpoolManager {
 
-	private List<Truck> freeTrucks;
-	private List<Truck> takenTrucks;
+	private CarManagmentWrapper carManagmentWrapper;
 	private BusinessTime businessTime;
 	private Cart cart;
 	private OrderManager<Order> orderManager;
@@ -41,13 +38,14 @@ public class CarpoolManager {
 	private AccountancyManager accountancyManager;
 	private Map<UserAccount,List<Truck>> userAccountTruckMap;
 
-	public CarpoolManager(AccountancyManager accountancyManager, OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog, BusinessTime businessTime ) {
+
+	public CarpoolManager(CarManagmentWrapper carManagmentWrapper, AccountancyManager accountancyManager, OrderManager<Order> orderManager, UserAccountManager userAccountManager, Catalog carCatalog, BusinessTime businessTime ) {
 		this.accountancyManager=accountancyManager;
 		userAccountTruckMap =new HashMap<>();
 		this.businessTime=businessTime;
 		this.carCatalog=carCatalog;
-		this.freeTrucks = new ArrayList<>();
-		this.takenTrucks = new ArrayList<>();
+		this.carManagmentWrapper=carManagmentWrapper;
+
 		this.orderManager = orderManager;
 		this.userAccountManager=userAccountManager;
 	}
@@ -91,15 +89,19 @@ public class CarpoolManager {
 				,money
 				,quantityCapapacity
 				,businessTime.getTime());
-		freeTrucks.add(truck);
-		carCatalog.save(truck);
-		carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
+
+		carManagmentWrapper.addFreeTrucks(truck);
+		//carCatalog.save(truck);
+		//carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
+
+
 
 	public Truck checkTruckavailable(Quantity weight){
 		List<Truck> filteredTrucks=new ArrayList<>();
+
 		for (Truck t:
-				freeTrucks) {
+				carManagmentWrapper.getFreeTrucks()) {
 			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
 				filteredTrucks.add(t);
 		}
@@ -107,21 +109,17 @@ public class CarpoolManager {
 		if (filteredTrucks.size()<=0){
 			return null;
 		}
-		else{
-			Truck possible = null;
-			for (Truck t: filteredTrucks){
-				if(possible == null){
-					possible = t;
+
+		//<editor-fold desc="FilterLogic">
+		if (filteredTrucks.size()>1){
+			Collections.sort(filteredTrucks, new Comparator<Truck>() {
+				@Override
+				public int compare(Truck o1, Truck o2) {
+					return o1.getPrice().compareTo(o2.getPrice());
 				}
-				else{
-					if(weight.getAmount().intValue() - t.getCapacity().getAmount().intValue()
-							< weight.getAmount().intValue() - possible.getCapacity().getAmount().intValue()){
-						possible = t;
-					}
-				}
-			}
-			return possible;
+			});
 		}
+		return filteredTrucks.get(0);
 	}
 
 	public Truck rentTruckByWight(Quantity weight,UserAccount rentedBy){
@@ -134,7 +132,7 @@ public class CarpoolManager {
 		List<Truck> filteredTrucks=new ArrayList<>();
 
 		for (Truck t:
-				freeTrucks) {
+				carManagmentWrapper.getFreeTrucks()) {
 			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
 				filteredTrucks.add(t);
 		}
@@ -176,8 +174,8 @@ public class CarpoolManager {
 			}
 
 			//<editor-fold desc="Bestellung">
-			takenTrucks.add(truckToRent);
-			freeTrucks.remove(truckToRent);
+			carManagmentWrapper.addTakenTrucks(truckToRent);
+			carManagmentWrapper.getFreeTrucks().remove(truckToRent);
 		}catch (Exception e){
 			System.out.println("Somthing went wrong in CarpoolManager in rent Truck method");
 			truckToRent=null;
@@ -201,10 +199,10 @@ public class CarpoolManager {
 			for (Truck t: truckList
 				 ) {
 				Truck truckCopie= new Truck(t.getName(),t.getPrice(), t.getCapacity(),t.getDayOfRent());
-				freeTrucks.add(truckCopie);
-				takenTrucks.remove(t);
-				carCatalog.save(truckCopie);
-				carCatalog.save(new InventoryItem(truckCopie,Quantity.of(1)));
+				carManagmentWrapper.addFreeTrucks(truckCopie);
+				carManagmentWrapper.getTakenTrucks().remove(t);
+				//carCatalog.save(truckCopie);
+				//carCatalog.save(new InventoryItem(truckCopie,Quantity.of(1)));
 			}
 
 
@@ -215,6 +213,9 @@ public class CarpoolManager {
 		}
 		return true;
 	}
+
+
+
 
 	Map<Truck,UserAccount> getTruckUserAccountMap() {
 
@@ -244,14 +245,5 @@ public class CarpoolManager {
 		}
 		return list;*/
 	}
-
-	 List<Truck> getFreeTrucks() {
-		return freeTrucks;
-	}
-
-	 List<Truck> getTakenTrucks() {
-		return takenTrucks;
-	}
-
 
 }

@@ -1,13 +1,16 @@
 package kickstart.order;
 
 
+
 import kickstart.articles.Article;
+
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
 import kickstart.catalog.WebshopCatalog;
 import org.salespointframework.catalog.ProductIdentifier;
+
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.OrderLine;
 import org.salespointframework.order.OrderManager;
@@ -25,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +42,20 @@ public class CartOrderManager {
 	private final BusinessTime businesstime;
 	private Quantity wight = Quantity.of(0, Metric.KILOGRAM);
 	private final CarpoolManager carpoolManager;
-	private String destination = "Home";
+	private String destination = "home";
 	private final List<String> destinations;
+
 	private final WebshopCatalog catalog;
 	
 
 
+
+	/**
+	 *
+	 * @param ordermanager The repository where Orders are saved
+	 * @param businesstime The internal Time
+	 * @param carpoolManager The repository where Trucks are saved
+	 */
 
 
 	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager){
@@ -70,7 +82,6 @@ public class CartOrderManager {
 	}
 
 	public UserAccount getAccount(){
-		changeStatus();
 		return account;
 	}
 
@@ -78,6 +89,11 @@ public class CartOrderManager {
 		this.destination = destination;
 		return "redirect:/lkwbooking";
 	}
+
+	/**
+	 * Initialize a Cart
+	 * @return
+	 */
 
 	public Cart initializeCart() {
 
@@ -92,9 +108,16 @@ public class CartOrderManager {
 
 	}
 
+	/**
+	 *
+	 * @param order An Order of type OrderStatus.OPEN
+	 * @param choose chooses if Order should be payed or canceld
+	 * @return
+	 */
+
 	public String cancelorpayOrder(CustomerOrder order, String choose){
 
-		changeStatus();
+
 
 		if(choose.equals("bezahlen")){
 			orderManager.payOrder(order);
@@ -118,8 +141,18 @@ public class CartOrderManager {
 			orderManager.save(order);
 		}
 
+		changeStatus();
+
 		return "redirect:/";
 	}
+
+	/**
+	 *
+	 * @param article the article which should be added to the cart
+	 * @param count the amount of the article
+	 * @param cart actual cart
+	 * @return
+	 */
 
 	public String addComposite (Composite article, int count, Cart cart){
 
@@ -130,6 +163,14 @@ public class CartOrderManager {
 		return "redirect:/catalog";
 	}
 
+	/**
+	 *
+	 * @param article the part which should be added to the cart
+	 * @param count the amount of the part
+	 * @param cart actual cart
+	 * @return
+	 */
+
 	public String addPart (Part article, int count, Cart cart){
 
 		wight = wight.add(article.getWeight());
@@ -138,13 +179,23 @@ public class CartOrderManager {
 		return "redirect:/catalog";
 	}
 
+	/**
+	 *
+	 * checks if there is an available Truck for the wight of the cart
+	 * @return Matching truck
+	 */
+
 	public Truck checkLKW(){
 		return carpoolManager.checkTruckavailable(wight);
 	}
 
-	public String addLKW(Cart cart){
+	/**
+	 * a matching truck is added to the cart
+	 * @param cart actual cart
+	 * @return a new order
+	 */
 
-		// für funktion mit leos carpool Manager entkommentieren wenn vorhanden
+	public String addLKW(Cart cart){
 
 		Truck truck=carpoolManager.rentTruckByWight(wight,account);
 		if(truck==null){
@@ -155,12 +206,22 @@ public class CartOrderManager {
 		return newOrder(cart);
 	}
 
+	/**
+	 *
+	 * @param account the account of the costumer for whom the employee orders
+	 * @return
+	 */
 
 	public String addCostumer(UserAccount account){
-		changeStatus();
 		this.account = account;
 		return "redirect:/cart";
 	}
+
+	/**
+	 * generates a new order
+	 * @param cart actual cart
+	 * @return
+	 */
 
 	public String newOrder(Cart cart){
 
@@ -178,6 +239,13 @@ public class CartOrderManager {
 		}
 		return "redirect:/catalog";
 	}
+
+	/**
+	 * compares the internal time with the date of creation of the Customerorder
+	 * and switches the status after one day difference from:
+	 * PAID to COMPLETE
+	 * COMPLETE to abholbereit
+	 */
 
 	@Scheduled(fixedRate = 5000L)
 	public void changeStatus(){

@@ -7,76 +7,47 @@ import javax.persistence.OneToOne;
 
 import org.salespointframework.useraccount.UserAccount;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 @Entity
 public class User {
 
+	@Getter
 	private @Id @GeneratedValue long id;
 
+	@Getter
 	@OneToOne
 	private UserAccount userAccount;
-
+	
+	@Getter
+	@Setter
 	private String address;
+	
+	@Getter
+	@Setter
 	private String email;
+	
+	@Getter
+	@Setter
 	private String firstname;
+	
+	@Getter
+	@Setter
 	private String lastname;
+	
+	@Getter
 	private int salary;
 
-	@SuppressWarnings("unused")
 	public User() {}
 
-	public User(UserAccount userAccount, @NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull String address) {
-		this.userAccount = userAccount;
+	public User(@NonNull UserAccount userAccount, @NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull String address) {
 		this.firstname = firstname;
 		this.lastname =lastname;
 		this.email = email;
 		this.address = address;
 		salary = 0;
-	}
-
-	public UserAccount getUserAccount() {
-		return userAccount;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(@NonNull String address) {
-		this.address = address;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(@NonNull String email) {
-		this.email = email;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(@NonNull String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(@NonNull String lastname) {
-		this.lastname = lastname;
-	}
-
-	public int getSalary() {
-		return salary;
 	}
 
 	public void setSalary(int salary) {
@@ -86,7 +57,4 @@ public class User {
 		}
 		this.salary = salary;
 	}
-
-	
-	
 }
