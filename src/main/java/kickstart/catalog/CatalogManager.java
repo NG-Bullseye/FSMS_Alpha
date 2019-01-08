@@ -1,8 +1,17 @@
 package kickstart.catalog;
 
-import kickstart.articles.*;
-import static org.salespointframework.core.Currencies.*;
-import kickstart.inventory.ReorderableInventoryItem;
+import static org.salespointframework.core.Currencies.EURO;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -10,8 +19,10 @@ import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.util.*;
+import kickstart.articles.Article;
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
+import kickstart.inventory.ReorderableInventoryItem;
 
 
 @Component

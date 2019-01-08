@@ -5,6 +5,10 @@ import java.lang.annotation.*;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 @Documented
 @Constraint(validatedBy = isRegisteredValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })

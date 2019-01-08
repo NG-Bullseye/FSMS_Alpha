@@ -6,6 +6,10 @@ import javax.validation.ConstraintValidatorContext;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 public class isRegisteredValidator implements ConstraintValidator<isRegistered, String> {
 	
 	private final UserManagement userManagement;

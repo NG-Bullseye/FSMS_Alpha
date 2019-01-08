@@ -3,6 +3,10 @@ package kickstart.user;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 interface MoneyForm {
 
 	@NotEmpty(message = "Bitte geben sie ein Gehalt ein!")
