@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
-
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;

@@ -1,19 +1,20 @@
 package kickstart.inventory;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Quantity;
 
 import lombok.Getter;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.List;
-import java.util.TreeMap;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 
 
 // Timer class

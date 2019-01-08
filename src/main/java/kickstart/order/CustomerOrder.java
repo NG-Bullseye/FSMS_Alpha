@@ -1,12 +1,11 @@
 package kickstart.order;
 
+import javax.persistence.Entity;
+
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderLine;
-import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.payment.Cash;
-
-
-import javax.persistence.Entity;
+import org.salespointframework.useraccount.UserAccount;
 
 
 @Entity

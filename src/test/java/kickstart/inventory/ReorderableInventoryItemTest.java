@@ -1,5 +1,7 @@
 package kickstart.inventory;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 
@@ -10,7 +12,6 @@ import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import kickstart.articles.Article;
 import kickstart.articles.Part;

@@ -1,15 +1,16 @@
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
+import java.util.HashSet;
+import java.util.LinkedList;
+
 import org.salespointframework.core.DataInitializer;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.util.HashSet;
-import java.util.LinkedList;
+import kickstart.articles.Article;
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
 
 @Component
 @Order(20)

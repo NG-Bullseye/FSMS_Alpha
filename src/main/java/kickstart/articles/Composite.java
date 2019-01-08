@@ -3,15 +3,9 @@ package kickstart.articles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.quantity.Metric;
-import org.salespointframework.quantity.Quantity;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.AttributeOverride;
@@ -22,6 +16,11 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
 
 /**
  * This class represents the furniture that is made of many {@link Part}. In our example that

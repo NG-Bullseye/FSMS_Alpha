@@ -1,33 +1,33 @@
 package kickstart.accountancy;
 
 
-import kickstart.user.User;
-import kickstart.user.UserManagement;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.money.MonetaryAmount;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.catalog.Catalog;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
-
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
-
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.money.MonetaryAmount;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.stream.Collectors;
+import kickstart.user.User;
+import kickstart.user.UserManagement;
 
 @Service
 
