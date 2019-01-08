@@ -437,22 +437,29 @@ public class CatalogManager {
 		return catalog.findById(identifier).isPresent() && hiddenArticles.contains(catalog.findById(identifier).get());  //Verkürztes If Statement
 	}
 
+	/**
+	 * Returns all contained Articles concatenated in a String
+	 *
+	 * @param identifier ProductIdentifier of the given Article
+	 * @return String containing all included Articles separated by ","
+	 */
 	public String textOfAllComponents(ProductIdentifier identifier){
 		String result = "";
 		Optional<Article> composite = catalog.findById(identifier);
 		if(composite.isPresent()) {
 			LinkedList<String> names = new LinkedList<>();
-			catalog.findById(identifier).get().getPartIds().keySet().forEach(article ->{
+			composite.get().getPartIds().keySet().forEach(article ->{
 				names.add(catalog.findById(article).get().getName());
 			});
-			for(int i = names.size();i>=0;i--){
+			for(int i = names.size();i>0;i--){
 				if(i!=1){
-					result.concat(names.get(i)+", ");
+					result = result + names.get(i-1) + ", ";
 				} else {
-					result.concat(names.get(i));
+					result= result + names.get(i-1) + ".";
 				}
 			}
 		}
+
 		return result;
 	}
 

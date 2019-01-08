@@ -98,6 +98,9 @@ public class CatalogController {
 		model.addAttribute("article", manager.getArticle(identifier));
 		model.addAttribute("max",manager.maximumOrderAmount(identifier));
 		model.addAttribute("hidden",manager.isHidden(identifier));
+		if(manager.getArticle(identifier).getType() == Article.ArticleType.COMPOSITE){
+			model.addAttribute("parts",manager.textOfAllComponents(identifier));
+		}
 		return "article";
 	}
 	@PostMapping("article/{identifier}/comment")

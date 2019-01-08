@@ -25,7 +25,8 @@
         <div class="description">
             <t th:text="${article.description}">Beschreibung</t>
             <div th:switch="${article.type}">
-                <t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${parts}">Teile</t>
+                <br>
+                <t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
             </div>
         </div>
         <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
@@ -34,7 +35,7 @@
             </a>
         </div>
         <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-            <a class="item" th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">Bearbeiten</a>
+                <a class="item" th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">Bearbeiten</a>
         </div>
         </div>
         <div class="ui button" th:switch="${hidden}" sec:authorize="hasRole('ROLE_EMPLOYEE')">

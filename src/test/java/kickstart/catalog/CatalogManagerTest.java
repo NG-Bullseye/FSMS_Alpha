@@ -533,5 +533,11 @@ class CatalogManagerTest {
 		partIds.put(tester2.getId(),2);
 		assertThat(manager.getArticle(com1.getId()).getPartIds()).as("Das Composite wurde nicht korrekt geändert.").isEqualTo(partIds);
 	}
+	@Test
+	@Transient
+	void textOfAllComponents(){
+		String expected = "Test1.";
+		assertEquals(expected,manager.textOfAllComponents(com1.getId()),"Die enthaltenen Artikel werden nicht richtig angezeigt.");
+	}
 
 }
