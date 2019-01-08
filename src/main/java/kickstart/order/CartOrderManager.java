@@ -1,6 +1,7 @@
 package kickstart.order;
 
 
+import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
@@ -22,7 +23,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 @Component
@@ -97,7 +102,12 @@ public class CartOrderManager {
 			Iterator<OrderLine> orderLineIterator = order.getOrderLines().iterator();
 			if(orderLineIterator.hasNext()) {
 				ProductIdentifier s = orderLineIterator.next().getProductIdentifier();
-				catalog.findById(s).get().increaseOrderedAmount(1);
+				if(catalog.findById(s).isPresent()) {
+					Article a = catalog.findById(s).get();
+					a.increaseOrderedAmount(1);
+					catalog.save(a);
+				}
+				
 			}
 
 
