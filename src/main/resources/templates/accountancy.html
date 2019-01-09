@@ -30,20 +30,6 @@
 							Monat vorspulen
 							</button>
 						</form>
-						<!--
-						<form class="item" th:action="@{/plus}" method="post">
-							<button class="btn btn-sm btn-outline-secondary">
-								+20 Euro
-							</button>
-						</form>
-
-						<form class="item" th:action="@{/minus}" method="post">
-							<button class="btn btn-sm btn-outline-secondary" >
-								-20 Euro
-							</button>
-						</form>
-						-->
-
 
 					</div>
 				</div>
@@ -53,19 +39,21 @@
 	
 				<!-- Table -->
 				<div class="ui container">
-					<h2 >Abgeschlosene Bestellungen</h2>
+					<h2 >Rechnungsposten von diesem Monat</h2>
 					<table class="ui celled table">
 						<thead>
 							<tr>
-								<th >Betrag</th>
-								<!--<th th:text="#{orders.customer}">Kunde</th>-->
+								<th >Betrag in Euro</th>
 								<th >Datum</th>
+								<th >Ursprung</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="entry:${monthlyAccountancy}">
 								<td th:text="${entry.getValue().getNumber().longValue()}"></td>
 								<td th:text="${#temporals.format(entry.getDate().get(),'dd.MM.yyyy HH:mm')}"></td>
+								<td th:text="${entry.getDescription()}"></td>
+
 							</tr>
 						</tbody>
 					</table>
@@ -91,15 +79,13 @@
 
 							</form>
 							</th>
-							<th >Betrag</th>
+							<th >Betrag in Euro</th>
 						</tr>
                         </thead>
                         <tbody>
                         <tr th:each="entry:${filteredYearList}">
-                            <td th:text="${entry.getValue().getNumber().longValue()}"></td>
-
                             <td th:text="${#temporals.format(entry.getDate().get(),'dd.MM.yyyy HH:mm')}"></td>
-
+							<td th:text="${entry.getValue().getNumber().longValue()}"></td>
 						</tr>
                         </tbody>
                     </table>

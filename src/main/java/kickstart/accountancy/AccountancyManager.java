@@ -74,7 +74,6 @@ public class AccountancyManager {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 
 	/**
@@ -85,6 +84,16 @@ public class AccountancyManager {
 	public void addEntry(MonetaryAmount amount,String message){
 		try{
 			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime(),message);
+			accountancy.add(entry);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+	}
+//WIRD BALD RAUSGENOMMEN
+	public void addEntry(MonetaryAmount amount){
+		try{
+			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime());
 			accountancy.add(entry);
 		}catch (Exception e){
 			e.printStackTrace();

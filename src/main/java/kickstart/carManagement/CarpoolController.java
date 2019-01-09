@@ -1,5 +1,6 @@
 package kickstart.carManagement;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,6 +28,7 @@ public class CarpoolController {
 	 * @param returnForm contains information about the truck to return
 	 * @param model contains the information for the html
 	 */
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping("/carpool")
 	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
 		truckClassForm= new TruckClassForm();
@@ -44,6 +46,7 @@ public class CarpoolController {
 	 * @param form contains information about the truck to add to the List of available trucks
 	 * @param model contains the information for the html
 	 */
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/addTruck")
 	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) {
 		try{
@@ -60,6 +63,7 @@ public class CarpoolController {
 	 * returns the truck to the once available
 	 * @param form contains the information about the truck to return
 	 */
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/returnTruck")
 	String returnTruck(@ModelAttribute("returnForm") ReturnForm form) {
 		try{

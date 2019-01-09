@@ -149,7 +149,7 @@ public class CarpoolManager {
 	/**
 	 * returns the truck that matches the form to the available trucks
 	 * @param form contains the information about the truck that is suppose to be returned
-	 * @return true if the has been successfully completed
+	 * @return true if the action has been successfully completed
 	 */
 	boolean returnTruckToFreeTrucks(ReturnForm form){
 		try{

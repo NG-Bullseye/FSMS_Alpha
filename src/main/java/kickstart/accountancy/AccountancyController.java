@@ -18,6 +18,7 @@ package kickstart.accountancy;
 import java.time.Month;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -49,6 +50,7 @@ public class AccountancyController {
 	 * @param model
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/accountancy")
 	public String show(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm,Model model) {
 
@@ -79,6 +81,7 @@ public class AccountancyController {
 	/**
 	 * skipps a day forward in time
 	 */
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/skippDay")
 	public String skippDay() {
 		accountancyManager.skippDay();
@@ -88,6 +91,7 @@ public class AccountancyController {
 	/**
 	 * skipps a Month forward in time
 	 */
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/skippMonth")
 	public String skippMonth() {
 		accountancyManager.skippMonth();

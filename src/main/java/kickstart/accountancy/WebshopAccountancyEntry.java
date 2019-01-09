@@ -1,6 +1,7 @@
 package kickstart.accountancy;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
@@ -20,8 +21,14 @@ public class WebshopAccountancyEntry extends AccountancyEntry {
 	 * @return
 	 */
 	WebshopAccountancyEntry(MonetaryAmount value, LocalDateTime creationTime,String message) {
-		super(value);
+		super(value,message);
 		this.message=message;
+		this.creationTime =creationTime;
+	}
+
+//WIRD BALD RAUS GENOMMEN
+	WebshopAccountancyEntry(MonetaryAmount value, LocalDateTime creationTime) {
+		super(value,"");
 		this.creationTime =creationTime;
 	}
 
@@ -31,14 +38,14 @@ public class WebshopAccountancyEntry extends AccountancyEntry {
 	/**
 	 * @return creation time
 	 */
-	public LocalDateTime time(){
+	public LocalDateTime getCreationTime(){
 		return creationTime;
 	}
 
 	/**
 	 * @return message that gives a clue about the purpose of the transaction
 	 * */
-	public String getMessage(){
+	public String getDescription(){
 		return message;
 	}
 
