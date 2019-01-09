@@ -9,7 +9,6 @@ import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +17,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kickstart.exception.UnAllowedException;
+import lombok.NonNull;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 @Controller
 class UserController {
 
 	private final UserManagement userManagement;
 	private final OrderCollector orders;
 
-	UserController(UserManagement userManagement, OrderCollector orders) {
-
-		Assert.notNull(userManagement, "UserManagement must not be null!");
+	UserController(@NonNull UserManagement userManagement, @NonNull OrderCollector orders) {
 
 		this.userManagement = userManagement;
 		this.orders = orders;

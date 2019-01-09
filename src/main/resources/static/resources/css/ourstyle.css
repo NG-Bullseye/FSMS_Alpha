@@ -65,6 +65,11 @@ body {
     margin: 5px 1em 5px 1em;
 }
 
+.justified {
+    align-items: center;
+    justify-content: center;
+}
+
 /*fonts*/
 
 t1 {

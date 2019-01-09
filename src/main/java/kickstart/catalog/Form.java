@@ -1,9 +1,11 @@
 package kickstart.catalog;
 
-import org.springframework.format.annotation.NumberFormat;
-
-import javax.validation.constraints.*;
 import java.util.HashSet;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class Form {
 	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")

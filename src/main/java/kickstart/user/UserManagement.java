@@ -1,7 +1,5 @@
 package kickstart.user;
 
-import org.springframework.data.util.Streamable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +7,7 @@ import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountIdentifier;
 import org.salespointframework.useraccount.UserAccountManager;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -17,6 +16,10 @@ import kickstart.exception.UnAllowedException;
 import lombok.NonNull;
 
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 @Service
 @Transactional
 public class UserManagement {
@@ -24,7 +27,15 @@ public class UserManagement {
 	private final UserRepository users;
 	private final UserAccountManager userAccounts;
 	private final JavaMailer mailSender;
-
+	
+	/**
+	 * Creates a new {@link UserManagement} with the
+	 * {@link UserRepository}, {@link UserAccountManager} and a {@link JavaMailer}.
+	 * 
+	 * @param users must not be {@literal null}.
+	 * @param userAccounts must not be {@literal null}.
+	 * @param mailSender must not be {@literal null}.
+	 */
 	UserManagement(UserRepository users, UserAccountManager userAccounts, JavaMailer mailSender) {
 
 		Assert.notNull(users, "UserRepository must not be null!");
@@ -36,18 +47,25 @@ public class UserManagement {
 		this.mailSender = mailSender;
 	}
 
-	public User createUser(RegistrationForm form) {
-
-		Assert.notNull(form, "Registration form must not be null!");
+	/**
+	 * Creates a new {@link User} using the information given in the {@link RegistrationForm}.
+	 * 
+	 * @param form must not be {@literal null}.
+	 * @return the new {@link User} instance.
+	 */
+	public User createUser(@NonNull RegistrationForm form) {
 
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
 		mailSender.sendCustomerRegistrationMessage(form.getEmail());
 		return users.save(new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
 	
-	public void editData(EditForm form) {
-
-		Assert.notNull(form, "Registration form must not be null!");
+	/**
+	 * Edits a {@link User} using the information given in the {@link EditForm}.
+	 * 
+	 * @param form must not be {@literal null}. Contains Id of the {@link User} and the entered information. Empty fields in {@link EditForm} will be skipped.
+	 */
+	public void editData(@NonNull EditForm form) {
 		
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
@@ -71,26 +89,44 @@ public class UserManagement {
 		return;
 	}
 	
-	public User findUser (UserAccount userAccount) {
-		
-		Assert.notNull(userAccount, "UserAccount must not be null!");
+	/**
+	 * Returns a {@link User} for given {@link UserAccount}.
+	 * 
+	 * @param userAccount must not be {@literal null}.
+	 * @return {@link User} for given {@link UserAccount}.
+	 */
+	public User findUser (@NonNull UserAccount userAccount) {
 		
 		User user = users.findByUserAccount(userAccount);
 		return user;
 	}
 	
-public User findUserById (long id) {
+	/**
+	 * Returns a {@link User} for given Id.
+	 * 
+	 * @param id must not be {@literal null}.
+	 * @return the requested {@link User}.
+	 */
+	public User findUserById (long id) {
 		
-	Assert.notNull(id, "Id must not be null!");
-	
 		User user = users.findById(id);
 		return user;
 	}
 
+	/**
+	 * Returns all {@link User} currently saved.
+	 * 
+	 * @return all {@link User} entities.
+	 */
 	public Streamable<User> findAll() {
 		return Streamable.of(users.findAll());
 	}
 	
+	/**
+	 * Returns all {@link User} with Role of Customer currently saved.
+	 * 
+	 * @return all {@link User} with Role of Customer.
+	 */
 	public Streamable<User> findAllCustomers() {
 		Iterable<User> userList = findAll();
 		List<User> customersList = new ArrayList<User>();
@@ -106,6 +142,11 @@ public User findUserById (long id) {
 		return Streamable.of(employees);
 	}
 	
+	/**
+	 * Returns all {@link User} with Role of Employee currently saved.
+	 * 
+	 * @return all {@link User} with Role of Employee.
+	 */
 	public Streamable<User> findAllEmployees() {
 		Iterable<User> userList = findAll();
 		List<User> employeesList = new ArrayList<User>();
@@ -121,10 +162,14 @@ public User findUserById (long id) {
 		return Streamable.of(employees);
 	}
 	
-	public void useraccountActivation(UserAccountIdentifier accountId, int type) {
-		
-		Assert.notNull(accountId, "AccountId must not be null!");
-		Assert.notNull(type, "Type must not be null!");
+	/**
+	 * Makes it possible to disable or enable a {@link User} for given {@link UserAccountIdentifier} and type.
+	 * 
+	 * @param accountId must not be {@literal null}.
+	 * @param type Definition: 0 for disable and 1 for enable.
+	 * @throws IllegalArgumentException if no type is given.
+	 */
+	public void useraccountActivation(@NonNull UserAccountIdentifier accountId, int type) {
 		
 		if (type == 0) { // deaktivieren
 			userAccounts.disable(accountId);
@@ -138,7 +183,16 @@ public User findUserById (long id) {
 		
 	}
 	
-	public void changeRole(@NonNull User requestedUser, @NonNull User loggedIn,int type) throws UnAllowedException {
+	/**
+	 * Makes it possible to change the Role of a given {@link User}.
+	 * 
+	 * @param requestedUser must not be {@literal null}. Contains {@link User} which should be changed.
+	 * @param loggedIn must not be {@literal null}. Contains logged in {@link User}.
+	 * @param type Definition: 0 - customer to employee; 1 - employee to customer; 2 - employee to boss (admin); 3 - boss (admin) to employee
+	 * @throws UnAllowedException if somebody try to change his own Role.
+	 * @throws IllegalArgumentException if no type is given.
+	 */
+	public void changeRole(@NonNull User requestedUser, @NonNull User loggedIn, int type) throws UnAllowedException {
 		if (requestedUser.getId() == loggedIn.getId()) { // Nutzer möchte sich selbst befördern oder herabstufen
 			throw new UnAllowedException("You are not allowed to change your own Role!");
 		}
@@ -165,9 +219,12 @@ public User findUserById (long id) {
 		}
 	}
 	
-	public void changeSalary(MoneyForm form) {
-		
-		Assert.notNull(form, "Money form must not be null!");
+	/**
+	 * Adjusts the salary for a {@link User} using the information given in the {@link MoneyForm}.
+	 * 
+	 * @param form must not be {@literal null}. Contains Id of the {@link User} and the new salary.
+	 */
+	public void changeSalary(@NonNull MoneyForm form) {
 		
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);

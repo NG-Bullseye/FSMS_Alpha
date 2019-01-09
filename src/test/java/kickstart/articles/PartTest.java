@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.junit.jupiter.api.Test;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 

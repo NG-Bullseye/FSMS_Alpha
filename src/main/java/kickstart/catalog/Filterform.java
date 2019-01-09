@@ -1,9 +1,10 @@
 package kickstart.catalog;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.validation.constraints.*;
 import java.util.ArrayList;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class Filterform {
 	@NotNull(message = "Bitte wählen Sie mindestens eine Farbe aus.")

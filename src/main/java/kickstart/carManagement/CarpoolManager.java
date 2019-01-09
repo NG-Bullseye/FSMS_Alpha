@@ -1,7 +1,15 @@
 package kickstart.carManagement;
 
 
-import kickstart.accountancy.AccountancyManager;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.money.MonetaryAmount;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Catalog;
 import org.salespointframework.order.Cart;
@@ -15,13 +23,7 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.money.MonetaryAmount;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
-import java.util.Comparator;
+import kickstart.accountancy.AccountancyManager;
 
 
 @Service

@@ -1,9 +1,23 @@
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
-import kickstart.inventory.ReorderableInventoryItem;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.salespointframework.core.Currencies.EURO;
+
+import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,23 +29,10 @@ import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.transaction.Transactional;
-import java.beans.Transient;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Map;
-
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.salespointframework.core.Currencies.EURO;
+import kickstart.articles.Article;
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
+import kickstart.inventory.ReorderableInventoryItem;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -28,15 +28,23 @@
         <tr th:each="funiture : ${cart} ">
             <td th:text="${funiture.productName}">Moebelstück</td>
             <td th:text="${funiture.quantity}">Anzahl</td>
-            <td th:text="${funiture.price}">Preis</td>
+            <td th:text="${funiture.price.getNumber().doubleValueExact()}">Preis</td>
         </tr>
         </tbody>
     </table>
 </div>
 
 
-<div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
-<div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+<div class="ui grid">
+    <div class="eight wide column">
+        <div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+    </div>
+
+    <div class="eight wide column">
+
+        <div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
+    </div>
+</div>
 <div>
      <form th:action="@{/lkwbooking}" th:align="right">
         <button id="buttonspace" type="submit" class="ui button" th:text="Bestellen">button</button>
