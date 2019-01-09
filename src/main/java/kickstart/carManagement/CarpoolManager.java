@@ -20,10 +20,14 @@ import java.util.Comparator;
 @Service
 public class CarpoolManager {
 
-	private CarManagmentWrapper carManagmentWrapper;
+	private CarCatalog carCatalog;
 	private BusinessTime businessTime;
 	private UserAccountManager userAccountManager;
+
+	private UserAccount userAccount;
+	private List<Truck> userTruckList;
 	private Map<UserAccount,List<Truck>> userAccountTruckMap;
+
 
 	/**
 	 * @param userAccountManager contains information about all useraccounts
@@ -44,22 +48,27 @@ public class CarpoolManager {
 		int capacity;
 		MonetaryAmount money;
 		Quantity quantityCapapacity;
-		try{
-			price=form.getPrice();
-			capacity=form.getCapacity();
+		try {
+			price = form.getPrice();
+			capacity = form.getCapacity();
 
-			money=Money.of(price,"EUR");
-			quantityCapapacity=Quantity.of(capacity, Metric.KILOGRAM);
-		}catch (Exception e){
+			money = Money.of(price, "EUR");
+			quantityCapapacity = Quantity.of(capacity, Metric.KILOGRAM);
+
+		} catch (Exception e) {
 			System.out.println("money or capacity is not entered as number");
 			return;
 		}
-		Truck truck= new Truck(
+
+		Truck truck = new Truck(
 				form.getName()
 				,money
 				,quantityCapapacity
 				,businessTime.getTime());
-		carManagmentWrapper.addFreeTrucks(truck);
+
+		carCatalog.save(truck);
+		//carCatalog.save(truck);
+		//carCatalog.save(new InventoryItem(truck,Quantity.of(1)));
 	}
 
 	/**
@@ -70,18 +79,18 @@ public class CarpoolManager {
 	public Truck checkTruckAvailable(Quantity weight){
 		List<Truck> filteredTrucks=new ArrayList<>();
 
-		for (Truck t:
-				carManagmentWrapper.getFreeTrucks()) {
+		for (Truck t :
+				carCatalog.findByFree(true)) {
 			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
 				filteredTrucks.add(t);
 		}
 
-		if (filteredTrucks.size()<=0){
+		if (filteredTrucks.size() <= 0) {
 			return null;
 		}
 
 		//<editor-fold desc="FilterLogic">
-		if (filteredTrucks.size()>1){
+		if (filteredTrucks.size() > 1) {
 			Collections.sort(filteredTrucks, new Comparator<Truck>() {
 				@Override
 				public int compare(Truck o1, Truck o2) {
@@ -100,21 +109,23 @@ public class CarpoolManager {
 	 */
 	public Truck rentTruckByWeight(Quantity weight, UserAccount rentedBy){
 		Assert.notNull(rentedBy, "useraccount must not be null!");
-		if (weight.isZeroOrNegative()){
+		if (weight.isZeroOrNegative()) {
 			//popup
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
-		List<Truck> filteredTrucks=new ArrayList<>();
-		for (Truck t:
-				carManagmentWrapper.getFreeTrucks()) {
+		List<Truck> filteredTrucks = new ArrayList<>();
+
+		for (Truck t :
+				carCatalog.findByFree(true)) {
 			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
 				filteredTrucks.add(t);
 		}
-		if (filteredTrucks.size()<=0){
+
+		if (filteredTrucks.size() <= 0) {
 			return null;
 		}
 		//<editor-fold desc="FilterLogic">
-		if (filteredTrucks.size()>1){
+		if (filteredTrucks.size() > 1) {
 			Collections.sort(filteredTrucks, new Comparator<Truck>() {
 				@Override
 				public int compare(Truck o1, Truck o2) {
@@ -124,35 +135,36 @@ public class CarpoolManager {
 		}
 		//</editor-fold>
 		Truck truckToRent;
-		try{
-			truckToRent=filteredTrucks.get(0);
-		}catch (NullPointerException e){
+		try {
+			truckToRent = filteredTrucks.get(0);
+		} catch (NullPointerException e) {
 			System.out.println("Nullpointer in fitereredTrucks.get(0) in carpoolManager");
 			return null;
 		}
-		try{
-			truckToRent.setRentDate(businessTime.getTime());
+		try {
+			truckToRent.setRentDay(businessTime.getTime());
 
-			//if user has a truck already
-			if (userAccountTruckMap.containsKey(rentedBy)){
+			//if user was a truck allready
+			if (userAccountTruckMap.containsKey(rentedBy)) {
 				userAccountTruckMap.get(rentedBy).add(truckToRent);
 			}
 			//if user has no truck at the moment
-			else{
-				List<Truck> userTruckList = new ArrayList<>();
+			else {
+				userTruckList = new ArrayList<>();
 				userTruckList.add(truckToRent);
 				userAccountTruckMap.put(rentedBy, userTruckList);
 			}
 			//<editor-fold desc="Bestellung">
-			carManagmentWrapper.addTakenTrucks(truckToRent);
-			carManagmentWrapper.getFreeTrucks().remove(truckToRent);
-		}catch (Exception e){
+
+			truckToRent.setFree(false);
+		} catch (Exception e) {
 			System.out.println("Somthing went wrong in CarpoolManager in rent Truck method");
-			truckToRent=null;
+			truckToRent = null;
 		}
 		//</editor-fold>
 		return truckToRent;
 	}
+
 
 	/**
 	 * returns the truck that matches the form to the available trucks
@@ -162,20 +174,22 @@ public class CarpoolManager {
 	boolean returnTruckToFreeTrucks(ReturnForm form){
 		try{
 			UserAccount rentedBy;
-			if(userAccountManager.findByUsername(form.getName()).isPresent()){
-				rentedBy=userAccountManager.findByUsername(form.getName()).get();
-			}
-			else{
+
+			if (userAccountManager.findByUsername(form.getName()).isPresent()) {
+				rentedBy = userAccountManager.findByUsername(form.getName()).get();
+			} else {
 				System.out.println("MyError: User not present ");
 				return false;
 			}
-			List<Truck> truckList= userAccountTruckMap.get(rentedBy);
+			List<Truck> truckList = userAccountTruckMap.get(rentedBy);
+
 			userAccountTruckMap.remove(rentedBy);
-			for (Truck t: truckList
-				 ) {
-				Truck truckCopie= new Truck(t.getName(),t.getPrice(), t.getCapacity(),t.getDateOfRent());
-				carManagmentWrapper.addFreeTrucks(truckCopie);
-				carManagmentWrapper.getTakenTrucks().remove(t);
+			for (Truck t : truckList
+			) {
+				t.setFree(true);
+				carCatalog.save(t);
+				//carCatalog.save(truckCopie);
+				//carCatalog.save(new InventoryItem(truckCopie,Quantity.of(1)));
 			}
 		}catch (Exception e){
 			System.out.println("MyError: Truck can not be returned: ");
@@ -185,20 +199,18 @@ public class CarpoolManager {
 		return true;
 	}
 
-	/***/
-	CarManagmentWrapper getCarManagementWrapper() {
-		return carManagmentWrapper;
-	}
-	Map<Truck,UserAccount> getTruckUserAccountMap() {
-		 Map<Truck,UserAccount> myNewHashMap = new HashMap<>();
-		 for(Map.Entry<UserAccount, List<Truck>> entry : userAccountTruckMap.entrySet()){
-		 	for(Truck t:entry.getValue()){
 
-		 		if(!myNewHashMap.containsKey(t)){
+	Map<Truck, UserAccount> getTruckUserAccountMap() {
 
-		 			myNewHashMap.put(t,entry.getKey());
-				}
-				else throw new IllegalArgumentException("The same truck cant be rented twice. logic programing error in carpoolmanager");
+		Map<Truck, UserAccount> myNewHashMap = new HashMap<>();
+		for (Map.Entry<UserAccount, List<Truck>> entry : userAccountTruckMap.entrySet()) {
+			for (Truck t : entry.getValue()) {
+
+				if (!myNewHashMap.containsKey(t)) {
+
+					myNewHashMap.put(t, entry.getKey());
+				} else
+					throw new IllegalArgumentException("The same truck cant be rented twice. logic programing error in carpoolmanager");
 			}
 
 		}

@@ -35,8 +35,16 @@
 </div>
 
 
-<div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
-<div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+<div class="ui grid">
+    <div class="eight wide column">
+        <div class="value"><h2><span th:text="${wightofcart}"></span></h2></div>
+    </div>
+
+    <div class="eight wide column">
+
+        <div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
+    </div>
+</div>
 <div>
      <form th:action="@{/lkwbooking}" th:align="right">
         <button id="buttonspace" type="submit" class="ui button" th:text="Bestellen">button</button>
