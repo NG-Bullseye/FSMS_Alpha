@@ -76,7 +76,7 @@ public class Part extends Article {
 
 	/**
 	 * 
-	 * @throws IllegalArgumentException: If weight is not positive
+	 * @throws IllegalArgumentException If weight is not positive
 	 */
 	public void setWeight(double weight) throws IllegalArgumentException {
 		if (weight <= 0) {
@@ -97,7 +97,7 @@ public class Part extends Article {
 
 	/**
 	 * 
-	 * @throws IllegalArgumentException: If colour is an empty string
+	 * @throws IllegalArgumentException If colour is an empty string
 	 */
 	@Override
 	public void setColour(@NotNull String colour) throws IllegalArgumentException {
