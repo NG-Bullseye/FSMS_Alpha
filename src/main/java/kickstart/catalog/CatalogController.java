@@ -152,7 +152,7 @@ public class CatalogController {
 			return "newPart";
 		}
 		manager.newPart(form);
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 		return"redirect:/catalog/";
 	}
 	@GetMapping("catalog/composite/new")
@@ -179,7 +179,7 @@ public class CatalogController {
 
 		manager.newComposite(form,partsMapping);
 
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 
 		return"redirect:/catalog/";
 	}

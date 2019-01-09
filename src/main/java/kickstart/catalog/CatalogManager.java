@@ -6,25 +6,6 @@ import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.inventory.ReorderableInventoryItem;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.inventory.Inventory;
-import org.salespointframework.quantity.Metric;
-import org.salespointframework.quantity.Quantity;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,11 +17,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
+import org.springframework.stereotype.Component;
 
-import kickstart.articles.Article;
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
-import kickstart.inventory.ReorderableInventoryItem;
 
 @Component
 public class CatalogManager {
@@ -59,7 +42,7 @@ public class CatalogManager {
 	 * This method returns a Iterable of all invisible Articles in the Catalog.
 	 * @return invisible Articles in the Catalog.
 	 */
-	public Iterable<Article> getWholeCatalog() {
+	public List<Article> getInvisibleCatalog() {
 		LinkedList<Article> invisible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
 			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()) {
@@ -90,6 +73,20 @@ public class CatalogManager {
 		});
 		visible.sort(Comparator.comparing(Article::getName));
 		return visible;
+	}
+	
+	/**
+	 * 
+	 * @return Returns a list of all articles in the catalog
+	 */
+	public List<Article> getWholeCatalog() {
+		List<Article> articles = new ArrayList<Article>();
+		
+		catalog.findAll().forEach(article -> {
+			articles.add(article);
+		});
+		
+		return articles;
 	}
 
 	/**
@@ -539,5 +536,4 @@ public class CatalogManager {
 
 		return result;
 	}
-
 }

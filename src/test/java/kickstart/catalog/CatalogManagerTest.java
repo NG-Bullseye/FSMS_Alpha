@@ -21,7 +21,6 @@ import javax.transaction.Transactional;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.salespointframework.catalog.ProductIdentifier;
@@ -116,6 +115,22 @@ class CatalogManagerTest {
 		catalog.save(tester1);
 		catalog.save(tester2);
 		assertThat(manager.getWholeCatalog()).as("Die Artikel werden nicht richtig angezeigt.").isEqualTo(catalog.findAll());
+	}
+	
+	@Test
+	@Transient
+	void testGetInvisibleCatalog() {
+		manager.changeVisibility(tester1.getId());
+		
+		List<Article> articles = manager.getInvisibleCatalog();
+		
+		for(Article a:catalog.findAll()) {
+			if(a.isHidden()) {
+				assertTrue(articles.contains(a), "GetInvisibleCatalog sollte versteckte Artikel beinhalten.");
+			} else {
+				assertFalse(articles.contains(a), "GetInvisibleCatalog sollte versteckte Artikel nicht beinhalten.");
+			}
+		}
 	}
 
 	@Test
@@ -359,12 +374,13 @@ class CatalogManagerTest {
 		assertTrue(inventory.findByProduct(article).isPresent());
 	}
 	
-	@Disabled
+	
 	@Test
 	@Transient
 	void newComposite() {
 		HashSet<Article> before = new HashSet<>();
-		manager.getWholeCatalog().forEach(before::add);
+		manager.getVisibleCatalog().forEach(before::add);
+		manager.getInvisibleCatalog().forEach(before::add);
 
 		HashMap<String, String> input = new HashMap<>();
 		input.put("article_"+Objects.requireNonNull(tester2.getId()).getIdentifier(),"2");
@@ -381,6 +397,9 @@ class CatalogManagerTest {
 				actualList.add(article);
 			}
 		});
+		
+		assertFalse(actualList.size() == 0, "Die Liste soll niemals leer sein");
+		
 		Article actual = actualList.get(0);
 
 		assertEquals(expected.getName(), actual.getName(),"Der Artikel wurde nicht richtig erzeugt.");
@@ -542,5 +561,7 @@ class CatalogManagerTest {
 		String expected = "Test1.";
 		assertEquals(expected,manager.textOfAllComponents(com1.getId()),"Die enthaltenen Artikel werden nicht richtig angezeigt.");
 	}
+	
+	
 
 }
