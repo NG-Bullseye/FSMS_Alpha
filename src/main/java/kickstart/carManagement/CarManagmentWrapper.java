@@ -11,40 +11,42 @@ public class CarManagmentWrapper {
 	private List<Truck> freeTrucks;
 	private List<Truck> takenTrucks;
 
-		/**
-         * @param
-         * @return
-         */
+		/***/
 	public CarManagmentWrapper() {
 		this.freeTrucks = new ArrayList<>();
 		this.takenTrucks = new ArrayList<>();
 	}
 
+	/**
+	 * clears all free and taken truck lists
+	 * */
 	void clear() {
 			freeTrucks.clear();
 			takenTrucks.clear();
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param truck the truck instance that should be added
+	 * @return true if the action was successful
 	 */
 	boolean addTakenTrucks(Truck truck) {
 		return 	this.takenTrucks.add(truck);
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param truck the truck instance that should be added
+	 * @return true if the action was successful
 	 */
 	boolean addFreeTrucks(Truck truck) {
 		return this.freeTrucks.add(truck);
 	}
 
+	/***/
 	List<Truck> getTakenTrucks() {
 		return takenTrucks;
 	}
 
+	/***/
 	List<Truck> getFreeTrucks() {
 		return freeTrucks;
 	}

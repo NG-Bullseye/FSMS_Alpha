@@ -13,35 +13,44 @@ public class Truck extends Product {
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity capacity;
-	private LocalDateTime rentDay;
+	private LocalDateTime rentDate;
 
+	/***/
 	public Truck() {
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * creates a new truck
+	 * @param truckName name of truck
+	 * @param price price the user has to pay in order to rent the truck
+	 * @param capacity the maximum weight the truck is suppose to carry
+	 * @param dayOfRent the day the truck was rented
+	 * @return the initialized truck
 	 */
 	public Truck(String truckName, MonetaryAmount price, Quantity capacity,LocalDateTime dayOfRent) {
 		super(truckName, price);
 		this.capacity=capacity;
-
-		this.rentDay= dayOfRent;
+		this.rentDate = dayOfRent;
 	}
 
+	/**
+	 * @return the capacity the truck can carry at max
+	 * */
 	public Quantity getCapacity() {
 		return capacity;
 	}
 
-	public LocalDateTime getDayOfRent() {
-		return rentDay;
+	/**
+	 * @return the date the truck was rented on
+	 * */
+	public LocalDateTime getDateOfRent() {
+		return rentDate;
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param rentDate the local date time the truck has been rented
 	 */
-	public void setRentDay(LocalDateTime rentDay) {
-		this.rentDay = rentDay;
+	public void setRentDate(LocalDateTime rentDate) {
+		this.rentDate = rentDate;
 	}
 }

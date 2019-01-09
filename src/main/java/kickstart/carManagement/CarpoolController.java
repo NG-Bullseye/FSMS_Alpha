@@ -15,11 +15,13 @@ public class CarpoolController {
 
 	public CarpoolController(CarpoolManager carpoolManager) {
 		this.carpoolManager = carpoolManager;
-		carManagmentWrapper=carpoolManager.getCarManagmentWrapper();
+		carManagmentWrapper=carpoolManager.getCarManagementWrapper();
 	}
 
 	/**
-	 * @param
+	 * standard goto url for the carpool
+	 * @param returnForm contains information about the truck to return
+	 * @param model contains the information for the html
 	 * @return
 	 */
 	@RequestMapping("/carpool")
@@ -35,7 +37,9 @@ public class CarpoolController {
 	}
 
 	/**
-	 * @param
+	 * adds a new truck to the pool
+	 * @param form contains information about the truck to add to the List of available trucks
+	 * @param model contains the information for the html
 	 * @return
 	 */
 	@PostMapping("/addTruck")
@@ -51,13 +55,14 @@ public class CarpoolController {
 	}
 
 	/**
-	 * @param
+	 * returns the truck to the once available
+	 * @param form contains the information about the truck to return
 	 * @return
 	 */
 	@PostMapping("/returnTruck")
-	String returnTruck(@ModelAttribute("returnForm") ReturnForm form, Model model) {
+	String returnTruck(@ModelAttribute("returnForm") ReturnForm form) {
 		try{
-			carpoolManager.returnTruckToFreeTrucks(form); //auswahl treffen anhand von useraccount
+			carpoolManager.returnTruckToFreeTrucks(form);
 		}catch (Exception r){
 			return "redirect:carpool";
 		}

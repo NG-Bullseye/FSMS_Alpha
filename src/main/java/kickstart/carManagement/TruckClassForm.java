@@ -12,25 +12,29 @@ public class TruckClassForm {
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param name name of truck
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @return price the user has to pay in order to rent the truck
+	 */
 	public int getPrice() {
 		return price;
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param price price the user has to pay in order to rent the truck
 	 */
 	public void setPrice(int price) {
 		this.price = price;
 	}
 
+	/**
+	 * @return the capacity the truck can carry at max
+	 */
 	public int getCapacity() {
 		return capacity;
 	}

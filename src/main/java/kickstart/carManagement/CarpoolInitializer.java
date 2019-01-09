@@ -17,13 +17,16 @@ public class CarpoolInitializer implements DataInitializer {
 	private CarpoolManager carpoolManager;
 
 	/**
-	 * @param
+	 * @param carpoolManager contains all information needed for the initialization
 	 * @return
 	 */
 	public CarpoolInitializer(CarpoolManager carpoolManager) {
 		this.carpoolManager = carpoolManager;
 	}
 
+	/**
+	 * pre-initializes a small, medium and big truck
+	 * */
 	@Override
 	public void initialize() {
 		TruckClassForm truckForm;

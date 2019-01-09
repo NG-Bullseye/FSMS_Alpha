@@ -126,7 +126,7 @@ public class CartOrderManager {
 
 		// für funktion mit leos carpool Manager entkommentieren wenn vorhanden
 
-		Truck truck=carpoolManager.rentTruckByWight(wight,account);
+		Truck truck=carpoolManager.rentTruckByWeight(wight,account);
 		if(truck==null){
 			return "redirect:/";
 		}
