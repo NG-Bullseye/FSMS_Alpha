@@ -13,8 +13,6 @@ import javax.money.MonetaryAmount;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
-import org.salespointframework.catalog.Catalog;
-import org.salespointframework.order.Cart;
 import org.salespointframework.order.Order;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
@@ -26,7 +24,6 @@ import kickstart.user.User;
 import kickstart.user.UserManagement;
 
 @Service
-
 public class AccountancyManager {
 	private Accountancy accountancy;
 	private BusinessTime businessTime;
@@ -48,7 +45,6 @@ public class AccountancyManager {
 		Assert.notNull(accountancy, "accountancy must not be null!");
 	}
 
-
 	//<editor-fold desc="Time Skipp Logic">
 	public LocalDateTime getTime(){
 		return businessTime.getTime();
@@ -65,12 +61,13 @@ public class AccountancyManager {
 
 	//<editor-fold desc="Schnittstelle für zusatzkosten">
 	/**
-	 * @param order
+	 * @param order contains the order information
+	 * @param message message that will be displayed next to the value and date of the order
 	 * @return true if action was successful
 	 */
-	public boolean addEntry(Order order){
+	public boolean addEntry(Order order,String message){
 		try{
-			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(order.getTotalPrice(),order.getDateCreated());
+			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(order.getTotalPrice(),order.getDateCreated(),message);
 			accountancy.add(entry);
 			return true;
 		}catch (Exception e){
@@ -81,21 +78,39 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param amount
+	 * @param amount contains the order information
+	 * @param message message that will be displayed next to the value and date of the order
+	 * @return true if action was successful
 	 */
-	public void addEntry(MonetaryAmount amount){
+	public void addEntry(MonetaryAmount amount,String message){
 		try{
-			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime());
+			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime(),message);
 			accountancy.add(entry);
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 
 	}
+
+	/**
+	 * @param amount contains the order information
+	 * @param creationTime for instantiation purpose only. use with care
+	 * @param message message that will be displayed next to the value and date of the order
+	 */
+	public void addEntry(MonetaryAmount amount,LocalDateTime creationTime,String message){
+		try{
+			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,creationTime,message);
+			accountancy.add(entry);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+	}
+
 	//</editor-fold>
 
 	/**
-	 * @param
+	 * @param sinceMonth the month from where on you want to know the value
 	 * @return
 	 */
 	int fetchMonthlyAccountancyValue(Month sinceMonth){
@@ -110,6 +125,9 @@ public class AccountancyManager {
 		return value;
 	}
 
+	/**
+	 * @return a list of all accountancy entrys from this month
+	 */
 	List<AccountancyEntry> fetchThisMonthAccountancy(){
 		Set<AccountancyEntry> results;
 		results=accountancy.find(fetchIntervalToNow(businessTime
@@ -129,8 +147,8 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param sinceMonth
+	 * @return returns an interval from parameter to now
 	 */
 	private Interval fetchIntervalToNow(Month sinceMonth){
 		LocalDateTime now=businessTime.getTime();
@@ -148,8 +166,8 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param form contains info about the number of the year
+	 * @return returns according accountancy entries
 	 */
 	List<AccountancyEntry> getFilteredYearList(YearFilterForm form) {
 		return accountancy
@@ -159,7 +177,7 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param
+	 * @param sinceYear
 	 * @return
 	 */
 	private Interval fetchOneYearSinceInterval(int sinceYear){
@@ -178,22 +196,22 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param
-	 * @return
+	 *
 	 */
 	public Accountancy getAccountancy() {
 		return accountancy;
 	}
 
 	/**
-	 * @param
-	 * @return
+	 *
 	 */
 	public BusinessTime getBusinessTime() {
 		return businessTime;
 	}
 
-
+	/**
+	 * checks if its time for the monthly paycheck
+	 */
 	void checkForPayDay(){
 		Month thisMonth=businessTime.getTime().getMonth();
 		int differenz =(thisMonth.getValue()-lastMonth.getValue())%12;
@@ -215,9 +233,7 @@ public class AccountancyManager {
 				}
 			}
 			lastMonth=thisMonth;
-			addEntry(Money.of(monthlySalary,"EUR"));
+			addEntry(Money.of(monthlySalary,"EUR"),"Monthly Paycheck");
 		}
 	}
-
-//</editor-fold>
 }
