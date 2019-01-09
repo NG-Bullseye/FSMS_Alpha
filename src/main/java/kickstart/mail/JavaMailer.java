@@ -1,4 +1,4 @@
-package kickstart.user;
+package kickstart.mail;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -32,8 +32,17 @@ public class JavaMailer {
     public void sendCustomerRegistrationMessage(@NonNull String email) {
         SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(email);
-		message.setSubject("Registrierung");
+		message.setSubject("Möbel-Hier Registrierung");
 		message.setText("Sie haben sich erfolgreich bei Möbel-Hier registriert!");
+		sendMail(message);
+		return;
+    }
+    
+    public void sendCustomerConfirmationMessage(@NonNull String email) {
+    	SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(email);
+		message.setSubject("Möbel-Hier Bestellung");
+		message.setText("Ihre Ware ist ab sofort abholbereit!");
 		sendMail(message);
 		return;
     }
