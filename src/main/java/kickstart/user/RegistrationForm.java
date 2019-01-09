@@ -6,6 +6,10 @@ import javax.validation.constraints.Size;
 
 import kickstart.validation.isRegistered;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 interface RegistrationForm {
 
 	@NotEmpty(message = "Bitte geben sie einen Username ein!")

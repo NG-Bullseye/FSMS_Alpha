@@ -15,6 +15,8 @@
  */
 package kickstart.accountancy;
 
+import java.time.Month;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
@@ -23,7 +25,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.time.Month;
 
 
 /**

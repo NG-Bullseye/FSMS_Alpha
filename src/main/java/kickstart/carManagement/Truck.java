@@ -1,16 +1,16 @@
 package kickstart.carManagement;
 
-import org.salespointframework.catalog.Product;
-import org.salespointframework.quantity.Quantity;
+import java.time.LocalDateTime;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Column;
 
-import java.time.LocalDateTime;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.quantity.Quantity;
 
 @Entity
 public class Truck extends Product {

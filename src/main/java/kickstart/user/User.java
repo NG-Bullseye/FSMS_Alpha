@@ -11,6 +11,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 @Entity
 public class User {
 
@@ -30,24 +34,28 @@ public class User {
 	private String email;
 	
 	@Getter
-	@Setter
 	private String firstname;
 	
 	@Getter
-	@Setter
 	private String lastname;
 	
 	@Getter
 	private int salary;
-
+	
+	@SuppressWarnings("unused")
 	public User() {}
 
 	public User(@NonNull UserAccount userAccount, @NonNull String firstname, @NonNull String lastname, @NonNull String email, @NonNull String address) {
+		this.userAccount = userAccount;
 		this.firstname = firstname;
 		this.lastname =lastname;
 		this.email = email;
 		this.address = address;
 		salary = 0;
+		
+		userAccount.setFirstname(firstname);
+		userAccount.setLastname(lastname);
+		
 	}
 
 	public void setSalary(int salary) {
@@ -56,5 +64,15 @@ public class User {
 			
 		}
 		this.salary = salary;
+	}
+	
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+		this.userAccount.setFirstname(firstname);
+	}
+	
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+		this.userAccount.setLastname(lastname);
 	}
 }

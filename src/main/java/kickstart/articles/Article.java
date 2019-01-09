@@ -1,9 +1,8 @@
 package kickstart.articles;
 
-import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.quantity.Quantity;
-import org.salespointframework.quantity.Metric;
+
+import lombok.Getter;
+
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -11,13 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.javamoney.moneta.Money;
-
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+
+import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
 
 
 /** 
@@ -57,12 +60,16 @@ public abstract class Article extends Product{
 	@ElementCollection
 	@javax.persistence.Transient
 	private List<ProductIdentifier> parents;
+	
+	// This variable stores the number of orders of this item
+	@Getter
+	private int orderedAmount;
   
 	/**
 	 * 
 	 * @param name: The name of the article. Neither null nor an empty String(i.e. "")
 	 * @param description: The description of this artile. Neither null nor an empty String
-	 * @throws IllegalArgumentException: If name or description equal the empty string
+	 * @throws IllegalArgumentException If name or description equal the empty string
 	 */
 	public Article(@NotNull String name, @NotNull String description)
 		throws  IllegalArgumentException {
@@ -86,7 +93,9 @@ public abstract class Article extends Product{
 		hidden = false;
 		
 		updateStatus = true;
-		this.parents = new LinkedList<>();
+		this.parents = new LinkedList<ProductIdentifier>();
+		
+		orderedAmount = 0;
 	}
 	
 	/**
@@ -99,7 +108,7 @@ public abstract class Article extends Product{
 	/**
 	 * 
 	 * @param description: The new description for this article. 
-	 * @throws IllegalArgumentException: If description equals the empty string
+	 * @throws IllegalArgumentException If description equals the empty string
 	 */
 	public void setDescription(@NotNull String description)
 		throws  IllegalArgumentException {	
@@ -219,4 +228,17 @@ public abstract class Article extends Product{
 	}
 	public abstract void addPart(@NotNull Article article);
 	public abstract void removePart(@NotNull Article article);
+	
+	/**
+	 * 
+	 * @param amount The amount that gets added to the current amount
+	 * @throws IllegalArgumentException If amount is negative
+	 */
+	public void increaseOrderedAmount(int amount) throws IllegalArgumentException{
+		if(amount < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		orderedAmount += amount;
+	}
 }

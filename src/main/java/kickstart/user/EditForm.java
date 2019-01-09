@@ -6,6 +6,10 @@ import javax.validation.constraints.Size;
 
 import kickstart.validation.isRegistered;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 interface EditForm {
 	
 	@Size(max=255, message = "Eingabe zu lang!")

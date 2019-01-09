@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kickstart.exception.UnAllowedException;
 import lombok.NonNull;
 
+/**
+ * @author Daniel Koersten
+ *
+ */
 @Controller
 class UserController {
 

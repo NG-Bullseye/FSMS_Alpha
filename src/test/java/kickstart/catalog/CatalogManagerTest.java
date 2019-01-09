@@ -1,9 +1,23 @@
 package kickstart.catalog;
 
-import kickstart.articles.Article;
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
-import kickstart.inventory.ReorderableInventoryItem;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.salespointframework.core.Currencies.EURO;
+
+import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,23 +29,10 @@ import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.transaction.Transactional;
-import java.beans.Transient;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Map;
-
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.salespointframework.core.Currencies.EURO;
+import kickstart.articles.Article;
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
+import kickstart.inventory.ReorderableInventoryItem;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -532,6 +533,12 @@ class CatalogManagerTest {
 		Map<ProductIdentifier, Integer> partIds = new HashMap<>();
 		partIds.put(tester2.getId(),2);
 		assertThat(manager.getArticle(com1.getId()).getPartIds()).as("Das Composite wurde nicht korrekt geändert.").isEqualTo(partIds);
+	}
+	@Test
+	@Transient
+	void textOfAllComponents(){
+		String expected = "Test1.";
+		assertEquals(expected,manager.textOfAllComponents(com1.getId()),"Die enthaltenen Artikel werden nicht richtig angezeigt.");
 	}
 
 }

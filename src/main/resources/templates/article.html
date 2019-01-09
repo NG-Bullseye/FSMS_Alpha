@@ -8,8 +8,8 @@
 <div id="tablespace" class="ui grid">
     <div class="four wide column">
         <div class="ui image">
-            <img th:src="@{/resources/productImages/placeholder.jpg}"
-                 src="../static/resources/productImages/placeholder.jpg"/>
+            <img th:src="@{/resources/productImages/icon.jpg}"
+                 src="../static/resources/productImages/icon.jpg"/>
         </div>
     </div>
 
@@ -22,10 +22,13 @@
                 <t2 th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Preis</t2>
             </div>
         </div>
-        <div class="description">
+        <div class="description" id="textnhead">
             <t th:text="${article.description}">Beschreibung</t>
+            <p>verfügbare Farben: </p>
+            <span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
             <div th:switch="${article.type}">
-                <t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${parts}">Teile</t>
+                <br>
+                <t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
             </div>
         </div>
         <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
@@ -34,7 +37,7 @@
             </a>
         </div>
         <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-            <a class="item" th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">Bearbeiten</a>
+                <a class="item" th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">Bearbeiten</a>
         </div>
         </div>
         <div class="ui button" th:switch="${hidden}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
@@ -50,7 +53,7 @@
             <div class="ui label">Anzahl:</div>
             <input name="count" type="number" min="1" th:max="${max}" value="1">
             <input name="part" type="hidden" th:value="${article.id}">
-            <input class="ui button" type="submit" value="Artikel hinzufügen">
+            <input class="ui button" type="submit" value="dem Warenkorb hinzufügen">
         </div>
     </form>
     <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
@@ -58,33 +61,16 @@
             <div  class="ui label">Anzahl:</div>
             <input name="count" type="number" min="1" max="10" value="1">
             <input name="article" type="hidden" th:value="${article.id}">
-            <input class="ui button" type="submit" value="Artikel hinzufügen">
+            <input class="ui  button" type="submit" value="dem Warenkorb hinzufügen">
         </div>
     </form>
 </div>
+<div class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+    <a th:href="@{/reorder/{id}(id=${article.id})}">Nachbestellen</a>
 
-<a th:href="@{/reorder/{id}(id=${article.id})}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-	<div class="ui button">
-		<tnorm th:text="#{article.reorder}">Nachbestellen</tnorm>
-	</div>
-</a>
-
-<div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
-        <label class="ui label">Anzahl:</label>
-        <input name="count" type="number" min="1" max="10" value="1">
-        <input name="part" type="hidden" th:value="${article.id}">
-        <input class="ui button" type="submit" th:text="Hinzufügen">
-    </form>
-    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
-        <label class="ui label">Anzahl</label>
-        <input name="count" type="number" min="1" max="10" value="1">
-        <input name="article" type="hidden" th:value="${article.id}">
-        <div class="ui label">in den Warenkorb</div>
-        <input class="ui labeled button" type="submit" name="in den Warenkorb">
-    </form></div>
+</div>
     
-<div sec:authorize="hasRole('ROLE_EMPLOYEE')" id="article">
+<div sec:authorize="hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_CUSTOMER')" id="article">
 	<div class="ui comments">
 	    <h3 class="ui dividing header">Bewertungen</h3>
 	    <h4 th:text="'Durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' " >5</h4>
