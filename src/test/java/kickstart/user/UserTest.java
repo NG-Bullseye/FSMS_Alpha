@@ -1,6 +1,6 @@
 package kickstart.user;
 
-import org.junit.Ignore;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.annotation.Transient;
 import org.springframework.transaction.annotation.Transactional;
 
-@Ignore("Out of Date")
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
 @Transactional

@@ -11,11 +11,11 @@ public class CarpoolController {
 
 	private CarpoolManager carpoolManager;
 	private TruckClassForm truckClassForm;
-	private CarManagmentWrapper carManagmentWrapper;
+	private CarCatalog carCatalog;
 
-	public CarpoolController(CarpoolManager carpoolManager, CarManagmentWrapper carManagmentWrapper) {
+	public CarpoolController(CarpoolManager carpoolManager, CarCatalog carCatalog) {
 		this.carpoolManager = carpoolManager;
-		this.carManagmentWrapper = carManagmentWrapper;
+		this.carCatalog=carCatalog;
 	}
 
 	@RequestMapping("/carpool")
@@ -23,10 +23,11 @@ public class CarpoolController {
 		truckClassForm= new TruckClassForm();
 		model.addAttribute("newForm",truckClassForm);
 
-		model.addAttribute("freeTrucks",carManagmentWrapper.getFreeTrucks() );
-		model.addAttribute("takenTrucks",carManagmentWrapper.getTakenTrucks() );
-		model.addAttribute("freeTrucksNumber",carManagmentWrapper.getFreeTrucks().size() );
-		model.addAttribute("takenTrucksNumber",carManagmentWrapper.getTakenTrucks().size() );
+		model.addAttribute("freeTrucks",carCatalog.findByFree(true) );
+		model.addAttribute("takenTrucks",carCatalog.findByFree(false) );
+		model.addAttribute("freeTrucksNumber",carCatalog.findByFree(true).stream().count());
+		model.addAttribute("takenTrucksNumber",carCatalog.findByFree(false).stream().count() );
+		carpoolManager.checkForError();
 		model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
 
 		return "carpool";
@@ -90,6 +91,7 @@ public class CarpoolController {
 		return "redirect:pricing";
 	}*/
 
-
-
+	public CarpoolManager getManager() {
+		return carpoolManager;
+	}
 }

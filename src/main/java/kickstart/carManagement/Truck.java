@@ -15,10 +15,14 @@ import java.time.LocalDateTime;
 @Entity
 public class Truck extends Product {
 
+
+
+
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity capacity;
 	private LocalDateTime rentDay;
+	private boolean free;
 	public Truck() {
 
 	}
@@ -26,7 +30,7 @@ public class Truck extends Product {
 	public Truck(String truckName, MonetaryAmount price, Quantity capacity,LocalDateTime dayOfRent) {
 		super(truckName, price);
 		this.capacity=capacity;
-
+		this.free=true;
 		this.rentDay= dayOfRent;
 	}
 
@@ -40,5 +44,13 @@ public class Truck extends Product {
 
 	public void setRentDay(LocalDateTime rentDay) {
 		this.rentDay = rentDay;
+	}
+
+	public boolean isFree() {
+		return free;
+	}
+
+	public void setFree(boolean free) {
+		this.free = free;
 	}
 }
