@@ -16,10 +16,7 @@
 package kickstart.accountancy;
 
 import java.time.Month;
-
-import org.javamoney.moneta.Money;
 import org.salespointframework.useraccount.UserAccount;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,9 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AccountancyController {
 
-
 	private AccountancyManager accountancyManager;
-
 	private UserAccount userAccount;
 
 	/**
@@ -81,19 +76,25 @@ public class AccountancyController {
 		return "accountancy";
 	}
 
-
+	/**
+	 * skipps a day forward in time
+	 */
 	@RequestMapping("/skippDay")
 	public String skippDay() {
 		accountancyManager.skippDay();
 		return "redirect:/accountancy";
 	}
 
+	/**
+	 * skipps a Month forward in time
+	 */
 	@RequestMapping("/skippMonth")
 	public String skippMonth() {
 		accountancyManager.skippMonth();
 		return "redirect:/accountancy";
 	}
 
+	/***/
 	public AccountancyManager getManager(){
 		return accountancyManager;
 	}

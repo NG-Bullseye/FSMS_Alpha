@@ -40,8 +40,7 @@ public class TruckClassForm {
 	}
 
 	/**
-	 * @param
-	 * @return
+	 * @param capacity maximum weight of truckload
 	 */
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;

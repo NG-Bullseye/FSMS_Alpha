@@ -1,6 +1,5 @@
 package kickstart.accountancy;
 
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -10,9 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.money.MonetaryAmount;
-
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
@@ -25,7 +22,6 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
 import kickstart.user.User;
 import kickstart.user.UserManagement;
 
@@ -34,24 +30,21 @@ import kickstart.user.UserManagement;
 public class AccountancyManager {
 	private Accountancy accountancy;
 	private BusinessTime businessTime;
-	private Cart cart;
 	private UserManagement userManager;
-	private Catalog catalog;
 	private Month lastMonth;
 
 	/**
-	 * @param
-	 * @return
+	 * @param userManager
+	 * @param userAccountManager
+	 * @param accountancy
+	 * @param businessTime
 	 */
 	@Autowired
-	public AccountancyManager(UserManagement userManager, Catalog catalog, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
+	public AccountancyManager(UserManagement userManager, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy=accountancy;
-		this.catalog=catalog;
 		this.userManager=userManager;
-		this.cart=new Cart();
 		this.businessTime=businessTime;
 		this.lastMonth=businessTime.getTime().getMonth();
-
 		Assert.notNull(accountancy, "accountancy must not be null!");
 	}
 
@@ -63,20 +56,17 @@ public class AccountancyManager {
 
 	void skippDay(){
 		businessTime.forward(Duration.ofDays(1));
-
 	}
 
 	void skippMonth(){
-
 		businessTime.forward(Duration.ofDays(30));
-
 	}
 	//</editor-fold>
 
 	//<editor-fold desc="Schnittstelle für zusatzkosten">
 	/**
-	 * @param
-	 * @return
+	 * @param order
+	 * @return true if action was successful
 	 */
 	public boolean addEntry(Order order){
 		try{
@@ -91,7 +81,7 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param
+	 * @param amount
 	 */
 	public void addEntry(MonetaryAmount amount){
 		try{

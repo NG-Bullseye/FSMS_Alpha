@@ -13,6 +13,10 @@ public class CarpoolController {
 	private TruckClassForm truckClassForm;
 	private CarCatalog carCatalog;
 
+	/**
+	 * @param carpoolManager contains Backendlogic
+	 * @param carCatalog contains persistent list of trucks
+	 * */
 	public CarpoolController(CarpoolManager carpoolManager, CarCatalog carCatalog) {
 		this.carpoolManager = carpoolManager;
 		this.carCatalog=carCatalog;
@@ -22,19 +26,16 @@ public class CarpoolController {
 	 * standard goto url for the carpool
 	 * @param returnForm contains information about the truck to return
 	 * @param model contains the information for the html
-	 * @return
 	 */
 	@RequestMapping("/carpool")
 	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
 		truckClassForm= new TruckClassForm();
 		model.addAttribute("newForm",truckClassForm);
-
 		model.addAttribute("freeTrucks",carCatalog.findByFree(true) );
 		model.addAttribute("takenTrucks",carCatalog.findByFree(false) );
 		model.addAttribute("freeTrucksNumber",carCatalog.findByFree(true).stream().count());
 		model.addAttribute("takenTrucksNumber",carCatalog.findByFree(false).stream().count() );
 		model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
-
 		return "carpool";
 	}
 
@@ -42,7 +43,6 @@ public class CarpoolController {
 	 * adds a new truck to the pool
 	 * @param form contains information about the truck to add to the List of available trucks
 	 * @param model contains the information for the html
-	 * @return
 	 */
 	@PostMapping("/addTruck")
 	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) {
@@ -59,7 +59,6 @@ public class CarpoolController {
 	/**
 	 * returns the truck to the once available
 	 * @param form contains the information about the truck to return
-	 * @return
 	 */
 	@PostMapping("/returnTruck")
 	String returnTruck(@ModelAttribute("returnForm") ReturnForm form) {
