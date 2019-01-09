@@ -5,12 +5,9 @@
     </head>
 
     <body>
-
         <nav th:include="navbar :: navbar"></nav>
 
-
         <h1 class="display-4">Lkw Ausleihe</h1>
-
 
         <div class="ui container">
 
@@ -117,75 +114,68 @@
                     -->
 
                 </div>
-                <!--</editor-fold>-->
-
-            </div>
-
-            <!--<editor-fold desc="Bestand Table">-->
-            <div class="ui container">
-                <h2 >Bestand</h2>
-                <table class="ui celled table">
-                    <thead>
-
-                    <tr>
-                        <th >Freie Lkws</th>
-                        <th >Ausgeliehene Lkws</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td th:text="${freeTrucksNumber}"></td>
-                        <td th:text="${takenTrucksNumber}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="ui container">
-                <h2 >Freie Lkws</h2>
-                <table class="ui celled table">
-                     <thead>
-                    <tr>
-                        <th >Lkw Bezeichnung</th>
-                        <th >Kapazität</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                    <tr th:each="entry:${freeTrucks}">
-                        <td th:text="${entry.getName()}"></td>
-                        <td th:text="${entry.getCapacity().toString()}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="ui container">
-                <h2 >Ausgeliehene Lkws</h2>
-                <table class="ui celled table">
-                    <thead>
-                    <tr>
-                        <th >Ausgeliehen von</th>
-                        <th >Lkw Bezeichung</th>
-                        <th >Kapazität</th>
-                        <th >Ausgeliehen am</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                    <tr th:each="entry:${takenTrucks}">
-                        <td th:text="${truckUserAccountMapping.get(entry).getUsername()}"></td>
-                        <td th:text="${entry.getName()}"></td>
-                        <td th:text="${entry.getCapacity().toString()}"></td>
-                        <td th:text="${#temporals.format(entry.getDayOfRent(), 'dd.MM.yyyy HH:mm')}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!--</editor-fold>-->
 
         </div>
 
+        <div class="ui container">
+            <h2 >Bestand</h2>
+            <table class="ui celled table">
+                <thead>
+
+                <tr>
+                    <th >Freie Lkws</th>
+                    <th >Ausgeliehene Lkws</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${freeTrucksNumber}"></td>
+                    <td th:text="${takenTrucksNumber}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ui container">
+            <h2 >Freie Lkws</h2>
+            <table class="ui celled table">
+                 <thead>
+                <tr>
+                    <th >Lkw Bezeichnung</th>
+                    <th >Kapazität</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <tr th:each="entry:${freeTrucks}">
+                    <td th:text="${entry.getName()}"></td>
+                    <td th:text="${entry.getCapacity().toString()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ui container">
+            <h2 >Ausgeliehene Lkws</h2>
+            <table class="ui celled table">
+                <thead>
+                <tr>
+                    <th >Ausgeliehen von</th>
+                    <th >Lkw Bezeichung</th>
+                    <th >Kapazität</th>
+                    <th >Ausgeliehen am</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <tr th:each="entry:${takenTrucks}">
+                    <td th:text="${truckUserAccountMapping.get(entry).getUsername()}"></td>
+                    <td th:text="${entry.getName()}"></td>
+                    <td th:text="${entry.getCapacity().toString()}"></td>
+                    <td th:text="${#temporals.format(entry.getDateOfRent(), 'dd.MM.yyyy HH:mm')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </body>
 </html>

@@ -186,7 +186,7 @@ public class CartOrderManager {
 	 */
 
 	public Truck checkLKW(){
-		return carpoolManager.checkTruckavailable(wight);
+		return carpoolManager.checkTruckAvailable(wight);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class CartOrderManager {
 
 	public String addLKW(Cart cart){
 
-		Truck truck=carpoolManager.rentTruckByWight(wight,account);
+		Truck truck=carpoolManager.rentTruckByWeight(wight,account);
 		if(truck==null){
 			return "redirect:/";
 		}
