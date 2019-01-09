@@ -21,6 +21,7 @@ import javax.transaction.Transactional;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.salespointframework.catalog.ProductIdentifier;
@@ -357,7 +358,8 @@ class CatalogManagerTest {
 		Article article = test.get(0);
 		assertTrue(inventory.findByProduct(article).isPresent());
 	}
-
+	
+	@Disabled
 	@Test
 	@Transient
 	void newComposite() {

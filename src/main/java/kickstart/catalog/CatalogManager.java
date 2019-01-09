@@ -56,14 +56,21 @@ public class CatalogManager {
 	}
 
 	/**
-	 * This method returns a Iterable of all Articles in the Catalog.
-	 * @return Every Article in the Catalog.
+	 * This method returns a Iterable of all invisible Articles in the Catalog.
+	 * @return invisible Articles in the Catalog.
 	 */
 	public Iterable<Article> getWholeCatalog() {
-		LinkedList<Article> output = new LinkedList<>();
-		catalog.findAll().forEach(output::add);
-		output.sort(Comparator.comparing(Article::getName));
-		return catalog.findAll();
+		LinkedList<Article> invisible = new LinkedList<>();
+		catalog.findAll().forEach(article -> {
+			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()) {
+				if (hiddenArticles.contains(article)
+						&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
+					invisible.add(article);
+				}
+			}
+		});
+		invisible.sort(Comparator.comparing(Article::getName));
+		return invisible;
 
 	}
 
