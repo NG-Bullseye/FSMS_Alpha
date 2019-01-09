@@ -1,6 +1,9 @@
 package kickstart.carManagement;
 
 import org.salespointframework.core.DataInitializer;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
+import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,9 +44,10 @@ public class CarpoolInitializer implements DataInitializer {
 		truckForm=new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_MEDIUM);
 		truckForm.setName("Mittlerer Lkw");
-		truckForm.setPrice(CAPACITY_MEDIUM);
+		truckForm.setPrice(PRICE_MEDIUM);
 		carpoolController.getManager().addFreeTruck(truckForm);
-		carpoolController.getManager().rentTruckByWight(Quantity.of(CAPACITY_MEDIUM, Metric.KILOGRAM),userManagement.findByUsername("chef").get());
+		carpoolController.getManager().rentTruckByWeight(Quantity.of(CAPACITY_MEDIUM, Metric.KILOGRAM),userManagement.findByUsername("chef").get());
+
 
 		truckForm=new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_LARGE);

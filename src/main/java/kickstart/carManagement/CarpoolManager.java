@@ -20,22 +20,18 @@ import java.util.Comparator;
 @Service
 public class CarpoolManager {
 
-	private CarCatalog carCatalog;
 	private BusinessTime businessTime;
 	private UserAccountManager userAccountManager;
-
-	private UserAccount userAccount;
-	private List<Truck> userTruckList;
+	private CarCatalog carCatalog;
 	private Map<UserAccount,List<Truck>> userAccountTruckMap;
-
 
 	/**
 	 * @param userAccountManager contains information about all useraccounts
 	 */
-	public CarpoolManager(UserAccountManager userAccountManager, BusinessTime businessTime ) {
+	public CarpoolManager(CarCatalog carCatalog,UserAccountManager userAccountManager, BusinessTime businessTime ) {
+		this.carCatalog=carCatalog;
 		userAccountTruckMap =new HashMap<>();
 		this.businessTime=businessTime;
-		this.carManagmentWrapper=new CarManagmentWrapper();
 		this.userAccountManager=userAccountManager;
 	}
 
@@ -142,7 +138,7 @@ public class CarpoolManager {
 			return null;
 		}
 		try {
-			truckToRent.setRentDay(businessTime.getTime());
+			truckToRent.setRentDate(businessTime.getTime());
 
 			//if user was a truck allready
 			if (userAccountTruckMap.containsKey(rentedBy)) {
@@ -150,7 +146,7 @@ public class CarpoolManager {
 			}
 			//if user has no truck at the moment
 			else {
-				userTruckList = new ArrayList<>();
+				List<Truck> userTruckList = new ArrayList<>();
 				userTruckList.add(truckToRent);
 				userAccountTruckMap.put(rentedBy, userTruckList);
 			}
