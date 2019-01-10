@@ -3,18 +3,14 @@ package kickstart.order;
 
 
 import kickstart.articles.Article;
-
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
 import kickstart.catalog.WebshopCatalog;
+import kickstart.mail.JavaMailer;
 import org.salespointframework.catalog.ProductIdentifier;
-
-import org.salespointframework.order.Cart;
-import org.salespointframework.order.OrderLine;
-import org.salespointframework.order.OrderManager;
-import org.salespointframework.order.OrderStatus;
+import org.salespointframework.order.*;
 import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
@@ -26,12 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
@@ -44,8 +35,8 @@ public class CartOrderManager {
 	private final CarpoolManager carpoolManager;
 	private String destination = "home";
 	private final List<String> destinations;
-
 	private final WebshopCatalog catalog;
+	private final JavaMailer javaMailer;
 	
 
 
@@ -58,12 +49,13 @@ public class CartOrderManager {
 	 */
 
 
-	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager){
+	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager, JavaMailer javaMailer){
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
 		this.destinations = new ArrayList<String>();
 		this.catalog = catalog;
+		this.javaMailer = javaMailer;
 		
 		this.destinations.add("Berlin");
 		this.destinations.add("Hamburg");
@@ -116,8 +108,6 @@ public class CartOrderManager {
 	 */
 
 	public String cancelorpayOrder(CustomerOrder order, String choose){
-
-
 
 		if(choose.equals("bezahlen")){
 			orderManager.payOrder(order);
@@ -201,9 +191,17 @@ public class CartOrderManager {
 		if(truck==null){
 			return "redirect:/";
 		}
-		cart.addOrUpdateItem(truck, Quantity.of(1));
+		//cart.addOrUpdateItem(truck, Quantity.of(1));
 		
-		return newOrder(cart);
+		//return newOrder(cart);
+
+		if(cart.isEmpty()){
+			return "redirect:/catalog";
+		}
+		ChargeLine chargeLine = new ChargeLine(truck.getPrice(),truck.getName());
+		newOrder(cart).add(chargeLine);
+		return "redirect:/";
+
 	}
 
 	/**
@@ -223,9 +221,9 @@ public class CartOrderManager {
 	 * @return
 	 */
 
-	public String newOrder(Cart cart){
+	public CustomerOrder newOrder(Cart cart){
 
-		if(!cart.isEmpty() ) {
+		//if(!cart.isEmpty() ) {
 			CustomerOrder order = new CustomerOrder(account, Cash.CASH);
 			cart.addItemsTo(order);
 			order.setDestination(destination);
@@ -235,9 +233,10 @@ public class CartOrderManager {
 			wight = Quantity.of(0,Metric.KILOGRAM);
 			cart.clear();
 
-			return "redirect:/";
-		}
-		return "redirect:/catalog";
+			//return "redirect:/"; String!!!!
+		//}
+		//return "redirect:/catalog";
+		return order;
 	}
 
 	/**
@@ -258,9 +257,15 @@ public class CartOrderManager {
 
 				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
 					order.setStatus(Status.abholbereit);
+					if(!order.getUserAccount().getEmail().isEmpty()) {
+						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
+					}
 				}
 				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
 					order.setStatus(Status.abholbereit);
+					if(!order.getUserAccount().getEmail().isEmpty()) {
+						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
+					}
 				}
 			}
 		}
