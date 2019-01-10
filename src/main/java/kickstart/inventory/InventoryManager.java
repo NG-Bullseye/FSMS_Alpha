@@ -1,6 +1,7 @@
 package kickstart.inventory;
 
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
@@ -37,14 +38,12 @@ public class InventoryManager {
 	
 	// The time difference (in days) until a reorder is completed 
 	@Getter
-	private final long reorderTime = 6;
+	private final long reorderTime = 4;
 	
-		
 	/**
 	 * 
 	 * @param inventory The repository where InventoryItems are saved
-	 * @param reorders The repository where {@link ReorderableInventoryItem}  is saved.
-	 * @param time An interface to determine the time
+	 * @param accountancy This class gives the class the current time and is used to add expenses
 	 */
 	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory,
 			@NotNull AccountancyManager accountancy ) {
@@ -86,15 +85,14 @@ public class InventoryManager {
 		
 		if(item.isPresent()) {
 			return item.get().hasSufficientQuantity(quantity);
-		}
-		else {
+		}else {
 			return false;
 		}
 	}
 	
 	/**
 	 * Creates a new reorder for the article so that after the specified reorder time,
-	 * the quantity increases
+	 * the quantity increases. It also adds an AccountancyEntry to the {@link AccountancyManager}
 	 * 
 	 * @param article The article that should get reordered.
 	 * @param quantity The desired quantity
@@ -108,20 +106,22 @@ public class InventoryManager {
 			inventory.save(item.get());
 
 			accountancy.addEntry(item.get().getProduct().getPrice().multiply(
-					item.get().getQuantity().getAmount()));
+					item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1)))
+					, accountancy.getTime(), "Reordered " +
+			item.get().getProduct().getName() + " " + item.get().getQuantity().toString()+ " " + "times");
+			
 		}
 		
 	}
 	
 	/**
 	 * Creates a new reorder for the article so that after the specified reorder time,
-	 * the quantity increases
+	 * the quantity increases. It also adds an AccountancyEntry to the {@link AccountancyManager
 	 * 
 	 * @param id The ProductIdentifier of the article that should get reordered.
 	 * @param quantity The desired quantity
 	 */
-	public void reorder(@NotNull ProductIdentifier id, @NotNull Quantity quantity)
-	{
+	public void reorder(@NotNull ProductIdentifier id, @NotNull Quantity quantity) {
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);
 		
 		if(item.isPresent()) {
@@ -130,7 +130,9 @@ public class InventoryManager {
 			inventory.save(item.get());
 
 			accountancy.addEntry(item.get().getProduct().getPrice().multiply(
-					quantity.getAmount()).multiply(-1));
+					item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1))),
+					accountancy.getTime(), "Reordered " +
+			item.get().getProduct().getName() + " " + item.get().getQuantity().toString()+ " " + "times");
 		}
 	}
 	
@@ -175,7 +177,7 @@ public class InventoryManager {
 	}
 	
 	/**
-	 * This functions runs the update method of the class {@link Reorder} for all currently stored reorders.
+	 * This functions runs the update method of the class {@link ReorderableInventoryItem} for all currently stored reorders.
 	 * If update on a reorders returns true, the reorder is deleted from the repository.
 	 */
 	@Scheduled(fixedRate = 5000)

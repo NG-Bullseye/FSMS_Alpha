@@ -19,6 +19,10 @@ import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
+/**
+ * This class represents the part that a {@link Composite} consists of. Most of it's methods are  
+ * implementation of the methods of the {@link Article} class. 
+ */
 @Entity
 public class Part extends Article {
 
@@ -30,13 +34,16 @@ public class Part extends Article {
 	private Set<String> colours;
 	private ArticleType type;
 
+	/**
+	 * Constructor for the database. It shouldn't be used otherwise.
+	 */
 	private Part() {
 		super("a", "b");
 	}
 
 	/**
 	 * 
-	 * @param name
+	 * @param name 
 	 * @param description
 	 * @param price
 	 * @param weight
@@ -119,7 +126,7 @@ public class Part extends Article {
 
 	/**
 	 * 
-	 * @return A set of all categories as String
+	 * @return A set of all categories as Strings
 	 */
 	public HashSet<String> getAllCategories() {
 		HashSet<String> returning = new HashSet<>();

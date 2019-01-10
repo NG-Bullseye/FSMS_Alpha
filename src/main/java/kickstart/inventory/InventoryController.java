@@ -39,8 +39,7 @@ public class InventoryController {
 	private InventoryManager manager;
 
 	/**
-	 * An inner class to easier combine information from the classes
-	 * ReorderableInventoryItem and Article.
+	 * This inner class is used to easier combine information from Articles and InventoryItems
 	 */
 	public class TableElement {
 		@Getter
