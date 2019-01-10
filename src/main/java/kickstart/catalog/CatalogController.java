@@ -85,10 +85,10 @@ public class CatalogController {
 
 		return "catalog";
 	}
-	@GetMapping("catalog/all")
+	@GetMapping("catalog/hidden")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String completeCatalog(Model model){
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getInvisibleCatalog());
 		model.addAttribute("filterform",new Filterform());
 		return "catalog";
 	}
@@ -109,6 +109,7 @@ public class CatalogController {
 		Article article = manager.getArticle(identifier);
 		article.addComment(payload.toComment(businessTime.getTime()));
 		manager.saveArticle(article);
+		
 
 		return "redirect:/article/"+ article.getId();
 
@@ -152,7 +153,7 @@ public class CatalogController {
 			return "newPart";
 		}
 		manager.newPart(form);
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 		return"redirect:/catalog/";
 	}
 	@GetMapping("catalog/composite/new")
@@ -179,7 +180,7 @@ public class CatalogController {
 
 		manager.newComposite(form,partsMapping);
 
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 
 		return"redirect:/catalog/";
 	}

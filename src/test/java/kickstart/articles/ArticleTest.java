@@ -5,7 +5,6 @@ import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Quantity;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,11 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
-
-import org.javamoney.moneta.Money;
-import org.junit.jupiter.api.Test;
-import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.quantity.Quantity;
 
 public class ArticleTest {
 
