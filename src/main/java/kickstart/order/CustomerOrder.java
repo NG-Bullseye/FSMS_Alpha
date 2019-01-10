@@ -1,11 +1,11 @@
 package kickstart.order;
 
-import javax.persistence.Entity;
-
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderLine;
 import org.salespointframework.payment.Cash;
 import org.salespointframework.useraccount.UserAccount;
+
+import javax.persistence.Entity;
 
 
 @Entity
@@ -37,13 +37,27 @@ public class CustomerOrder extends Order {
 		this.status = status;
 	}
 
+	/**
+	 *
+	 * @return true if CustomerOrder is versendet
+	 */
 	public boolean isversendet() {
 		return status == Status.versendet;
 	}
 
+	/**
+	 *
+	 * @return true if CustomerOrder is abholbereit
+	 */
+
 	public boolean isabholbereit() {
 		return status == Status.abholbereit;
 	}
+
+	/**
+	 *
+	 * @return true if CustomerOrder is abgeholt
+	 */
 
 	public boolean isabgeholt() {
 		return status == Status.abgeholt;

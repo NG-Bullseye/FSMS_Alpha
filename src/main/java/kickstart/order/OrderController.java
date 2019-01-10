@@ -58,8 +58,10 @@ public class OrderController {
 		if(cartordermanager.getAccount() != null){
 			UserAccount accountname = cartordermanager.getAccount();
 			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
-		} else {
-			model.addAttribute("nameoftheorderer", "Bitte einen Kunde ausählen");
+		}
+		else {
+			model.addAttribute("nameoftheorderer", "Bitte einen Kunden auswählen");
+
 		}
 
 

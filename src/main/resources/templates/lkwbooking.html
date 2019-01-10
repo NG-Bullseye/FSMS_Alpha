@@ -28,7 +28,7 @@
         <tr th:each="funiture : ${cart} ">
             <td th:text="${funiture.productName}">Moebelstück</td>
             <td th:text="${funiture.quantity}">Anzahl</td>
-            <td th:text="${funiture.price}">Preis</td>
+            <td th:text="${funiture.price.getNumber().doubleValueExact()}">Preis</td>
         </tr>
         </tbody>
     </table>
