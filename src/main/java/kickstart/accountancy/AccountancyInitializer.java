@@ -1,15 +1,8 @@
 package kickstart.accountancy;
 
-import kickstart.carManagement.CarCatalog;
-import kickstart.carManagement.CarpoolController;
-import kickstart.carManagement.Truck;
-import kickstart.carManagement.TruckClassForm;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.AccountancyEntry;
 import org.salespointframework.core.DataInitializer;
-import org.salespointframework.quantity.Metric;
-import org.salespointframework.quantity.Quantity;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
 
@@ -34,17 +27,17 @@ public class AccountancyInitializer implements DataInitializer {
 
 	/**
 	 * pre-initializes a small, medium and big truck
-	 * */
+	 */
 	@Override
 	public void initialize() {
-		Streamable<AccountancyEntry> entries=accountancyController.getManager().getAccountancy().findAll();;
-		for (AccountancyEntry entry:entries
-			 ) {
-			if (entry.getDescription().equals("Kosten der Unternehmensgründung")){
+		Streamable<AccountancyEntry> entries = accountancyController.getManager().getAccountancy().findAll();
+		for (AccountancyEntry entry : entries
+		) {
+			if (entry.getDescription().equals("Kosten der Unternehmensgründung")) {
 				return;
 			}
 		}
-		accountancyController.getManager().addEntry(Money.of(ENTRY_FIRSTPAYMENT,"EUR"), LocalDateTime.of(LocalDate.of(2019,1,1), LocalTime.of(12,0)),"Kosten der Unternehmensgründung");
+		accountancyController.getManager().addEntry(Money.of(ENTRY_FIRSTPAYMENT, "EUR"), LocalDateTime.of(LocalDate.of(2019, 1, 1), LocalTime.of(12, 0)), "Kosten der Unternehmensgründung");
 	}
 
 }

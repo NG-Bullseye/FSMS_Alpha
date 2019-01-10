@@ -43,14 +43,14 @@
 					<table class="ui celled table">
 						<thead>
 							<tr>
-								<th >Betrag in Euro</th>
+								<th >Betrag</th>
 								<th >Datum</th>
-								<th >Ursprung</th>
+								<th >Bemerkung</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="entry:${monthlyAccountancy}">
-								<td th:text="${entry.getValue().getNumber().longValue()}"></td>
+								<td th:text="${entry.getValue().getNumber().doubleValueExact()}+' '+${entry.getValue().getCurrency()}"></td>
 								<td th:text="${#temporals.format(entry.getDate().get(),'dd.MM.yyyy HH:mm')}"></td>
 								<td th:text="${entry.getDescription()}"></td>
 
@@ -79,13 +79,13 @@
 
 							</form>
 							</th>
-							<th >Betrag in Euro</th>
+							<th >Betrag</th>
 						</tr>
                         </thead>
                         <tbody>
                         <tr th:each="entry:${filteredYearList}">
                             <td th:text="${#temporals.format(entry.getDate().get(),'dd.MM.yyyy HH:mm')}"></td>
-							<td th:text="${entry.getValue().getNumber().longValue()}"></td>
+							<td th:text="${entry.getValue().getNumber().doubleValueExact()}+' '+${entry.getValue().getCurrency()}"></td>
 						</tr>
                         </tbody>
                     </table>

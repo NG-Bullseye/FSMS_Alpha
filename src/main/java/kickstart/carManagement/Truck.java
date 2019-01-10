@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Truck extends Product {
 
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
+	@AttributeOverrides({@AttributeOverride(name = "metric", column = @Column(name = "quantity_metric"))})
 	private Quantity capacity;
 	private boolean free;
 	private LocalDateTime rentDate;
@@ -25,40 +25,26 @@ public class Truck extends Product {
 
 	/**
 	 * creates a new truck
+	 *
 	 * @param truckName name of truck
-	 * @param price price the user has to pay in order to rent the truck
-	 * @param capacity the maximum weight the truck is suppose to carry
+	 * @param price     price the user has to pay in order to rent the truck
+	 * @param capacity  the maximum weight the truck is suppose to carry
 	 * @param dayOfRent the day the truck was rented
 	 * @return the initialized truck
 	 */
-	public Truck(String truckName, MonetaryAmount price, Quantity capacity,LocalDateTime dayOfRent) {
+	public Truck(String truckName, MonetaryAmount price, Quantity capacity, LocalDateTime dayOfRent) {
 		super(truckName, price);
-		this.capacity=capacity;
-		this.free=true;
+		this.capacity = capacity;
+		this.free = true;
 		this.rentDate = dayOfRent;
-		this.rentedBy=null;
+		this.rentedBy = null;
 	}
 
 	/**
 	 * @return the date the truck was rented on
-	 * */
+	 */
 	public LocalDateTime getDateOfRent() {
 		return rentDate;
-	}
-
-	/**
-	 * @param rentDate the local date time the truck has been rented
-	 */
-	void setRentDate(LocalDateTime rentDate) {
-		this.rentDate = rentDate;
-	}
-
-	void setRentedBy(UserAccount rentedBy){
-			this.rentedBy=rentedBy;
-	}
-
-	public void setFree(boolean free) {
-		this.free = free;
 	}
 
 	public Quantity getCapacity() {
@@ -69,11 +55,26 @@ public class Truck extends Product {
 		return this.free;
 	}
 
+	public void setFree(boolean free) {
+		this.free = free;
+	}
+
 	public LocalDateTime getRentDate() {
 		return this.rentDate;
 	}
 
+	/**
+	 * @param rentDate the local date time the truck has been rented
+	 */
+	void setRentDate(LocalDateTime rentDate) {
+		this.rentDate = rentDate;
+	}
+
 	public UserAccount getRentedBy() {
 		return this.rentedBy;
+	}
+
+	void setRentedBy(UserAccount rentedBy) {
+		this.rentedBy = rentedBy;
 	}
 }
