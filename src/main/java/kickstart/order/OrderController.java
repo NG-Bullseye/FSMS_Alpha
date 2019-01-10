@@ -5,9 +5,9 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.catalog.WebshopCatalog;
+import kickstart.mail.JavaMailer;
 import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
-import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderIdentifier;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
@@ -17,17 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
-import kickstart.carManagement.CarpoolManager;
-import kickstart.user.UserManagement;
 
 
 
@@ -44,15 +33,16 @@ public class OrderController {
 	private final UserManagement userManagement;
 	private final WebshopCatalog catalog;
 
-	OrderController(OrderManager<CustomerOrder> orderManager,WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement){
+	OrderController(OrderManager<CustomerOrder> orderManager,WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement, JavaMailer javaMailer){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
 		this.businesstime = businesstime;
 		this.carpoolManager = carpoolManager;
 		this.catalog = catalog;
-		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager);
+		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager, javaMailer);
 		this.userManagement = userManagement;
+
 
 	}
 
@@ -141,32 +131,10 @@ public class OrderController {
 	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart){
 
-	return cartordermanager.newOrder(cart);
+	cartordermanager.newOrder(cart);
+	return "redirect:/";
 	}
 
-	@RequestMapping("/showcustomerorders")
-	String showcostumerorder(@RequestParam(value = "theabsoluteorderer") long orderer,
-							 @RequestParam("username") String name,
-							 @RequestParam("usermail") String mail,
-							 @RequestParam("useraddress") String living,Model model){
-
-		UserAccount userAccount = userManagement.findUserById(orderer).getUserAccount();
-
-		model.addAttribute("name", name);
-		model.addAttribute("email",mail);
-		model.addAttribute("address", living);
-		model.addAttribute("onpoint", true);
-
-		cartordermanager.changeStatus();
-
-		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isversendet));
-		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
-		model.addAttribute("ordersofthedudepaid", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
-		model.addAttribute("ordersofthedudedeliverd",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isabholbereit));
-		model.addAttribute("orderscomplete",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isabgeholt));
-
-		return "customeraccount";
-	}
 
 	@RequestMapping("/cancelthatorder")
 	String cancelOrder(@RequestParam("orderidentity") CustomerOrder order, @RequestParam("choose") String choose, Model model){

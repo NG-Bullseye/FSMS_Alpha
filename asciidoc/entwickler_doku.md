@@ -162,6 +162,11 @@ Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (si
 ![Paketdiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Paket-Diagramm.jpg)
 
 ## Entwurfsentscheidungen
+Dieser Abschnitt beschreibt die Umsetzung verschiedener Probleme und Fragen, die während der Entwicklung aufgetreten sind. 
+
+Zur Update unserer Artikel(siehe Abschnitt Entwurfsentscheidungen) verändern wir zunächst den ausgewählten Artikel. Danach suchen wir mithilfe einer Tiefensuche (alternativ würde auch Breitensuche gehen) die Artikel die den geänderten Artikel enthalten und konstruieren damit einen Baum. Dabei aktualisieren wir jedoch noch nicht gleich, da auch ein Teil dieses Artikels den ursprünglich geänderten Artikel enthalten könnte, sodass dieser zuerst aktualisiert werden muss. Danach wenden wir eine Art topologische Sortierung an. Es werden im Baum nacheinander alle Artikel aktualisiert, deren Teile nicht im Baum der Artikel, die eine Aktualisierung benötigen, auftaucht.
+
+Das Projekt besitzt neben den regulären Artikeln auch ausleihbare Produkte, die LKWs. Diese werden als Erweiterung des Salespoint Produktesimplementiert und besitzen ein Attribut, das anzeigt ob dieser LKW momentan verliehen ist. Das Zurückgeben kann einfach über eine Attributänderung stattfinden. Da es dazu kein Salespointlager gibt, nutzen wir stattdessen ChargeLines, die in Salespoint für zusätzliche Ausgaben einer Bestellung verwendet werden können.
 
 ## Architektur
 
@@ -181,16 +186,15 @@ Entwurfsmuster
 Model-View-Controller(MVC)
 
 Wir verwenden das MVC-Muster (Model-View-Controller) mit einer Umsetzung durch Spring und Thymeleaf. 
-Die Controller und Manager bilden das Java-basierte Backend des Programms und sind für die Verwaltung und Verarbeitung der Daten verantwortlich, außerdem dient der Controller als Verbindung zwischen View und Model, da er die Eingaben des Views verarbeitet und auf Fehler prüft und anschließend das Model dementsprechend modifiziert. 
-Im View werden mittels Thymeleaftemplates die Daten des Modells angezeigt. Ebenso werden darüber die Eingaben der Benutzer getätigt. Dabei bleibt die View aber vom Modell unabhängig.
+Die Controller und Manager bilden das Java-basierte Backend des Programms und sind für die Verwaltung und Verarbeitung der Daten verantwortlich. Der Controller dient als Verbindung zwischen View und Model, da er die Eingaben des Views verarbeitet und auf Fehler prüft und anschließend das Model dementsprechend modifiziert. 
+Im View werden mittels Thymeleaftemplates die Daten des Models angezeigt. Ebenso werden darüber die Eingaben der Benutzer getätigt. Dabei bleibt die View aber vom Model unabhängig.
 
 Composite
 
 Mithilfe des Composite-Musters stellen wir die Artikel in unserem System dar. Es gibt Möbel und Teile als bestellbare Artikel. Dabei sind Teile die kleinstmöglichen Einheiten, welche als Blätter des Baumes dienen. Möbel setzen sich aus anderen Möbeln und Teilen zusammen und bilden dadurch eine Baumstruktur. 
 Dies erlaubt zum einen eine einfache Bearbeitung, da neue Bestandteile einfach in dem Baum eingefügt bzw. alte Bestandteile entfernt werden können. Ebenso wird über die Baumstruktur das Gewicht und der Preis bestimmt, da sich dieser aus den Preisen/Gewichten der Einzelteilen ergibt. Außerdem ermöglicht uns das auch zu jedem Möbelstück die Einzelteile anzubieten(wie in den Anforderungen gefordert), da sowohl Möbel als auch Teile Artikel sind, die bestellt werden können.
 
-
-
+Diese ursprüngliche Idee hat sich in der Implementierung jedoch als nicht praktikabel herausgestellt. Daher haben wir das Muster abgewandelt, wobei aber grundsätzlich die Idee erhalten bleibt. Es war problematisch Artikel als Attribute von Artikeln zu implementieren, da dann die Datenbank unter Umständen viele verschiedene Artikel für nur einen Artikel laden muss. Daher haben wir die Verbindung gelockert und nur noch die Ids der Teile gespeichert. Mithilfe des Katalogs können anhand dieser Ids die Artikel zum Beispiel für Updates immer noch gefunden werden. Außerdem verwenden wir anstelle einer einfachen Liste eine assoziative Datenstruktur, dass heißt eine Map, um auch die Anzahl zu speichern, sodass nicht mehrmals der selbe Artikel und seine Daten ermittelt werden muss.
  
 ## Persistenz
 
@@ -273,5 +277,8 @@ Der Admin kann hier alle Mitarbeiter einsehen. Durch einen Klick auf den Status 
         <td><p>Framework</p></td>
         <td><p>Programmiergerüst in der Softwaretechnik</p></td>
     </tr>
+    <tr class="even">
+      <td><p>Assoziatives Datenfeld</p></td>
+      <td><p>Ein Datenfeld, das Werte mithilfe eines Schlüssels speichert. In Java ist dies die Klasse Map.
     </tbody>
 </table>
