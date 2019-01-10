@@ -29,6 +29,7 @@ body {
 	margin: 2em 0em 0em 0em;
 }
 
+
 #textnhead {
 	margin: 0em 0em 1em 0em;
 }
@@ -54,7 +55,7 @@ body {
 
 #article {
 	margin: auto;
-	width: 75%;
+	width: 50%;
 }
 
 #editspace {

@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import kickstart.exception.UnAllowedException;
+import kickstart.mail.JavaMailer;
 import lombok.NonNull;
-
 
 /**
  * @author Daniel Koersten
@@ -27,14 +27,14 @@ public class UserManagement {
 	private final UserRepository users;
 	private final UserAccountManager userAccounts;
 	private final JavaMailer mailSender;
-	
+
 	/**
-	 * Creates a new {@link UserManagement} with the
-	 * {@link UserRepository}, {@link UserAccountManager} and a {@link JavaMailer}.
+	 * Creates a new {@link UserManagement} with the {@link UserRepository},
+	 * {@link UserAccountManager} and a {@link JavaMailer}.
 	 * 
-	 * @param users must not be {@literal null}.
+	 * @param users        must not be {@literal null}.
 	 * @param userAccounts must not be {@literal null}.
-	 * @param mailSender must not be {@literal null}.
+	 * @param mailSender   must not be {@literal null}.
 	 */
 	UserManagement(UserRepository users, UserAccountManager userAccounts, JavaMailer mailSender) {
 
@@ -48,7 +48,8 @@ public class UserManagement {
 	}
 
 	/**
-	 * Creates a new {@link User} using the information given in the {@link RegistrationForm}.
+	 * Creates a new {@link User} using the information given in the
+	 * {@link RegistrationForm}.
 	 * 
 	 * @param form must not be {@literal null}.
 	 * @return the new {@link User} instance.
@@ -57,19 +58,22 @@ public class UserManagement {
 
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
 		mailSender.sendCustomerRegistrationMessage(form.getEmail());
-		return users.save(new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
+		return users.save(
+				new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}
-	
+
 	/**
 	 * Edits a {@link User} using the information given in the {@link EditForm}.
 	 * 
-	 * @param form must not be {@literal null}. Contains Id of the {@link User} and the entered information. Empty fields in {@link EditForm} will be skipped.
+	 * @param form must not be {@literal null}. Contains Id of the {@link User} and
+	 *             the entered information. Empty fields in {@link EditForm} will be
+	 *             skipped.
 	 */
 	public void editData(@NonNull EditForm form) {
-		
+
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
-		
+
 		if (!form.getFirstname().isEmpty()) {
 			user.setFirstname(form.getFirstname());
 		}
@@ -88,27 +92,27 @@ public class UserManagement {
 		}
 		return;
 	}
-	
+
 	/**
 	 * Returns a {@link User} for given {@link UserAccount}.
 	 * 
 	 * @param userAccount must not be {@literal null}.
 	 * @return {@link User} for given {@link UserAccount}.
 	 */
-	public User findUser (@NonNull UserAccount userAccount) {
-		
+	public User findUser(@NonNull UserAccount userAccount) {
+
 		User user = users.findByUserAccount(userAccount);
 		return user;
 	}
-	
+
 	/**
 	 * Returns a {@link User} for given Id.
 	 * 
 	 * @param id must not be {@literal null}.
 	 * @return the requested {@link User}.
 	 */
-	public User findUserById (long id) {
-		
+	public User findUserById(long id) {
+
 		User user = users.findById(id);
 		return user;
 	}
@@ -121,7 +125,7 @@ public class UserManagement {
 	public Streamable<User> findAll() {
 		return Streamable.of(users.findAll());
 	}
-	
+
 	/**
 	 * Returns all {@link User} with Role of Customer currently saved.
 	 * 
@@ -130,18 +134,17 @@ public class UserManagement {
 	public Streamable<User> findAllCustomers() {
 		Iterable<User> userList = findAll();
 		List<User> customersList = new ArrayList<User>();
-		
-		
+
 		for (User user : userList) {
-		    if (user.getUserAccount().hasRole(Role.of("ROLE_CUSTOMER"))) {
-		    	customersList.add(user);
-		    }
+			if (user.getUserAccount().hasRole(Role.of("ROLE_CUSTOMER"))) {
+				customersList.add(user);
+			}
 		}
-		
-		Iterable<User> employees = customersList; 
+
+		Iterable<User> employees = customersList;
 		return Streamable.of(employees);
 	}
-	
+
 	/**
 	 * Returns all {@link User} with Role of Employee currently saved.
 	 * 
@@ -150,27 +153,27 @@ public class UserManagement {
 	public Streamable<User> findAllEmployees() {
 		Iterable<User> userList = findAll();
 		List<User> employeesList = new ArrayList<User>();
-		
-		
+
 		for (User user : userList) {
-		    if (user.getUserAccount().hasRole(Role.of("ROLE_EMPLOYEE"))) {
-		        employeesList.add(user);
-		    }
+			if (user.getUserAccount().hasRole(Role.of("ROLE_EMPLOYEE"))) {
+				employeesList.add(user);
+			}
 		}
-		
-		Iterable<User> employees = employeesList; 
+
+		Iterable<User> employees = employeesList;
 		return Streamable.of(employees);
 	}
-	
+
 	/**
-	 * Makes it possible to disable or enable a {@link User} for given {@link UserAccountIdentifier} and type.
+	 * Makes it possible to disable or enable a {@link User} for given
+	 * {@link UserAccountIdentifier} and type.
 	 * 
 	 * @param accountId must not be {@literal null}.
-	 * @param type Definition: 0 for disable and 1 for enable.
+	 * @param type      Definition: 0 for disable and 1 for enable.
 	 * @throws IllegalArgumentException if no type is given.
 	 */
 	public void useraccountActivation(@NonNull UserAccountIdentifier accountId, int type) {
-		
+
 		if (type == 0) { // deaktivieren
 			userAccounts.disable(accountId);
 			return;
@@ -180,57 +183,65 @@ public class UserManagement {
 		} else {
 			throw new IllegalArgumentException("Parameter type has illegal value");
 		}
-		
+
 	}
-	
+
 	/**
 	 * Makes it possible to change the Role of a given {@link User}.
 	 * 
-	 * @param requestedUser must not be {@literal null}. Contains {@link User} which should be changed.
-	 * @param loggedIn must not be {@literal null}. Contains logged in {@link User}.
-	 * @param type Definition: 0 - customer to employee; 1 - employee to customer; 2 - employee to boss (admin); 3 - boss (admin) to employee
-	 * @throws UnAllowedException if somebody try to change his own Role.
+	 * @param requestedUser must not be {@literal null}. Contains {@link User} which
+	 *                      should be changed.
+	 * @param loggedIn      must not be {@literal null}. Contains logged in
+	 *                      {@link User}.
+	 * @param type          Definition: 0 - customer to employee; 1 - employee to
+	 *                      customer; 2 - employee to boss (admin); 3 - boss (admin)
+	 *                      to employee
+	 * @throws UnAllowedException       if somebody try to change his own Role.
 	 * @throws IllegalArgumentException if no type is given.
 	 */
 	public void changeRole(@NonNull User requestedUser, @NonNull User loggedIn, int type) throws UnAllowedException {
 		if (requestedUser.getId() == loggedIn.getId()) { // Nutzer möchte sich selbst befördern oder herabstufen
 			throw new UnAllowedException("You are not allowed to change your own Role!");
 		}
-		
+
 		UserAccount userAccount = requestedUser.getUserAccount();
-		if (type == 0) { // Kunde zum Mitarbeiter machen
+
+		switch (type) {
+		case 0: // Kunde zum Mitarbeiter machen
 			userAccount.add(Role.of("ROLE_EMPLOYEE"));
 			userAccount.remove(Role.of("ROLE_CUSTOMER"));
-			requestedUser.setSalary(50);
-			return;
-		} else if (type == 1) { // Mitarbeiter zum Kunde machen
+			requestedUser.setSalary(150);
+			break;
+		case 1: // Mitarbeiter zum Kunde machen
 			userAccount.add(Role.of("ROLE_CUSTOMER"));
 			userAccount.remove(Role.of("ROLE_EMPLOYEE"));
 			requestedUser.setSalary(0);
-			return;
-		} else if (type == 2) { // Mitarbeiter zum Admin machen
+			break;
+		case 2: // Mitarbeiter zum Admin machen
 			userAccount.add(Role.of("ROLE_BOSS"));
-			return;
-		} else if (type == 3) { // Admin zum Mitarbeiter machen
+			break;
+		case 3: // Admin zum Mitarbeiter machen
 			userAccount.remove(Role.of("ROLE_BOSS"));
-			return;
-		} else {
+			break;
+		default:
 			throw new IllegalArgumentException("Parameter type has illegal value");
 		}
 	}
-	
+
 	/**
-	 * Adjusts the salary for a {@link User} using the information given in the {@link MoneyForm}.
+	 * Adjusts the salary for a {@link User} using the information given in the
+	 * {@link MoneyForm}.
 	 * 
-	 * @param form must not be {@literal null}. Contains Id of the {@link User} and the new salary.
+	 * @param form must not be {@literal null}. Contains Id of the {@link User} and
+	 *             the new salary.
 	 */
 	public void changeSalary(@NonNull MoneyForm form) {
-		
+
 		long requestedId = Long.parseLong(form.getId());
 		User user = findUserById(requestedId);
 		int salary = Integer.parseInt(form.getSalary());
 		user.setSalary(salary);
 		return;
 	}
-	
+
 }

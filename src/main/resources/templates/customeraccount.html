@@ -70,9 +70,7 @@
                        <!-- <td th:if="${(order.isComplete()) and (order.isversendet())}">Versendet</td>-->
                         <td th:if="${order.isabholbereit()}">Abholbereit</td>
 						<td th:if="${order.isabgeholt()}">Abgeschlossen</td>
-                        <!-- noch mehr statusse -->
 						<td th:if="${order.isCanceled()}">Storniert</td>
-<!-- 						Das muss in ein paar ordentliche anchor umgewandelt werden!! -->
 						<td th:if="${order.isOpen()}">
 							<a th:href="@{'/cancelthatorder'(orderidentity=${order.id}, choose=bezahlen)}" sec:authorize="hasRole('ROLE_CUSTOMER')">
 								<div class="positive ui button">

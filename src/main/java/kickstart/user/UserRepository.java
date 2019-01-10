@@ -10,7 +10,7 @@ import lombok.NonNull;
  *
  */
 interface UserRepository extends CrudRepository<User, Long> {
-	
+
 	/**
 	 * Search for {@link User} in database for given {@link UserAccount}.
 	 * 
@@ -18,7 +18,7 @@ interface UserRepository extends CrudRepository<User, Long> {
 	 * @return the found {@link User}.
 	 */
 	User findByUserAccount(@NonNull UserAccount userAccount);
-	
+
 	/**
 	 * Search for {@link User} in database for given Id.
 	 * 
