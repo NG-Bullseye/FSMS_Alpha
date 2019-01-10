@@ -8,8 +8,9 @@
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
 		<div id="title">
-			<t1>Willkommen bei Möbel-Hier!</t1>
+			<t11>Möbel Hier! - Möbel kauft man hier.</t11>
 		</div>
+		<br/>
 		<div id="registration" sec:authorize="!hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')">
 			<t2>Sie haben noch kein Kundenkonto?</t2>
 			<div id="buttonspace">

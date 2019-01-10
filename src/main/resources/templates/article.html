@@ -35,9 +35,8 @@
 						th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
 				</div>
 			</div>
-			<div class="ui buttons">
-				<div th:switch="${article.type}"
-					sec:authorize="hasRole('ROLE_EMPLOYEE')">
+			<div class="ui buttons" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+				<div th:switch="${article.type}">
 					<a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
 						th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">
 						<div class="ui red basic button">
@@ -63,8 +62,7 @@
 							<i class="eye icon"></i>Für Kunden sichtbar machen
 						</div></a>
 				</div>
-				<a th:href="@{/reorder/{id}(id=${article.id})}"
-					sec:authorize="hasRole('ROLE_EMPLOYEE')">
+				<a th:href="@{/reorder/{id}(id=${article.id})}">
 					<div class="ui green basic button">
 						<i class="chart bar icon"></i></i>Nachbestellen
 					</div>
