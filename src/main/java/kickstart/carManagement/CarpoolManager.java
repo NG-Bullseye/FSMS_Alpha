@@ -27,7 +27,7 @@ public class CarpoolManager {
 	/**
 	 * @param userAccountManager contains information about all useraccounts
 	 */
-	public CarpoolManager(CarCatalog carCatalog,UserAccountManager userAccountManager, BusinessTime businessTime ) {
+	CarpoolManager(CarCatalog carCatalog,UserAccountManager userAccountManager, BusinessTime businessTime ) {
 		this.carCatalog=carCatalog;
 		userAccountTruckMap =new HashMap<>();
 		this.businessTime=businessTime;

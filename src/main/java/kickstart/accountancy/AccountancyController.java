@@ -16,7 +16,6 @@
 package kickstart.accountancy;
 
 import java.time.Month;
-import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AccountancyController {
 
 	private AccountancyManager accountancyManager;
-	private UserAccount userAccount;
 
 	/**
 	 * @param accountancyManager Managerklasse welche die Logik für die Finanzüberischt beinhaltet
@@ -53,12 +51,10 @@ public class AccountancyController {
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/accountancy")
 	public String show(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm,Model model) {
-
 		model.addAttribute("time", accountancyManager.getTime());
 		model.addAttribute("yearFilterForm",yearFilterForm);
 		model.addAttribute("filteredYear",yearFilterForm.getYear());
 		model.addAttribute("filteredYearList",accountancyManager.getFilteredYearList(yearFilterForm));
-
 		model.addAttribute("dezValue", accountancyManager.fetchMonthlyAccountancyValue(Month.DECEMBER));
 		model.addAttribute("novValue", accountancyManager.fetchMonthlyAccountancyValue(Month.NOVEMBER));
 		model.addAttribute("oktValue", accountancyManager.fetchMonthlyAccountancyValue(Month.OCTOBER));
@@ -71,7 +67,6 @@ public class AccountancyController {
 		model.addAttribute("marValue", accountancyManager.fetchMonthlyAccountancyValue(Month.MARCH));
 		model.addAttribute("febValue", accountancyManager.fetchMonthlyAccountancyValue(Month.FEBRUARY));
 		model.addAttribute("janValue", accountancyManager.fetchMonthlyAccountancyValue(Month.JANUARY));
-
 		model.addAttribute("monthlyAccountancy",accountancyManager.fetchThisMonthAccountancy());
 		//model.addAttribute("monthlyOrders", accountancyManager.fetchMonthlyOrders());
 		accountancyManager.checkForPayDay();

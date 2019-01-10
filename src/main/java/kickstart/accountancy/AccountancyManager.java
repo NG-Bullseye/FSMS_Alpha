@@ -37,7 +37,7 @@ public class AccountancyManager {
 	 * @param businessTime
 	 */
 	@Autowired
-	public AccountancyManager(UserManagement userManager, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
+	AccountancyManager(UserManagement userManager, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy=accountancy;
 		this.userManager=userManager;
 		this.businessTime=businessTime;
@@ -90,7 +90,8 @@ public class AccountancyManager {
 		}
 
 	}
-//WIRD BALD RAUSGENOMMEN
+
+	@Deprecated
 	public void addEntry(MonetaryAmount amount){
 		try{
 			WebshopAccountancyEntry entry= new WebshopAccountancyEntry(amount,businessTime.getTime());
@@ -242,7 +243,7 @@ public class AccountancyManager {
 				}
 			}
 			lastMonth=thisMonth;
-			addEntry(Money.of(monthlySalary,"EUR"),"Monthly Paycheck");
+			addEntry(Money.of(-monthlySalary,"EUR"),"Bezahlung aller Mitarbeiter");
 		}
 	}
 }
