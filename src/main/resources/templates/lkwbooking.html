@@ -40,7 +40,7 @@
 
 <div class="eight wide column">
 
-<div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
+<div class="value" align="right"><h2><span th:text="${{cart.price.getNumber().doubleValueExact()}}">Gesamtpreis</span></h2></div>
 </div>
 </div>
 <div class="ui grid">
