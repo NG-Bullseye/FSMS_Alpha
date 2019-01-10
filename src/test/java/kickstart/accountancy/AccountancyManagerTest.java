@@ -1,9 +1,11 @@
 package kickstart.accountancy;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import javax.persistence.Transient;
 
+@Disabled
 public class AccountancyManagerTest {
 
 

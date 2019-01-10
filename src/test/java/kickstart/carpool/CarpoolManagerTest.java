@@ -1,9 +1,11 @@
 package kickstart.carpool;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.annotation.Transient;
 
+@Disabled
 public class CarpoolManagerTest {
 
 
