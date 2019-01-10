@@ -69,7 +69,7 @@ public abstract class Article extends Product{
 	 * 
 	 * @param name: The name of the article. Neither null nor an empty String(i.e. "")
 	 * @param description: The description of this artile. Neither null nor an empty String
-	 * @throws IllegalArgumentException: If name or description equal the empty string
+	 * @throws IllegalArgumentException If name or description equal the empty string
 	 */
 	public Article(@NotNull String name, @NotNull String description)
 		throws  IllegalArgumentException {
@@ -108,7 +108,7 @@ public abstract class Article extends Product{
 	/**
 	 * 
 	 * @param description: The new description for this article. 
-	 * @throws IllegalArgumentException: If description equals the empty string
+	 * @throws IllegalArgumentException If description equals the empty string
 	 */
 	public void setDescription(@NotNull String description)
 		throws  IllegalArgumentException {	

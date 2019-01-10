@@ -1,5 +1,6 @@
 package kickstart.carManagement;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,85 +12,70 @@ public class CarpoolController {
 
 	private CarpoolManager carpoolManager;
 	private TruckClassForm truckClassForm;
-	private CarManagmentWrapper carManagmentWrapper;
+	private CarCatalog carCatalog;
 
-	public CarpoolController(CarpoolManager carpoolManager, CarManagmentWrapper carManagmentWrapper) {
+	/**
+	 * @param carpoolManager contains Backendlogic
+	 * @param carCatalog contains persistent list of trucks
+	 * */
+	public CarpoolController(CarpoolManager carpoolManager, CarCatalog carCatalog) {
 		this.carpoolManager = carpoolManager;
-		this.carManagmentWrapper = carManagmentWrapper;
+		this.carCatalog=carCatalog;
 	}
 
+	/**
+	 * standard goto url for the carpool
+	 * @param returnForm contains information about the truck to return
+	 * @param model contains the information for the html
+	 */
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping("/carpool")
 	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
 		truckClassForm= new TruckClassForm();
 		model.addAttribute("newForm",truckClassForm);
-
-		model.addAttribute("freeTrucks",carManagmentWrapper.getFreeTrucks() );
-		model.addAttribute("takenTrucks",carManagmentWrapper.getTakenTrucks() );
-		model.addAttribute("freeTrucksNumber",carManagmentWrapper.getFreeTrucks().size() );
-		model.addAttribute("takenTrucksNumber",carManagmentWrapper.getTakenTrucks().size() );
+		model.addAttribute("freeTrucks",carCatalog.findByFree(true) );
+		model.addAttribute("takenTrucks",carCatalog.findByFree(false) );
+		model.addAttribute("freeTrucksNumber",carCatalog.findByFree(true).stream().count());
+		model.addAttribute("takenTrucksNumber",carCatalog.findByFree(false).stream().count() );
 		model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
-
 		return "carpool";
 	}
 
+	/**
+	 * adds a new truck to the pool
+	 * @param form contains information about the truck to add to the List of available trucks
+	 * @param model contains the information for the html
+	 */
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/addTruck")
-	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) { // Hier habe ich festgelegt, dass er die Form als Eingabe erwartet
-
+	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) {
 		try{
 			model.addAttribute("newForm",truckClassForm);
-			carpoolManager.addFreeTruck(form);   //hier wird die korrekte Form an deine Manager-Funktion übergeben
+			carpoolManager.addFreeTruck(form);
 		}catch (Exception r){
 			r.printStackTrace();
 			return "redirect:carpool";
 		}
-
-
 		return "redirect:carpool";
 	}
 
-	/*@RequestMapping("/addTruck")
-	public String addFreeTruckDummy(){
-		carpoolManager.addFreeTruck("Dummy Lkw ", Money.of(30,EURO), 20);
-		return "redirect:carpool";
-	}*/
-
+	/**
+	 * returns the truck to the once available
+	 * @param form contains the information about the truck to return
+	 */
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/returnTruck")
-	String returnTruck(@ModelAttribute("returnForm") ReturnForm form, Model model) {
-
+	String returnTruck(@ModelAttribute("returnForm") ReturnForm form) {
 		try{
-			carpoolManager.returnTruckToFreeTrucks(form); //auswahl treffen anhand von useraccount
+			carpoolManager.returnTruckToFreeTrucks(form);
 		}catch (Exception r){
 			return "redirect:carpool";
 		}
 		return "redirect:carpool";
 	}
 
-
-
-	@RequestMapping("/rentTruck1Dummy")
-	public String capacity1(Model model){
-		carpoolManager.rentTruck1Dummy();
-		return "redirect:carpool";
+	public CarpoolManager getManager(){
+		return carpoolManager;
 	}
-	@RequestMapping("/rentTruck2Dummy")
-	public String capacity2(Model model){
-		carpoolManager.rentTruck2Dummy();
-		return "redirect:carpool";
-	}
-
-
-	/*@RequestMapping("/addTruckToInventory")
-	public String addTruckToInventory(){
-		carpoolManager.addTruckToInventory();
-		return "redirect:pricing";
-	}*/
-
-	/*@RequestMapping("/returnTruck")
-	public String returnTruckToCatalog(){
-		carpoolManager.returnTruckToCatalog();
-		return "redirect:pricing";
-	}*/
-
-
 
 }

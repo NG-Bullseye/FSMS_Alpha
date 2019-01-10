@@ -71,19 +71,44 @@ public class CartOrderManager {
 
 	}
 
+	/**
+	 *
+	 * @return the destination of the order
+	 */
+
 	public String getDestination(){return destination;}
+
+	/**
+	 *
+	 * @return the total wight of the cart
+	 */
 
 	public Quantity getWight(){
 		return wight;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
+
 	public OrderManager<CustomerOrder> getOrderManager(){
 		return orderManager;
 	}
 
+	/**
+	 *
+	 * @return account of the user for whom it is ordered
+	 */
 	public UserAccount getAccount(){
 		return account;
 	}
+
+	/**
+	 *
+	 * @param destination
+	 * @return
+	 */
 
 	public String setDestination(String destination){
 		this.destination = destination;
@@ -92,7 +117,7 @@ public class CartOrderManager {
 
 	/**
 	 * Initialize a Cart
-	 * @return
+	 * @return initialized cart
 	 */
 
 	public Cart initializeCart() {
@@ -100,13 +125,16 @@ public class CartOrderManager {
 		return new Cart();
 	}
 
+
+
+	/**
+	 *
+	 * @return destination of the order
+	 */
 	public List<String> getDestinations() {
 		return destinations;
 	}
 
-	public void updateStatus(CustomerOrder order){
-
-	}
 
 	/**
 	 *
@@ -190,7 +218,7 @@ public class CartOrderManager {
 	 */
 
 	public Truck checkLKW(){
-		return carpoolManager.checkTruckavailable(wight);
+		return carpoolManager.checkTruckAvailable(wight);
 	}
 
 	/**
@@ -201,7 +229,7 @@ public class CartOrderManager {
 
 	public String addLKW(Cart cart){
 
-		Truck truck=carpoolManager.rentTruckByWight(wight,account);
+		Truck truck=carpoolManager.rentTruckByWeight(wight,account);
 		if(truck==null){
 			return "redirect:/";
 		}

@@ -7,7 +7,6 @@ import kickstart.carManagement.CarpoolManager;
 import kickstart.catalog.WebshopCatalog;
 import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
-import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderIdentifier;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
@@ -61,7 +60,8 @@ public class OrderController {
 			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
 		}
 		else {
-			model.addAttribute("nameoftheorderer", "Bitte einen Kunde auswählen");
+			model.addAttribute("nameoftheorderer", "Bitte einen Kunden auswählen");
+
 		}
 
 
@@ -75,15 +75,13 @@ public class OrderController {
 		}
 		if(cartordermanager.checkLKW() == null){
 			model.addAttribute("available", false);
-		}
-		else{
+		} else{
 			model.addAttribute("available", true);
 			model.addAttribute("lkwprice",cartordermanager.checkLKW().getPrice());
 		}
 		if(cartordermanager.getDestination().equals("Home")){
 			model.addAttribute("ishome", true);
-		}
-		else {
+		} else {
 			model.addAttribute("ishome", false);
 			model.addAttribute("finaldestination", cartordermanager.getDestination());
 		}
@@ -131,30 +129,6 @@ public class OrderController {
 	String newOrder(@ModelAttribute Cart cart){
 
 	return cartordermanager.newOrder(cart);
-	}
-
-	@RequestMapping("/showcustomerorders")
-	String showcostumerorder(@RequestParam(value = "theabsoluteorderer") long orderer,
-							 @RequestParam("username") String name,
-							 @RequestParam("usermail") String mail,
-							 @RequestParam("useraddress") String living,Model model){
-
-		UserAccount userAccount = userManagement.findUserById(orderer).getUserAccount();
-
-		model.addAttribute("name", name);
-		model.addAttribute("email",mail);
-		model.addAttribute("address", living);
-		model.addAttribute("onpoint", true);
-
-		cartordermanager.changeStatus();
-
-		model.addAttribute("ordersofthedudecomplete", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isversendet));
-		model.addAttribute("ordersofthedudeopen", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isOpen));
-		model.addAttribute("ordersofthedudepaid", cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isPaid));
-		model.addAttribute("ordersofthedudedeliverd",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isabholbereit));
-		model.addAttribute("orderscomplete",cartordermanager.getOrderManager().findBy(userAccount).filter(Order::isCompleted).filter(CustomerOrder::isabgeholt));
-
-		return "customeraccount";
 	}
 
 	@RequestMapping("/cancelthatorder")
