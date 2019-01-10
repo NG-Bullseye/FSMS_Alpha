@@ -99,7 +99,7 @@ public class CartOrderManager {
 
 		return new Cart();
 	}
-	
+
 	public List<String> getDestinations() {
 		return destinations;
 	}
@@ -123,14 +123,18 @@ public class CartOrderManager {
 			orderManager.payOrder(order);
 			orderManager.save(order);
 			Iterator<OrderLine> orderLineIterator = order.getOrderLines().iterator();
-			if(orderLineIterator.hasNext()) {
-				ProductIdentifier s = orderLineIterator.next().getProductIdentifier();
-				if(catalog.findById(s).isPresent()) {
-					Article a = catalog.findById(s).get();
-					a.increaseOrderedAmount(1);
-					catalog.save(a);
-				}
-				
+
+				while (orderLineIterator.hasNext()){
+					ProductIdentifier s = orderLineIterator.next().getProductIdentifier();
+
+
+
+					if (catalog.findById(s).isPresent()) {
+						Article a = catalog.findById(s).get();
+						a.increaseOrderedAmount(1);
+						catalog.save(a);
+					}
+
 			}
 
 
@@ -231,6 +235,7 @@ public class CartOrderManager {
 			order.setDestination(destination);
 			orderManager.save(order);
 
+			account = null;
 			destination = "Home";
 			wight = Quantity.of(0,Metric.KILOGRAM);
 			cart.clear();
@@ -258,9 +263,11 @@ public class CartOrderManager {
 
 				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
 					order.setStatus(Status.abholbereit);
+					orderManager.save(order);
 				}
 				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
 					order.setStatus(Status.abholbereit);
+					orderManager.save(order);
 				}
 			}
 		}
@@ -282,6 +289,11 @@ public class CartOrderManager {
 		}
 		
 	}
+
+	/**
+	 * get orders delivered sideinventories
+	 * @return map of orders delivered in the sideinventories
+	 */
 	
 	public Map<String, List<CustomerOrder>> getSideInventories() {
 		Map<String, List<CustomerOrder>> sideInventories = new HashMap<String, List<CustomerOrder>>();
