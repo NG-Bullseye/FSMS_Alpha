@@ -9,6 +9,8 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import javax.money.MonetaryAmount;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,8 +96,7 @@ public class CarpoolManager {
 	 * @param rentedBy the useraccount the truck will be rented on
 	 * @return the cheapest truck that is capable of carrying the weight
 	 */
-	public Truck rentTruckByWeight(Quantity weight, UserAccount rentedBy){
-		Assert.notNull(rentedBy, "useraccount must not be null!");
+	public Truck rentTruckByWeight(@NotNull Quantity weight,@NotNull @NotEmpty UserAccount rentedBy){
 		if (weight.isZeroOrNegative()) {
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}

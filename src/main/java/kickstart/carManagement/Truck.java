@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 
 import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Quantity;
+import org.salespointframework.useraccount.UserAccount;
 
 @Entity
 public class Truck extends Product {
@@ -20,6 +21,7 @@ public class Truck extends Product {
 	private Quantity capacity;
 	private boolean free;
 	private LocalDateTime rentDate;
+	private UserAccount rentedBy;
 
 	/***/
 	public Truck() {
@@ -63,6 +65,15 @@ public class Truck extends Product {
 
 	public boolean isFree() {
 		return free;
+	}
+
+	public boolean setRentedBy(UserAccount rentedBy){
+		if(isFree()){
+			this.rentedBy=rentedBy;
+			return true;
+		}
+		else return false;
+
 	}
 
 	public void setFree(boolean free) {
