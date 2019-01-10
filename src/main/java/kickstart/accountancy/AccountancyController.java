@@ -34,7 +34,7 @@ import java.time.Month;
 @Controller
 public class AccountancyController {
 
-	private AccountancyManager accountancyManager;
+	private final AccountancyManager accountancyManager;
 
 	/**
 	 * @param accountancyManager Managerklasse welche die Logik für die Finanzüberischt beinhaltet
@@ -45,9 +45,8 @@ public class AccountancyController {
 	}
 
 	/**
-	 * @param yearFilterForm
-	 * @param model
-	 * @return
+	 * @param yearFilterForm information about the year to filter
+	 * @param model information for the html
 	 */
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/accountancy")

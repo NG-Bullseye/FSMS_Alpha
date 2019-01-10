@@ -14,12 +14,10 @@ import java.time.LocalTime;
 public class AccountancyInitializer implements DataInitializer {
 
 	private static final int ENTRY_FIRSTPAYMENT = -10000;
-	private AccountancyController accountancyController;
-
+	private final AccountancyController accountancyController;
 
 	/**
 	 * @param accountancyController contains all information needed for the initialization
-	 * @return
 	 */
 	public AccountancyInitializer(AccountancyController accountancyController) {
 		this.accountancyController = accountancyController;

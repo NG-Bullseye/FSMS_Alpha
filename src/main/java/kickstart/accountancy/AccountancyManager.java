@@ -22,19 +22,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountancyManager {
-	private Accountancy accountancy;
-	private BusinessTime businessTime;
-	private UserManagement userManager;
+	private final Accountancy accountancy;
+	private final BusinessTime businessTime;
+	private final UserManagement userManager;
 	private Month lastMonth;
 
 	/**
-	 * @param userManager
-	 * @param userAccountManager
-	 * @param accountancy
+	 * @param userManager contains information about the users
+	 * @param accountancy contains information about the accountancy entries
 	 * @param businessTime
 	 */
 	@Autowired
-	AccountancyManager(UserManagement userManager, UserAccountManager userAccountManager, Accountancy accountancy, BusinessTime businessTime) {
+	AccountancyManager(UserManagement userManager, Accountancy accountancy, BusinessTime businessTime) {
 		this.accountancy = accountancy;
 		this.userManager = userManager;
 		this.businessTime = businessTime;
@@ -59,25 +58,8 @@ public class AccountancyManager {
 	//<editor-fold desc="Schnittstelle für zusatzkosten">
 
 	/**
-	 * @param order   contains the order information
-	 * @param message message that will be displayed next to the value and date of the order
-	 * @return true if action was successful
-	 */
-	public boolean addEntry(Order order, String message) {
-		try {
-			WebshopAccountancyEntry entry = new WebshopAccountancyEntry(order.getTotalPrice(), order.getDateCreated(), message);
-			accountancy.add(entry);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	/**
 	 * @param amount  contains the order information
 	 * @param message message that will be displayed next to the value and date of the order
-	 * @return true if action was successful
 	 */
 	public void addEntry(MonetaryAmount amount, String message) {
 		try {
@@ -119,7 +101,7 @@ public class AccountancyManager {
 
 	/**
 	 * @param sinceMonth the month from where on you want to know the value
-	 * @return
+	 * @return the value that the company spend and received at the month given
 	 */
 	int fetchMonthlyAccountancyValue(Month sinceMonth) {
 		int value = 0;
@@ -150,7 +132,7 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param sinceMonth
+	 * @param sinceMonth since which month
 	 * @return returns an interval from parameter to now
 	 */
 	private Interval fetchIntervalToNow(Month sinceMonth) {
@@ -180,8 +162,8 @@ public class AccountancyManager {
 	}
 
 	/**
-	 * @param sinceYear
-	 * @return
+	 * @param sinceYear since which year
+	 * @return the interval from sinceYear to now
 	 */
 	private Interval fetchOneYearSinceInterval(int sinceYear) {
 		LocalDateTime now = businessTime.getTime();

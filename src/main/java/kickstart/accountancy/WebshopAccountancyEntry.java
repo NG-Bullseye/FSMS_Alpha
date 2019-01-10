@@ -13,10 +13,9 @@ public class WebshopAccountancyEntry extends AccountancyEntry {
 	private String message;
 
 	/**
-	 * @param value
-	 * @param creationTime
+	 * @param value the amount of money this that should be added or subtracted
+	 * @param creationTime the moment this entry was created
 	 * @param message      purpose of transaction
-	 * @return
 	 */
 	WebshopAccountancyEntry(MonetaryAmount value, LocalDateTime creationTime, String message) {
 		super(value, message);
