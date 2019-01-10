@@ -4,6 +4,7 @@ import org.salespointframework.core.DataInitializer;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccountManager;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,13 +19,15 @@ public class CarpoolInitializer implements DataInitializer {
 	private final int PRICE_LARGE =300;
 	private CarpoolController carpoolController;
 	private UserAccountManager userManagement;
+	private CarCatalog carCatalog;
 
 	/**
 	 * @param carpoolController contains all information needed for the initialization
 	 * @return
 	 */
 
-	public CarpoolInitializer(CarpoolController carpoolController,UserAccountManager userManagement) {
+	public CarpoolInitializer(CarCatalog carCatalog,CarpoolController carpoolController,UserAccountManager userManagement) {
+		this.carCatalog=carCatalog;
 		this.carpoolController=carpoolController;
 		this.userManagement=userManagement;
 	}
@@ -34,6 +37,12 @@ public class CarpoolInitializer implements DataInitializer {
 	 * */
 	@Override
 	public void initialize() {
+		Iterable<Truck> allTrucks= carCatalog.findAll();
+		for (Truck t :
+				allTrucks) {
+			if(t.getName().equals("Kleiner Lkw"))
+			return;
+		}
 		TruckClassForm truckForm;
 		truckForm=new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_SMALL);

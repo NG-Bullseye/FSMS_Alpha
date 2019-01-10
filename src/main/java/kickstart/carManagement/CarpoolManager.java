@@ -9,6 +9,8 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import javax.money.MonetaryAmount;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +29,7 @@ public class CarpoolManager {
 	/**
 	 * @param userAccountManager contains information about all useraccounts
 	 */
-	public CarpoolManager(CarCatalog carCatalog,UserAccountManager userAccountManager, BusinessTime businessTime ) {
+	CarpoolManager(CarCatalog carCatalog,UserAccountManager userAccountManager, BusinessTime businessTime ) {
 		this.carCatalog=carCatalog;
 		userAccountTruckMap =new HashMap<>();
 		this.businessTime=businessTime;
@@ -94,8 +96,7 @@ public class CarpoolManager {
 	 * @param rentedBy the useraccount the truck will be rented on
 	 * @return the cheapest truck that is capable of carrying the weight
 	 */
-	public Truck rentTruckByWeight(Quantity weight, UserAccount rentedBy){
-		Assert.notNull(rentedBy, "useraccount must not be null!");
+	public Truck rentTruckByWeight(@NotNull Quantity weight,@NotNull @NotEmpty UserAccount rentedBy){
 		if (weight.isZeroOrNegative()) {
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
@@ -126,32 +127,54 @@ public class CarpoolManager {
 			return null;
 		}
 		try {
-			truckToRent.setRentDate(businessTime.getTime());
-
-			//if user was a truck already
-			if (userAccountTruckMap.containsKey(rentedBy)) {
-				userAccountTruckMap.get(rentedBy).add(truckToRent);
+			if(truckToRent.isFree()) {
+				truckToRent.setRentDate(businessTime.getTime());
+				truckToRent.setRentedBy(rentedBy);
+				truckToRent.setFree(false);
 			}
-			//if user has no truck at the moment
-			else {
-				List<Truck> userTruckList = new ArrayList<>();
-				userTruckList.add(truckToRent);
-				userAccountTruckMap.put(rentedBy, userTruckList);
-			}
-			truckToRent.setFree(false);
+			else throw new Exception();
 		} catch (Exception e) {
-			System.out.println("Somthing went wrong in CarpoolManager in rent Truck method");
+			System.out.println("Somthing went wrong in the managment of free an taken trucks.");
 			truckToRent = null;
 		}
 		return truckToRent;
 	}
 
+
+	/**
+	 * returns the truck that matches the form to the available trucks
+	 * @param username contains the information about the truck that is suppose to be returned
+	 * @return true if the action has been successfully completed
+	 */
+	public void returnTruckByUsername(String username){
+		try{
+			UserAccount rentedBy;
+
+			if (userAccountManager.findByUsername(username).isPresent()) {
+				rentedBy = userAccountManager.findByUsername(username).get();
+			} else {
+				System.out.println("MyError: User not present ");
+				return;
+			}
+			List<Truck> truckList = userAccountTruckMap.get(rentedBy);
+			userAccountTruckMap.remove(rentedBy);
+			for (Truck t : truckList
+			) {
+				t.setFree(true);
+				t.setRentedBy(null);
+				carCatalog.save(t);
+			}
+		}catch (Exception e){
+			System.out.println("MyError: Truck can not be returned: ");
+			e.getCause();
+		}
+	}
 	/**
 	 * returns the truck that matches the form to the available trucks
 	 * @param form contains the information about the truck that is suppose to be returned
 	 * @return true if the action has been successfully completed
 	 */
-	boolean returnTruckToFreeTrucks(ReturnForm form){
+	void returnTruckToFreeTrucks(@NotEmpty ReturnForm form){
 		try{
 			UserAccount rentedBy;
 
@@ -159,34 +182,21 @@ public class CarpoolManager {
 				rentedBy = userAccountManager.findByUsername(form.getName()).get();
 			} else {
 				System.out.println("MyError: User not present ");
-				return false;
+				return;
 			}
 			List<Truck> truckList = userAccountTruckMap.get(rentedBy);
 			userAccountTruckMap.remove(rentedBy);
 			for (Truck t : truckList
 			) {
 				t.setFree(true);
+				t.setRentedBy(null);
 				carCatalog.save(t);
 			}
 		}catch (Exception e){
 			System.out.println("MyError: Truck can not be returned: ");
 			e.getCause();
-			return false;
 		}
-		return true;
 	}
 
 
-	Map<Truck, UserAccount> getTruckUserAccountMap() {
-		Map<Truck, UserAccount> myNewHashMap = new HashMap<>();
-		for (Map.Entry<UserAccount, List<Truck>> entry : userAccountTruckMap.entrySet()) {
-			for (Truck t : entry.getValue()) {
-				if (!myNewHashMap.containsKey(t)) {
-					myNewHashMap.put(t, entry.getKey());
-				} else
-					throw new IllegalArgumentException("The same truck cant be rented twice. logic programing error in carpoolmanager");
-			}
-		}
-		return  myNewHashMap;
-	}
 }

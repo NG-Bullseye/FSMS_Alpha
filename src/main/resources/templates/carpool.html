@@ -169,7 +169,7 @@
                 <tbody>
                 <tr>
                 <tr th:each="entry:${takenTrucks}">
-                    <td th:text="${truckUserAccountMapping.get(entry).getUsername()}"></td>
+                    <td th:text="${entry.getRentedBy().getUsername()}"></td>
                     <td th:text="${entry.getName()}"></td>
                     <td th:text="${entry.getCapacity().toString()}"></td>
                     <td th:text="${#temporals.format(entry.getDateOfRent(), 'dd.MM.yyyy HH:mm')}"></td>

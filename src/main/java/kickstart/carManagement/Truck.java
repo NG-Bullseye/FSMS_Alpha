@@ -1,16 +1,12 @@
 package kickstart.carManagement;
 
-import java.time.LocalDateTime;
-
-import javax.money.MonetaryAmount;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-
 import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Quantity;
+import org.salespointframework.useraccount.UserAccount;
+
+import javax.money.MonetaryAmount;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Truck extends Product {
@@ -20,6 +16,8 @@ public class Truck extends Product {
 	private Quantity capacity;
 	private boolean free;
 	private LocalDateTime rentDate;
+	@OneToOne
+	private UserAccount rentedBy;
 
 	/***/
 	public Truck() {
@@ -38,13 +36,7 @@ public class Truck extends Product {
 		this.capacity=capacity;
 		this.free=true;
 		this.rentDate = dayOfRent;
-	}
-
-	/**
-	 * @return the capacity the truck can carry at max
-	 * */
-	public Quantity getCapacity() {
-		return capacity;
+		this.rentedBy=null;
 	}
 
 	/**
@@ -57,15 +49,31 @@ public class Truck extends Product {
 	/**
 	 * @param rentDate the local date time the truck has been rented
 	 */
-	public void setRentDate(LocalDateTime rentDate) {
+	void setRentDate(LocalDateTime rentDate) {
 		this.rentDate = rentDate;
 	}
 
-	public boolean isFree() {
-		return free;
+	void setRentedBy(UserAccount rentedBy){
+			this.rentedBy=rentedBy;
 	}
 
 	public void setFree(boolean free) {
 		this.free = free;
+	}
+
+	public Quantity getCapacity() {
+		return this.capacity;
+	}
+
+	public boolean isFree() {
+		return this.free;
+	}
+
+	public LocalDateTime getRentDate() {
+		return this.rentDate;
+	}
+
+	public UserAccount getRentedBy() {
+		return this.rentedBy;
 	}
 }
