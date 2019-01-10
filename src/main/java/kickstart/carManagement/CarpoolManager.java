@@ -140,6 +140,35 @@ public class CarpoolManager {
 		return truckToRent;
 	}
 
+
+	/**
+	 * returns the truck that matches the form to the available trucks
+	 * @param username contains the information about the truck that is suppose to be returned
+	 * @return true if the action has been successfully completed
+	 */
+	public void returnTruckByUsername(String username){
+		try{
+			UserAccount rentedBy;
+
+			if (userAccountManager.findByUsername(username).isPresent()) {
+				rentedBy = userAccountManager.findByUsername(username).get();
+			} else {
+				System.out.println("MyError: User not present ");
+				return;
+			}
+			List<Truck> truckList = userAccountTruckMap.get(rentedBy);
+			userAccountTruckMap.remove(rentedBy);
+			for (Truck t : truckList
+			) {
+				t.setFree(true);
+				t.setRentedBy(null);
+				carCatalog.save(t);
+			}
+		}catch (Exception e){
+			System.out.println("MyError: Truck can not be returned: ");
+			e.getCause();
+		}
+	}
 	/**
 	 * returns the truck that matches the form to the available trucks
 	 * @param form contains the information about the truck that is suppose to be returned
