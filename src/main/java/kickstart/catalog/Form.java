@@ -11,13 +11,13 @@ import javax.validation.constraints.Size;
 public class Form {
 	@Size(max = 255,message = "Der Name darf maximal 255 Zeichen lang sein.")
 	private String name;
-	@Size(min = 2,max = 255,message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
+	@Size(max = 255,message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
 	private String description;
 	private HashSet<String> selectedColours;
-	@Min(0)
+	@Min(value = 0)
 	@Max(10000)
 	private double price;
-	@Min(0)
+	@Min(value = 0)
 	@Max(1500)
 	private double weight;
 	private HashSet<String> selectedCategories;

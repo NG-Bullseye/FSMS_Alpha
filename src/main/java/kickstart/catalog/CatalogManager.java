@@ -121,14 +121,20 @@ public class CatalogManager {
 		this.createAvailableForNewComposite();
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			afterEdit.setName(article.getName());
-			afterEdit.setDescription(article.getDescription());
-			afterEdit.setPrice(Money.of(article.getPrice(), EURO));
-			afterEdit.setWeight(article.getWeight());
+			if(!article.getName().isEmpty()){
+			afterEdit.setName(article.getName());}
+			if(!article.getDescription().isEmpty()){
+			afterEdit.setDescription(article.getDescription());}
+			if(article.getPrice() != 0.0){
+			afterEdit.setPrice(Money.of(article.getPrice(), EURO));}
+			if(article.getWeight() != 0.0){
+			afterEdit.setWeight(article.getWeight());}
+			if(!article.getSelectedCategories().isEmpty()){
 			afterEdit.getCategories().forEach(afterEdit::removeCategory);
-			article.getSelectedCategories().forEach(afterEdit::addCategory);
+			article.getSelectedCategories().forEach(afterEdit::addCategory);}
+			if(!article.getSelectedColours().isEmpty()){
 			afterEdit.removeColours();
-			article.getSelectedColours().forEach(afterEdit::setColour);
+			article.getSelectedColours().forEach(afterEdit::setColour);}
 
 			catalog.save(afterEdit);
 			this.editAffectedArticles(afterEdit);
@@ -154,9 +160,9 @@ public class CatalogManager {
 			throws IllegalArgumentException {
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			if(form.getName().isEmpty()){
+			if(!form.getName().isEmpty()){
 			afterEdit.setName(form.getName());}
-			if(form.getDescription().isEmpty()){
+			if(!form.getDescription().isEmpty()){
 			afterEdit.setDescription(form.getDescription());}
 
 			LinkedList<Article> partsBefore = new LinkedList<>();
