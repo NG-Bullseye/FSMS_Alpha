@@ -65,15 +65,15 @@ Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZ
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 </tr>
 <tr>
 <td><b>Wartbarkeit</b></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 </tr>
 <tr>
@@ -95,8 +95,8 @@ Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZ
 <tr>
 <td><b>Sicherheit</b></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 </tr>
