@@ -22,8 +22,7 @@ public class Form {
 	private double weight;
 	private HashSet<String> selectedCategories;
 
-
-	public Form(){ }
+	
 
 	public void setDescription(String description) {
 		this.description = description;

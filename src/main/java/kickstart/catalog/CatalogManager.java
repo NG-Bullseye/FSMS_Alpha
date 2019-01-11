@@ -45,11 +45,11 @@ public class CatalogManager {
 	public List<Article> getInvisibleCatalog() {
 		LinkedList<Article> invisible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
-			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()) {
-				if (hiddenArticles.contains(article)
-						&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
-					invisible.add(article);
-				}
+			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent() && hiddenArticles.contains(article)
+					&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
+
+				invisible.add(article);
+
 			}
 		});
 		invisible.sort(Comparator.comparing(Article::getName));
@@ -64,11 +64,11 @@ public class CatalogManager {
 	public Iterable<Article> getVisibleCatalog(){
 		LinkedList<Article> visible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
-			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()) {
-				if (!hiddenArticles.contains(article)
-						&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
-					visible.add(article);
-				}
+			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent() && !hiddenArticles.contains(article)
+					&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
+
+				visible.add(article);
+
 			}
 		});
 		visible.sort(Comparator.comparing(Article::getName));
@@ -438,7 +438,6 @@ public class CatalogManager {
 
 		HashSet<Article> allComposites = new HashSet<>();
 		catalog.findComposite().forEach(allComposites::add);
-		try {
 			for (Article composite : allComposites) {
 				Map<ProductIdentifier, Integer> parts = composite.getPartIds();
 				parts.forEach((articleId, count) -> {
@@ -450,9 +449,6 @@ public class CatalogManager {
 					}
 				});
 			}
-		} catch (NullPointerException n) {
-			System.out.println("Die Liste ist leer.");
-		}
 
 		this.availableForNewComposite = articlesWithoutParents;
 	}
