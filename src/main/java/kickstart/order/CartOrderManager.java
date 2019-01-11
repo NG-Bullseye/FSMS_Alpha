@@ -95,10 +95,7 @@ public class CartOrderManager {
 	public List<String> getDestinations() {
 		return destinations;
 	}
-
-	public void updateStatus(CustomerOrder order){
-
-	}
+	
 
 	/**
 	 *
@@ -253,21 +250,21 @@ public class CartOrderManager {
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 
-			if(order.isCompleted() && order.isversendet()){
 
-				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
+
+				if(order.isCompleted() && order.isversendet() && interval.getStart().getYear()-interval.getEnd().getYear()<0){
 					order.setStatus(Status.abholbereit);
 					if(!order.getUserAccount().getEmail().isEmpty()) {
 						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
 					}
 				}
-				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
+				if(order.isCompleted() && order.isversendet() && interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
 					order.setStatus(Status.abholbereit);
 					if(!order.getUserAccount().getEmail().isEmpty()) {
 						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
 					}
 				}
-			}
+
 		}
 
 

@@ -148,7 +148,7 @@ public class ArticleInitializer implements DataInitializer {
 		l4.add(b7);
 		l4.add(b8);
 		l4.add(b9);
-		Composite com4 = new Composite("Bettzeug", "ein Set bestehend aus Bettdeckke, Kissen und jeweiligen Bezügen",
+		Composite com4 = new Composite("Bettzeug", "ein Set bestehend aus Bettdecke, Kissen und jeweiligen Bezügen",
 				l4);
 		catalog.save(com4);
 

@@ -143,11 +143,11 @@ public class CatalogController {
 	@GetMapping("catalog/part/new")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String showNew(Model model){
-		model.addAttribute("form",new Form());
+		model.addAttribute("form",new PartOrderForm());
 		return"newPart";
 	}
 	@PostMapping("catalog/part/new")
-	public String editNew(@Valid @ModelAttribute("form") Form form,BindingResult bindingResult, Model model){
+	public String editNew(@Valid @ModelAttribute("form") PartOrderForm form,BindingResult bindingResult, Model model){
 		if(bindingResult.hasErrors()){
 			model.addAttribute("form",form);
 			return "newPart";
@@ -160,13 +160,13 @@ public class CatalogController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String newComposite(Model model){
 
-		CompositeForm composite = new CompositeForm();
+		CompositeOrderForm composite = new CompositeOrderForm();
 		model.addAttribute("compositeForm",composite);
 		model.addAttribute("catalog", manager.getAvailableForNewComposite());
 		return "newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeForm form, BindingResult bindingResult, Model model,@RequestParam Map<String,String> partsMapping){
+	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form, BindingResult bindingResult, Model model,@RequestParam Map<String,String> partsMapping){
 
 		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
 			return "redirect:/catalog/composite/new";

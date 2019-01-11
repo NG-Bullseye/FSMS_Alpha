@@ -86,11 +86,12 @@ Die Lieferung erfolgt entweder in das Nebenlager(LAGER) oder direkt an den Kunde
 
 Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
 
-Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
-
 Bezahlung ist nur andeutungsweise zu implementieren. Es muss nur eine Auswahl der Zahlungsoptionen geben.
 
 Der Kunde kann sich Teile(TEILE) einzeln bestellen, jedoch auch vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
+
+Kannkriterien:
+Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
 
 Variabilität ist über die Farbe möglich.
 

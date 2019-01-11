@@ -32,8 +32,6 @@ Die Lieferung erfolgt entweder in das Nebenlager(LAGER) oder direkt an den Kunde
 
 Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
 
-Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
-
 Bezahlung ist nur andeutungsweise zu implementieren. Es muss nur eine Auswahl der Zahlungsoptionen geben.
 
 Der Kunde kann sich Teile(TEILE) einzeln bestellen, jedoch auch vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
@@ -50,6 +48,9 @@ Die Software soll Stornieren bis zu einen Tag vor Versand berücksichtigen.
 
 Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
 
+Kann kriterien:
+Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
+
 <table>
 
 <tbody><tr>
@@ -65,15 +66,15 @@ Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZ
 <td></td>
 <td></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 </tr>
 <tr>
 <td><b>Wartbarkeit</b></td>
 <td></td>
 <td></td>
-<td></td>
 <td>X</td>
+<td></td>
 <td></td>
 </tr>
 <tr>
@@ -95,8 +96,8 @@ Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZ
 <tr>
 <td><b>Sicherheit</b></td>
 <td></td>
-<td>X</td>
 <td></td>
+<td>X</td>
 <td></td>
 <td></td>
 </tr>
@@ -154,7 +155,11 @@ entsprechenden Aufgabenbereiche des Programms bereitstellen:
 | Inventory Management | Dies ist die lagerverwaltung. Artikel können hier beispielsweise Nachbestellt werden.                                                                            |
 | Catalog Management   | Die Katalogverwaltung. Der Kunde kann auf unsere Webseite den Katalog einsehen und ihn filtern. Außerdem ist es möglich, Artikel vor dem Kunden zu "verstecken". |
 
-Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben.
+Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben. Somit ist die Trennung des Controllers vom Model gewährleistet.
+
+Ein sehr entscheidener Schwerpunkt des Projekts war die Implementierung des Composite-Musters für die Artikel. Da Datenbank es nur schwer zulassen eine baumstrukturierte Datenstruktur zu realisieren, haben wir unser Composite dementsprechend angepasst. Eine ausführliche Erklärung dazu kann man unter dem Punkt Entwurfsmuster nachlesen.
+
+
 
 
 
@@ -176,9 +181,17 @@ Das gesamte Projekt basiert auf der Objekt-orientierten Programmiersprache Java,
  
 Das Springframework, welches einen sehr großen Teil dieser Software ausmacht, ermöglicht in Verbindung mit Thymeleaf eine dynamische Verwendbarkeit und Erweiterbarkeit der zu betreibenden Website.
  
-Als spezieller Teil von Spring wird in dieser Software Spring-Boot verwendet.
+ Spring-Boot wird als spezieller Teil von Spring in dieser Software verwendet.
 
 Des weiteren ist Salespoint ein sehr wichtiges Framework für diese Software, da es bereits sehr viele Funktionalitäten und Verwaltungsstrukturen für den Betrieb einer Verkaufswebsite bietet.
+
+Um die Übersichtlichkeit und Einfachheit des Codes zu erhöhen, wurde die Project-Lombok Library verwendet.
+
+Für die Webansicht wurde das CSS-Framework Semantic-UI benutzt.
+
+
+
+
 
 ## Verwendete Muster
 Entwurfsmuster

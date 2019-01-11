@@ -5,10 +5,8 @@ import kickstart.user.UserManagement;
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
-import org.salespointframework.order.Order;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.time.Interval;
-import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -87,7 +85,7 @@ public class AccountancyManager {
 	 * @param creationTime for instantiation purpose only. use with care
 	 * @param message      message that will be displayed next to the value and date of the order
 	 */
-	void addEntry(MonetaryAmount amount, LocalDateTime creationTime, String message) {
+	public void addEntry(MonetaryAmount amount, LocalDateTime creationTime, String message) {
 		try {
 			WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, creationTime, message);
 			accountancy.add(entry);

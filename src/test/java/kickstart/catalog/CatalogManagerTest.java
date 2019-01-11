@@ -365,7 +365,14 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void newPart() {
-		manager.newPart(form1);
+		PartOrderForm partOrderForm = new PartOrderForm();
+		partOrderForm.setName(form1.getName());
+		partOrderForm.setDescription(form1.getDescription());
+		partOrderForm.setPrice(form1.getPrice());
+		partOrderForm.setWeight(form1.getWeight());
+		partOrderForm.setSelectedCategories(form1.getSelectedCategories());
+		partOrderForm.setSelectedColours(form1.getSelectedColours());
+		manager.newPart(partOrderForm);
 		assertFalse(catalog.findByName(form1.getName()).isEmpty(),"Der Artikel wurde nicht dem Katalog hinzugefügt.");
 
 		LinkedList<Article> test = new LinkedList<>();
@@ -378,13 +385,16 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void newComposite() {
+		CompositeOrderForm compositeOrderForm = new CompositeOrderForm();
+		compositeOrderForm.setName(form2.getName());
+		compositeOrderForm.setDescription(form2.getDescription());
 		HashSet<Article> before = new HashSet<>();
 		manager.getVisibleCatalog().forEach(before::add);
 		manager.getInvisibleCatalog().forEach(before::add);
 
 		HashMap<String, String> input = new HashMap<>();
 		input.put("article_"+Objects.requireNonNull(tester2.getId()).getIdentifier(),"2");
-		manager.newComposite(form2,input);
+		manager.newComposite(compositeOrderForm,input);
 
 		LinkedList<Article> l2 = new LinkedList<>();
 		l2.add(tester2);

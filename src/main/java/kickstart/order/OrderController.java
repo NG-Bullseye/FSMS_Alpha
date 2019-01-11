@@ -60,8 +60,7 @@ public class OrderController {
 		if(cartordermanager.getAccount() != null){
 			UserAccount accountname = cartordermanager.getAccount();
 			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
-		}
-		else {
+		} else {
 			model.addAttribute("nameoftheorderer", "Bitte einen Kunde ausählen");
 		}
 
@@ -76,15 +75,13 @@ public class OrderController {
 		}
 		if(cartordermanager.checkLKW() == null){
 			model.addAttribute("available", false);
-		}
-		else{
+		} else{
 			model.addAttribute("available", true);
 			model.addAttribute("lkwprice",cartordermanager.checkLKW().getPrice());
 		}
 		if(cartordermanager.getDestination().equals("Home")){
 			model.addAttribute("ishome", true);
-		}
-		else {
+		} else {
 			model.addAttribute("ishome", false);
 			model.addAttribute("finaldestination", cartordermanager.getDestination());
 		}

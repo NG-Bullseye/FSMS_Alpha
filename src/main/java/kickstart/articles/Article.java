@@ -67,8 +67,8 @@ public abstract class Article extends Product{
   
 	/**
 	 * 
-	 * @param name: The name of the article. Neither null nor an empty String(i.e. "")
-	 * @param description: The description of this artile. Neither null nor an empty String
+	 * @param name: The name of the article. 
+	 * @param description: The description of this artile.
 	 * @throws IllegalArgumentException If name or description equal the empty string
 	 */
 	public Article(@NotNull String name, @NotNull String description)
@@ -170,6 +170,10 @@ public abstract class Article extends Product{
 	
 	public abstract void removeColours();
 
+	/**
+	 * 
+	 * @return Returns a map that contains the identifiers of the parts as a key and their amount as a value
+	 */
 	public abstract Map<ProductIdentifier, Integer> getPartIds();
 
 	/**

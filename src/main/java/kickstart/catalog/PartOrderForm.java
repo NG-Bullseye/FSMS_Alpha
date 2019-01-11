@@ -1,28 +1,31 @@
 package kickstart.catalog;
 
-import java.util.HashSet;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 
-public class Form {
-	@Size(max = 255,message = "Der Name darf maximal 255 Zeichen lang sein.")
+public class PartOrderForm {
+	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")
+	@Size(min = 2,max = 255,message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
 	private String name;
-	@Size(max = 255,message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
+	@NotEmpty(message = "Bitte geben Sie eine Beschreibung für das Produkt ein.")
+	@Size(min = 2,max = 255,message = "Die Beschreibung muss zwischen 2 und 255 Zeichen lang sein.")
 	private String description;
+	@NotEmpty(message = "Bitte wählen Sie mindestens eine Farbe aus")
 	private HashSet<String> selectedColours;
-	@Min(value = 0)
+	@NotNull(message = "Bitte geben Sie einen Preis für das Produkt ein.")
+	@Min(1)
 	@Max(10000)
 	private double price;
-	@Min(value = 0)
+	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")
+	@Min(0)
 	@Max(1500)
 	private double weight;
+	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
-
-
 
 	public void setDescription(String description) {
 		this.description = description;

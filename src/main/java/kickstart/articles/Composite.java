@@ -70,8 +70,8 @@ public class Composite extends Article {
 	 * Standard constructor for Composite. See {@link Article} for more information
 	 * as it's the base class
 	 * 
-	 * @param name
-	 * @param description
+	 * @param name The name of the article
+	 * @param description the description of the article
 	 * @param parts       A list of Article that this composite consists of.
 	 * @throws IllegalArgumentException If the size of parts is zero.
 	 */
@@ -162,8 +162,8 @@ public class Composite extends Article {
 
 	/**
 	 * @param parts The list of all parts obtained from the catalog, since they
-	 *              aren't saved in the article. Use the method getPartIds to get
-	 *              the information which articles to get from the catalog
+	 *  aren't saved in the article. Use the method getPartIds to get
+	 *  the information which articles to get from the catalog
 	 * @return Returns true if the attributes got updated. Returns false if a part
 	 *         needs to get updated before
 	 */
@@ -207,7 +207,7 @@ public class Composite extends Article {
 	/**
 	 * 
 	 * @return Returns the weight of this composite. The weight is received by
-	 *         adding the weights of the parts.
+	 *   adding the weights of the parts.
 	 */
 	public Quantity getWeight() {
 		return weight;
@@ -216,7 +216,7 @@ public class Composite extends Article {
 	/**
 	 * 
 	 * @return Returns the price of this composite. The price is received by adding
-	 *         the prices of the parts.
+	 *  the prices of the parts.
 	 */
 	public MonetaryAmount getPrice() {
 		return price;
@@ -224,7 +224,7 @@ public class Composite extends Article {
 
 	/**
 	 * @return Returns the colours as a Set of String. This ensures that no colour
-	 *         appears twice or more.
+	 *  appears twice or more.
 	 */
 	public Set<String> getColour() {
 		return colours;

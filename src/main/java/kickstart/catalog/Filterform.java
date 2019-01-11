@@ -23,8 +23,6 @@ public class Filterform {
 	private ArrayList<String> selectedCategories;
 
 
-	public Filterform(){}
-
 	public void setSelectedColours(ArrayList<String> selectedColours) {
 		this.selectedColours = selectedColours;
 	}
