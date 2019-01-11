@@ -154,8 +154,11 @@ public class CatalogManager {
 			throws IllegalArgumentException {
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			afterEdit.setName(form.getName());
-			afterEdit.setDescription(form.getDescription());
+			if(form.getName().isEmpty()){
+			afterEdit.setName(form.getName());}
+			if(form.getDescription().isEmpty()){
+			afterEdit.setDescription(form.getDescription());}
+
 			LinkedList<Article> partsBefore = new LinkedList<>();
 			afterEdit.getPartIds().forEach((article, count) -> {
 				int i = count;
@@ -322,7 +325,7 @@ public class CatalogManager {
 	 * @param form A Form containing all information about the new Part, such as
 	 *             name, description, weight, price, colours, categories.
 	 */
-	public void newPart(Form form){
+	public void newPart(PartOrderForm form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getPrice(),form.getWeight(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
@@ -336,7 +339,7 @@ public class CatalogManager {
 	 * @param partsCount The user's input which articles and how many of them are
 	 *                   included in the composite.
 	 */
-	public void newComposite(CompositeForm form, Map<String, String> partsCount) {
+	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
 		Composite newArticle = new Composite(form.getName(), form.getDescription(),
 				this.compositeMapFiltering(partsCount));
