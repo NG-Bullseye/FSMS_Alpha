@@ -66,6 +66,12 @@ public class CarpoolManager {
 	 * @return the cheapest truck that is capable of carrying the weight
 	 */
 	public Truck checkTruckAvailable(Quantity weight) {
+		return filterLogic(weight);
+	}
+
+
+
+	private Truck filterLogic(Quantity weight){
 		List<Truck> filteredTrucks = new ArrayList<>();
 		for (Truck t :
 				carCatalog.findByFree(true)) {
@@ -98,32 +104,15 @@ public class CarpoolManager {
 		if (weight.isZeroOrNegative()) {
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
-		List<Truck> filteredTrucks = new ArrayList<>();
-		for (Truck t :
-				carCatalog.findByFree(true)) {
-			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
-				filteredTrucks.add(t);
+		Truck truckToRent=filterLogic(weight);
+		if (truckToRent!=null)
+		{
+			if (truckToRent.isFree()) {
+				truckToRent.setRentDate(businessTime.getTime());
+				truckToRent.setRentedBy(rentedBy);
+				truckToRent.setFree(false);
+			} else return null;
 		}
-		if (filteredTrucks.size() <= 0) {
-			return null;
-		}
-		//<editor-fold desc="FilterLogic">
-		if (filteredTrucks.size() > 1) {
-			Collections.sort(filteredTrucks, new Comparator<Truck>() {
-				@Override
-				public int compare(Truck o1, Truck o2) {
-					return o1.getPrice().compareTo(o2.getPrice());
-				}
-			});
-		}
-		//</editor-fold>
-		Truck truckToRent;
-		truckToRent = filteredTrucks.get(0);
-		if (truckToRent.isFree()) {
-			truckToRent.setRentDate(businessTime.getTime());
-			truckToRent.setRentedBy(rentedBy);
-			truckToRent.setFree(false);
-		} else return null;
 		return truckToRent;
 	}
 
@@ -132,7 +121,6 @@ public class CarpoolManager {
 	 * returns the truck that matches the form to the available trucks
 	 *
 	 * @param username contains the information about the truck that is suppose to be returned
-	 * @return true if the action has been successfully completed
 	 */
 	public void returnTruckByUsername(String username) {
 		try {
@@ -162,31 +150,12 @@ public class CarpoolManager {
 	 * returns the truck that matches the form to the available trucks
 	 *
 	 * @param form contains the information about the truck that is suppose to be returned
-	 * @return true if the action has been successfully completed
 	 */
 	void returnTruckToFreeTrucks(@NotEmpty ReturnForm form) {
-		try {
-			UserAccount rentedBy;
-
-			if (userAccountManager.findByUsername(form.getName()).isPresent()) {
-				rentedBy = userAccountManager.findByUsername(form.getName()).get();
-			} else {
-				System.out.println("MyError: User not present ");
-				return;
-			}
-			List<Truck> truckList = userAccountTruckMap.get(rentedBy);
-			userAccountTruckMap.remove(rentedBy);
-			for (Truck t : truckList
-			) {
-				t.setFree(true);
-				t.setRentedBy(null);
-				carCatalog.save(t);
-			}
-		} catch (Exception e) {
-			System.out.println("MyError: Truck can not be returned: ");
-			e.getCause();
+		if (userAccountManager.findByUsername(form.getName()).isPresent()) {
+			returnTruckByUsername(form.getName());
+		} else {
+			System.out.println("User not present ");
 		}
 	}
-
-
 }
