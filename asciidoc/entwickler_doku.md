@@ -102,7 +102,7 @@ zur Organisierbarkeit: dieser Punkt beschreibt die Eignung der Software die Elem
 ## Randbedingungen
 
 ### Hardware-Vorgaben
-Belieber Computer mit folgenden Spezifikationen:
+Beliebiger Computer mit folgenden Spezifikationen:
 - Pentium 4 oder neuer
 - 1024 MB Arbeitsspeicher oder mehr
 - min. 1GB freier Speicherplatz
@@ -154,11 +154,11 @@ Das Projekt besitzt neben den regulären Artikeln auch ausleihbare Produkte, die
 
 ![Entwurfsklassendiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Entwurfsklassendiagramm.jpg)
 
-Das gesamte Projekt basiert auf der Objekt-orientierten Programmiersprache Java,um eine modulare und polymorph-erweiterbare Architektur zu verwirklichen.
+Das gesamte Projekt basiert auf der objektorientierten Programmiersprache Java, um eine modulare und polymorph-erweiterbare Architektur zu verwirklichen.
  
 Das Springframework, welches einen sehr großen Teil dieser Software ausmacht, ermöglicht in Verbindung mit Thymeleaf eine dynamische Verwendbarkeit und Erweiterbarkeit der zu betreibenden Website.
  
- Spring-Boot wird als spezieller Teil von Spring in dieser Software verwendet.
+Spring-Boot wird als spezieller Teil von Spring in dieser Software verwendet.
 
 Des weiteren ist Salespoint ein sehr wichtiges Framework für diese Software, da es bereits sehr viele Funktionalitäten und Verwaltungsstrukturen für den Betrieb einer Verkaufswebsite bietet.
 
