@@ -8,6 +8,6 @@ public class MyErrorController {
 
   @GetMapping("/testerror")
   public void handleRequest() {
-      throw new RuntimeException("test exception");
+      //throw new RuntimeException("test exception");
   }
 }
