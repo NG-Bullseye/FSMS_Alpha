@@ -121,14 +121,20 @@ public class CatalogManager {
 		this.createAvailableForNewComposite();
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			afterEdit.setName(article.getName());
-			afterEdit.setDescription(article.getDescription());
-			afterEdit.setPrice(Money.of(article.getPrice(), EURO));
-			afterEdit.setWeight(article.getWeight());
+			if(!article.getName().isEmpty()){
+			afterEdit.setName(article.getName());}
+			if(!article.getDescription().isEmpty()){
+			afterEdit.setDescription(article.getDescription());}
+			if(article.getPrice() != 0.0){
+			afterEdit.setPrice(Money.of(article.getPrice(), EURO));}
+			if(article.getWeight() != 0.0){
+			afterEdit.setWeight(article.getWeight());}
+			if(!article.getSelectedCategories().isEmpty()){
 			afterEdit.getCategories().forEach(afterEdit::removeCategory);
-			article.getSelectedCategories().forEach(afterEdit::addCategory);
+			article.getSelectedCategories().forEach(afterEdit::addCategory);}
+			if(!article.getSelectedColours().isEmpty()){
 			afterEdit.removeColours();
-			article.getSelectedColours().forEach(afterEdit::setColour);
+			article.getSelectedColours().forEach(afterEdit::setColour);}
 
 			catalog.save(afterEdit);
 			this.editAffectedArticles(afterEdit);
@@ -154,8 +160,11 @@ public class CatalogManager {
 			throws IllegalArgumentException {
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			afterEdit.setName(form.getName());
-			afterEdit.setDescription(form.getDescription());
+			if(!form.getName().isEmpty()){
+			afterEdit.setName(form.getName());}
+			if(!form.getDescription().isEmpty()){
+			afterEdit.setDescription(form.getDescription());}
+
 			LinkedList<Article> partsBefore = new LinkedList<>();
 			afterEdit.getPartIds().forEach((article, count) -> {
 				int i = count;
@@ -322,7 +331,7 @@ public class CatalogManager {
 	 * @param form A Form containing all information about the new Part, such as
 	 *             name, description, weight, price, colours, categories.
 	 */
-	public void newPart(Form form){
+	public void newPart(PartOrderForm form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getPrice(),form.getWeight(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
@@ -336,7 +345,7 @@ public class CatalogManager {
 	 * @param partsCount The user's input which articles and how many of them are
 	 *                   included in the composite.
 	 */
-	public void newComposite(CompositeForm form, Map<String, String> partsCount) {
+	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
 		Composite newArticle = new Composite(form.getName(), form.getDescription(),
 				this.compositeMapFiltering(partsCount));
