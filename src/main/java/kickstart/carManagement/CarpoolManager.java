@@ -119,7 +119,6 @@ public class CarpoolManager {
 	 *
 	 * @param username contains the information about the truck that is suppose to
 	 *                 be returned
-	 * @throws RuntimeException if the truck cant be returned
 	 */
 	public void returnTruckByUsername(String username) {
 		try {
