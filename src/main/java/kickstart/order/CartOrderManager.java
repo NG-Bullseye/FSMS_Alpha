@@ -1,20 +1,14 @@
 package kickstart.order;
 
 
-
 import kickstart.articles.Article;
-
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
 import kickstart.catalog.WebshopCatalog;
 import org.salespointframework.catalog.ProductIdentifier;
-
-import org.salespointframework.order.Cart;
-import org.salespointframework.order.OrderLine;
-import org.salespointframework.order.OrderManager;
-import org.salespointframework.order.OrderStatus;
+import org.salespointframework.order.*;
 import org.salespointframework.payment.Cash;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
@@ -26,12 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
@@ -227,15 +216,22 @@ public class CartOrderManager {
 	 * @return a new order
 	 */
 
-	public String addLKW(Cart cart){
+	public String addLKW(Cart cart) {
 
-		Truck truck=carpoolManager.rentTruckByWeight(wight,account);
-		if(truck==null){
+		Truck truck = carpoolManager.rentTruckByWeight(wight, account);
+		if (truck == null) {
 			return "redirect:/";
 		}
-		cart.addOrUpdateItem(truck, Quantity.of(1));
-		
-		return newOrder(cart);
+		//cart.addOrUpdateItem(truck, Quantity.of(1));
+
+		//return newOrder(cart);
+
+		if (cart.isEmpty()) {
+			return "redirect:/catalog";
+		}
+		ChargeLine chargeLine = new ChargeLine(truck.getPrice(), truck.getName());
+		newOrder(cart).add(chargeLine);
+		return "redirect:/";
 	}
 
 	/**
@@ -255,22 +251,22 @@ public class CartOrderManager {
 	 * @return
 	 */
 
-	public String newOrder(Cart cart){
+	public CustomerOrder newOrder(Cart cart){
 
-		if(!cart.isEmpty() ) {
-			CustomerOrder order = new CustomerOrder(account, Cash.CASH);
-			cart.addItemsTo(order);
-			order.setDestination(destination);
-			orderManager.save(order);
+		//if(!cart.isEmpty() ) {
+		CustomerOrder order = new CustomerOrder(account, Cash.CASH);
+		cart.addItemsTo(order);
+		order.setDestination(destination);
+		orderManager.save(order);
 
-			account = null;
-			destination = "Home";
-			wight = Quantity.of(0,Metric.KILOGRAM);
-			cart.clear();
+		destination = "Home";
+		wight = Quantity.of(0,Metric.KILOGRAM);
+		cart.clear();
 
-			return "redirect:/";
-		}
-		return "redirect:/catalog";
+		//return "redirect:/"; String!!!!
+		//}
+		//return "redirect:/catalog";
+		return order;
 	}
 
 	/**
