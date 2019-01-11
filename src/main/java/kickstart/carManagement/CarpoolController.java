@@ -38,7 +38,6 @@ public class CarpoolController {
 		model.addAttribute("takenTrucks", carCatalog.findByFree(false));
 		model.addAttribute("freeTrucksNumber", carCatalog.findByFree(true).stream().count());
 		model.addAttribute("takenTrucksNumber", carCatalog.findByFree(false).stream().count());
-		//model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
 		return "carpool";
 	}
 

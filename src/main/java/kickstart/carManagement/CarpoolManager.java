@@ -132,10 +132,11 @@ public class CarpoolManager {
 			Iterable<Truck> truckList =carCatalog.findByFree(false);
 			for (Truck t : truckList
 			) {
-				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername()))
-				t.setFree(true);
-				t.setRentedBy(null);
-				carCatalog.save(t);
+				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername())){
+					t.setFree(true);
+					t.setRentedBy(null);
+					carCatalog.save(t);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("MyError: Truck can not be returned: ");
