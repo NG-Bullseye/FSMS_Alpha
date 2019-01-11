@@ -21,6 +21,7 @@ public class isRegisteredValidator implements ConstraintValidator<isRegistered, 
 	
 	@Override
     public void initialize(isRegistered inputEmail) {
+	    // empty
     }
 	
 	@Override
