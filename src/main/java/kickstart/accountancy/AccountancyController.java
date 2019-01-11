@@ -15,7 +15,6 @@
  */
 package kickstart.accountancy;
 
-import java.time.Month;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,38 +22,39 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.Month;
+
 
 /**
- *  Diese Klasse bietet eine monatliche Abrechnung,
- *  in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
+ * Diese Klasse bietet eine monatliche Abrechnung,
+ * in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
  */
 
+@SuppressWarnings("SameReturnValue")
 @Controller
 public class AccountancyController {
 
-	private AccountancyManager accountancyManager;
+	private final AccountancyManager accountancyManager;
 
 	/**
 	 * @param accountancyManager Managerklasse welche die Logik für die Finanzüberischt beinhaltet
 	 */
 	@Autowired
-	public AccountancyController(AccountancyManager accountancyManager)
-	{
+	public AccountancyController(AccountancyManager accountancyManager) {
 		this.accountancyManager = accountancyManager;
 	}
 
 	/**
-	 * @param yearFilterForm
-	 * @param model
-	 * @return
+	 * @param yearFilterForm information about the year to filter
+	 * @param model information for the html
 	 */
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/accountancy")
-	public String show(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm,Model model) {
+	public String show(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm, Model model) {
 		model.addAttribute("time", accountancyManager.getTime());
-		model.addAttribute("yearFilterForm",yearFilterForm);
-		model.addAttribute("filteredYear",yearFilterForm.getYear());
-		model.addAttribute("filteredYearList",accountancyManager.getFilteredYearList(yearFilterForm));
+		model.addAttribute("yearFilterForm", yearFilterForm);
+		model.addAttribute("filteredYear", yearFilterForm.getYear());
+		model.addAttribute("filteredYearList", accountancyManager.getFilteredYearList(yearFilterForm));
 		model.addAttribute("dezValue", accountancyManager.fetchMonthlyAccountancyValue(Month.DECEMBER));
 		model.addAttribute("novValue", accountancyManager.fetchMonthlyAccountancyValue(Month.NOVEMBER));
 		model.addAttribute("oktValue", accountancyManager.fetchMonthlyAccountancyValue(Month.OCTOBER));
@@ -67,7 +67,7 @@ public class AccountancyController {
 		model.addAttribute("marValue", accountancyManager.fetchMonthlyAccountancyValue(Month.MARCH));
 		model.addAttribute("febValue", accountancyManager.fetchMonthlyAccountancyValue(Month.FEBRUARY));
 		model.addAttribute("janValue", accountancyManager.fetchMonthlyAccountancyValue(Month.JANUARY));
-		model.addAttribute("monthlyAccountancy",accountancyManager.fetchThisMonthAccountancy());
+		model.addAttribute("monthlyAccountancy", accountancyManager.fetchThisMonthAccountancy());
 		//model.addAttribute("monthlyOrders", accountancyManager.fetchMonthlyOrders());
 		accountancyManager.checkForPayDay();
 		return "accountancy";
@@ -94,7 +94,7 @@ public class AccountancyController {
 	}
 
 	/***/
-	public AccountancyManager getManager(){
+	public AccountancyManager getManager() {
 		return accountancyManager;
 	}
 }

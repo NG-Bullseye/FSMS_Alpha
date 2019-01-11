@@ -7,16 +7,11 @@ import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+
 import javax.money.MonetaryAmount;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 @Service
 public class CarpoolManager {
@@ -24,23 +19,24 @@ public class CarpoolManager {
 	private BusinessTime businessTime;
 	private UserAccountManager userAccountManager;
 	private CarCatalog carCatalog;
-	private Map<UserAccount,List<Truck>> userAccountTruckMap;
+	private Map<UserAccount, List<Truck>> userAccountTruckMap;
 
 	/**
 	 * @param userAccountManager contains information about all useraccounts
 	 */
-	CarpoolManager(CarCatalog carCatalog,UserAccountManager userAccountManager, BusinessTime businessTime ) {
-		this.carCatalog=carCatalog;
-		userAccountTruckMap =new HashMap<>();
-		this.businessTime=businessTime;
-		this.userAccountManager=userAccountManager;
+	CarpoolManager(CarCatalog carCatalog, UserAccountManager userAccountManager, BusinessTime businessTime) {
+		this.carCatalog = carCatalog;
+		userAccountTruckMap = new HashMap<>();
+		this.businessTime = businessTime;
+		this.userAccountManager = userAccountManager;
 	}
 
 	/**
 	 * adds a free truck to the pool
+	 *
 	 * @param form contains information about the truck to be added
 	 */
-	public void addFreeTruck(TruckClassForm form){
+	public void addFreeTruck(TruckClassForm form) {
 		int price;
 		int capacity;
 		MonetaryAmount money;
@@ -56,20 +52,21 @@ public class CarpoolManager {
 		}
 		Truck truck = new Truck(
 				form.getName()
-				,money
-				,quantityCapapacity
-				,businessTime.getTime());
+				, money
+				, quantityCapapacity
+				, businessTime.getTime());
 		carCatalog.save(truck);
 	}
 
 	/**
 	 * checks if there is a truck available
 	 * contains filter and sort logic
+	 *
 	 * @param weight the weight the truck is suppose to carry
 	 * @return the cheapest truck that is capable of carrying the weight
 	 */
-	public Truck checkTruckAvailable(Quantity weight){
-		List<Truck> filteredTrucks=new ArrayList<>();
+	public Truck checkTruckAvailable(Quantity weight) {
+		List<Truck> filteredTrucks = new ArrayList<>();
 		for (Truck t :
 				carCatalog.findByFree(true)) {
 			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
@@ -92,11 +89,12 @@ public class CarpoolManager {
 	/**
 	 * rents the cheapest truck that can carry the weight
 	 * contains filter and sort logic
-	 * @param weight the weight the truck is suppose to carry
+	 *
+	 * @param weight   the weight the truck is suppose to carry
 	 * @param rentedBy the useraccount the truck will be rented on
 	 * @return the cheapest truck that is capable of carrying the weight
 	 */
-	public Truck rentTruckByWeight(@NotNull Quantity weight,@NotNull @NotEmpty UserAccount rentedBy){
+	public Truck rentTruckByWeight(@NotNull Quantity weight, @NotNull @NotEmpty UserAccount rentedBy) {
 		if (weight.isZeroOrNegative()) {
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
@@ -120,34 +118,25 @@ public class CarpoolManager {
 		}
 		//</editor-fold>
 		Truck truckToRent;
-		try {
-			truckToRent = filteredTrucks.get(0);
-		} catch (NullPointerException e) {
-			System.out.println("Nullpointer in fitereredTrucks.get(0) in carpoolManager");
-			return null;
+		truckToRent = filteredTrucks.get(0);
+		if (truckToRent.isFree()) {
+			truckToRent.setRentDate(businessTime.getTime());
+			truckToRent.setRentedBy(rentedBy);
+			truckToRent.setFree(false);
 		}
-		try {
-			if(truckToRent.isFree()) {
-				truckToRent.setRentDate(businessTime.getTime());
-				truckToRent.setRentedBy(rentedBy);
-				truckToRent.setFree(false);
-			}
-			else throw new Exception();
-		} catch (Exception e) {
-			System.out.println("Somthing went wrong in the managment of free an taken trucks.");
-			truckToRent = null;
-		}
+		else return null;
 		return truckToRent;
 	}
 
 
 	/**
 	 * returns the truck that matches the form to the available trucks
+	 *
 	 * @param username contains the information about the truck that is suppose to be returned
 	 * @return true if the action has been successfully completed
 	 */
-	public void returnTruckByUsername(String username){
-		try{
+	public void returnTruckByUsername(String username) {
+		try {
 			UserAccount rentedBy;
 
 			if (userAccountManager.findByUsername(username).isPresent()) {
@@ -164,18 +153,20 @@ public class CarpoolManager {
 				t.setRentedBy(null);
 				carCatalog.save(t);
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			System.out.println("MyError: Truck can not be returned: ");
 			e.getCause();
 		}
 	}
+
 	/**
 	 * returns the truck that matches the form to the available trucks
+	 *
 	 * @param form contains the information about the truck that is suppose to be returned
 	 * @return true if the action has been successfully completed
 	 */
-	void returnTruckToFreeTrucks(@NotEmpty ReturnForm form){
-		try{
+	void returnTruckToFreeTrucks(@NotEmpty ReturnForm form) {
+		try {
 			UserAccount rentedBy;
 
 			if (userAccountManager.findByUsername(form.getName()).isPresent()) {
@@ -192,7 +183,7 @@ public class CarpoolManager {
 				t.setRentedBy(null);
 				carCatalog.save(t);
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			System.out.println("MyError: Truck can not be returned: ");
 			e.getCause();
 		}
