@@ -132,7 +132,7 @@ entsprechenden Aufgabenbereiche des Programms bereitstellen:
 
 Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben. Somit ist die Trennung des Controllers vom Model gewährleistet.
 
-Ein sehr entscheidener Schwerpunkt des Projekts war die Implementierung des Composite-Musters für die Artikel. Da Datenbank es nur schwer zulassen eine baumstrukturierte Datenstruktur zu realisieren, haben wir unser Composite dementsprechend angepasst. Eine ausführliche Erklärung dazu kann man unter dem Punkt Entwurfsmuster nachlesen.
+Ein sehr entscheidener Schwerpunkt des Projekts war die Implementierung des Composite-Musters für die Artikel. Da Datenbanken es nur schwer zulassen eine baumstrukturierte Datenstruktur zu realisieren, haben wir unser Composite dementsprechend angepasst. Eine ausführliche Erklärung dazu kann man unter dem Punkt Entwurfsmuster nachlesen.
 
 
 
