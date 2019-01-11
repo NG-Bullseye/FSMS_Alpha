@@ -1,10 +1,11 @@
 package kickstart.accountancy;
 
-import org.salespointframework.accountancy.AccountancyEntry;
+import java.time.LocalDateTime;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.Entity;
-import java.time.LocalDateTime;
+
+import org.salespointframework.accountancy.AccountancyEntry;
 
 @Entity
 public class WebshopAccountancyEntry extends AccountancyEntry {
@@ -13,7 +14,8 @@ public class WebshopAccountancyEntry extends AccountancyEntry {
 	private String message;
 
 	/**
-	 * @param value the amount of money this that should be added or subtracted
+	 * @param value        the amount of money this that should be added or
+	 *                     subtracted
 	 * @param creationTime the moment this entry was created
 	 * @param message      purpose of transaction
 	 */
@@ -23,7 +25,7 @@ public class WebshopAccountancyEntry extends AccountancyEntry {
 		this.creationTime = creationTime;
 	}
 
-	//WIRD BALD RAUS GENOMMEN
+	// WIRD BALD RAUS GENOMMEN
 	WebshopAccountancyEntry(MonetaryAmount value, LocalDateTime creationTime) {
 		super(value, "");
 		this.creationTime = creationTime;

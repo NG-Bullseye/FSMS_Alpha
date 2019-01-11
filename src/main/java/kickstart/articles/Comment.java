@@ -26,8 +26,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 
 /**
- * This class are the comments that a user can write about an article. In addition to this text, 
- * the comment also has a rating and a creation time
+ * This class are the comments that a user can write about an article. In
+ * addition to this text, the comment also has a rating and a creation time
  */
 @Entity
 @Table(name = "COMMENTS")
@@ -38,7 +38,7 @@ public class Comment implements Serializable {
 
 	@Getter
 	private String text;
-	
+
 	@Getter
 	private int rating;
 
@@ -46,7 +46,8 @@ public class Comment implements Serializable {
 	private LocalDateTime date;
 
 	@SuppressWarnings("unused")
-	private Comment() {}
+	private Comment() {
+	}
 
 	public Comment(String text, int rating, LocalDateTime dateTime) {
 
@@ -54,7 +55,6 @@ public class Comment implements Serializable {
 		this.rating = rating;
 		this.date = dateTime;
 	}
-
 
 	/**
 	 * @return Returns the text of the comment

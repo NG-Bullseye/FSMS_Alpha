@@ -22,7 +22,6 @@ public class Filterform {
 	@NotNull(message = "Bitte wählen Sie mindestens eine Kategorie aus.")
 	private ArrayList<String> selectedCategories;
 
-
 	public void setSelectedColours(ArrayList<String> selectedColours) {
 		this.selectedColours = selectedColours;
 	}

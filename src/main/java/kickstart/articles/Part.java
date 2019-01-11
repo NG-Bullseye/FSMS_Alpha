@@ -20,8 +20,8 @@ import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
 /**
- * This class represents the part that a {@link Composite} consists of. Most of it's methods are  
- * implementation of the methods of the {@link Article} class. 
+ * This class represents the part that a {@link Composite} consists of. Most of
+ * it's methods are implementation of the methods of the {@link Article} class.
  */
 @Entity
 public class Part extends Article {
@@ -43,7 +43,7 @@ public class Part extends Article {
 
 	/**
 	 * 
-	 * @param name 
+	 * @param name
 	 * @param description
 	 * @param price
 	 * @param weight

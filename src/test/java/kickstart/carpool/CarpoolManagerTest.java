@@ -11,11 +11,9 @@ import org.springframework.data.annotation.Transient;
 @Disabled
 public class CarpoolManagerTest {
 
-
 	@BeforeAll
 	@Transient
 	public void setUp() {
-
 
 		return;
 
@@ -23,39 +21,38 @@ public class CarpoolManagerTest {
 
 	@Test
 	@Transient
-	public void testReturnTruck() throws Exception{
+	public void testReturnTruck() throws Exception {
 
 	}
 
 	@Test
 	@javax.persistence.Transient
-	public void testReturnTruckToFreeTrucks() throws Exception{
+	public void testReturnTruckToFreeTrucks() throws Exception {
 
 	}
 
 	@Test
 	@javax.persistence.Transient
-	public void testAddFreeTruck() throws Exception{
+	public void testAddFreeTruck() throws Exception {
 
 	}
 
 	@Test
 	@javax.persistence.Transient
-	public void testCheckTruckAvailable() throws Exception{
+	public void testCheckTruckAvailable() throws Exception {
 
 	}
 
 	@Test
 	@javax.persistence.Transient
-	public void testRentTruckByWight() throws Exception{
+	public void testRentTruckByWight() throws Exception {
 
 	}
 
 	@Test
 	@javax.persistence.Transient
-	public void testGetTruckUserAccountMap() throws Exception{
+	public void testGetTruckUserAccountMap() throws Exception {
 
 	}
 
 }
-

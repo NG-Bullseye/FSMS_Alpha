@@ -46,38 +46,38 @@ public class CatalogController {
 	private final CatalogManager manager;
 	private final BusinessTime businessTime;
 
-	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory, BusinessTime businessTime){
-	this.manager = new CatalogManager(catalog, inventory);
-	this.businessTime=businessTime;
+	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory,
+			BusinessTime businessTime) {
+		this.manager = new CatalogManager(catalog, inventory);
+		this.businessTime = businessTime;
 	}
 
 	@ModelAttribute("colours")
 	public String[] colours() {
-		return new String[] {
-				"schwarz","blau","weiß","rot","braun","grün"
-		};
+		return new String[] { "schwarz", "blau", "weiß", "rot", "braun", "grün" };
 	}
+
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] {
-				"Tisch","Schrank","Stuhl","Regal","Bett"
-		};
+		return new String[] { "Tisch", "Schrank", "Stuhl", "Regal", "Bett" };
 	}
 
 	@GetMapping("/catalog")
-	String catalog(Model model){
+	String catalog(Model model) {
 
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
 
 		return "catalog";
 	}
+
 	@PostMapping("/catalog")
-	String catalogFiltered (@Valid @ModelAttribute("filterform") Filterform filterform, @RequestParam(required = false, name="reset") String reset,BindingResult bindingResult, Model model){
-		if(reset.equals("reset")){
+	String catalogFiltered(@Valid @ModelAttribute("filterform") Filterform filterform,
+			@RequestParam(required = false, name = "reset") String reset, BindingResult bindingResult, Model model) {
+		if (reset.equals("reset")) {
 			return "redirect:/catalog";
 		}
-		if(bindingResult.hasErrors()){
+		if (bindingResult.hasErrors()) {
 			model.addAttribute("filterform", filterform);
 			return "catalog";
 		}
@@ -85,141 +85,152 @@ public class CatalogController {
 
 		return "catalog";
 	}
+
 	@GetMapping("catalog/hidden")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String completeCatalog(Model model){
+	public String completeCatalog(Model model) {
 		model.addAttribute("catalog", manager.getInvisibleCatalog());
-		model.addAttribute("filterform",new Filterform());
+		model.addAttribute("filterform", new Filterform());
 		return "catalog";
 	}
+
 	@GetMapping("/article/{identifier}")
-	public String detail(@PathVariable ProductIdentifier identifier, Model model){
+	public String detail(@PathVariable ProductIdentifier identifier, Model model) {
 
 		model.addAttribute("article", manager.getArticle(identifier));
-		model.addAttribute("max",manager.maximumOrderAmount(identifier));
-		model.addAttribute("hidden",manager.isHidden(identifier));
-		if(manager.getArticle(identifier).getType() == Article.ArticleType.COMPOSITE){
-			model.addAttribute("parts",manager.textOfAllComponents(identifier));
+		model.addAttribute("max", manager.maximumOrderAmount(identifier));
+		model.addAttribute("hidden", manager.isHidden(identifier));
+		if (manager.getArticle(identifier).getType() == Article.ArticleType.COMPOSITE) {
+			model.addAttribute("parts", manager.textOfAllComponents(identifier));
 		}
 		return "article";
 	}
+
 	@PostMapping("article/{identifier}/comment")
 	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_EMPLOYEE')")
-	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload, Model model){
+	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload,
+			Model model) {
 		Article article = manager.getArticle(identifier);
 		article.addComment(payload.toComment(businessTime.getTime()));
 		manager.saveArticle(article);
-		
 
-		return "redirect:/article/"+ article.getId();
-
+		return "redirect:/article/" + article.getId();
 
 	}
+
 	@GetMapping("/edit/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model){
+	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model) {
 
 		model.addAttribute("article", manager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
 		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
 		model.addAttribute("articleCategories", articleCategories);
-		model.addAttribute("form",new Form()); //Damit man im folgenden form bearbeiten kann
+		model.addAttribute("form", new Form()); // Damit man im folgenden form bearbeiten kann
 		return "edit";
 	}
 
 	@PostMapping("/edit/{identifier}")
-	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form, BindingResult bindingResult, Model model){
-		model.addAttribute("article",manager.getArticle(identifier));
+	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form,
+			BindingResult bindingResult, Model model) {
+		model.addAttribute("article", manager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
 		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
 		model.addAttribute("articleCategories", articleCategories);
-		if(bindingResult.hasErrors()){
+		if (bindingResult.hasErrors()) {
 			return "edit";
 		}
 		manager.editPart(form, identifier);
 
 		return "redirect:/catalog/";
 	}
+
 	@GetMapping("catalog/part/new")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String showNew(Model model){
-		model.addAttribute("form",new PartOrderForm());
-		return"newPart";
+	public String showNew(Model model) {
+		model.addAttribute("form", new PartOrderForm());
+		return "newPart";
 	}
+
 	@PostMapping("catalog/part/new")
-	public String editNew(@Valid @ModelAttribute("form") PartOrderForm form,BindingResult bindingResult, Model model){
-		if(bindingResult.hasErrors()){
-			model.addAttribute("form",form);
+	public String editNew(@Valid @ModelAttribute("form") PartOrderForm form, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("form", form);
 			return "newPart";
 		}
 		manager.newPart(form);
 		model.addAttribute("catalog", manager.getVisibleCatalog());
-		return"redirect:/catalog/";
+		return "redirect:/catalog/";
 	}
+
 	@GetMapping("catalog/composite/new")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String newComposite(Model model){
+	public String newComposite(Model model) {
 
 		CompositeOrderForm composite = new CompositeOrderForm();
-		model.addAttribute("compositeForm",composite);
+		model.addAttribute("compositeForm", composite);
 		model.addAttribute("catalog", manager.getAvailableForNewComposite());
 		return "newComposite";
 	}
-	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form, BindingResult bindingResult, Model model,@RequestParam Map<String,String> partsMapping){
 
-		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
+	@PostMapping("catalog/composite/new")
+	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form,
+			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping) {
+
+		if (manager.compositeMapFiltering(partsMapping).isEmpty()) {
 			return "redirect:/catalog/composite/new";
 		}
-		if(bindingResult.hasErrors()){
-			model.addAttribute("compositeForm",form);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("compositeForm", form);
 			model.addAttribute("catalog", manager.getAvailableForNewComposite());
 			return "newComposite";
 		}
-		model.addAttribute("compositeForm",new CompositeForm());
+		model.addAttribute("compositeForm", new CompositeForm());
 
-		manager.newComposite(form,partsMapping);
+		manager.newComposite(form, partsMapping);
 
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 
-		return"redirect:/catalog/";
+		return "redirect:/catalog/";
 	}
+
 	@GetMapping("hide/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String hide(@PathVariable ProductIdentifier identifier, Model model){
+	public String hide(@PathVariable ProductIdentifier identifier, Model model) {
 		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
+
 	@GetMapping("show/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String visible(@PathVariable ProductIdentifier identifier, Model model){
+	public String visible(@PathVariable ProductIdentifier identifier, Model model) {
 		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 
 	@GetMapping("/edit/composite/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	public String editComposite(@PathVariable ProductIdentifier identifier, Model model){
-		model.addAttribute("article",manager.getArticle(identifier));
-		model.addAttribute("compositeForm",new CompositeForm());
+	public String editComposite(@PathVariable ProductIdentifier identifier, Model model) {
+		model.addAttribute("article", manager.getArticle(identifier));
+		model.addAttribute("compositeForm", new CompositeForm());
 		model.addAttribute("catalog", manager.getArticlesForCompositeEdit(identifier));
 
 		return "editComposite";
 	}
+
 	@PostMapping("/edit/composite/{identifier}")
-	public String editCompositeFinished(@PathVariable ProductIdentifier identifier,Model model, @NotNull @RequestParam Map<String,String> partsMapping, @ModelAttribute CompositeForm compositeForm){
-		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
-			return "redirect:/edit/composite/"+identifier;
+	public String editCompositeFinished(@PathVariable ProductIdentifier identifier, Model model,
+			@NotNull @RequestParam Map<String, String> partsMapping, @ModelAttribute CompositeForm compositeForm) {
+		if (manager.compositeMapFiltering(partsMapping).isEmpty()) {
+			return "redirect:/edit/composite/" + identifier;
 		}
-		manager.editComposite(identifier,compositeForm,partsMapping);
+		manager.editComposite(identifier, compositeForm, partsMapping);
 		return "redirect:/article/" + identifier;
 	}
 
-
-
 	interface CommentAndRating {
 
-		/*	@NotEmpty*/
+		/* @NotEmpty */
 		String getComment();
 
 		@Range(min = 1, max = 10)

@@ -11,7 +11,7 @@ public class CommentTest {
 	@Test
 	public void testToString() {
 		Comment c = new Comment("Text", 1, LocalDateTime.of(1, 1, 1, 1, 1));
-		
+
 		assertThat(c.toString()).as("ToString on a comment should return the text").isEqualTo(c.getText());
 	}
 }

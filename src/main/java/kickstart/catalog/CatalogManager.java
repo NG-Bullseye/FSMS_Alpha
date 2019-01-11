@@ -2,10 +2,6 @@ package kickstart.catalog;
 
 import static org.salespointframework.core.Currencies.EURO;
 
-import kickstart.articles.Article;
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
-import kickstart.inventory.ReorderableInventoryItem;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,6 +20,10 @@ import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.springframework.stereotype.Component;
 
+import kickstart.articles.Article;
+import kickstart.articles.Composite;
+import kickstart.articles.Part;
+import kickstart.inventory.ReorderableInventoryItem;
 
 @Component
 public class CatalogManager {
@@ -40,12 +40,14 @@ public class CatalogManager {
 
 	/**
 	 * This method returns a Iterable of all invisible Articles in the Catalog.
+	 * 
 	 * @return invisible Articles in the Catalog.
 	 */
 	public List<Article> getInvisibleCatalog() {
 		LinkedList<Article> invisible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
-			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent() && hiddenArticles.contains(article)
+			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()
+					&& hiddenArticles.contains(article)
 					&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
 
 				invisible.add(article);
@@ -59,12 +61,14 @@ public class CatalogManager {
 
 	/**
 	 * This method returns an Iterable of all visible articles for the customer.
+	 * 
 	 * @return Every Article that is visible for the customer.
 	 */
-	public Iterable<Article> getVisibleCatalog(){
+	public Iterable<Article> getVisibleCatalog() {
 		LinkedList<Article> visible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
-			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent() && !hiddenArticles.contains(article)
+			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()
+					&& !hiddenArticles.contains(article)
 					&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
 
 				visible.add(article);
@@ -74,18 +78,18 @@ public class CatalogManager {
 		visible.sort(Comparator.comparing(Article::getName));
 		return visible;
 	}
-	
+
 	/**
 	 * 
 	 * @return Returns a list of all articles in the catalog
 	 */
 	public List<Article> getWholeCatalog() {
 		List<Article> articles = new ArrayList<Article>();
-		
+
 		catalog.findAll().forEach(article -> {
 			articles.add(article);
 		});
-		
+
 		return articles;
 	}
 
@@ -93,7 +97,7 @@ public class CatalogManager {
 	 * Returns the searched article.
 	 *
 	 * @param id The ProductIdentifier of the searched article.
- 	 * @throws IllegalArgumentException If the article is not present.
+	 * @throws IllegalArgumentException If the article is not present.
 	 * @return Returns the concrete Article.
 	 */
 	public Article getArticle(ProductIdentifier id) throws IllegalArgumentException {
@@ -121,22 +125,28 @@ public class CatalogManager {
 		this.createAvailableForNewComposite();
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			if(!article.getName().isEmpty()){
-			afterEdit.setName(article.getName());}
-			if(!article.getDescription().isEmpty()){
-			afterEdit.setDescription(article.getDescription());}
+			if (!article.getName().isEmpty()) {
+				afterEdit.setName(article.getName());
+			}
+			if (!article.getDescription().isEmpty()) {
+				afterEdit.setDescription(article.getDescription());
+			}
 			long l1 = Math.round(article.getPrice());
-			if(l1 != 0){
-			afterEdit.setPrice(Money.of(article.getPrice(), EURO));}
+			if (l1 != 0) {
+				afterEdit.setPrice(Money.of(article.getPrice(), EURO));
+			}
 			long l2 = Math.round(article.getWeight());
-			if( l2 != 0){
-			afterEdit.setWeight(article.getWeight());}
-			if(!article.getSelectedCategories().isEmpty()){
-			afterEdit.getCategories().forEach(afterEdit::removeCategory);
-			article.getSelectedCategories().forEach(afterEdit::addCategory);}
-			if(!article.getSelectedColours().isEmpty()){
-			afterEdit.removeColours();
-			article.getSelectedColours().forEach(afterEdit::setColour);}
+			if (l2 != 0) {
+				afterEdit.setWeight(article.getWeight());
+			}
+			if (!article.getSelectedCategories().isEmpty()) {
+				afterEdit.getCategories().forEach(afterEdit::removeCategory);
+				article.getSelectedCategories().forEach(afterEdit::addCategory);
+			}
+			if (!article.getSelectedColours().isEmpty()) {
+				afterEdit.removeColours();
+				article.getSelectedColours().forEach(afterEdit::setColour);
+			}
 
 			catalog.save(afterEdit);
 			this.editAffectedArticles(afterEdit);
@@ -162,10 +172,12 @@ public class CatalogManager {
 			throws IllegalArgumentException {
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			if(!form.getName().isEmpty()){
-			afterEdit.setName(form.getName());}
-			if(!form.getDescription().isEmpty()){
-			afterEdit.setDescription(form.getDescription());}
+			if (!form.getName().isEmpty()) {
+				afterEdit.setName(form.getName());
+			}
+			if (!form.getDescription().isEmpty()) {
+				afterEdit.setDescription(form.getDescription());
+			}
 
 			LinkedList<Article> partsBefore = new LinkedList<>();
 			afterEdit.getPartIds().forEach((article, count) -> {
@@ -254,9 +266,11 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Returns all articles with the given ProductIdentifiers and how many times they are contained in the Map.
+	 * Returns all articles with the given ProductIdentifiers and how many times
+	 * they are contained in the Map.
 	 *
-	 * @param map A map that contains the identifier of an article and the amount of occurrences in the list
+	 * @param map A map that contains the identifier of an article and the amount of
+	 *            occurrences in the list
 	 * @return All articles that there mapped.
 	 *
 	 */
@@ -278,7 +292,8 @@ public class CatalogManager {
 	/**
 	 * Returns all articles which fit to the given filter.
 	 *
-	 * @param filterform A Form containing all filter settings, such as type,price,colours,categories.
+	 * @param filterform A Form containing all filter settings, such as
+	 *                   type,price,colours,categories.
 	 * @return Iterable of all articles that fit to the given filter.
 	 */
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
@@ -315,7 +330,7 @@ public class CatalogManager {
 		LinkedList<Article> result = new LinkedList<>();
 		result.addAll(rightType);
 		result.retainAll(visible);
-		if(!filterform.getSelectedColours().isEmpty()) {
+		if (!filterform.getSelectedColours().isEmpty()) {
 			result.retainAll(rightColours);
 		}
 		result.retainAll(rightPrice);
@@ -333,10 +348,11 @@ public class CatalogManager {
 	 * @param form A Form containing all information about the new Part, such as
 	 *             name, description, weight, price, colours, categories.
 	 */
-	public void newPart(PartOrderForm form){
-			Part newArticle = new Part(form.getName(),form.getDescription(),form.getPrice(),form.getWeight(),form.getSelectedColours(),form.getSelectedCategories());
-			catalog.save(newArticle);
-			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
+	public void newPart(PartOrderForm form) {
+		Part newArticle = new Part(form.getName(), form.getDescription(), form.getPrice(), form.getWeight(),
+				form.getSelectedColours(), form.getSelectedCategories());
+		catalog.save(newArticle);
+		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
 
 	/**
@@ -359,7 +375,8 @@ public class CatalogManager {
 	 * Handles the user's input from the website about which articles and how many
 	 * of them are included in a Composite.
 	 *
-	 * @param partsCount The user's input which articles and how many of them are included in the composite.
+	 * @param partsCount The user's input which articles and how many of them are
+	 *                   included in the composite.
 	 * @return List off all articles, which where chosen by the user.
 	 */
 	// Eingabe von der Website Spring-seitig als Map<String,String>, weswegen in
@@ -423,7 +440,9 @@ public class CatalogManager {
 
 	/**
 	 * Returns all Articles which can be used for a new Composite.
-	 * @return Iterable containing all articles, that are available for a new Composite.
+	 * 
+	 * @return Iterable containing all articles, that are available for a new
+	 *         Composite.
 	 */
 	public Iterable<Article> getAvailableForNewComposite() {
 		this.createAvailableForNewComposite();
@@ -440,17 +459,17 @@ public class CatalogManager {
 
 		HashSet<Article> allComposites = new HashSet<>();
 		catalog.findComposite().forEach(allComposites::add);
-			for (Article composite : allComposites) {
-				Map<ProductIdentifier, Integer> parts = composite.getPartIds();
-				parts.forEach((articleId, count) -> {
-					if (catalog.findById(articleId).isPresent()) {
-						Article article = catalog.findById(articleId).get();
-						if (articlesWithoutParents.contains(article)) {
-							articlesWithoutParents.remove(article);
-						}
+		for (Article composite : allComposites) {
+			Map<ProductIdentifier, Integer> parts = composite.getPartIds();
+			parts.forEach((articleId, count) -> {
+				if (catalog.findById(articleId).isPresent()) {
+					Article article = catalog.findById(articleId).get();
+					if (articlesWithoutParents.contains(article)) {
+						articlesWithoutParents.remove(article);
 					}
-				});
-			}
+				}
+			});
+		}
 
 		this.availableForNewComposite = articlesWithoutParents;
 	}
@@ -459,7 +478,8 @@ public class CatalogManager {
 	 * Returns a list with all Articles in which the given Article is included.
 	 *
 	 * @param article The Article whose parents are searched.
-	 * @return List of the ProductIdentifiers of the articles, which include the given Article.
+	 * @return List of the ProductIdentifiers of the articles, which include the
+	 *         given Article.
 	 */
 	public List<ProductIdentifier> getParents(Article article) {
 		LinkedList<ProductIdentifier> parents = new LinkedList<>();
@@ -475,10 +495,12 @@ public class CatalogManager {
 	}
 
 	/**
-	 * Returns all Articles that are not already included in another Composite or included in the given Composite.
+	 * Returns all Articles that are not already included in another Composite or
+	 * included in the given Composite.
 	 *
 	 * @param identifier The ProductIdentifier of the Composite that will be edited.
-	 * @return Map of all articles that are already included in the Composite and how often or available to include in the Composite.
+	 * @return Map of all articles that are already included in the Composite and
+	 *         how often or available to include in the Composite.
 	 */
 	public Map<Article, Integer> getArticlesForCompositeEdit(ProductIdentifier identifier) {
 		HashMap<Article, Integer> parts = new HashMap<>();
@@ -498,7 +520,8 @@ public class CatalogManager {
 	 * Returns the number of units in stock of the given Article.
 	 *
 	 * @param identifier The ProductIdentifier of the Article.
-	 * @return How many units of the article you can buy at the same time, depending on how many units are in stock right now.
+	 * @return How many units of the article you can buy at the same time, depending
+	 *         on how many units are in stock right now.
 	 */
 	public int maximumOrderAmount(ProductIdentifier identifier) {
 		BigDecimal amount = inventory.findByProductIdentifier(identifier).get().getQuantity().getAmount();
@@ -524,19 +547,19 @@ public class CatalogManager {
 	 * @param identifier ProductIdentifier of the given Article
 	 * @return String containing all included Articles separated by ","
 	 */
-	public String textOfAllComponents(ProductIdentifier identifier){
+	public String textOfAllComponents(ProductIdentifier identifier) {
 		String result = "";
 		Optional<Article> composite = catalog.findById(identifier);
-		if(composite.isPresent()) {
+		if (composite.isPresent()) {
 			LinkedList<String> names = new LinkedList<>();
-			composite.get().getPartIds().keySet().forEach(article ->{
+			composite.get().getPartIds().keySet().forEach(article -> {
 				names.add(catalog.findById(article).get().getName());
 			});
-			for(int i = names.size();i>0;i--){
-				if(i!=1){
-					result = result + names.get(i-1) + ", ";
+			for (int i = names.size(); i > 0; i--) {
+				if (i != 1) {
+					result = result + names.get(i - 1) + ", ";
 				} else {
-					result= result + names.get(i-1) + ".";
+					result = result + names.get(i - 1) + ".";
 				}
 			}
 		}

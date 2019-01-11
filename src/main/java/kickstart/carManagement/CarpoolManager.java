@@ -1,5 +1,16 @@
 package kickstart.carManagement;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.money.MonetaryAmount;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
@@ -7,11 +18,6 @@ import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.stereotype.Service;
-
-import javax.money.MonetaryAmount;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.util.*;
 
 @Service
 public class CarpoolManager {
@@ -50,17 +56,12 @@ public class CarpoolManager {
 			System.out.println("money or capacity is not entered as number");
 			return;
 		}
-		Truck truck = new Truck(
-				form.getName()
-				, money
-				, quantityCapapacity
-				, businessTime.getTime());
+		Truck truck = new Truck(form.getName(), money, quantityCapapacity, businessTime.getTime());
 		carCatalog.save(truck);
 	}
 
 	/**
-	 * checks if there is a truck available
-	 * contains filter and sort logic
+	 * checks if there is a truck available contains filter and sort logic
 	 *
 	 * @param weight the weight the truck is suppose to carry
 	 * @return the cheapest truck that is capable of carrying the weight
@@ -69,10 +70,9 @@ public class CarpoolManager {
 		return filterLogic(weight);
 	}
 
-	private Truck filterLogic(Quantity weight){
+	private Truck filterLogic(Quantity weight) {
 		List<Truck> filteredTrucks = new ArrayList<>();
-		for (Truck t :
-				carCatalog.findByFree(true)) {
+		for (Truck t : carCatalog.findByFree(true)) {
 			if (t.getCapacity().isGreaterThanOrEqualTo(weight))
 				filteredTrucks.add(t);
 		}
@@ -91,8 +91,8 @@ public class CarpoolManager {
 	}
 
 	/**
-	 * rents the cheapest truck that can carry the weight
-	 * contains filter and sort logic
+	 * rents the cheapest truck that can carry the weight contains filter and sort
+	 * logic
 	 *
 	 * @param weight   the weight the truck is suppose to carry
 	 * @param rentedBy the useraccount the truck will be rented on
@@ -102,22 +102,23 @@ public class CarpoolManager {
 		if (weight.isZeroOrNegative()) {
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
-		Truck truckToRent=filterLogic(weight);
-		if (truckToRent!=null) {
+		Truck truckToRent = filterLogic(weight);
+		if (truckToRent != null) {
 			if (truckToRent.isFree()) {
 				truckToRent.setRentDate(businessTime.getTime());
 				truckToRent.setRentedBy(rentedBy);
 				truckToRent.setFree(false);
-			} else return null;
+			} else
+				return null;
 		}
 		return truckToRent;
 	}
 
-
 	/**
 	 * returns the truck that matches the form to the available trucks
 	 *
-	 * @param username contains the information about the truck that is suppose to be returned
+	 * @param username contains the information about the truck that is suppose to
+	 *                 be returned
 	 * @throws RuntimeException if the truck cant be returned
 	 */
 	public void returnTruckByUsername(String username) {
@@ -130,10 +131,9 @@ public class CarpoolManager {
 				System.out.println("MyError: User not present ");
 				return;
 			}
-			Iterable<Truck> truckList =carCatalog.findByFree(false);
-			for (Truck t : truckList
-			) {
-				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername())){
+			Iterable<Truck> truckList = carCatalog.findByFree(false);
+			for (Truck t : truckList) {
+				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername())) {
 					t.setFree(true);
 					t.setRentedBy(null);
 					carCatalog.save(t);
@@ -148,7 +148,8 @@ public class CarpoolManager {
 	/**
 	 * returns the truck that matches the form to the available trucks
 	 *
-	 * @param form contains the information about the truck that is suppose to be returned
+	 * @param form contains the information about the truck that is suppose to be
+	 *             returned
 	 */
 	void returnTruckToFreeTrucks(@NotEmpty ReturnForm form) {
 		if (userAccountManager.findByUsername(form.getName()).isPresent()) {

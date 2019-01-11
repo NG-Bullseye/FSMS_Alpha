@@ -21,10 +21,12 @@ public class CarpoolInitializer implements DataInitializer {
 	private CarCatalog carCatalog;
 
 	/**
-	 * @param carpoolController contains all information needed for the initialization
+	 * @param carpoolController contains all information needed for the
+	 *                          initialization
 	 */
 
-	public CarpoolInitializer(CarCatalog carCatalog, CarpoolController carpoolController, UserAccountManager userManagement) {
+	public CarpoolInitializer(CarCatalog carCatalog, CarpoolController carpoolController,
+			UserAccountManager userManagement) {
 		this.carCatalog = carCatalog;
 		this.carpoolController = carpoolController;
 		this.userManagement = userManagement;
@@ -36,8 +38,7 @@ public class CarpoolInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 		Iterable<Truck> allTrucks = carCatalog.findAll();
-		for (Truck t :
-				allTrucks) {
+		for (Truck t : allTrucks) {
 			if (t.getName().equals("Kleiner Lkw"))
 				return;
 		}
@@ -53,8 +54,8 @@ public class CarpoolInitializer implements DataInitializer {
 		truckForm.setName("Mittlerer Lkw");
 		truckForm.setPrice(PRICE_MEDIUM);
 		carpoolController.getManager().addFreeTruck(truckForm);
-		carpoolController.getManager().rentTruckByWeight(Quantity.of(CAPACITY_MEDIUM, Metric.KILOGRAM), userManagement.findByUsername("chef").get());
-
+		carpoolController.getManager().rentTruckByWeight(Quantity.of(CAPACITY_MEDIUM, Metric.KILOGRAM),
+				userManagement.findByUsername("chef").get());
 
 		truckForm = new TruckClassForm();
 		truckForm.setCapacity(CAPACITY_LARGE);

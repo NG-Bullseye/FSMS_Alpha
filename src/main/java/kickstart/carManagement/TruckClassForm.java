@@ -6,7 +6,6 @@ public class TruckClassForm {
 	private int capacity;
 	private int price;
 
-
 	public String getName() {
 		return name;
 	}
@@ -46,5 +45,3 @@ public class TruckClassForm {
 		this.capacity = capacity;
 	}
 }
-
-

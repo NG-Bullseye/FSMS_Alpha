@@ -18,8 +18,8 @@ import lombok.Getter;
 
 // Timer class
 /**
- * This class extends the regular InventoryItem. It can store reorders, which will after 
- * a certain time has passed increase the quantity of this item.
+ * This class extends the regular InventoryItem. It can store reorders, which
+ * will after a certain time has passed increase the quantity of this item.
  *
  */
 @Entity

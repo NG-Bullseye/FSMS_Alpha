@@ -15,6 +15,8 @@
  */
 package kickstart.accountancy;
 
+import java.time.Month;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,12 +24,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.Month;
-
-
 /**
- * Diese Klasse bietet eine monatliche Abrechnung,
- * in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
+ * Diese Klasse bietet eine monatliche Abrechnung, in der die Möbelverkäufe im
+ * Vergleich zum Vormonat aufgeglieder sind.
  */
 
 @SuppressWarnings("SameReturnValue")
@@ -37,7 +36,8 @@ public class AccountancyController {
 	private final AccountancyManager accountancyManager;
 
 	/**
-	 * @param accountancyManager Managerklasse welche die Logik für die Finanzüberischt beinhaltet
+	 * @param accountancyManager Managerklasse welche die Logik für die
+	 *                           Finanzüberischt beinhaltet
 	 */
 	@Autowired
 	public AccountancyController(AccountancyManager accountancyManager) {
@@ -46,7 +46,7 @@ public class AccountancyController {
 
 	/**
 	 * @param yearFilterForm information about the year to filter
-	 * @param model information for the html
+	 * @param model          information for the html
 	 */
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/accountancy")
@@ -68,7 +68,7 @@ public class AccountancyController {
 		model.addAttribute("febValue", accountancyManager.fetchMonthlyAccountancyValue(Month.FEBRUARY));
 		model.addAttribute("janValue", accountancyManager.fetchMonthlyAccountancyValue(Month.JANUARY));
 		model.addAttribute("monthlyAccountancy", accountancyManager.fetchThisMonthAccountancy());
-		//model.addAttribute("monthlyOrders", accountancyManager.fetchMonthlyOrders());
+		// model.addAttribute("monthlyOrders", accountancyManager.fetchMonthlyOrders());
 		accountancyManager.checkForPayDay();
 		return "accountancy";
 	}

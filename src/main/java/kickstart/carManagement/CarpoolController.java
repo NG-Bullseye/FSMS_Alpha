@@ -44,7 +44,8 @@ public class CarpoolController {
 	/**
 	 * adds a new truck to the pool
 	 *
-	 * @param form  contains information about the truck to add to the List of available trucks
+	 * @param form  contains information about the truck to add to the List of
+	 *              available trucks
 	 * @param model contains the information for the html
 	 * @throws RuntimeException if something went wrong with the form
 	 */

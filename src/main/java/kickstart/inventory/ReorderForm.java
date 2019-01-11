@@ -10,7 +10,8 @@ public interface ReorderForm {
 
 	/**
 	 * 
-	 * @return Returns the string representation of a positive number(that means "153" for 153)
+	 * @return Returns the string representation of a positive number(that means
+	 *         "153" for 153)
 	 */
 	@NotEmpty(message = "Bitte geben sie eine Zahl ein")
 	@Pattern(regexp = "^\\d{1,4}|$", message = "Ungültige Anzahl!")

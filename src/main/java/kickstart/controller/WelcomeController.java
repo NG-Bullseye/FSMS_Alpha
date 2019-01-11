@@ -28,7 +28,7 @@ import kickstart.catalog.WebshopCatalog;
 public class WelcomeController {
 	private final WebshopCatalog catalog;
 
-	public WelcomeController(WebshopCatalog catalog){
+	public WelcomeController(WebshopCatalog catalog) {
 		this.catalog = catalog;
 	}
 
@@ -36,11 +36,11 @@ public class WelcomeController {
 	public String index(Model model) {
 		LinkedList<Article> mostBought = new LinkedList<Article>();
 		catalog.mostBought().forEach(mostBought::add);
-		for(int i = mostBought.size()-1;i>2;i--){
+		for (int i = mostBought.size() - 1; i > 2; i--) {
 			mostBought.remove(i);
 		}
-		model.addAttribute("catalog",mostBought);
+		model.addAttribute("catalog", mostBought);
 		return "index";
 	}
-	
+
 }

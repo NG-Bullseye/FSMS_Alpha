@@ -15,10 +15,12 @@ import javax.validation.Payload;
  */
 @Documented
 @Constraint(validatedBy = isRegisteredValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface isRegistered {
-    String message() default "E-Mail is already registered!";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+	String message() default "E-Mail is already registered!";
+
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
 }

@@ -1,7 +1,17 @@
 package kickstart.accountancy;
 
-import kickstart.user.User;
-import kickstart.user.UserManagement;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.money.MonetaryAmount;
+
 import org.javamoney.moneta.Money;
 import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.accountancy.AccountancyEntry;
@@ -11,12 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.money.MonetaryAmount;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.*;
-import java.util.stream.Collectors;
+import kickstart.user.User;
+import kickstart.user.UserManagement;
 
 @Service
 public class AccountancyManager {
@@ -26,8 +32,8 @@ public class AccountancyManager {
 	private Month lastMonth;
 
 	/**
-	 * @param userManager contains information about the users
-	 * @param accountancy contains information about the accountancy entries
+	 * @param userManager  contains information about the users
+	 * @param accountancy  contains information about the accountancy entries
 	 * @param businessTime
 	 */
 	@Autowired
@@ -39,7 +45,7 @@ public class AccountancyManager {
 		Assert.notNull(accountancy, "accountancy must not be null!");
 	}
 
-	//<editor-fold desc="Time Skipp Logic">
+	// <editor-fold desc="Time Skipp Logic">
 	public LocalDateTime getTime() {
 		return businessTime.getTime();
 	}
@@ -51,13 +57,14 @@ public class AccountancyManager {
 	void skippMonth() {
 		businessTime.forward(Duration.ofDays(30));
 	}
-	//</editor-fold>
+	// </editor-fold>
 
-	//<editor-fold desc="Schnittstelle für zusatzkosten">
+	// <editor-fold desc="Schnittstelle für zusatzkosten">
 
 	/**
 	 * @param amount  contains the order information
-	 * @param message message that will be displayed next to the value and date of the order
+	 * @param message message that will be displayed next to the value and date of
+	 *                the order
 	 */
 	public void addEntry(MonetaryAmount amount, String message) {
 		WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, businessTime.getTime(), message);
@@ -67,14 +74,15 @@ public class AccountancyManager {
 	/**
 	 * @param amount       contains the order information
 	 * @param creationTime for instantiation purpose only. use with care
-	 * @param message      message that will be displayed next to the value and date of the order
+	 * @param message      message that will be displayed next to the value and date
+	 *                     of the order
 	 */
 	public void addEntry(MonetaryAmount amount, LocalDateTime creationTime, String message) {
 		WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, creationTime, message);
 		accountancy.add(entry);
 	}
 
-	//</editor-fold>
+	// </editor-fold>
 
 	/**
 	 * @param sinceMonth the month from where on you want to know the value
@@ -85,8 +93,7 @@ public class AccountancyManager {
 		Interval interval = fetchIntervalToNow(sinceMonth);
 		if (interval == null)
 			return 0;
-		for (AccountancyEntry e : accountancy.find(fetchIntervalToNow(sinceMonth))
-		) {
+		for (AccountancyEntry e : accountancy.find(fetchIntervalToNow(sinceMonth))) {
 			value += e.getValue().getNumber().longValue();
 		}
 		return value;
@@ -98,13 +105,11 @@ public class AccountancyManager {
 	@SuppressWarnings("unchecked")
 	List fetchThisMonthAccountancy() {
 		Set<AccountancyEntry> results;
-		results = accountancy.find(fetchIntervalToNow(businessTime
-				.getTime()
-				.getMonth()))
-				.stream()
+		results = accountancy.find(fetchIntervalToNow(businessTime.getTime().getMonth())).stream()
 				.collect(Collectors.toSet());
 		List list = new ArrayList<>(results);
-		Collections.sort(list, (Comparator<AccountancyEntry>) (entry2, entry1) -> entry1.getDate().get().compareTo(entry2.getDate().get()));
+		Collections.sort(list, (Comparator<AccountancyEntry>) (entry2, entry1) -> entry1.getDate().get()
+				.compareTo(entry2.getDate().get()));
 		return list;
 	}
 
@@ -132,10 +137,7 @@ public class AccountancyManager {
 	 * @return returns according accountancy entries
 	 */
 	List<AccountancyEntry> getFilteredYearList(YearFilterForm form) {
-		return accountancy
-				.find(fetchOneYearSinceInterval(form.getYear()))
-				.get()
-				.collect(Collectors.toList());
+		return accountancy.find(fetchOneYearSinceInterval(form.getYear())).get().collect(Collectors.toList());
 	}
 
 	/**
@@ -183,8 +185,7 @@ public class AccountancyManager {
 		if (differenz > 0) {
 			for (; differenz > 0; differenz--) {
 				List<User> list = userManager.findAllEmployees().stream().collect(Collectors.toList());
-				for (User u :
-						list) {
+				for (User u : list) {
 					monthlySalary += u.getSalary();
 				}
 			}

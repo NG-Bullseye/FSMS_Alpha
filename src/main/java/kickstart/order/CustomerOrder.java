@@ -1,12 +1,11 @@
 package kickstart.order;
 
+import javax.persistence.Entity;
+
 import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderLine;
 import org.salespointframework.payment.Cash;
 import org.salespointframework.useraccount.UserAccount;
-
-import javax.persistence.Entity;
-
 
 @Entity
 public class CustomerOrder extends Order {
@@ -14,26 +13,26 @@ public class CustomerOrder extends Order {
 	private Status status;
 	private String destination;
 
-	CustomerOrder(UserAccount account, Cash cash){
+	CustomerOrder(UserAccount account, Cash cash) {
 		super(account, cash);
 		status = Status.versendet;
 		destination = "home";
 
 	}
 
-	CustomerOrder(){
+	CustomerOrder() {
 
 	}
 
-	public Status getStatus(){
+	public Status getStatus() {
 		return status;
 	}
 
-	public String getDestination(){
+	public String getDestination() {
 		return destination;
 	}
 
-	public void setStatus(Status status){
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
@@ -63,28 +62,23 @@ public class CustomerOrder extends Order {
 		return status == Status.abgeholt;
 	}
 
-
-
-	public void  setDestination(String destination){
+	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-  
+
 	@Override
 	public String toString() {
-		String out = this.getUserAccount().getFirstname() + " " + this.getUserAccount().getLastname()
-				+ ": ";
-		
-		for(OrderLine line: this.getOrderLines()) {
-			out += line.getProductName()+ " " + line.getQuantity().toString() + "; ";
+		String out = this.getUserAccount().getFirstname() + " " + this.getUserAccount().getLastname() + ": ";
+
+		for (OrderLine line : this.getOrderLines()) {
+			out += line.getProductName() + " " + line.getQuantity().toString() + "; ";
 		}
-		
+
 		return out;
 	}
 
-
-
 }
 
-enum Status{
-versendet,abholbereit,abgeholt
+enum Status {
+	versendet, abholbereit, abgeholt
 }

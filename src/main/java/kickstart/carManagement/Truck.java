@@ -1,18 +1,24 @@
 package kickstart.carManagement;
 
+import java.time.LocalDateTime;
+
+import javax.money.MonetaryAmount;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
 import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
-
-import javax.money.MonetaryAmount;
-import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class Truck extends Product {
 
 	@Embedded
-	@AttributeOverrides({@AttributeOverride(name = "metric", column = @Column(name = "quantity_metric"))})
+	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity capacity;
 	private boolean free;
 	private LocalDateTime rentDate;
@@ -47,7 +53,6 @@ public class Truck extends Product {
 	public LocalDateTime getDateOfRent() {
 		return rentDate;
 	}
-
 
 	public Quantity getCapacity() {
 		return this.capacity;

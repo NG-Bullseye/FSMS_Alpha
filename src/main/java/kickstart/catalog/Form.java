@@ -4,14 +4,12 @@ import java.util.HashSet;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Form {
-	@Size(max = 255,message = "Der Name darf maximal 255 Zeichen lang sein.")
+	@Size(max = 255, message = "Der Name darf maximal 255 Zeichen lang sein.")
 	private String name;
-	@Size(max = 255,message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
+	@Size(max = 255, message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
 	private String description;
 	private HashSet<String> selectedColours;
 	@Min(value = 0)
@@ -21,8 +19,6 @@ public class Form {
 	@Max(1500)
 	private double weight;
 	private HashSet<String> selectedCategories;
-
-
 
 	public void setDescription(String description) {
 		this.description = description;
@@ -63,6 +59,7 @@ public class Form {
 	public void setSelectedColours(HashSet<String> colour) {
 		this.selectedColours = colour;
 	}
+
 	public HashSet<String> getSelectedCategories() {
 		return selectedCategories;
 	}

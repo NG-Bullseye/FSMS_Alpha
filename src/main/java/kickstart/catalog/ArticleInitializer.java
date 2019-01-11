@@ -171,7 +171,7 @@ public class ArticleInitializer implements DataInitializer {
 		LinkedList<Article> l7 = new LinkedList<>();
 		l7.add(r1);
 		l7.add(r3);
-		Composite com7 = new Composite("Wandregal","ein Wandregal mit einer großen Ablagefläche",l7);
+		Composite com7 = new Composite("Wandregal", "ein Wandregal mit einer großen Ablagefläche", l7);
 		catalog.save(com7);
 	}
 }
