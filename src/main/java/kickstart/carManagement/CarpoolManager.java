@@ -129,10 +129,10 @@ public class CarpoolManager {
 				System.out.println("MyError: User not present ");
 				return;
 			}
-			List<Truck> truckList = userAccountTruckMap.get(rentedBy);
-			userAccountTruckMap.remove(rentedBy);
+			Iterable<Truck> truckList =carCatalog.findByFree(false);
 			for (Truck t : truckList
 			) {
+				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername()))
 				t.setFree(true);
 				t.setRentedBy(null);
 				carCatalog.save(t);
