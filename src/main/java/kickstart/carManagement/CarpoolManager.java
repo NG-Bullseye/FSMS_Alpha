@@ -123,8 +123,7 @@ public class CarpoolManager {
 			truckToRent.setRentDate(businessTime.getTime());
 			truckToRent.setRentedBy(rentedBy);
 			truckToRent.setFree(false);
-		}
-		else return null;
+		} else return null;
 		return truckToRent;
 	}
 
