@@ -14,6 +14,12 @@ import java.time.LocalTime;
 public class AccountancyInitializer implements DataInitializer {
 
 	private static final int ENTRY_FIRSTPAYMENT = -10000;
+	private static final int INIT_YEAR =2019 ;
+	private static final int INIT_MONTH = 1;
+	private static final int INIT_DAY = 1;
+	private static final int INIT_MINUTE = 0;
+	private static final int INIT_HOUR = 24;
+
 	private final AccountancyController accountancyController;
 
 	/**
@@ -35,7 +41,7 @@ public class AccountancyInitializer implements DataInitializer {
 				return;
 			}
 		}
-		accountancyController.getManager().addEntry(Money.of(ENTRY_FIRSTPAYMENT, "EUR"), LocalDateTime.of(LocalDate.of(2019, 1, 1), LocalTime.of(12, 0)), "Kosten der Unternehmensgründung");
+		accountancyController.getManager().addEntry(Money.of(ENTRY_FIRSTPAYMENT, "EUR"), LocalDateTime.of(LocalDate.of(INIT_YEAR, INIT_MONTH, INIT_DAY), LocalTime.of(INIT_HOUR, INIT_MINUTE)), "Kosten der Unternehmensgründung");
 	}
 
 }
