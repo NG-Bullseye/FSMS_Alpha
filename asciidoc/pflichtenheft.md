@@ -62,49 +62,23 @@ Das Pflichtenheft sollte stehts zu vervollständigen,  konsequente und korrekt s
 ### Möbelgeschäft
 Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihrer Firma mit einer neuen Kundensoftware(WEBSHOP) ausgestattet.
 
-Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten.
+Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten. Besonderes Augenmerk soll auf die Warenbestellung und-auslieferung gelegt werden.
+Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden muss. Möbelstücke und Teile sind in Kategorien unterteilt. Diese lassen sich nach Kategorien filtern und sortieren und können ausschließlich telefonisch bestellt werden. 
 
-Besonderes Augenmerk soll auf die Warenbestellung,  -auslieferung gelegt werden.
+Der Katalog enthält einzelne Teile(TEILE), die alleine bestellt werden können, und auch  vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer. Variabilität ist dabei über die Farbe möglich.
+Mitarbeiter verwalten für den Kunden seinen Warenkorb(WARENKORB) und sollen Produkte aus dem Katalog ausgeblendet werden können.
 
-Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden muss.
- 
-Möbelstücke und Teile sind in Kategorien unterteilt.
- 
-Die Möbel dort lassen sich nach Kategorisierungen filtern und sortieren.
+Einige Mitarbeiter sind Adminstratoren und haben damit weitreichendere Kompetenzen. So verwalten sie zum Beispiel die Mitarbeiter.
 
-Möbel lassen sich vom Kunden ausschließlich telefonisch bestellen.
- 
-Der Mitarbeiter verwaltet den Warenkorb(WARENKORB). 
- 
-Der Mitarbeiter soll Produkte ausblenden können.
- 
-Einige Mitarbeiter sind Administratoren(ADMIN).
- 
-Ausschließlich die Administratoren verwalten die Mitarbeiter.
+Die Lieferung einer Bestellung erfolgt entweder an ein Nebenlager(LAGER) oder direkt an den Kunden(KUNDE). Bei einer Lieferung an ein Nebenlager muss der Kunde automatisch benachrichtigt werden, damit er sie abholen kann.
+Die Bezahlung der Bestellung ist nur andeutungsweise zu implementieren. Es soll aber  eine Auswahl der Zahlungsoptionen geben.
 
-Die Lieferung erfolgt entweder in das Nebenlager(LAGER) oder direkt an den Kunden(KUNDE).
+Die Auslieferung erfolgt mit dem firmeneigenen LKW-Fuhrpark(FUHRPARK). Alternativ können sich Kunden zum Abtransport der Ware diese LKWs mieten. Je nach Gewicht der Lieferung soll immer der nächst günstigste LKW vermietet bzw.von der Firma genutzt werden. Bis einen Tag vor Auslieferung bzw.  Versand soll das Stornieren einer Bestellung möglich sein.
 
-Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
-
-Bezahlung ist nur andeutungsweise zu implementieren. Es muss nur eine Auswahl der Zahlungsoptionen geben.
-
-Der Kunde kann sich Teile(TEILE) einzeln bestellen, jedoch auch vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
+Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Einnahmen wie Möbelkosten oder Ausgaben wie Personalkosten im Vergleich zum Vormonat aufgegliedert sind.
 
 Kannkriterien:
 Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
-
-Variabilität ist über die Farbe möglich.
-
-Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park(FUHRPARK).
-
-Alternativ können sich Kunden zum Abtransport der Ware diese LKW's mieten.
-
-Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.
-von der Firma genutzt werden.
-
-Die Software soll Stornieren bis zu einen Tag vor Versand berücksichtigen.
-
-Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
 
 # 3. Produktnutzung
 
