@@ -31,6 +31,7 @@ public class OrderController {
 	private final CarpoolManager carpoolManager;
 	private final UserManagement userManagement;
 	private final WebshopCatalog catalog;
+	private String payment;
 
 	OrderController(OrderManager<CustomerOrder> orderManager,WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement){
 
@@ -41,6 +42,7 @@ public class OrderController {
 		this.catalog = catalog;
 		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager);
 		this.userManagement = userManagement;
+		payment = "Bar";
 
 	}
 
@@ -87,6 +89,7 @@ public class OrderController {
 		model.addAttribute("wightofcart", cartordermanager.getWight());
 		UserAccount accountname = cartordermanager.getAccount();
 		model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
+		model.addAttribute("waytopay", payment);
 
 		return "lkwbooking";
 	}
@@ -124,10 +127,17 @@ public class OrderController {
 		return cartordermanager.setDestination(destination);
 	}
 
+	@RequestMapping("/choosewaytopay")
+	String choosethewaytopay(@RequestParam("awaytopay") String payment){
+		this.payment = payment;
+		return "redirect:/lkwbooking";
+	}
+
 	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart){
 
-	return cartordermanager.newOrder(cart);
+		cartordermanager.newOrder(cart);
+		return "redirect:/";
 	}
 
 	@RequestMapping("/cancelthatorder")
