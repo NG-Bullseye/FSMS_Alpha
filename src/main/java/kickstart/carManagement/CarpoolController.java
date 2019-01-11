@@ -16,43 +16,45 @@ public class CarpoolController {
 
 	/**
 	 * @param carpoolManager contains Backendlogic
-	 * @param carCatalog contains persistent list of trucks
-	 * */
+	 * @param carCatalog     contains persistent list of trucks
+	 */
 	public CarpoolController(CarpoolManager carpoolManager, CarCatalog carCatalog) {
 		this.carpoolManager = carpoolManager;
-		this.carCatalog=carCatalog;
+		this.carCatalog = carCatalog;
 	}
 
 	/**
 	 * standard goto url for the carpool
+	 *
 	 * @param returnForm contains information about the truck to return
-	 * @param model contains the information for the html
+	 * @param model      contains the information for the html
 	 */
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping("/carpool")
-	String show(@ModelAttribute("returnForm") ReturnForm returnForm,Model model){
-		truckClassForm= new TruckClassForm();
-		model.addAttribute("newForm",truckClassForm);
-		model.addAttribute("freeTrucks",carCatalog.findByFree(true) );
-		model.addAttribute("takenTrucks",carCatalog.findByFree(false) );
-		model.addAttribute("freeTrucksNumber",carCatalog.findByFree(true).stream().count());
-		model.addAttribute("takenTrucksNumber",carCatalog.findByFree(false).stream().count() );
-		model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
+	String show(@ModelAttribute("returnForm") ReturnForm returnForm, Model model) {
+		truckClassForm = new TruckClassForm();
+		model.addAttribute("newForm", truckClassForm);
+		model.addAttribute("freeTrucks", carCatalog.findByFree(true));
+		model.addAttribute("takenTrucks", carCatalog.findByFree(false));
+		model.addAttribute("freeTrucksNumber", carCatalog.findByFree(true).stream().count());
+		model.addAttribute("takenTrucksNumber", carCatalog.findByFree(false).stream().count());
+		//model.addAttribute("truckUserAccountMapping",carpoolManager.getTruckUserAccountMap() );
 		return "carpool";
 	}
 
 	/**
 	 * adds a new truck to the pool
-	 * @param form contains information about the truck to add to the List of available trucks
+	 *
+	 * @param form  contains information about the truck to add to the List of available trucks
 	 * @param model contains the information for the html
 	 */
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/addTruck")
 	String addTruck(@ModelAttribute("newForm") TruckClassForm form, Model model) {
-		try{
-			model.addAttribute("newForm",truckClassForm);
+		try {
+			model.addAttribute("newForm", truckClassForm);
 			carpoolManager.addFreeTruck(form);
-		}catch (Exception r){
+		} catch (Exception r) {
 			r.printStackTrace();
 			return "redirect:carpool";
 		}
@@ -61,20 +63,21 @@ public class CarpoolController {
 
 	/**
 	 * returns the truck to the once available
+	 *
 	 * @param form contains the information about the truck to return
 	 */
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/returnTruck")
 	String returnTruck(@ModelAttribute("returnForm") ReturnForm form) {
-		try{
+		try {
 			carpoolManager.returnTruckToFreeTrucks(form);
-		}catch (Exception r){
+		} catch (Exception r) {
 			return "redirect:carpool";
 		}
 		return "redirect:carpool";
 	}
 
-	public CarpoolManager getManager(){
+	public CarpoolManager getManager() {
 		return carpoolManager;
 	}
 

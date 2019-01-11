@@ -116,6 +116,22 @@ class CatalogManagerTest {
 		catalog.save(tester2);
 		assertThat(manager.getWholeCatalog()).as("Die Artikel werden nicht richtig angezeigt.").isEqualTo(catalog.findAll());
 	}
+	
+	@Test
+	@Transient
+	void testGetInvisibleCatalog() {
+		manager.changeVisibility(tester1.getId());
+		
+		List<Article> articles = manager.getInvisibleCatalog();
+		
+		for(Article a:catalog.findAll()) {
+			if(a.isHidden()) {
+				assertTrue(articles.contains(a), "GetInvisibleCatalog sollte versteckte Artikel beinhalten.");
+			} else {
+				assertFalse(articles.contains(a), "GetInvisibleCatalog sollte versteckte Artikel nicht beinhalten.");
+			}
+		}
+	}
 
 	@Test
 	@Transient
@@ -349,7 +365,14 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void newPart() {
-		manager.newPart(form1);
+		PartOrderForm partOrderForm = new PartOrderForm();
+		partOrderForm.setName(form1.getName());
+		partOrderForm.setDescription(form1.getDescription());
+		partOrderForm.setPrice(form1.getPrice());
+		partOrderForm.setWeight(form1.getWeight());
+		partOrderForm.setSelectedCategories(form1.getSelectedCategories());
+		partOrderForm.setSelectedColours(form1.getSelectedColours());
+		manager.newPart(partOrderForm);
 		assertFalse(catalog.findByName(form1.getName()).isEmpty(),"Der Artikel wurde nicht dem Katalog hinzugefügt.");
 
 		LinkedList<Article> test = new LinkedList<>();
@@ -357,16 +380,21 @@ class CatalogManagerTest {
 		Article article = test.get(0);
 		assertTrue(inventory.findByProduct(article).isPresent());
 	}
-
+	
+	
 	@Test
 	@Transient
 	void newComposite() {
+		CompositeOrderForm compositeOrderForm = new CompositeOrderForm();
+		compositeOrderForm.setName(form2.getName());
+		compositeOrderForm.setDescription(form2.getDescription());
 		HashSet<Article> before = new HashSet<>();
-		manager.getWholeCatalog().forEach(before::add);
+		manager.getVisibleCatalog().forEach(before::add);
+		manager.getInvisibleCatalog().forEach(before::add);
 
 		HashMap<String, String> input = new HashMap<>();
 		input.put("article_"+Objects.requireNonNull(tester2.getId()).getIdentifier(),"2");
-		manager.newComposite(form2,input);
+		manager.newComposite(compositeOrderForm,input);
 
 		LinkedList<Article> l2 = new LinkedList<>();
 		l2.add(tester2);
@@ -379,6 +407,9 @@ class CatalogManagerTest {
 				actualList.add(article);
 			}
 		});
+		
+		assertFalse(actualList.size() == 0, "Die Liste soll niemals leer sein");
+		
 		Article actual = actualList.get(0);
 
 		assertEquals(expected.getName(), actual.getName(),"Der Artikel wurde nicht richtig erzeugt.");
@@ -540,5 +571,7 @@ class CatalogManagerTest {
 		String expected = "Test1.";
 		assertEquals(expected,manager.textOfAllComponents(com1.getId()),"Die enthaltenen Artikel werden nicht richtig angezeigt.");
 	}
+	
+	
 
 }

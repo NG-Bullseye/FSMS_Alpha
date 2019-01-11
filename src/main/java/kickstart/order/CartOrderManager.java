@@ -7,6 +7,7 @@ import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
 import kickstart.catalog.WebshopCatalog;
+import kickstart.mail.JavaMailer;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.order.*;
 import org.salespointframework.payment.Cash;
@@ -33,8 +34,8 @@ public class CartOrderManager {
 	private final CarpoolManager carpoolManager;
 	private String destination = "home";
 	private final List<String> destinations;
-
 	private final WebshopCatalog catalog;
+	private final JavaMailer javaMailer;
 	
 
 
@@ -47,12 +48,13 @@ public class CartOrderManager {
 	 */
 
 
-	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager){
+	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager, JavaMailer javaMailer){
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
 		this.destinations = new ArrayList<String>();
 		this.catalog = catalog;
+		this.javaMailer = javaMailer;
 		
 		this.destinations.add("Berlin");
 		this.destinations.add("Hamburg");
@@ -124,7 +126,6 @@ public class CartOrderManager {
 		return destinations;
 	}
 
-
 	/**
 	 *
 	 * @param order An Order of type OrderStatus.OPEN
@@ -133,8 +134,6 @@ public class CartOrderManager {
 	 */
 
 	public String cancelorpayOrder(CustomerOrder order, String choose){
-
-
 
 		if(choose.equals("bezahlen")){
 			orderManager.payOrder(order);
@@ -224,6 +223,7 @@ public class CartOrderManager {
 		}
 		//cart.addOrUpdateItem(truck, Quantity.of(1));
 
+
 		//return newOrder(cart);
 
 		if (cart.isEmpty()) {
@@ -232,6 +232,7 @@ public class CartOrderManager {
 		ChargeLine chargeLine = new ChargeLine(truck.getPrice(), truck.getName());
 		newOrder(cart).add(chargeLine);
 		return "redirect:/";
+
 	}
 
 	/**
@@ -259,11 +260,11 @@ public class CartOrderManager {
 		order.setDestination(destination);
 		orderManager.save(order);
 
+
 		destination = "Home";
 		wight = Quantity.of(0,Metric.KILOGRAM);
 		cart.clear();
 
-		//return "redirect:/"; String!!!!
 		//}
 		//return "redirect:/catalog";
 		return order;
@@ -283,17 +284,19 @@ public class CartOrderManager {
 		for(CustomerOrder order: orderManager.findBy(OrderStatus.COMPLETED)){
 			Interval interval = Interval.from(order.getDateCreated()).to(date);
 
-			if(order.isCompleted() && order.isversendet()){
 
-				if(interval.getStart().getYear()-interval.getEnd().getYear()<0){
+
+				if(order.isCompleted() && order.isversendet() && interval.getStart().getYear()-interval.getEnd().getYear()<0){
 					order.setStatus(Status.abholbereit);
 					orderManager.save(order);
 				}
-				if(interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
+				if(order.isCompleted() && order.isversendet() && interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
 					order.setStatus(Status.abholbereit);
 					orderManager.save(order);
+					if(!order.getUserAccount().getEmail().isEmpty()) {
+						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
 				}
-			}
+
 		}
 
 

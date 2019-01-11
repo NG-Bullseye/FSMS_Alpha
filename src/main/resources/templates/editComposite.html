@@ -21,14 +21,14 @@
                 <td><t3>Bezeichnung:</t3></td>
                 <td th:text="${article.name}">Name</td>
                 <td>
-                    <input type="text" th:field="*{name}" required="required"/>
+                    <input type="text" th:field="*{name}"/>
                 </td>
             </tr>
             <tr>
                 <td><t3>Beschreibung:</t3></td>
                 <td th:text="${article.description}">Name</td>
                 <td>
-                    <input type="text" th:field="*{description}" required="required"/>
+                    <input type="text" th:field="*{description}"/>
                 </td>
             </tr>
             <tr>
@@ -40,7 +40,7 @@
                 <td th:text="${article.key.name}"></td>
                 <td class="center aligned" th:text="${article.value}"></td>
                 <td>
-                    <input type="number" min="0" value="0" th:name="article_+${article.key.id}" >
+                    <input type="number" min="0" th:value="${article.value}" th:name="article_+${article.key.id}" >
                 </td>
 
             </tr>

@@ -1,115 +1,148 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.w3.org/1999/xhtml">
 <!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
 <head th:include="header :: head">
-    <title id="pageTitle">Katalog</title>
+<title id="pageTitle">Katalog</title>
 </head>
 <body>
-<nav th:include="navbar :: navbar"></nav>
-<div id="tablespace" class="ui grid">
-    <div class="four wide column">
-        <div class="ui image">
-            <img th:src="@{/resources/productImages/icon.jpg}"
-                 src="../static/resources/productImages/icon.jpg"/>
-        </div>
-    </div>
+	<nav th:include="navbar :: navbar"></nav>
+	<div id="tablespace" class="ui grid">
+		<div class="four wide column">
+			<div class="ui image">
+				<img th:src="@{/resources/productImages/icon.jpg}"
+					src="../static/resources/productImages/icon.jpg" />
+			</div>
+		</div>
 
-    <div id="rightspace" class="twelve wide column">
-        <div id="textnhead">
-            <t1 th:text="${article.name}">Name</t1>
-        </div>
-        <div id="textnhead">
-            <div class="meta">
-                <t2 th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Preis</t2>
-            </div>
-        </div>
-        <div class="description" id="textnhead">
-            <t th:text="${article.description}">Beschreibung</t>
-            <p>verfügbare Farben: </p>
-            <span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
-            <div th:switch="${article.type}">
-                <br>
-                <t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
-            </div>
-        </div>
-        <div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-        <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).PART}">
-            <a class="item" th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">Bearbeiten
-            </a>
-        </div>
-        <div class="ui button" th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-                <a class="item" th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">Bearbeiten</a>
-        </div>
-        </div>
-        <div class="ui button" th:switch="${hidden}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-            <a class="item" th:case="false" th:href="@{/hide/{id}(id=${article.getId()})}" target="_self">Für Kunden verbergen</a>
-            <a class="item" th:case="true" th:href="@{/show/{id}(id=${article.getId()})}" target="_self">Für Kunden sichtbar machen</a>
-        </div>
-    </div>
-</div>
-
-<div th:switch="${article.type}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-    <form class="ui form" th:case="${T(kickstart.articles.Article.ArticleType).PART}" th:action="@{/cart_part}" method="post">
-        <div class="ui labeled input">
-            <div class="ui label">Anzahl:</div>
-            <input name="count" type="number" min="1" th:max="${max}" value="1">
-            <input name="part" type="hidden" th:value="${article.id}">
-            <input class="ui button" type="submit" value="dem Warenkorb hinzufügen">
-        </div>
-    </form>
-    <form class="ui form"th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:action="@{/cart_composite}" method="post">
-        <div class="ui labeled input">
-            <div  class="ui label">Anzahl:</div>
-            <input name="count" type="number" min="1" max="10" value="1">
-            <input name="article" type="hidden" th:value="${article.id}">
-            <input class="ui  button" type="submit" value="dem Warenkorb hinzufügen">
-        </div>
-    </form>
-</div>
-<div class="ui button" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-    <a th:href="@{/reorder/{id}(id=${article.id})}">Nachbestellen</a>
-
-</div>
-    
-<div sec:authorize="hasRole('ROLE_EMPLOYEE') or hasRole('ROLE_CUSTOMER')" id="article">
-	<div class="ui comments">
-	    <h3 class="ui dividing header">Bewertungen</h3>
-	    <h4 th:text="'Durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' " >5</h4>
-	    <div class="comment" th:each="comment : ${article.comments}">
-	        <div class="content">
-	            <div class="metadata">
-	                <div class="rating">
-	                    <span th:text="'★ '+${comment.rating}">5</span>
-	                </div>
-	            </div>
-	            <div class="text" th:text="${comment.text}">Eins tolles Ding</div>
-	        </div>
-	    </div>
+		<div id="rightspace" class="twelve wide column">
+			<div id="textnhead">
+				<t1 th:text="${article.name}">Name</t1>
+			</div>
+			<div id="textnhead">
+				<div class="meta">
+					<t2
+						th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Preis</t2>
+				</div>
+			</div>
+			<div class="description" id="textnhead">
+				<t th:text="${article.description}">Beschreibung</t>
+				<p>verfügbare Farben:</p>
+				<span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
+				<div th:switch="${article.type}">
+					<br>
+					<t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+						th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
+				</div>
+			</div>
+			<div class="ui buttons" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+				<div th:switch="${article.type}">
+					<a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
+						th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">
+						<div class="ui red basic button">
+							<i class="edit icon"></i>Bearbeiten
+						</div>
+					</a> <a
+						th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+						th:href="@{/edit/composite/{id}(id=${article.getId()})}"
+						target="_self">
+						<div class="ui red basic button">
+							<i class="edit icon"></i>Bearbeiten
+						</div>
+					</a>
+				</div>
+				<div th:switch="${hidden}" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+					<a th:case="false" th:href="@{/hide/{id}(id=${article.getId()})}"
+						target="_self">
+						<div class="ui blue basic button">
+							<i class="eye icon"></i>Für Kunden verbergen
+						</div>
+					</a> <a th:case="true" th:href="@{/show/{id}(id=${article.getId()})}"
+						target="_self"><div class="ui blue basic button">
+							<i class="eye icon"></i>Für Kunden sichtbar machen
+						</div></a>
+				</div>
+				<a th:href="@{/reorder/{id}(id=${article.id})}">
+					<div class="ui green basic button">
+						<i class="chart bar icon"></i></i>Nachbestellen
+					</div>
+				</a>
+			</div>
+		</div>
 	</div>
-	
-	<form class="ui reply form" role="form" th:action="@{/article/{id}/comment(id=${article.id})}" method="post">
-	    <div class="field" id="textnhead">
-	        <textarea id="comment" name="comment" cols="40" rows="5" placeholder="Geben sie hier bitte ihren Kommentar ein"></textarea><br/>
-	    </div>
-	    <div class="field">
-	        <label for="rating">Bewertung</label>
-	        <select id="rating" name="rating">
-	            <option value=1> 1 </option>
-	            <option value=2> 2 </option>
-	            <option value=3> 3 </option>
-	            <option value=4> 4 </option>
-	            <option value=5> 5 </option>
-	            <option value=6> 6 </option>
-	            <option value=7> 7 </option>
-	            <option value=8> 8 </option>
-	            <option value=9> 9</option>
-	            <option value=10> 10 </option>
-	        </select>
-	    </div>
-	    <button type="submit" class="ui labeled button">
-	        <div class="ui label">Bewertung abgeben</div>
-	    </button>
-	</form>
-</div>
+
+	<div th:switch="${article.type}"
+		sec:authorize="hasRole('ROLE_EMPLOYEE')">
+		<form class="ui form"
+			th:case="${T(kickstart.articles.Article.ArticleType).PART}"
+			th:action="@{/cart_part}" method="post">
+			<div class="ui labeled input">
+				<div class="ui label">Anzahl:</div>
+				<input name="count" type="number" min="1" th:max="${max}" value="1">
+				<input name="part" type="hidden" th:value="${article.id}"> <input
+					class="ui button" type="submit" value="dem Warenkorb hinzufügen">
+			</div>
+		</form>
+		<form class="ui form"
+			th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+			th:action="@{/cart_composite}" method="post">
+			<div class="ui labeled input">
+				<div class="ui label">Anzahl:</div>
+				<input name="count" type="number" min="1" max="10" value="1">
+				<input name="article" type="hidden" th:value="${article.id}">
+				<input class="ui  button" type="submit"
+					value="dem Warenkorb hinzufügen">
+			</div>
+		</form>
+	</div>
+
+	<div id="tablespace">
+		<div id="article">
+			<div class="ui comments">
+				<h3 class="ui dividing header">Bewertungen</h3>
+				<h4
+					th:text="'Durchschnittliche Bewertung : '+${article.getAverageRating()} + ' ★' ">5</h4>
+				<div class="comment" th:each="comment : ${article.comments}">
+					<div class="content">
+						<div class="metadata">
+							<div class="rating">
+								<span th:text="'★ '+${comment.rating}">5</span>
+							</div>
+						</div>
+						<div class="text" th:text="${comment.text}">Eins tolles Ding</div>
+					</div>
+				</div>
+			</div>
+
+			<form class="ui reply form" role="form"
+				th:action="@{/article/{id}/comment(id=${article.id})}" method="post">
+				<div class="field" id="textnhead">
+					<textarea id="comment" name="comment" cols="40" rows="5"
+						placeholder="Geben sie hier bitte ihren Kommentar ein"></textarea>
+					<br />
+				</div>
+				<div class="field">
+					<label for="rating">Bewertung</label> <select id="rating"
+						name="rating">
+						<option value=1>1</option>
+						<option value=2>2</option>
+						<option value=3>3</option>
+						<option value=4>4</option>
+						<option value=5>5</option>
+						<option value=6>6</option>
+						<option value=7>7</option>
+						<option value=8>8</option>
+						<option value=9>9</option>
+						<option value=10>10</option>
+					</select>
+				</div>
+				<button type="submit" class="ui button">
+					<i class="envelope icon"></i>Bewertung abgeben
+
+				</button>
+			</form>
+		</div>
+	</div>
 
 </body>
 </html>

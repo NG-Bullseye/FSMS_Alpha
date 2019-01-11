@@ -81,17 +81,17 @@
 					</button>
 				</div>
 				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-					<a th:href="@{/catalog/all}">
+					<a th:href="@{/catalog/hidden}">
 						<div class="ui button">
 							<i class="eye icon"></i>
-							Gesamter Katalog
+							Versteckte Artikel
 						</div>
 					</a>
 				</div>
 				<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<div class="item">
 						<div class="ui simple dropdown">
-							neues Möbelstück
+							neuer Artikel
 							<i class="dropdown icon"></i>
 							<div class="menu">
 								<a class="item" th:href="@{/catalog/part/new}">neues Möbelteil</a>

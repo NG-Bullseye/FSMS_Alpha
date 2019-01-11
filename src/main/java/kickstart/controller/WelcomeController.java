@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import kickstart.articles.Article;
 import kickstart.catalog.WebshopCatalog;
 
 @Controller
@@ -33,7 +34,7 @@ public class WelcomeController {
 
 	@RequestMapping("/")
 	public String index(Model model) {
-		LinkedList mostBought = new LinkedList();
+		LinkedList<Article> mostBought = new LinkedList<Article>();
 		catalog.mostBought().forEach(mostBought::add);
 		for(int i = mostBought.size()-1;i>2;i--){
 			mostBought.remove(i);

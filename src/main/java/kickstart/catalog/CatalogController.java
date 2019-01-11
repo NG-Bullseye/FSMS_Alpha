@@ -85,10 +85,10 @@ public class CatalogController {
 
 		return "catalog";
 	}
-	@GetMapping("catalog/all")
+	@GetMapping("catalog/hidden")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String completeCatalog(Model model){
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getInvisibleCatalog());
 		model.addAttribute("filterform",new Filterform());
 		return "catalog";
 	}
@@ -109,6 +109,7 @@ public class CatalogController {
 		Article article = manager.getArticle(identifier);
 		article.addComment(payload.toComment(businessTime.getTime()));
 		manager.saveArticle(article);
+		
 
 		return "redirect:/article/"+ article.getId();
 
@@ -142,30 +143,30 @@ public class CatalogController {
 	@GetMapping("catalog/part/new")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String showNew(Model model){
-		model.addAttribute("form",new Form());
+		model.addAttribute("form",new PartOrderForm());
 		return"newPart";
 	}
 	@PostMapping("catalog/part/new")
-	public String editNew(@Valid @ModelAttribute("form") Form form,BindingResult bindingResult, Model model){
+	public String editNew(@Valid @ModelAttribute("form") PartOrderForm form,BindingResult bindingResult, Model model){
 		if(bindingResult.hasErrors()){
 			model.addAttribute("form",form);
 			return "newPart";
 		}
 		manager.newPart(form);
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 		return"redirect:/catalog/";
 	}
 	@GetMapping("catalog/composite/new")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	public String newComposite(Model model){
 
-		CompositeForm composite = new CompositeForm();
+		CompositeOrderForm composite = new CompositeOrderForm();
 		model.addAttribute("compositeForm",composite);
 		model.addAttribute("catalog", manager.getAvailableForNewComposite());
 		return "newComposite";
 	}
 	@PostMapping("catalog/composite/new")
-	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeForm form, BindingResult bindingResult, Model model,@RequestParam Map<String,String> partsMapping){
+	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form, BindingResult bindingResult, Model model,@RequestParam Map<String,String> partsMapping){
 
 		if(manager.compositeMapFiltering(partsMapping).isEmpty()){
 			return "redirect:/catalog/composite/new";
@@ -179,7 +180,7 @@ public class CatalogController {
 
 		manager.newComposite(form,partsMapping);
 
-		model.addAttribute("catalog", manager.getWholeCatalog());
+		model.addAttribute("catalog", manager.getVisibleCatalog());
 
 		return"redirect:/catalog/";
 	}

@@ -6,25 +6,6 @@ import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.inventory.ReorderableInventoryItem;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.inventory.Inventory;
-import org.salespointframework.quantity.Metric;
-import org.salespointframework.quantity.Quantity;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,11 +17,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.inventory.Inventory;
+import org.salespointframework.quantity.Metric;
+import org.salespointframework.quantity.Quantity;
+import org.springframework.stereotype.Component;
 
-import kickstart.articles.Article;
-import kickstart.articles.Composite;
-import kickstart.articles.Part;
-import kickstart.inventory.ReorderableInventoryItem;
 
 @Component
 public class CatalogManager {
@@ -56,14 +39,21 @@ public class CatalogManager {
 	}
 
 	/**
-	 * This method returns a Iterable of all Articles in the Catalog.
-	 * @return Every Article in the Catalog.
+	 * This method returns a Iterable of all invisible Articles in the Catalog.
+	 * @return invisible Articles in the Catalog.
 	 */
-	public Iterable<Article> getWholeCatalog() {
-		LinkedList<Article> output = new LinkedList<>();
-		catalog.findAll().forEach(output::add);
-		output.sort(Comparator.comparing(Article::getName));
-		return catalog.findAll();
+	public List<Article> getInvisibleCatalog() {
+		LinkedList<Article> invisible = new LinkedList<>();
+		catalog.findAll().forEach(article -> {
+			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent() && hiddenArticles.contains(article)
+					&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
+
+				invisible.add(article);
+
+			}
+		});
+		invisible.sort(Comparator.comparing(Article::getName));
+		return invisible;
 
 	}
 
@@ -74,15 +64,29 @@ public class CatalogManager {
 	public Iterable<Article> getVisibleCatalog(){
 		LinkedList<Article> visible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
-			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()) {
-				if (!hiddenArticles.contains(article)
-						&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
-					visible.add(article);
-				}
+			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent() && !hiddenArticles.contains(article)
+					&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
+
+				visible.add(article);
+
 			}
 		});
 		visible.sort(Comparator.comparing(Article::getName));
 		return visible;
+	}
+	
+	/**
+	 * 
+	 * @return Returns a list of all articles in the catalog
+	 */
+	public List<Article> getWholeCatalog() {
+		List<Article> articles = new ArrayList<Article>();
+		
+		catalog.findAll().forEach(article -> {
+			articles.add(article);
+		});
+		
+		return articles;
 	}
 
 	/**
@@ -117,14 +121,20 @@ public class CatalogManager {
 		this.createAvailableForNewComposite();
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			afterEdit.setName(article.getName());
-			afterEdit.setDescription(article.getDescription());
-			afterEdit.setPrice(Money.of(article.getPrice(), EURO));
-			afterEdit.setWeight(article.getWeight());
+			if(!article.getName().isEmpty()){
+			afterEdit.setName(article.getName());}
+			if(!article.getDescription().isEmpty()){
+			afterEdit.setDescription(article.getDescription());}
+			if(article.getPrice() != 0){
+			afterEdit.setPrice(Money.of(article.getPrice(), EURO));}
+			if(article.getWeight() != 0){
+			afterEdit.setWeight(article.getWeight());}
+			if(!article.getSelectedCategories().isEmpty()){
 			afterEdit.getCategories().forEach(afterEdit::removeCategory);
-			article.getSelectedCategories().forEach(afterEdit::addCategory);
+			article.getSelectedCategories().forEach(afterEdit::addCategory);}
+			if(!article.getSelectedColours().isEmpty()){
 			afterEdit.removeColours();
-			article.getSelectedColours().forEach(afterEdit::setColour);
+			article.getSelectedColours().forEach(afterEdit::setColour);}
 
 			catalog.save(afterEdit);
 			this.editAffectedArticles(afterEdit);
@@ -150,8 +160,11 @@ public class CatalogManager {
 			throws IllegalArgumentException {
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			afterEdit.setName(form.getName());
-			afterEdit.setDescription(form.getDescription());
+			if(!form.getName().isEmpty()){
+			afterEdit.setName(form.getName());}
+			if(!form.getDescription().isEmpty()){
+			afterEdit.setDescription(form.getDescription());}
+
 			LinkedList<Article> partsBefore = new LinkedList<>();
 			afterEdit.getPartIds().forEach((article, count) -> {
 				int i = count;
@@ -318,7 +331,7 @@ public class CatalogManager {
 	 * @param form A Form containing all information about the new Part, such as
 	 *             name, description, weight, price, colours, categories.
 	 */
-	public void newPart(Form form){
+	public void newPart(PartOrderForm form){
 			Part newArticle = new Part(form.getName(),form.getDescription(),form.getPrice(),form.getWeight(),form.getSelectedColours(),form.getSelectedCategories());
 			catalog.save(newArticle);
 			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
@@ -332,7 +345,7 @@ public class CatalogManager {
 	 * @param partsCount The user's input which articles and how many of them are
 	 *                   included in the composite.
 	 */
-	public void newComposite(CompositeForm form, Map<String, String> partsCount) {
+	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
 		Composite newArticle = new Composite(form.getName(), form.getDescription(),
 				this.compositeMapFiltering(partsCount));
@@ -425,7 +438,6 @@ public class CatalogManager {
 
 		HashSet<Article> allComposites = new HashSet<>();
 		catalog.findComposite().forEach(allComposites::add);
-		try {
 			for (Article composite : allComposites) {
 				Map<ProductIdentifier, Integer> parts = composite.getPartIds();
 				parts.forEach((articleId, count) -> {
@@ -437,9 +449,6 @@ public class CatalogManager {
 					}
 				});
 			}
-		} catch (NullPointerException n) {
-			System.out.println("Die Liste ist leer.");
-		}
 
 		this.availableForNewComposite = articlesWithoutParents;
 	}
@@ -532,5 +541,4 @@ public class CatalogManager {
 
 		return result;
 	}
-
 }

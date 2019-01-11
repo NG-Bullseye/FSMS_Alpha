@@ -5,6 +5,7 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.catalog.WebshopCatalog;
+import kickstart.mail.JavaMailer;
 import kickstart.user.UserManagement;
 import org.salespointframework.order.Cart;
 import org.salespointframework.order.OrderIdentifier;
@@ -33,16 +34,17 @@ public class OrderController {
 	private final WebshopCatalog catalog;
 	private String payment;
 
-	OrderController(OrderManager<CustomerOrder> orderManager,WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement){
+	OrderController(OrderManager<CustomerOrder> orderManager,WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement, JavaMailer javaMailer){
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
 		this.businesstime = businesstime;
 		this.carpoolManager = carpoolManager;
 		this.catalog = catalog;
-		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager);
+		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager, javaMailer);
 		this.userManagement = userManagement;
 		payment = "Bar";
+
 
 	}
 
@@ -62,7 +64,6 @@ public class OrderController {
 			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
 		} else {
 			model.addAttribute("nameoftheorderer", "Bitte einen Kunden auswählen");
-
 		}
 
 
@@ -126,7 +127,6 @@ public class OrderController {
 	String choosedestination(@RequestParam("destination")String destination){
 		return cartordermanager.setDestination(destination);
 	}
-
 	@RequestMapping("/choosewaytopay")
 	String choosethewaytopay(@RequestParam("awaytopay") String payment){
 		this.payment = payment;
