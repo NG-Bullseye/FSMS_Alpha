@@ -150,6 +150,10 @@ Zur Update unserer Artikel(siehe Abschnitt Entwurfsentscheidungen) verändern wi
 
 Das Projekt besitzt neben den regulären Artikeln auch ausleihbare Produkte, die LKWs. Diese werden als Erweiterung des Salespoint Produktes implementiert und besitzen ein Attribut, das anzeigt ob dieser LKW momentan verliehen ist. Das Zurückgeben kann einfach über eine Attributänderung stattfinden. Da es dazu kein Salespointlager gibt, nutzen wir stattdessen ChargeLines, die in Salespoint für zusätzliche Ausgaben einer Bestellung verwendet werden können.
 
+Für die Implementierung der verschiedenen User (Kunde, Mitarbeiter, Admin) haben wir uns entschieden, eine globale Klasse User zu verwenden (entgegen dem ursprünglichen Entwurfsmusterdiagramm). Kunden unterscheiden sich von Mitarbeitern nur im Gehalt. Dieses wird jedoch beim erzeugen eines Kunden bzw. Feuern eines Mitarbeiters auf Null gesetzt. Desweiteren wird das Gehalt nur von Mitarbeitern abgefragt. Die Rollen, sprich Berechtigungen, für den User werden dann über den SalesPoint UserAccount festgelegt.
+Die Erstellung der drei Klassen hätte einem erheblichen Mehraufwand entsprochen und wiederspricht der allgemeinen Regel, Attribute statt Klassen zu verwenden.
+
+
 ## Architektur
 
 ![Entwurfsklassendiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Entwurfsklassendiagramm.jpg)
