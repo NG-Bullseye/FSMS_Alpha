@@ -116,10 +116,10 @@ public class InventoryManager {
 	
 	/**
 	 * Creates a new reorder for the article so that after the specified reorder time,
-	 * the quantity increases. It also adds an AccountancyEntry to the {@link AccountancyManager
-	 * 
-	 * @param id The ProductIdentifier of the article that should get reordered.
-	 * @param quantity The desired quantity
+	 * the quantity increases. It also adds an AccountancyEntry to the {@link AccountancyManager}
+	 *
+	 * @param id  The ProductIdentifier of the article that should get reordered.
+	 * @param quantity  The desired quantity
 	 */
 	public void reorder(@NotNull ProductIdentifier id, @NotNull Quantity quantity) {
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);

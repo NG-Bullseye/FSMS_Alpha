@@ -30,7 +30,7 @@ public class Truck extends Product {
 	 * @param price     price the user has to pay in order to rent the truck
 	 * @param capacity  the maximum weight the truck is suppose to carry
 	 * @param dayOfRent the day the truck was rented
-	 * @return the initialized truck
+	 *
 	 */
 	public Truck(String truckName, MonetaryAmount price, Quantity capacity, LocalDateTime dayOfRent) {
 		super(truckName, price);
@@ -41,7 +41,8 @@ public class Truck extends Product {
 	}
 
 	/**
-	 * @return the date the truck was rented on
+	 *
+	 * @return The date the truck was rented on
 	 */
 	public LocalDateTime getDateOfRent() {
 		return rentDate;
