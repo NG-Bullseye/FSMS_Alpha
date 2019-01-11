@@ -69,8 +69,6 @@ public class CarpoolManager {
 		return filterLogic(weight);
 	}
 
-
-
 	private Truck filterLogic(Quantity weight){
 		List<Truck> filteredTrucks = new ArrayList<>();
 		for (Truck t :
@@ -105,8 +103,7 @@ public class CarpoolManager {
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
 		Truck truckToRent=filterLogic(weight);
-		if (truckToRent!=null)
-		{
+		if (truckToRent!=null) {
 			if (truckToRent.isFree()) {
 				truckToRent.setRentDate(businessTime.getTime());
 				truckToRent.setRentedBy(rentedBy);
@@ -132,10 +129,10 @@ public class CarpoolManager {
 				System.out.println("MyError: User not present ");
 				return;
 			}
-			List<Truck> truckList = userAccountTruckMap.get(rentedBy);
-			userAccountTruckMap.remove(rentedBy);
+			Iterable<Truck> truckList =carCatalog.findByFree(false);
 			for (Truck t : truckList
 			) {
+				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername()))
 				t.setFree(true);
 				t.setRentedBy(null);
 				carCatalog.save(t);
