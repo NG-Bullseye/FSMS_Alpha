@@ -10,12 +10,17 @@ Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihre
 
 Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten. Besonderes Augenmerk soll auf die Warenbestellung und-auslieferung gelegt werden.
 Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden muss. Möbelstücke und Teile sind in Kategorien unterteilt. Diese lassen sich nach Kategorien filtern und sortieren und können ausschließlich telefonisch bestellt werden. 
+
 Der Katalog enthält einzelne Teile(TEILE), die alleine bestellt werden können, und auch  vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer. Variabilität ist dabei über die Farbe möglich.
 Mitarbeiter verwalten für den Kunden seinen Warenkorb(WARENKORB) und sollen Produkte aus dem Katalog ausgeblendet werden können.
+
 Einige Mitarbeiter sind Adminstratoren und haben damit weitreichendere Kompetenzen. So verwalten sie zum Beispiel die Mitarbeiter.
+
 Die Lieferung einer Bestellung erfolgt entweder an ein Nebenlager(LAGER) oder direkt an den Kunden(KUNDE). Bei einer Lieferung an ein Nebenlager muss der Kunde automatisch benachrichtigt werden, damit er sie abholen kann.
 Die Bezahlung der Bestellung ist nur andeutungsweise zu implementieren. Es soll aber  eine Auswahl der Zahlungsoptionen geben.
+
 Die Auslieferung erfolgt mit dem firmeneigenen LKW-Fuhrpark(FUHRPARK). Alternativ können sich Kunden zum Abtransport der Ware diese LKWs mieten. Je nach Gewicht der Lieferung soll immer der nächst günstigste LKW vermietet bzw.von der Firma genutzt werden. Bis einen Tag vor Auslieferung bzw.  Versand soll das Stornieren einer Bestellung möglich sein.
+
 Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Einnahmen wie Möbelkosten oder Ausgaben wie Personalkosten im Vergleich zum Vormonat aufgegliedert sind.
 
 Kannkriterien:
