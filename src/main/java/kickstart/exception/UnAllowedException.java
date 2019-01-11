@@ -15,8 +15,7 @@ public class UnAllowedException extends Exception {
      * @param message contains an optional message, which will be printed out.
     */
 	// Constructor that accepts a message
-    public UnAllowedException(String message)
-      {
+    public UnAllowedException(String message){
     	  super(message);
       }
  }
