@@ -28,7 +28,7 @@
         <tr th:each="funiture : ${cart} ">
             <td th:text="${funiture.productName}">Moebelstück</td>
             <td th:text="${funiture.quantity}">Anzahl</td>
-            <td th:text="${funiture.price}">Preis</td>
+            <td th:text="${funiture.price.getNumber().doubleValueExact()}">Preis</td>
         </tr>
         </tbody>
     </table>
@@ -40,11 +40,11 @@
 
 <div class="eight wide column">
 
-<div class="value" align="right"><h2><span th:text="${{cart.price}}">Gesamtpreis</span></h2></div>
+<div class="value" align="right"><h2><span th:text="${{cart.price.getNumber().doubleValueExact()}}">Gesamtpreis</span></h2></div>
 </div>
 </div>
 <div class="ui grid">
-<div class="eight wide column">
+<div class="six wide column">
 
 <div  th:if="${available}==true"><h2>Wollen sie einen LKW mieten?</h2></div>
 <div  th:if="${available}==false"><h2>Leider kein LKW verfügbar.</h2></div>
@@ -60,7 +60,7 @@
 </div>
 </div>
 
-<div class="eight wide column">
+<div class="five wide column">
 
     <div th:if="${ishome}==true" >   <h2>Bitte Lieferort auswählen</h2></div>
     <div th:if="${ishome}==false" >  <h2 th:text="'Lieferort:'+' '+${finaldestination}">Lieferort</h2></div>
@@ -78,6 +78,22 @@
     </form>
 </div>
 </div>
+    <div class="five wide column">
+
+        <div th:if="${ishome}==true" >   <h2>Bitte Zahlungsart auswählen</h2></div>
+        <div th:if="${ishome}==false" >  <h2 th:text="'Zahlungsart:'+' '+${waytopay}">waytopay</h2></div>
+        <div>
+            <form th:action="@{/choosewaytopay}">
+                <select name="awaytopay">
+                    <option th:value="Bar">Bar</option>
+                    <option th:value="Paypal">Paypal</option>
+                    <option th:value="Vorkasse">Vorkasse</option>
+
+                </select>
+                <input type="submit" value="Auswählen">
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

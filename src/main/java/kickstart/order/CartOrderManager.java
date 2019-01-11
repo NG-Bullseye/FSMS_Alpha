@@ -1,7 +1,6 @@
 package kickstart.order;
 
 
-
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
@@ -63,19 +62,44 @@ public class CartOrderManager {
 
 	}
 
+	/**
+	 *
+	 * @return the destination of the order
+	 */
+
 	public String getDestination(){return destination;}
+
+	/**
+	 *
+	 * @return the total wight of the cart
+	 */
 
 	public Quantity getWight(){
 		return wight;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
+
 	public OrderManager<CustomerOrder> getOrderManager(){
 		return orderManager;
 	}
 
+	/**
+	 *
+	 * @return account of the user for whom it is ordered
+	 */
 	public UserAccount getAccount(){
 		return account;
 	}
+
+	/**
+	 *
+	 * @param destination
+	 * @return
+	 */
 
 	public String setDestination(String destination){
 		this.destination = destination;
@@ -84,18 +108,23 @@ public class CartOrderManager {
 
 	/**
 	 * Initialize a Cart
-	 * @return
+	 * @return initialized cart
 	 */
 
 	public Cart initializeCart() {
 
 		return new Cart();
 	}
-	
+
+
+
+	/**
+	 *
+	 * @return destination of the order
+	 */
 	public List<String> getDestinations() {
 		return destinations;
 	}
-	
 
 	/**
 	 *
@@ -110,14 +139,18 @@ public class CartOrderManager {
 			orderManager.payOrder(order);
 			orderManager.save(order);
 			Iterator<OrderLine> orderLineIterator = order.getOrderLines().iterator();
-			if(orderLineIterator.hasNext()) {
-				ProductIdentifier s = orderLineIterator.next().getProductIdentifier();
-				if(catalog.findById(s).isPresent()) {
-					Article a = catalog.findById(s).get();
-					a.increaseOrderedAmount(1);
-					catalog.save(a);
-				}
-				
+
+				while (orderLineIterator.hasNext()){
+					ProductIdentifier s = orderLineIterator.next().getProductIdentifier();
+
+
+
+					if (catalog.findById(s).isPresent()) {
+						Article a = catalog.findById(s).get();
+						a.increaseOrderedAmount(1);
+						catalog.save(a);
+					}
+
 			}
 
 
@@ -182,20 +215,21 @@ public class CartOrderManager {
 	 * @return a new order
 	 */
 
-	public String addLKW(Cart cart){
+	public String addLKW(Cart cart) {
 
-		Truck truck=carpoolManager.rentTruckByWeight(wight,account);
-		if(truck==null){
+		Truck truck = carpoolManager.rentTruckByWeight(wight, account);
+		if (truck == null) {
 			return "redirect:/";
 		}
 		//cart.addOrUpdateItem(truck, Quantity.of(1));
-		
+
+
 		//return newOrder(cart);
 
-		if(cart.isEmpty()){
+		if (cart.isEmpty()) {
 			return "redirect:/catalog";
 		}
-		ChargeLine chargeLine = new ChargeLine(truck.getPrice(),truck.getName());
+		ChargeLine chargeLine = new ChargeLine(truck.getPrice(), truck.getName());
 		newOrder(cart).add(chargeLine);
 		return "redirect:/";
 
@@ -221,16 +255,16 @@ public class CartOrderManager {
 	public CustomerOrder newOrder(Cart cart){
 
 		//if(!cart.isEmpty() ) {
-			CustomerOrder order = new CustomerOrder(account, Cash.CASH);
-			cart.addItemsTo(order);
-			order.setDestination(destination);
-			orderManager.save(order);
+		CustomerOrder order = new CustomerOrder(account, Cash.CASH);
+		cart.addItemsTo(order);
+		order.setDestination(destination);
+		orderManager.save(order);
 
-			destination = "Home";
-			wight = Quantity.of(0,Metric.KILOGRAM);
-			cart.clear();
 
-			//return "redirect:/"; String!!!!
+		destination = "Home";
+		wight = Quantity.of(0,Metric.KILOGRAM);
+		cart.clear();
+
 		//}
 		//return "redirect:/catalog";
 		return order;
@@ -254,15 +288,13 @@ public class CartOrderManager {
 
 				if(order.isCompleted() && order.isversendet() && interval.getStart().getYear()-interval.getEnd().getYear()<0){
 					order.setStatus(Status.abholbereit);
-					if(!order.getUserAccount().getEmail().isEmpty()) {
-						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
-					}
+					orderManager.save(order);
 				}
 				if(order.isCompleted() && order.isversendet() && interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
 					order.setStatus(Status.abholbereit);
+					orderManager.save(order);
 					if(!order.getUserAccount().getEmail().isEmpty()) {
 						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
-					}
 				}
 
 		}
@@ -284,6 +316,11 @@ public class CartOrderManager {
 		}
 		
 	}
+
+	/**
+	 * get orders delivered sideinventories
+	 * @return map of orders delivered in the sideinventories
+	 */
 	
 	public Map<String, List<CustomerOrder>> getSideInventories() {
 		Map<String, List<CustomerOrder>> sideInventories = new HashMap<String, List<CustomerOrder>>();
