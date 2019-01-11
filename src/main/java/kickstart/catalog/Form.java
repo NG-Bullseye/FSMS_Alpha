@@ -9,23 +9,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Form {
-	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")
-	@Size(min = 2,max = 255,message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
+	@Size(max = 255,message = "Der Name darf maximal 255 Zeichen lang sein.")
 	private String name;
-	@NotEmpty(message = "Bitte geben Sie eine Beschreibung für das Produkt ein.")
-	@Size(min = 2,max = 255,message = "Die Beschreibung muss zwischen 2 und 255 Zeichen lang sein.")
+	@Size(min = 2,max = 255,message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
 	private String description;
-	@NotEmpty(message = "Bitte wählen Sie mindestens eine Farbe aus")
 	private HashSet<String> selectedColours;
-	@NotNull(message = "Bitte geben Sie einen Preis für das Produkt ein.")
-	@Min(1)
+	@Min(0)
 	@Max(10000)
 	private double price;
-	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")
 	@Min(0)
 	@Max(1500)
 	private double weight;
-	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
 
 
