@@ -125,9 +125,11 @@ public class CatalogManager {
 			afterEdit.setName(article.getName());}
 			if(!article.getDescription().isEmpty()){
 			afterEdit.setDescription(article.getDescription());}
-			if(article.getPrice() != 0){
+			long l1 = Math.round(article.getPrice());
+			if(l1 != 0){
 			afterEdit.setPrice(Money.of(article.getPrice(), EURO));}
-			if(article.getWeight() != 0){
+			long l2 = Math.round(article.getWeight());
+			if( l2 != 0){
 			afterEdit.setWeight(article.getWeight());}
 			if(!article.getSelectedCategories().isEmpty()){
 			afterEdit.getCategories().forEach(afterEdit::removeCategory);

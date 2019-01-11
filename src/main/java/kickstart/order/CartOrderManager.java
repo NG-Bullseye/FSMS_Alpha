@@ -157,6 +157,9 @@ public class CartOrderManager {
 		if(choose.equals("stornieren")) {
 			orderManager.cancelOrder(order);
 			orderManager.save(order);
+			if(!order.getUserAccount().getUsername().isEmpty()) {
+				carpoolManager.returnTruckByUsername(order.getUserAccount().getUsername());
+			}
 		}
 
 		changeStatus();
