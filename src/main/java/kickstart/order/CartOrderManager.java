@@ -8,6 +8,7 @@ import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
 import kickstart.catalog.WebshopCatalog;
 import kickstart.mail.JavaMailer;
+import kickstart.user.UserManagement;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.order.*;
 import org.salespointframework.payment.Cash;
@@ -36,6 +37,7 @@ public class CartOrderManager {
 	private final List<String> destinations;
 	private final WebshopCatalog catalog;
 	private final JavaMailer javaMailer;
+	private final UserManagement userManagement;
 	
 
 
@@ -48,13 +50,14 @@ public class CartOrderManager {
 	 */
 
 
-	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager, JavaMailer javaMailer){
+	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager, JavaMailer javaMailer, UserManagement userManagement){
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager= carpoolManager;
 		this.destinations = new ArrayList<String>();
 		this.catalog = catalog;
 		this.javaMailer = javaMailer;
+		this.userManagement = userManagement;
 		
 		this.destinations.add("Berlin");
 		this.destinations.add("Hamburg");
@@ -157,7 +160,7 @@ public class CartOrderManager {
 		if(choose.equals("stornieren")) {
 			orderManager.cancelOrder(order);
 			orderManager.save(order);
-			if(!order.getUserAccount().getUsername().isEmpty()) {
+			if(!order.getUserAccount().getUsername().isEmpty() && order.getChargeLines().get().findFirst().isPresent()) {
 				carpoolManager.returnTruckByUsername(order.getUserAccount().getUsername());
 			}
 		}
@@ -231,7 +234,10 @@ public class CartOrderManager {
 			return "redirect:/catalog";
 		}
 		ChargeLine chargeLine = new ChargeLine(truck.getPrice(), truck.getName());
-		newOrder(cart).add(chargeLine);
+		CustomerOrder helper = 	newOrder(cart);
+		helper.add(chargeLine);
+		orderManager.save(helper);
+
 		return "redirect:/";
 
 	}
@@ -289,16 +295,13 @@ public class CartOrderManager {
 				if(order.isCompleted() && order.isversendet() && interval.getStart().getYear()-interval.getEnd().getYear()<0){
 					order.setStatus(Status.abholbereit);
 					orderManager.save(order);
-					if(!order.getUserAccount().getEmail().isEmpty()) {
-						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
-					}
+					javaMailer.sendCustomerConfirmationMessage(userManagement.findUser(order.getUserAccount()).getEmail());
+
 				}
 				if(order.isCompleted() && order.isversendet() && interval.getStart().getDayOfYear()-interval.getEnd().getDayOfYear()<0){
 					order.setStatus(Status.abholbereit);
 					orderManager.save(order);
-					if(!order.getUserAccount().getEmail().isEmpty()) {
-						javaMailer.sendCustomerConfirmationMessage(order.getUserAccount().getEmail());
-					}
+					javaMailer.sendCustomerConfirmationMessage(userManagement.findUser(order.getUserAccount()).getEmail());
 				}
 
 		}
