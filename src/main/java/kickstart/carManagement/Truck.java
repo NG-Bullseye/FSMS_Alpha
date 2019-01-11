@@ -48,6 +48,7 @@ public class Truck extends Product {
 		return rentDate;
 	}
 
+
 	public Quantity getCapacity() {
 		return this.capacity;
 	}

@@ -60,24 +60,8 @@ public class AccountancyManager {
 	 * @param message message that will be displayed next to the value and date of the order
 	 */
 	public void addEntry(MonetaryAmount amount, String message) {
-		try {
-			WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, businessTime.getTime(), message);
-			accountancy.add(entry);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	@Deprecated
-	public void addEntry(MonetaryAmount amount) {
-		try {
-			WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, businessTime.getTime());
-			accountancy.add(entry);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, businessTime.getTime(), message);
+		accountancy.add(entry);
 	}
 
 	/**
@@ -86,13 +70,8 @@ public class AccountancyManager {
 	 * @param message      message that will be displayed next to the value and date of the order
 	 */
 	public void addEntry(MonetaryAmount amount, LocalDateTime creationTime, String message) {
-		try {
-			WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, creationTime, message);
-			accountancy.add(entry);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		WebshopAccountancyEntry entry = new WebshopAccountancyEntry(amount, creationTime, message);
+		accountancy.add(entry);
 	}
 
 	//</editor-fold>

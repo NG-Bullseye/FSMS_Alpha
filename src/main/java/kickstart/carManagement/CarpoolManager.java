@@ -118,6 +118,7 @@ public class CarpoolManager {
 	 * returns the truck that matches the form to the available trucks
 	 *
 	 * @param username contains the information about the truck that is suppose to be returned
+	 * @throws RuntimeException if the truck cant be returned
 	 */
 	public void returnTruckByUsername(String username) {
 		try {
@@ -132,12 +133,13 @@ public class CarpoolManager {
 			Iterable<Truck> truckList =carCatalog.findByFree(false);
 			for (Truck t : truckList
 			) {
-				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername()))
-				t.setFree(true);
-				t.setRentedBy(null);
-				carCatalog.save(t);
+				if (t.getRentedBy().getUsername().equals(rentedBy.getUsername())){
+					t.setFree(true);
+					t.setRentedBy(null);
+					carCatalog.save(t);
+				}
 			}
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			System.out.println("MyError: Truck can not be returned: ");
 			e.getCause();
 		}
