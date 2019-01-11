@@ -67,7 +67,7 @@
 						<td th:text="${order.TotalPrice.getNumber().doubleValueExact()} + ' ' + ${order.TotalPrice.getCurrency()}"></td>
  						<td th:if="${order.isOpen()}">Offen</td>
 						<td th:if="${order.isPaid()}">Bezahlt</td>
-                       <!-- <td th:if="${(order.isComplete()) and (order.isversendet())}">Versendet</td>-->
+                        <td th:if="${(order.isCompleted()) and (order.isversendet())}">Versendet</td>
                         <td th:if="${order.isabholbereit()}">Abholbereit</td>
 						<td th:if="${order.isabgeholt()}">Abgeschlossen</td>
                         <!-- noch mehr statusse -->
