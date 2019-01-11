@@ -69,8 +69,6 @@ public class CarpoolManager {
 		return filterLogic(weight);
 	}
 
-
-
 	private Truck filterLogic(Quantity weight){
 		List<Truck> filteredTrucks = new ArrayList<>();
 		for (Truck t :
@@ -105,8 +103,7 @@ public class CarpoolManager {
 			throw new IllegalArgumentException("Weight cant be zero or smaller");
 		}
 		Truck truckToRent=filterLogic(weight);
-		if (truckToRent!=null)
-		{
+		if (truckToRent!=null) {
 			if (truckToRent.isFree()) {
 				truckToRent.setRentDate(businessTime.getTime());
 				truckToRent.setRentedBy(rentedBy);
