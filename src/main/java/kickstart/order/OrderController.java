@@ -32,6 +32,7 @@ public class OrderController {
 	private final CarpoolManager carpoolManager;
 	private final UserManagement userManagement;
 	private final WebshopCatalog catalog;
+	private String payment;
 
 	OrderController(OrderManager<CustomerOrder> orderManager,WebshopCatalog catalog, BusinessTime businesstime, CarpoolManager carpoolManager,UserManagement userManagement, JavaMailer javaMailer){
 
@@ -42,6 +43,7 @@ public class OrderController {
 		this.catalog = catalog;
 		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager, javaMailer);
 		this.userManagement = userManagement;
+		payment = "Bar";
 
 
 	}
@@ -61,7 +63,7 @@ public class OrderController {
 			UserAccount accountname = cartordermanager.getAccount();
 			model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
 		} else {
-			model.addAttribute("nameoftheorderer", "Bitte einen Kunde ausählen");
+			model.addAttribute("nameoftheorderer", "Bitte einen Kunden auswählen");
 		}
 
 
@@ -88,6 +90,7 @@ public class OrderController {
 		model.addAttribute("wightofcart", cartordermanager.getWight());
 		UserAccount accountname = cartordermanager.getAccount();
 		model.addAttribute("nameoftheorderer","Bestellen für "+accountname.getUsername());
+		model.addAttribute("waytopay", payment);
 
 		return "lkwbooking";
 	}
@@ -124,14 +127,18 @@ public class OrderController {
 	String choosedestination(@RequestParam("destination")String destination){
 		return cartordermanager.setDestination(destination);
 	}
+	@RequestMapping("/choosewaytopay")
+	String choosethewaytopay(@RequestParam("awaytopay") String payment){
+		this.payment = payment;
+		return "redirect:/lkwbooking";
+	}
 
 	@RequestMapping("/addorder")
 	String newOrder(@ModelAttribute Cart cart){
 
-	cartordermanager.newOrder(cart);
-	return "redirect:/";
+		cartordermanager.newOrder(cart);
+		return "redirect:/";
 	}
-
 
 	@RequestMapping("/cancelthatorder")
 	String cancelOrder(@RequestParam("orderidentity") CustomerOrder order, @RequestParam("choose") String choose, Model model){

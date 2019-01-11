@@ -2,53 +2,28 @@
 
 ## Einführung und Ziele
 
-Die Entwiklerdokumentation ist an das Entwicklungsteam gerichtet und sorgt für einen schnellen Überblick über Kontepte die 
+Die Entwicklerdokumentation ist an das Entwicklungsteam gerichtet und sorgt für einen schnellen Überblick über Kontepte die 
 wärend der Entwicklung entstanden sind.
 
 ### Aufgabenstellung - Möbelgeschäft "Möbel-Hier"
 Das von der Moebel-Hunger-Kette übernommene Geschäft Möbel-Hier wird von Ihrer Firma mit einer neuen Kundensoftware(WEBSHOP) ausgestattet.
 
-Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten.
+Im Leistungsumfang sind die Bestellverwaltung (BESTELLÜBERSICHT), das Warenlager(LAGER) und der Auslieferungsservice (FUHRPARK)enthalten. Besonderes Augenmerk soll auf die Warenbestellung und-auslieferung gelegt werden.
+Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden muss. Möbelstücke und Teile sind in Kategorien unterteilt. Diese lassen sich nach Kategorien filtern und sortieren und können ausschließlich telefonisch bestellt werden. 
 
-Besonderes Augenmerk soll auf die Warenbestellung,  -auslieferung gelegt werden.
+Der Katalog enthält einzelne Teile(TEILE), die alleine bestellt werden können, und auch  vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer. Variabilität ist dabei über die Farbe möglich.
+Mitarbeiter verwalten für den Kunden seinen Warenkorb(WARENKORB) und sollen Produkte aus dem Katalog ausgeblendet werden können.
 
-Dem Kunden liegt ein Sortiment(KATALOG) im Internet vor, für dessen Einsicht er sich nicht anmelden muss.
+Einige Mitarbeiter sind Adminstratoren und haben damit weitreichendere Kompetenzen. So verwalten sie zum Beispiel die Mitarbeiter.
 
-Möbelstücke und Teile sind in Kategorien unterteilt.
+Die Lieferung einer Bestellung erfolgt entweder an ein Nebenlager(LAGER) oder direkt an den Kunden(KUNDE). Bei einer Lieferung an ein Nebenlager muss der Kunde automatisch benachrichtigt werden, damit er sie abholen kann.
+Die Bezahlung der Bestellung ist nur andeutungsweise zu implementieren. Es soll aber  eine Auswahl der Zahlungsoptionen geben.
 
-Die Möbel dort lassen sich nach Kategorisierungen filtern und sortieren.
+Die Auslieferung erfolgt mit dem firmeneigenen LKW-Fuhrpark(FUHRPARK). Alternativ können sich Kunden zum Abtransport der Ware diese LKWs mieten. Je nach Gewicht der Lieferung soll immer der nächst günstigste LKW vermietet bzw.von der Firma genutzt werden. Bis einen Tag vor Auslieferung bzw.  Versand soll das Stornieren einer Bestellung möglich sein.
 
-Möbel lassen sich vom Kunden ausschließlich telefonisch bestellen.
+Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Einnahmen wie Möbelkosten oder Ausgaben wie Personalkosten im Vergleich zum Vormonat aufgegliedert sind.
 
-Der Mitarbeiter verwaltet den Warenkorb(WARENKORB). 
-
-Der Mitarbeiter soll Produkte ausblenden können.
-
-Einige Mitarbeiter sind Administratoren(ADMIN).
-
-Ausschließlich die Administratoren verwalten die Mitarbeiter.
-
-Die Lieferung erfolgt entweder in das Nebenlager(LAGER) oder direkt an den Kunden(KUNDE).
-
-Für ersteres muss der Kunde bei vollständiger Ware automatisch benachrichtigt werden, damit er sie abholen kommen kann.
-
-Bezahlung ist nur andeutungsweise zu implementieren. Es muss nur eine Auswahl der Zahlungsoptionen geben.
-
-Der Kunde kann sich Teile(TEILE) einzeln bestellen, jedoch auch vorgefertigte Sätze an Teilen(MÖBEL), so z.B. eine Couchecke mit Ein-, Zwei- und Dreisitzer.
-
-Variabilität ist über die Farbe möglich.
-
-Die Auslieferung erfolgt mit dem firmeneigenen LKW-Park(FUHRPARK).
-
-Alternativ können sich Kunden zum Abtransport der Ware diese LKW's mieten.
-
-Je nach Gewicht der Lieferung soll immer der nächst günstigere LKW vermietet bzw.von der Firma genutzt werden.
-
-Die Software soll Stornieren bis zu einen Tag vor Versand berücksichtigen.
-
-Die Geschäftsführung von Möbel-Hier möchte eine monatliche Abrechnung(FINANZÜBERSICHT)  haben, in der die Möbelverkäufe im Vergleich zum Vormonat aufgeglieder sind.
-
-Kann kriterien:
+Kannkriterien:
 Weiterhin soll eine Statusabfrage über die bereits gelieferten Möbelteile der Bestellungen möglich sein.
 
 <table>
@@ -127,7 +102,7 @@ zur Organisierbarkeit: dieser Punkt beschreibt die Eignung der Software die Elem
 ## Randbedingungen
 
 ### Hardware-Vorgaben
-Belieber Computer mit folgenden Spezifikationen:
+Beliebiger Computer mit folgenden Spezifikationen:
 - Pentium 4 oder neuer
 - 1024 MB Arbeitsspeicher oder mehr
 - min. 1GB freier Speicherplatz
@@ -169,6 +144,8 @@ Ein sehr entscheidener Schwerpunkt des Projekts war die Implementierung des Comp
 ## Entwurfsentscheidungen
 Dieser Abschnitt beschreibt die Umsetzung verschiedener Probleme und Fragen, die während der Entwicklung aufgetreten sind. 
 
+Für viele unserer Funktionen konnten wir Salespointfunktionalitäten nutzen. Dennoch mussten wir für weitere Funktionalitäten diese oft erweitern und haben die ursprüngliche Klasse per Vererbung oder Komposition genutzt.
+
 Zur Update unserer Artikel(siehe Abschnitt Entwurfsentscheidungen) verändern wir zunächst den ausgewählten Artikel. Danach suchen wir mithilfe einer Tiefensuche (alternativ würde auch Breitensuche gehen) die Artikel die den geänderten Artikel enthalten und konstruieren damit einen Baum. Dabei aktualisieren wir jedoch noch nicht gleich, da auch ein Teil dieses Artikels den ursprünglich geänderten Artikel enthalten könnte, sodass dieser zuerst aktualisiert werden muss. Danach wenden wir eine Art topologische Sortierung an. Es werden im Baum nacheinander alle Artikel aktualisiert, deren Teile nicht im Baum der Artikel, die eine Aktualisierung benötigen, auftaucht.
 
 Das Projekt besitzt neben den regulären Artikeln auch ausleihbare Produkte, die LKWs. Diese werden als Erweiterung des Salespoint Produktesimplementiert und besitzen ein Attribut, das anzeigt ob dieser LKW momentan verliehen ist. Das Zurückgeben kann einfach über eine Attributänderung stattfinden. Da es dazu kein Salespointlager gibt, nutzen wir stattdessen ChargeLines, die in Salespoint für zusätzliche Ausgaben einer Bestellung verwendet werden können.
@@ -177,20 +154,17 @@ Das Projekt besitzt neben den regulären Artikeln auch ausleihbare Produkte, die
 
 ![Entwurfsklassendiagramm](https://github.com/st-tu-dresden-praktikum/swt18w34/blob/master/asciidoc/models/design/Entwurfsklassendiagramm.jpg)
 
-Das gesamte Projekt basiert auf der Objekt-orientierten Programmiersprache Java,um eine modulare und polymorph-erweiterbare Architektur zu verwirklichen.
+Das gesamte Projekt basiert auf der objektorientierten Programmiersprache Java, um eine modulare und polymorph-erweiterbare Architektur zu verwirklichen.
  
 Das Springframework, welches einen sehr großen Teil dieser Software ausmacht, ermöglicht in Verbindung mit Thymeleaf eine dynamische Verwendbarkeit und Erweiterbarkeit der zu betreibenden Website.
  
- Spring-Boot wird als spezieller Teil von Spring in dieser Software verwendet.
+Spring-Boot wird als spezieller Teil von Spring in dieser Software verwendet.
 
 Des weiteren ist Salespoint ein sehr wichtiges Framework für diese Software, da es bereits sehr viele Funktionalitäten und Verwaltungsstrukturen für den Betrieb einer Verkaufswebsite bietet.
 
 Um die Übersichtlichkeit und Einfachheit des Codes zu erhöhen, wurde die Project-Lombok Library verwendet.
 
 Für die Webansicht wurde das CSS-Framework Semantic-UI benutzt.
-
-
-
 
 
 ## Verwendete Muster

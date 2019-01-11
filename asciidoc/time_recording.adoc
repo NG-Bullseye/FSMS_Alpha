@@ -18,9 +18,11 @@ Die individuell erfasste Zeit beinhaltet auch das Lesen von Dokumentationen, Bes
 |7  |1200   |690    |660    |750    |435    |90    
 |8  |760   |1050    |960   |570    |650    |90    
 |9  |810  |1410    |1200    |1380    |1275    |180   
-|10 |650   |660    |…    |180    |870    |90    
-|11 |940   |…    |…    |…    |…    |…    
-|12  |…   |…    |…    |…    |…    |…    
+|10 |650   |660    |480    |180    |870    |90    
+|11 |220   |…    |600    |…    |…    |…    
+|12  |1600   |…    |1200    |…    |…    |…    
+|Gesamt |8900 |   |8370   |   |   |
+|Pro Woche |742 |   |910   |   |   |
 |===
 
 Bitte tragen Sie am Ende des Praktikums noch folgende weitere Werte ein:

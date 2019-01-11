@@ -22,7 +22,6 @@ public class CarpoolInitializer implements DataInitializer {
 
 	/**
 	 * @param carpoolController contains all information needed for the initialization
-	 * @return
 	 */
 
 	public CarpoolInitializer(CarCatalog carCatalog, CarpoolController carpoolController, UserAccountManager userManagement) {
