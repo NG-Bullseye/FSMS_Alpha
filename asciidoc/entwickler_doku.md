@@ -148,7 +148,7 @@ Für viele unserer Funktionen konnten wir Salespointfunktionalitäten nutzen. De
 
 Zur Update unserer Artikel(siehe Abschnitt Entwurfsentscheidungen) verändern wir zunächst den ausgewählten Artikel. Danach suchen wir mithilfe einer Tiefensuche (alternativ würde auch Breitensuche gehen) die Artikel die den geänderten Artikel enthalten und konstruieren damit einen Baum. Dabei aktualisieren wir jedoch noch nicht gleich, da auch ein Teil dieses Artikels den ursprünglich geänderten Artikel enthalten könnte, sodass dieser zuerst aktualisiert werden muss. Danach wenden wir eine Art topologische Sortierung an. Es werden im Baum nacheinander alle Artikel aktualisiert, deren Teile nicht im Baum der Artikel, die eine Aktualisierung benötigen, auftaucht.
 
-Das Projekt besitzt neben den regulären Artikeln auch ausleihbare Produkte, die LKWs. Diese werden als Erweiterung des Salespoint Produktesimplementiert und besitzen ein Attribut, das anzeigt ob dieser LKW momentan verliehen ist. Das Zurückgeben kann einfach über eine Attributänderung stattfinden. Da es dazu kein Salespointlager gibt, nutzen wir stattdessen ChargeLines, die in Salespoint für zusätzliche Ausgaben einer Bestellung verwendet werden können.
+Das Projekt besitzt neben den regulären Artikeln auch ausleihbare Produkte, die LKWs. Diese werden als Erweiterung des Salespoint Produktes implementiert und besitzen ein Attribut, das anzeigt ob dieser LKW momentan verliehen ist. Das Zurückgeben kann einfach über eine Attributänderung stattfinden. Da es dazu kein Salespointlager gibt, nutzen wir stattdessen ChargeLines, die in Salespoint für zusätzliche Ausgaben einer Bestellung verwendet werden können.
 
 ## Architektur
 
