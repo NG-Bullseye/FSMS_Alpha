@@ -154,7 +154,11 @@ entsprechenden Aufgabenbereiche des Programms bereitstellen:
 | Inventory Management | Dies ist die lagerverwaltung. Artikel können hier beispielsweise Nachbestellt werden.                                                                            |
 | Catalog Management   | Die Katalogverwaltung. Der Kunde kann auf unsere Webseite den Katalog einsehen und ihn filtern. Außerdem ist es möglich, Artikel vor dem Kunden zu "verstecken". |
 
-Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben.
+Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben. Somit ist die Trennung des Controllers vom Model gewährleistet.
+
+Ein sehr entscheidener Schwerpunkt des Projekts war die Implementierung des Composite-Musters für die Artikel. Da Datenbank es nur schwer zulassen eine baumstrukturierte Datenstruktur zu realisieren, haben wir unser Composite dementsprechend angepasst. Eine ausführliche Erklärung dazu kann man unter dem Punkt Entwurfsmuster nachlesen.
+
+
 
 
 
@@ -176,9 +180,17 @@ Das gesamte Projekt basiert auf der Objekt-orientierten Programmiersprache Java,
  
 Das Springframework, welches einen sehr großen Teil dieser Software ausmacht, ermöglicht in Verbindung mit Thymeleaf eine dynamische Verwendbarkeit und Erweiterbarkeit der zu betreibenden Website.
  
-Als spezieller Teil von Spring wird in dieser Software Spring-Boot verwendet.
+ Spring-Boot wird als spezieller Teil von Spring in dieser Software verwendet.
 
 Des weiteren ist Salespoint ein sehr wichtiges Framework für diese Software, da es bereits sehr viele Funktionalitäten und Verwaltungsstrukturen für den Betrieb einer Verkaufswebsite bietet.
+
+Um die Übersichtlichkeit und Einfachheit des Codes zu erhöhen, wurde die Project-Lombok Library verwendet.
+
+Für die Webansicht wurde das CSS-Framework Semantic-UI benutzt.
+
+
+
+
 
 ## Verwendete Muster
 Entwurfsmuster
