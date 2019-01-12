@@ -1,6 +1,6 @@
 # Zeiterfassung für Gruppe 34
 
-### Aktuelle Zeiterfassung: link: https://docs.google.com/spreadsheets/d/1nr8pW949Duenh1e8whPZbrdYzpz3W-HcMXC3Jbl9jX8[Google Sheet]
+### Aktuelle Zeiterfassung: link: https://docs.google.com/spreadsheets/d/1nr8pW949Duenh1e8whPZbrdYzpz3W-HcMXC3Jbl9jX8
 
 Notieren Sie die Zeit in Minuten für jeden Entwickler und – getrennt davon – für Team-Treffen pro Woche (Wochengranularität).
 Die individuell erfasste Zeit beinhaltet auch das Lesen von Dokumentationen, Besprechungen mit Teamkollegen und sonstige auf das Praktikum bezogene Aufgaben, jedoch *nicht* das Team-Treffen (= letzte Spalte).
