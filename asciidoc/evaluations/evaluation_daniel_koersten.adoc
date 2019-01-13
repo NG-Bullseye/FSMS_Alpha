@@ -17,7 +17,8 @@
 
 == Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
 * Den Einstieg empfand ich als sehr schwer. Es ist viel Arbeit sich einzuarbeiten.
-* Die Dokumentation ist nicht Lückenlos. Man fühlt sich manchmal einfach ins Wasser geschmissen.
+* Wenn man einmal weiß, wie, sind Frameworks eine gute und zeitsparende Sache.
+* Die Dokumentation von SalesPoint ist nicht Lückenlos. Man fühlt sich manchmal einfach ins Wasser geschmissen.
 * Der Videoshop enthält einen Fehler bezgl. Eingabedatenvalidierung. Die Lösung des Problems hat micht viel Zeit gekostet (Siehe PullRequest für Videoshop (von @technikamateur), der das fixt, aber immer noch nicht angenommen ist.)
 * Spring/SalesPoint sind ein sehr mächtiges Werkzeug. Vielleicht sollte man nicht direkt mit solchen großen Frameworks arbeiten, wenn man noch nie vorher etwas mit Frameworks zu tun hatte.
 * SalesPoint an sich ist sehr hilfreich, wenn man einmal die Idee dahinter verstanden hat und mit der Dokumentation umgehen kann.
