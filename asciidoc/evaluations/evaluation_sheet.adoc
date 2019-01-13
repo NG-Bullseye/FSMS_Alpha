@@ -24,29 +24,3 @@
 
 == Sonstiges und Anmerkungen
 // Welche Aspekte fanden in den oben genannten Punkten keine Erwähnung?
-
-
-
-
-**Von:** Daniel Güth
-
-**Gruppe:** 34
-
-== Was habe ich gelernt?
-Die Verwendung von GitHub und den Git-Workflow. Eine weitere Erkenntnis war, dass gerade bei Projekten, an denen mehrere Entwickler beteiligt sind, eine richtige Planung der Software bevor man anfängt zu programmieren absolut goldwert ist und auch zwingend notwendig. Gerade die Analysephase empfand ich als sehr nützlich, da man sich durch das Betrachten der Problemstellung mit Hilfe verschiedener Methoden (CRC, Analyseklassendiagramm) schon vor der ersten Zeile Code ein solides Fundament für die spätere Software gelegt hat und auch sichergestellt hat, dass jedes Teammitglied den Aufbau und die Gliederung der Software versteht.
-
-== Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
-Das arbeiten in einer größeren Gruppe kann sich sehr leicht als sehr schwierig herausstellen, wenn man nicht klare Ansagen macht was, wann und wie fertig zu sein hat. Nichtsdestotrotz hat sich die Teamarbeit, bis auf einige Ausnahmen mit einem Teammitglied, als sehr angenehm und bereichernd herausgestellt. Gerade die Diskussion darüber, warum man etwas genau so gemacht hat und die sofortige Hilfe bei Problemen, die man nicht so einfach selbstständig lösen kann, hat sehr geholfen auch den persönlichen Programmierstil zu verbessern. 
-
-== Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
-Eine wichtige Erkenntnis dieses Praktikums war, wie praktisch und zeitsparend Bibliotheken/Frameworks sein können. Gerade die Salespoint Datenbanken wie der Katalog beispielsweise erleichtern einem das Leben schon sehr. Spring war auch sehr hilfreich, nicht nur weil es die Verbindung von Code und der Website geschaffen hat, sondern auch weil es dem Programmierer sehr viel Arbeit im allgemeinen Umgang mit der Software abnimmt.
-
-== Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
-Da wahrscheinlich viele Studenten noch keine Ahnung von Datenbanken und ihrem Aufbau haben (mich eingeschlossen), würde ich mir wünschen, dass bei Aufgabenstellungen wie unserer, die speziell auf eine baumstrukturierten Datenspeicherung abzielen, wenigstens ein Hinweis dazu enthalten ist, dass Datenbanken mit so etwas wie einer Baumstruktur nicht so umgehen können wie andere Datenspeicherungsformen, die wir bisher in SWT behandelt haben (Java-Collection).
-
-== Feedback für den Tutor
-Daniel wirkte immer sehr engagiert und war auch stets bereit bei Problemen zu helfen.
-
-== Sonstiges und Anmerkungen
-
-
