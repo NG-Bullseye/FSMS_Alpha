@@ -4,23 +4,41 @@
 // Sowohl positive als auch negative Anmerkungen werden gern gesehen und zur stetigen Verbesserung genutzt.
 // Versuchen Sie in dieser Auswertung also stets sowohl Positives wie auch Negatives zu erwähnen.
 
-**Von:**
+**Von:** Leonard Wecke
 
-**Gruppe:**
+**Gruppe:** swt18w34
 
 == Was habe ich gelernt?
+Der größten Lerneffekt hat sich bei mir im Bereich Nutzung und Einbingung von Frameworks, sowie Bugfixing und Troubleshooting ergeben. Weiterhin hat mir das MVC Pattern viel Verständniss über die Kommunikation zwischen Website User und Server gegeben. Allgemein haben sich viele grundlegende Fragen zu Webapplikationen gelöst.
+Ich habe viele nützliche Tools zum coden in Erfahrung bringen können und aus positiven und negativen Erfahrung in Teamarbeiten lernen dürfen.
 // Ausführung der positiven und negativen Erfahrungen, die im Softwarepraktikum gesammelt wurden
 
 == Welche Erfahrungen habe ich mit der Zusammenarbeit im Team gemacht?
+Durch die Teamarbeit habe ich einen sehr angenehmen Arbeitsworkflow im Bereich Coding gerlernt. 
+Ich habe gerlernt dass die Arbeit an einem Projekt und die Absprache mit anderen um so schwieriger ist, je weniger man sich in der Thematik auskennt.
+Ein weiteren Gruppendynamischen Effekt der mit vorher unbekannt war, ist die Tatsache, dass je weniger sich Teammitglieder kennen, um so weniger man gewillt ist einander zu helfen, wenn das nötige Maß an Professionalität fehlt. 
 // Kurze Beschreibung der Zusammenarbeit im Team. Was lief gut? Was war verbesserungswürdig? Was würden Sie das nächste Mal anders machen?
 
 == Welche Erfahrungen habe ich bei der Wiederverwendung von Bibliotheken/Frameworks (insbesondere SalesPoint) gemacht?
+Mein erster Eindruck in diesem Bezug war sehr überwältigend, sowohl positiv als auch negativ. Der Gedankt, bei etwas nicht alles verstehen und damit arbeiten zu müssen, war eine bittere Pille, die sich im Nachhinein aber als äußerst wertvoll und zeitsparend herrausgestellt hat.
+Sich in solch komplexe Zusammenhänge einzuarbeiten kann oft frustrierend sein, vor allem wenn die Art der Dokumentation weniger für den Einstieg und mehr zur Erinnerung des schon vorhandenen Verständisses gilt.
+Nach einer harten Einarbeitungszeit viel mir der Umgang damit aber zunehmend leichter. Dann hat es auch angefangen Spaß zu machen.
+In Retrospektive bin ich der Überzeugung, dass solche Frameworks unglaublich nützlich und trotz der langen Einarbeitung unheimlich Aufand erspaaren und Stabilität der Anwendung bringen.
 // Einschätzung der Arbeit mit den bereitgestellten und zusätzlich genutzten Frameworks. Was War gut? Was war verbesserungswürdig?
 
 == Welche Vorschläge zur weiteren Verbesserung des Softwarepraktikums gibt es?
+Ich bin sehr zufrieden mit dem Umfang des Praktikums, den Deadlines, der zur Verfügung gestellten Software und der umfangreichen Betreuung. 
+Unter Umständen könnte man auf eine homogenere Gruppenzusammensetzung achten. Grund der Annahme, ist die ohnehin schon sehr starke Belastung, der komplexen und umfangreichen Aufgaben, welche durch Probleme in Gruppen noch unlösbarer erscheinen und stark demotivierend sein können (Schneeball Effekt).
+
 // Möglichst mit Beschreibung, warum die Umsetzung des von Ihnen angebrachten Vorschlages nötig ist.
 
 == Feedback für den Tutor
+Daniel ist sehr umgänglich, zuverlässig und engagiert. 
+Ich persönlich fand es gut das er stehts Druck auf die Deadlines gemacht hat, was mich sehr motiviert hat mein Pensum zu erfüllen.
+Konstruktive Kritik: 
+Individuelle Kurzgespräche mit Einzelnen Gruppenmitgliedern wären eine Option eine bessere pädagogische Betreung zu leisten.
+Im Verhältnis zu den Tutoren im Lernraum war Daniel ab und zu weniger daran interessiert mit umfangreichen Codingproblemen zu helfen.
+Ich bin allerdings der Meinung, dass das nicht an ihm, sondern an der Gestaltung des Gruppentreffens liegt. Die Zeit im Gruppentreffen war meistens zu knapp um wirklich Fragen zu Frameworks und Dokus zu stellen zu können. Das Hauptaugenmerk der Gruppentreffen lag auf der Koordination und ist warscheinlich auch so vorgesehen.
 // Fühlten Sie sich durch den vom Lehrstuhl bereitgestellten Tutor gut betreut? Was war positiv? Was war verbesserungswürdig?
 
 == Sonstiges und Anmerkungen
