@@ -28,6 +28,7 @@
 * Ich würde mir mehr Zeit wünschen. Es ist doch sehr viel Zeit, die in das Projekt fließt. Sicherlich kann man das aber nur schwer ändern.
 * Im Lernraum gerne mehr Tutoren einsetzten. Teilweise musste ich für die Klärung einer kleinen Frage 1 Stunde warten.
 * SonarQube bitte UNBEDINGT für den develop freischalten
+* Den Scrum Master abschaffen. In unserem Fall, gab es auf dem Papier zwar einen, aber er war nicht nötig.
 
 == Feedback für den Tutor
 Daniel konnte uns bei unseren Problemen immer helfen. Er hat auf E-Mails zügig reagiert. Ich habe mich von ihm gut betreut gefühlt. Er hat uns immer den Weg gezeigt und uns geholfen, unsere Prioritäten zu setzten.
