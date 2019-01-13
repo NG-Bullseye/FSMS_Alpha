@@ -26,8 +26,8 @@
 // Welche Aspekte fanden in den oben genannten Punkten keine Erwähnung?
 
 
-
-
+//
+//
 
 **Von:** Daniel Güth
 
