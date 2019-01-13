@@ -9,7 +9,7 @@
 **Gruppe:** swt18w34
 
 == Was habe ich gelernt?
-Der größten Lerneffekt hat sich bei mir im Bereich Nutzung und Einbingung von Frameworks, sowie Bugfixing und Troubleshooting ergeben. Weiterhin hat mir das MVC Pattern viel Verständniss über die Kommunikation zwischen Website User und Server gegeben. Allgemein haben sich viele grundlegende Fragen zu Webapplikationen gelöst.
+Der größten Lerneffekt hat sich bei mir im Bereich Nutzung und Einbindung von Frameworks, sowie Bugfixing und Troubleshooting ergeben. Weiterhin hat mir das MVC Pattern viel Verständniss über die Kommunikation zwischen Website User und Server gegeben. Allgemein haben sich viele grundlegende Fragen zu Webapplikationen gelöst.
 Ich habe viele nützliche Tools zum coden in Erfahrung bringen können und aus positiven und negativen Erfahrung in Teamarbeiten lernen dürfen.
 // Ausführung der positiven und negativen Erfahrungen, die im Softwarepraktikum gesammelt wurden
 
