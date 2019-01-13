@@ -5,7 +5,7 @@
 
 **Von: Ricco Schönfeld**
 
-**Gruppe: 34**
+**Gruppe: swt18w34**
 
 == Was habe ich gelernt?
 - die Nutzung von Git
