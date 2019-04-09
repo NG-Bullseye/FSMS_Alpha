@@ -74,8 +74,8 @@ public class InventoryController {
 	 * @param model Stores the information for the view
 	 * @return
 	 */
-	@GetMapping("/inventory")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@GetMapping("/")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String inventoryView(Model model) {
 		List<TableElement> tableElements = new ArrayList<TableElement>();
 
@@ -97,7 +97,7 @@ public class InventoryController {
 	 * @return
 	 */
 	@GetMapping("/reorders")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String reorderView(Model model) {
 		List<TableElement> tableElements = new ArrayList<TableElement>();
 
@@ -124,7 +124,7 @@ public class InventoryController {
 	 * @return
 	 */
 	@GetMapping("reorder/{identifier}")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String showReorder(@PathVariable ProductIdentifier identifier, ReorderForm form, Model model) {
 		if (manager.isPresent(identifier)) {
 			model.addAttribute("form", form);
@@ -151,7 +151,7 @@ public class InventoryController {
 	 * @return
 	 */
 	@PostMapping("reorder/{identifier}")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String reorder(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") ReorderForm form,
 			BindingResult bindingResult, Model model, Errors result) {
 
@@ -175,7 +175,7 @@ public class InventoryController {
 	 * @return
 	 */
 	@GetMapping("inventory/update")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String updateInventory() {
 
 		manager.update();

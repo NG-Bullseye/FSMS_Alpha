@@ -32,7 +32,7 @@ public class WelcomeController {
 		this.catalog = catalog;
 	}
 
-	@RequestMapping("/")
+	@RequestMapping("/start")
 	public String index(Model model) {
 		LinkedList<Article> mostBought = new LinkedList<Article>();
 		catalog.mostBought().forEach(mostBought::add);

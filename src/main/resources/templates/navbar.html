@@ -2,6 +2,7 @@
 
 <nav id="navmenu" th:fragment="navbar">
 	<div class="ui secondary menu">
+		<!--
 		<a class="item" href="index.html" th:href="@{/}" th:text="Startseite">
 			Startseite </a> <a class="item" href="catalog.html" th:href="@{/catalog}"
 			th:text="Katalog"> Katalog </a> <a class="item"
@@ -20,6 +21,8 @@
 		</a> <a class="item" href="accountancy.html" th:href="@{/accountancy}"
 			sec:authorize="hasRole('ROLE_BOSS')" th:text="Buchhaltung">Buchhaltung
 		</a>
+		-->
+
 
 		<div class="right menu">
 			<t3 class="item" sec:authorize="isAuthenticated()"
