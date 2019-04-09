@@ -47,7 +47,7 @@ public class InventoryManager {
 	 *                    add expenses
 	 */
 	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory,
-			@NotNull AccountancyManager accountancy) {
+							@NotNull AccountancyManager accountancy) {
 		this.inventory = inventory;
 		this.accountancy = accountancy;
 	}

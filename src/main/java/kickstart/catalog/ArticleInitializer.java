@@ -31,9 +31,10 @@ public class ArticleInitializer implements DataInitializer {
 			return;
 		}
 		HashSet<String> c1 = new HashSet<>();
-		c1.add("schwarz");
-		c1.add("weiß");
-		c1.add("braun");
+		c1.add("rocky");
+		c1.add("veggie");
+		c1.add("muddy");
+		/*
 		HashSet<String> c2 = new HashSet<>();
 		c2.add("schwarz");
 		c2.add("blau");
@@ -44,18 +45,18 @@ public class ArticleInitializer implements DataInitializer {
 		c3.add("blau");
 		c3.add("rot");
 
+		 */
+
+
 		HashSet<String> cat1 = new HashSet<>();
-		cat1.add("Tisch");
+		cat1.add("Produkt");
 		HashSet<String> cat2 = new HashSet<>();
-		cat2.add("Bett");
+		cat2.add("Einzelteil");
 		HashSet<String> cat3 = new HashSet<>();
-		cat3.add("Schrank");
-		HashSet<String> cat4 = new HashSet<>();
-		cat4.add("Stuhl");
-		HashSet<String> cat5 = new HashSet<>();
-		cat5.add("Regal");
-		Part p1 = new Part("mittelhohes Tischbein", "ein mittelhohes Tischbein", 15, 15.0, c1, cat1);
-		catalog.save(p1);
+		cat3.add("Rohstoff");
+
+
+		/*
 		Part p2 = new Part("mittelgroße Tischplatte", "eine mittelgroße Tischplatte", 55, 50.0, c1, cat1);
 		catalog.save(p2);
 		Part p3 = new Part("hohes Tischbein", "ein hohes Tischbein", 25, 20.0, c3, cat1);
@@ -121,15 +122,24 @@ public class ArticleInitializer implements DataInitializer {
 		catalog.save(r3);
 		Part r4 = new Part("Regalgerüst", "ein Regalgerüst zum hinstellen", 40, 12, c1, cat5);
 		catalog.save(r4);
+		 */
+
+		Part p1 = new Part("Latex", "beschreibung", 15, 15.0, c1, cat1);
+		catalog.save(p1);
+
+		Part p2 = new Part("PLA", "beschreibung", 15, 15.0, c1, cat1);
+		catalog.save(p1);
 
 		LinkedList<Article> l1 = new LinkedList<>();
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
 			l1.add(p1);
 		}
 		l1.add(p2);
-		Composite com1 = new Composite("mittelgroßer Tisch", "ein mittelgroßer Tisch", l1);
+		Composite com1 = new Composite("ZIP Body", "bechreibung", l1);
 		catalog.save(com1);
 
+
+		/*
 		LinkedList<Article> l2 = new LinkedList<>();
 		for (int i = 0; i < 4; i++) {
 			l2.add(p3);
@@ -173,5 +183,7 @@ public class ArticleInitializer implements DataInitializer {
 		l7.add(r3);
 		Composite com7 = new Composite("Wandregal", "ein Wandregal mit einer großen Ablagefläche", l7);
 		catalog.save(com7);
+		 */
+
 	}
 }

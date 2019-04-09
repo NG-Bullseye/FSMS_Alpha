@@ -74,7 +74,7 @@ public class InventoryController {
 	 * @param model Stores the information for the view
 	 * @return
 	 */
-	@GetMapping("/")
+	@GetMapping("/inventory")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String inventoryView(Model model) {
 		List<TableElement> tableElements = new ArrayList<TableElement>();

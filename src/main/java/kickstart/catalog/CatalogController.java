@@ -16,12 +16,17 @@
 package kickstart.catalog;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import kickstart.inventory.InventoryController;
+import kickstart.inventory.InventoryManager;
+import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -45,32 +50,45 @@ public class CatalogController {
 
 	private final CatalogManager manager;
 	private final BusinessTime businessTime;
+	private InventoryManager inventoryManager;
+
+
+
 
 	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory,
-			BusinessTime businessTime) {
+					  @NotNull InventoryManager inventoryManager, BusinessTime businessTime) {
 		this.manager = new CatalogManager(catalog, inventory);
 		this.businessTime = businessTime;
+		this.inventoryManager=inventoryManager;
 	}
 
 	@ModelAttribute("colours")
 	public String[] colours() {
-		return new String[] { "schwarz", "blau", "weiß", "rot", "braun", "grün" };
+		return new String[] { "rocky", "veggie", "muddy" };
 	}
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] { "Tisch", "Schrank", "Stuhl", "Regal", "Bett" };
+		return new String[] { "Rohstoffe", "Einzelteile", "Produkte" };
 	}
 
-	@GetMapping("/catalog")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
+	@GetMapping("/")
 	String catalog(Model model) {
+		List<TableElement> tableElements = new ArrayList<>();
 
+		for (ReorderableInventoryItem item : inventoryManager.getInventory().findAll()) {
+			tableElements
+					.add(new TableElement(item.getProduct().getName(), item.getQuantity().getAmount().toString(), " "));
+		}
+
+		model.addAttribute("inventoryItems", tableElements);
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
 
 		return "catalog";
 	}
-
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@PostMapping("/catalog")
 	String catalogFiltered(@Valid @ModelAttribute("filterform") Filterform filterform,
 			@RequestParam(required = false, name = "reset") String reset, BindingResult bindingResult, Model model) {
@@ -87,7 +105,7 @@ public class CatalogController {
 	}
 
 	@GetMapping("catalog/hidden")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String completeCatalog(Model model) {
 		model.addAttribute("catalog", manager.getInvisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
@@ -95,6 +113,7 @@ public class CatalogController {
 	}
 
 	@GetMapping("/article/{identifier}")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model) {
 
 		model.addAttribute("article", manager.getArticle(identifier));
@@ -107,7 +126,7 @@ public class CatalogController {
 	}
 
 	@PostMapping("article/{identifier}/comment")
-	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload,
 			Model model) {
 		Article article = manager.getArticle(identifier);
@@ -119,7 +138,7 @@ public class CatalogController {
 	}
 
 	@GetMapping("/edit/{identifier}")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model) {
 
 		model.addAttribute("article", manager.getArticle(identifier));
@@ -131,6 +150,8 @@ public class CatalogController {
 	}
 
 	@PostMapping("/edit/{identifier}")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
+
 	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form,
 			BindingResult bindingResult, Model model) {
 		model.addAttribute("article", manager.getArticle(identifier));
@@ -146,13 +167,14 @@ public class CatalogController {
 	}
 
 	@GetMapping("catalog/part/new")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String showNew(Model model) {
 		model.addAttribute("form", new PartOrderForm());
 		return "newPart";
 	}
 
 	@PostMapping("catalog/part/new")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String editNew(@Valid @ModelAttribute("form") PartOrderForm form, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("form", form);
@@ -164,7 +186,7 @@ public class CatalogController {
 	}
 
 	@GetMapping("catalog/composite/new")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String newComposite(Model model) {
 
 		CompositeOrderForm composite = new CompositeOrderForm();
@@ -174,6 +196,7 @@ public class CatalogController {
 	}
 
 	@PostMapping("catalog/composite/new")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form,
 			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping) {
 
@@ -195,21 +218,21 @@ public class CatalogController {
 	}
 
 	@GetMapping("hide/{identifier}")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model) {
 		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 
 	@GetMapping("show/{identifier}")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String visible(@PathVariable ProductIdentifier identifier, Model model) {
 		manager.changeVisibility(identifier);
 		return "redirect:/catalog/";
 	}
 
 	@GetMapping("/edit/composite/{identifier}")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String editComposite(@PathVariable ProductIdentifier identifier, Model model) {
 		model.addAttribute("article", manager.getArticle(identifier));
 		model.addAttribute("compositeForm", new CompositeForm());

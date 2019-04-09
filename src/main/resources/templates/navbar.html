@@ -2,13 +2,15 @@
 
 <nav id="navmenu" th:fragment="navbar">
 	<div class="ui secondary menu">
+
+		<a class="item" href="catalog.html" th:href="@{/catalog}" th:text="Katalog"> Katalog </a>
 		<!--
+		<a class="item"
+		   href="customeraccount.html" th:href="@{/customeraccount}"
+		   sec:authorize="isAuthenticated()">Eigenes Konto</a>
 		<a class="item" href="index.html" th:href="@{/}" th:text="Startseite">
-			Startseite </a> <a class="item" href="catalog.html" th:href="@{/catalog}"
-			th:text="Katalog"> Katalog </a> <a class="item"
-			href="customeraccount.html" th:href="@{/customeraccount}"
-			sec:authorize="isAuthenticated()">Eigenes Konto
-		</a> <a class="item" href="customers.html" th:href="@{/customers}"
+			Startseite </a>
+		<a class="item" href="customers.html" th:href="@{/customers}"
 			sec:authorize="hasRole('ROLE_EMPLOYEE')" th:text="Kundenübersicht">Kundenübersicht
 		</a> <a class="item" href="employees.html" th:href="@{/employees}"
 			sec:authorize="hasRole('ROLE_BOSS')" th:text="Mitarbeiterliste">Mitarbeiterliste
