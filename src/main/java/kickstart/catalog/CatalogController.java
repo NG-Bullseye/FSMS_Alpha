@@ -16,10 +16,7 @@
 package kickstart.catalog;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -75,14 +72,20 @@ public class CatalogController {
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@GetMapping("/")
 	String catalog(Model model) {
-		List<TableElement> tableElements = new ArrayList<>();
 
-		for (ReorderableInventoryItem item : inventoryManager.getInventory().findAll()) {
-			tableElements
-					.add(new TableElement(item.getProduct().getName(), item.getQuantity().getAmount().toString(), " "));
-		}
 
-		model.addAttribute("inventoryItems", tableElements);
+	for (ReorderableInventoryItem item : inventoryManager.getInventory().findAll()) {
+
+		item.getProduct().getName();
+		item.getProduct().getCategories().get().findFirst().get();
+		item.getQuantity().getAmount().toString();
+
+	}
+
+
+
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
+		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
 

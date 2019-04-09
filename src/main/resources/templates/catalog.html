@@ -9,6 +9,7 @@
 		<nav th:include="navbar :: navbar"></nav>
 		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
 			<div class="ui menu">
+				<!--
 				<div class="item">
 					<select class="ui dropdown" th:field="*{type}">
 						<option th:value="all" >Alle Artikel</option>
@@ -16,6 +17,8 @@
 						<option th:value="composite">Möbel</option>
 					</select>
 				</div>
+				-->
+
 				<div class="item">
 					<div class="ui simple dropdown">
 						<div class="text">Farbe</div>
@@ -80,6 +83,7 @@
 					Filter zurücksetzen
 					</button>
 				</div>
+				<!--
 				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<a th:href="@{/catalog/hidden}">
 						<div class="ui button">
@@ -88,6 +92,8 @@
 						</div>
 					</a>
 				</div>
+				-->
+
 				<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<div class="item">
 						<div class="ui simple dropdown">
@@ -110,12 +116,22 @@
 				<tr>
 					<th th:text="#{articletable.name}">Name</th>
 					<th th:text="#{articletable.amount}">Anzahl</th>
+					<th>Kategorie</th>
+					<th>Farbe</th>
+					<th>Preis Netto</th>
+					<th>Preis Brutto</th>
+					<th>EAN Code</th>
+
 				</tr>
 				</thead>
 				<tbody>
+				<!--/*@thymesVar id="inventoryItems" type="kickstart.catalog.CatalogController"*/-->
 				<tr th:each="item: ${inventoryItems}">
-					<td th:text="${item.name}">Name</td>
-					<td th:text="${item.amount}">Anzahl</td>
+					<td th:text="${item.getProduct().getName()}">Name</td>
+					<td th:text="${item.getQuantity().getAmount().toString()}">Anzahl</td>
+					<td th:text="${item.getProduct().getCategories().get().findFirst().get()}">Kategorie</td>
+
+
 				</tr>
 				</tbody>
 			</table>
