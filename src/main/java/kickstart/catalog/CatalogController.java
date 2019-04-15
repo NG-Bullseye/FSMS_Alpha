@@ -48,15 +48,17 @@ public class CatalogController {
 	private final CatalogManager manager;
 	private final BusinessTime businessTime;
 	private InventoryManager inventoryManager;
+	private CatalogManager catalogManager;
 
 
 
 
 	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory,
-					  @NotNull InventoryManager inventoryManager, BusinessTime businessTime) {
+					  @NotNull InventoryManager inventoryManager, BusinessTime businessTime,CatalogManager catalogManager) {
 		this.manager = new CatalogManager(catalog, inventory);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
+		this.catalogManager=catalogManager;
 	}
 
 	@ModelAttribute("colours")
@@ -72,13 +74,14 @@ public class CatalogController {
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	@GetMapping("/")
 	String catalog(Model model) {
-
-
 	for (ReorderableInventoryItem item : inventoryManager.getInventory().findAll()) {
 
 		item.getProduct().getName();
 		item.getProduct().getCategories().get().findFirst().get();
 		item.getQuantity().getAmount().toString();
+
+		catalogManager.getArticle(item.getProduct().getId()).getColour();
+
 
 	}
 
@@ -88,6 +91,7 @@ public class CatalogController {
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
+		model.addAttribute("catalogManager",catalogManager);
 
 		return "catalog";
 	}

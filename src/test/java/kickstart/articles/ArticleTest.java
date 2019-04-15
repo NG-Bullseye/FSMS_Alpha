@@ -39,7 +39,7 @@ public class ArticleTest {
 		}
 
 		@Override
-		public Set<String> getColour() {
+		public String getColour() {
 			return null;
 		}
 
@@ -74,11 +74,7 @@ public class ArticleTest {
 		public void removePart(Article article) {
 		}
 
-		@Override
-		public void removeColours() {
-			// TODO Auto-generated method stub
 
-		}
 	}
 
 	// Used to compare double values

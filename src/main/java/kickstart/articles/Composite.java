@@ -63,8 +63,8 @@ public class Composite extends Article {
 
 	private MonetaryAmount price;
 
-	@ElementCollection
-	private Set<String> colours;
+
+	private String colour;
 
 	/**
 	 * Standard constructor for Composite. See {@link Article} for more information
@@ -188,7 +188,7 @@ public class Composite extends Article {
 
 			price = price.add(article.getPrice());
 
-			colours.addAll(article.getColour());
+			this.colour=article.getColour();
 			for (String category : article.getCategories()) {
 				this.addCategory(category);
 			}
@@ -197,7 +197,7 @@ public class Composite extends Article {
 
 		this.weight = weight;
 		this.price = price;
-		this.colours = colours;
+		//this.colour = colour;
 
 		this.setUpdateStatus(true);
 
@@ -223,11 +223,11 @@ public class Composite extends Article {
 	}
 
 	/**
-	 * @return Returns the colours as a Set of String. This ensures that no colour
+	 * @return Returns the colour as a Set of String. This ensures that no colour
 	 *         appears twice or more.
 	 */
-	public Set<String> getColour() {
-		return colours;
+	public String getColour() {
+		return colour;
 	}
 
 	/**
@@ -239,13 +239,13 @@ public class Composite extends Article {
 
 	/**
 	 * This method is only for the composite structure and doesn't change the
-	 * composite. The colours are determined by the parts
+	 * composite. The colour are determined by the parts
 	 */
 	@Override
 	public void setColour(String colour) {
 		// This method is only for the composite structure and doesn't change the
 		// composite.
-		// The colours are determined by the parts
+		// The colour are determined by the parts
 	}
 
 	/**
@@ -269,12 +269,6 @@ public class Composite extends Article {
 		return categories;
 	}
 
-	/**
-	 * This method removes all colours that this part contains
-	 */
-	@Override
-	public void removeColours() {
-		this.colours.clear();
-	}
+
 
 }

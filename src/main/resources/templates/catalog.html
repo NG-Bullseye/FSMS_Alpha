@@ -130,6 +130,7 @@
 					<td th:text="${item.getProduct().getName()}">Name</td>
 					<td th:text="${item.getQuantity().getAmount().toString()}">Anzahl</td>
 					<td th:text="${item.getProduct().getCategories().get().findFirst().get()}">Kategorie</td>
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
 
 
 				</tr>

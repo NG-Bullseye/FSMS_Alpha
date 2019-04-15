@@ -59,7 +59,7 @@
                 <div class="menu">
                     <div th:each="colour: ${colours}">
                         <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
-                                                              th:field="*{selectedColours}"
+                                                              th:field="*{selectedColour}"
                                                               th:value="${colour}" />
                             <label
                                     th:text="${colour}"></label>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-                <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">
+                <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColour}">
                     Bitte geben Sie eine Beschreibung ein.
                 </div>
             </div>

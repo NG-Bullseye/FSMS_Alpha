@@ -30,8 +30,7 @@ public class Part extends Article {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity quantity;
 
-	@ElementCollection
-	private Set<String> colours;
+	private String colour;
 	private ArticleType type;
 
 	/**
@@ -52,7 +51,7 @@ public class Part extends Article {
 	 * @throws IllegalArgumentException If the price or weight is not positive.
 	 */
 	public Part(@NotNull String name, @NotNull String description, double price, double weight,
-			@NotNull HashSet<String> colour, @NotNull Set<String> categories) throws IllegalArgumentException {
+			@NotNull String colour, @NotNull Set<String> categories) throws IllegalArgumentException {
 		super(name, description);
 
 		if (price <= 0) {
@@ -63,7 +62,7 @@ public class Part extends Article {
 			throw new IllegalArgumentException("Part.weight should be positive");
 		}
 
-		this.colours = colour;
+		this.colour = colour;
 
 		this.setPrice(Money.of(price, "EUR"));
 
@@ -98,11 +97,12 @@ public class Part extends Article {
 	 *         set for the composite structure.
 	 */
 	@Override
-	public Set<String> getColour() {
-		return colours;
+	public String getColour() {
+		return colour;
 	}
 
 	/**
+	 *
 	 * 
 	 * @throws IllegalArgumentException If colour is an empty string
 	 */
@@ -113,7 +113,7 @@ public class Part extends Article {
 			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");
 		}
 
-		this.colours.add(colour);
+		this.colour=colour;
 	}
 
 	/**
@@ -174,8 +174,5 @@ public class Part extends Article {
 	/**
 	 * This method removes all colours that this part contains
 	 */
-	@Override
-	public void removeColours() {
-		this.colours.clear();
-	}
+	
 }

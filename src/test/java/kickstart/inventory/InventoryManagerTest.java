@@ -27,8 +27,7 @@ import kickstart.articles.Part;
 @TestInstance(Lifecycle.PER_CLASS)
 @Transactional
 public class InventoryManagerTest {
-
-	private @Autowired Catalog<Article> catalog;
+/*private @Autowired Catalog<Article> catalog;
 
 	private @Autowired Inventory<ReorderableInventoryItem> inventory;
 
@@ -183,4 +182,6 @@ public class InventoryManagerTest {
 
 		manager.getTime().reset();
 	}
+* */
+
 }

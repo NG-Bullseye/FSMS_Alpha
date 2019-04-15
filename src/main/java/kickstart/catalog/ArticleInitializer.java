@@ -124,10 +124,10 @@ public class ArticleInitializer implements DataInitializer {
 		catalog.save(r4);
 		 */
 
-		Part p1 = new Part("Latex", "beschreibung", 15, 15.0, c1, cat1);
+		Part p1 = new Part("Latex", "beschreibung", 15, 15.0, "rooky", cat1);
 		catalog.save(p1);
 
-		Part p2 = new Part("PLA", "beschreibung", 15, 15.0, c1, cat1);
+		Part p2 = new Part("PLA", "beschreibung", 15, 15.0, "muddy", cat1);
 		catalog.save(p1);
 
 		LinkedList<Article> l1 = new LinkedList<>();

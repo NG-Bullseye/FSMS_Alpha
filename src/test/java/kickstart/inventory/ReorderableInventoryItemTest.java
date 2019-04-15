@@ -27,9 +27,9 @@ public class ReorderableInventoryItemTest {
 
 	@BeforeEach
 	public void beforeEach() {
-		HashSet<String> colours = new HashSet<String>();
-		colours.add("red");
-		part = new Part("Name", "Description", 2, 2, colours, new HashSet<String>());
+
+
+		part = new Part("Name", "Description", 2, 2, "", new HashSet<String>());
 
 		item = new ReorderableInventoryItem(part, Quantity.of(2));
 	}

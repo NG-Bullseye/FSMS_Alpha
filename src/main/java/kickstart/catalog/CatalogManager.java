@@ -144,7 +144,7 @@ public class CatalogManager {
 				article.getSelectedCategories().forEach(afterEdit::addCategory);
 			}
 			if (!article.getSelectedColours().isEmpty()) {
-				afterEdit.removeColours();
+				//afterEdit.removeColours();
 				article.getSelectedColours().forEach(afterEdit::setColour);
 			}
 
@@ -350,7 +350,7 @@ public class CatalogManager {
 	 */
 	public void newPart(PartOrderForm form) {
 		Part newArticle = new Part(form.getName(), form.getDescription(), form.getPrice(), form.getWeight(),
-				form.getSelectedColours(), form.getSelectedCategories());
+				form.getSelectedColour(), form.getSelectedCategories());
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}

@@ -161,7 +161,7 @@ public abstract class Article extends Product {
 
 	public abstract Quantity getWeight();
 
-	public abstract Set<String> getColour();
+	public abstract String getColour();
 
 	public abstract ArticleType getType();
 
@@ -169,7 +169,6 @@ public abstract class Article extends Product {
 
 	public abstract void setColour(@NotNull String colour);
 
-	public abstract void removeColours();
 
 	/**
 	 * 

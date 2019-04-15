@@ -59,8 +59,8 @@ public class InventoryControllerTest {
 	@BeforeAll
 	@Transient
 	public void setUp() {
-		part1 = new Part("Name", "Description", 10, 10, new HashSet<String>(), new HashSet<String>());
-		part2 = new Part("Name2", "Description2", 5, 5, new HashSet<String>(), new HashSet<String>());
+		part1 = new Part("Name", "Description", 10, 10, "", new HashSet<String>());
+		part2 = new Part("Name2", "Description2", 5, 5, "", new HashSet<String>());
 
 		catalog.save(part1);
 		catalog.save(part2);

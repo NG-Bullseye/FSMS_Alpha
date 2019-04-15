@@ -16,7 +16,7 @@ public class PartOrderForm {
 	@Size(min = 2, max = 255, message = "Die Beschreibung muss zwischen 2 und 255 Zeichen lang sein.")
 	private String description;
 	@NotEmpty(message = "Bitte wählen Sie mindestens eine Farbe aus")
-	private HashSet<String> selectedColours;
+	private String selectedColour;
 	@NotNull(message = "Bitte geben Sie einen Preis für das Produkt ein.")
 	@Min(1)
 	@Max(10000)
@@ -60,12 +60,12 @@ public class PartOrderForm {
 		this.weight = weight;
 	}
 
-	public HashSet<String> getSelectedColours() {
-		return selectedColours;
+	public String getSelectedColour() {
+		return selectedColour;
 	}
 
-	public void setSelectedColours(HashSet<String> colour) {
-		this.selectedColours = colour;
+	public void setSelectedColours(String colour) {
+		this.selectedColour = colour;
 	}
 
 	public HashSet<String> getSelectedCategories() {

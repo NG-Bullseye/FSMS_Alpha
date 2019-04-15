@@ -28,21 +28,19 @@ public class CompositeTest {
 	private Composite composite2;
 	LinkedList<Article> parts1;
 	LinkedList<Article> parts2;
-	HashSet<String> colours1;
-	HashSet<String> colours2;
+	String colour1;
+	String colour2;
 	HashSet<String> categories1;
 	HashSet<String> categories2;
 
 	@BeforeEach
 	public void setUp() {
-		colours1 = new HashSet<String>();
-		colours1.add("brown");
 
-		colours2 = new HashSet<String>();
-		colours2.add("black");
+		colour1="brown";
+		colour2="black";
 
-		part1 = new Part("Frame", "Frame for a book shelf", 25.75, 6, colours1, new HashSet<String>());
-		part2 = new Part("Board", "Board for a book shelf", 14.33, 2, colours2, new HashSet<String>());
+		part1 = new Part("Frame", "Frame for a book shelf", 25.75, 6, colour1, new HashSet<String>());
+		part2 = new Part("Board", "Board for a book shelf", 14.33, 2, colour2, new HashSet<String>());
 
 		parts1 = new LinkedList<Article>();
 		parts1.add(part1);
@@ -192,7 +190,7 @@ public class CompositeTest {
 
 		assertThat(c.getColour()).as("Composite should return the right colours").isEqualTo(colour2);
 
-		assertThat(c.getColour().size() == 1).as("Composite should return each colour just once").isTrue();
+		//assertThat(c.getColour().size() == 1).as("Composite should return each colour just once").isTrue();
 
 	}
 
@@ -268,28 +266,24 @@ public class CompositeTest {
 		assertThat(composite1.getWeight().getAmount()).as("Composite should update the weight correctly")
 				.isEqualByComparingTo(part1.getWeight().add(part2.getWeight()).getAmount());
 
-		HashSet<String> colours = new HashSet<String>();
-		colours.addAll(part1.getColour());
-		colours.addAll(part2.getColour());
+		String colours=part1.getColour();
 
-		for (String colour : colours) {
+
+		/*
+		* for (String colour : colours) {
 			assertThat(composite1.getColour()).as("Composite should contains it's parts colours").contains(colour);
-		}
-
-		HashSet<String> categories = new HashSet<String>();
+		}HashSet<String> categories = new HashSet<String>();
 		colours.addAll(part1.getAllCategories());
 		colours.addAll(part2.getAllCategories());
-
-		for (String category : categories) {
+		*for (String category : categories) {
 			assertThat(composite1.getAllCategories()).as("Composite should contains it's parts colours")
 					.contains(category);
-		}
+		} */
+
+
+
+
 	}
 
-	@Test
-	public void testRemoveColours() {
-		composite1.removeColours();
-
-		assertThat(composite1.getColour().size()).as("Remove colours should make the colour set empty").isEqualTo(0);
-	}
+	
 }
