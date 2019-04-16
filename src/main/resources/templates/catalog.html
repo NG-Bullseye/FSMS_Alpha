@@ -9,7 +9,7 @@
 		<nav th:include="navbar :: navbar"></nav>
 		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
 			<div class="ui menu">
-				<!--
+
 				<div class="item">
 					<select class="ui dropdown" th:field="*{type}">
 						<option th:value="all" >Alle Artikel</option>
@@ -17,7 +17,7 @@
 						<option th:value="composite">Möbel</option>
 					</select>
 				</div>
-				-->
+
 
 				<div class="item">
 					<div class="ui simple dropdown">
@@ -94,7 +94,10 @@
 				</div>
 				-->
 
+				<!--
 				<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+				-->
+
 					<div class="item">
 						<div class="ui simple dropdown">
 							neuer Artikel
@@ -105,7 +108,10 @@
 							</div>
 						</div>
 					</div>
+				<!--
 				</div>
+				-->
+
 			</div>
 		</form>
 
@@ -131,8 +137,9 @@
 					<td th:text="${item.getQuantity().getAmount().toString()}">Anzahl</td>
 					<td th:text="${item.getProduct().getCategories().get().findFirst().get()}">Kategorie</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
-
-
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Farbe</td>
 				</tr>
 				</tbody>
 			</table>

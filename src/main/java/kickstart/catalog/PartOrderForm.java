@@ -18,15 +18,43 @@ public class PartOrderForm {
 	@NotEmpty(message = "Bitte wählen Sie mindestens eine Farbe aus")
 	private String selectedColour;
 	@NotNull(message = "Bitte geben Sie einen Preis für das Produkt ein.")
-	@Min(1)
-	@Max(10000)
+
 	private double price;
+	private double priceNetto;
+	private double priceBrutto;
+	@NotNull(message = "Bitte geben Sie ein eanCode ein")
+	private String eanCode;
+
 	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")
 	@Min(0)
 	@Max(1500)
 	private double weight;
 	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private HashSet<String> selectedCategories;
+
+	public double getPriceNetto() {
+		return priceNetto;
+	}
+
+	public double getPriceBrutto() {
+		return priceBrutto;
+	}
+
+	public void setPriceBrutto(double priceBrutto) {
+		this.priceBrutto = priceBrutto;
+	}
+
+	public String getEanCode() {
+		return eanCode;
+	}
+
+	public void setEanCode(String eanCode) {
+		this.eanCode = eanCode;
+	}
+
+	public void setPriceNetto(double priceNetto) {
+		this.priceNetto = priceNetto;
+	}
 
 	public void setDescription(String description) {
 		this.description = description;

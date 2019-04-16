@@ -19,7 +19,8 @@ import kickstart.articles.Part;
 @SpringBootTest
 public class ReorderableInventoryItemTest {
 
-	private @Autowired BusinessTime time;
+	/*
+	* private @Autowired BusinessTime time;
 
 	private Article part;
 
@@ -71,5 +72,7 @@ public class ReorderableInventoryItemTest {
 		assertThat(item.getQuantity().getAmount()).as("Update should increase the amount after update")
 				.isEqualByComparingTo(before.add(Quantity.of(1)).getAmount());
 	}
+	* */
+
 
 }

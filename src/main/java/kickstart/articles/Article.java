@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.money.MonetaryAmount;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -42,6 +43,9 @@ public abstract class Article extends Product {
 	}
 
 	private String description;
+	private MonetaryAmount priceNetto;
+	private MonetaryAmount priceBrutto;
+	private String eanCode;
 
 	// This variable states whether a article needs to get updated after,
 	// one of it's children was edited. Update means in this context that attributes
@@ -70,7 +74,7 @@ public abstract class Article extends Product {
 	 * @throws IllegalArgumentException If name or description equal the empty
 	 *                                  string
 	 */
-	public Article(@NotNull String name, @NotNull String description) throws IllegalArgumentException {
+	public Article(@NotNull String name, @NotNull String description, double priceNetto,double priceBrutto,String eanCode) throws IllegalArgumentException {
 		// Here the name is just set to test later whether name is valid. Therefore a
 		// placeholder is
 		// used and later changed. We can't check this before calling the super
@@ -89,6 +93,9 @@ public abstract class Article extends Product {
 		setName(name);
 
 		this.description = description;
+		this.priceNetto=Money.of(priceNetto,"EUR");
+		this.priceBrutto=Money.of(priceBrutto,"EUR");
+		this.eanCode=eanCode;
 
 		hidden = false;
 
@@ -125,6 +132,31 @@ public abstract class Article extends Product {
 	 * @return Returns true if it could get updated. False otherwise
 	 */
 	public abstract boolean update(@NotNull List<Article> parts);
+
+
+	public MonetaryAmount getPriceNetto() {
+		return priceNetto;
+	}
+
+	public String getEanCode() {
+		return eanCode;
+	}
+
+	public void setEanCode(String eanCode) {
+		this.eanCode = eanCode;
+	}
+
+	public void setPriceNetto(MonetaryAmount priceNetto) {
+		this.priceNetto = priceNetto;
+	}
+
+	public MonetaryAmount getPriceBrutto() {
+		return priceBrutto;
+	}
+
+	public void setPriceBrutto(MonetaryAmount priceBrutto) {
+		this.priceBrutto = priceBrutto;
+	}
 
 	/**
 	 * 

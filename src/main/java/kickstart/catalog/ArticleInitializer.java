@@ -124,18 +124,18 @@ public class ArticleInitializer implements DataInitializer {
 		catalog.save(r4);
 		 */
 
-		Part p1 = new Part("Latex", "beschreibung", 15, 15.0, "rooky", cat1);
+		Part p1 = new Part("Latex", "beschreibung", 15, 10,12,"F13FR4",15.0, "rocky", cat1);
 		catalog.save(p1);
 
-		Part p2 = new Part("PLA", "beschreibung", 15, 15.0, "muddy", cat1);
-		catalog.save(p1);
+		Part p2 = new Part("PLA", "beschreibung", 15,9 ,12,"AAAFR5",15.0, "muddy", cat1);
+		catalog.save(p2);
 
 		LinkedList<Article> l1 = new LinkedList<>();
 		for (int i = 0; i < 2; i++) {
 			l1.add(p1);
 		}
 		l1.add(p2);
-		Composite com1 = new Composite("ZIP Body", "bechreibung", l1);
+		Composite com1 = new Composite("ZIP Body", "bechreibung",20,25,"DD14F", l1);
 		catalog.save(com1);
 
 

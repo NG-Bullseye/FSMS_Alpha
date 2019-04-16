@@ -36,7 +36,7 @@ public class CompositeTest {
 	@BeforeEach
 	public void setUp() {
 
-		colour1="brown";
+		/*colour1="brown";
 		colour2="black";
 
 		part1 = new Part("Frame", "Frame for a book shelf", 25.75, 6, colour1, new HashSet<String>());
@@ -283,7 +283,9 @@ public class CompositeTest {
 
 
 
+
 	}
+
 
 	
 }

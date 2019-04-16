@@ -20,7 +20,8 @@ import org.salespointframework.quantity.Quantity;
 
 public class ArticleTest {
 
-	// This class is just for testing the non-abstract methods of Article. Do not
+	/*
+	* // This class is just for testing the non-abstract methods of Article. Do not
 	// use it for any other purpose.
 	private class ArticleImpl extends Article {
 
@@ -228,4 +229,7 @@ public class ArticleTest {
 					.isEqualTo(before + amount);
 		}
 	}
+	*
+	* */
+
 }

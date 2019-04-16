@@ -37,7 +37,7 @@ public class Part extends Article {
 	 * Constructor for the database. It shouldn't be used otherwise.
 	 */
 	private Part() {
-		super("a", "b");
+		super("a", "b",0,0,"");
 	}
 
 	/**
@@ -50,9 +50,9 @@ public class Part extends Article {
 	 * @param categories
 	 * @throws IllegalArgumentException If the price or weight is not positive.
 	 */
-	public Part(@NotNull String name, @NotNull String description, double price, double weight,
+	public Part(@NotNull String name, @NotNull String description, double price, double priceNetto, double priceBrutto,String eanCode, double weight,
 			@NotNull String colour, @NotNull Set<String> categories) throws IllegalArgumentException {
-		super(name, description);
+		super(name, description,priceNetto,priceBrutto,eanCode);
 
 		if (price <= 0) {
 			throw new IllegalArgumentException("Part.price should be positive.");

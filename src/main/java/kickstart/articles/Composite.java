@@ -15,6 +15,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.javamoney.moneta.Money;
@@ -56,7 +57,7 @@ public class Composite extends Article {
 	 * Empty constructor for data base interactions. Shouldn't used otherwise.
 	 */
 	public Composite() {
-		super("a", "b");
+		super("a", "b",0,0,"");
 
 		this.parts = new ArrayList<Article>();
 	}
@@ -75,9 +76,9 @@ public class Composite extends Article {
 	 * @param parts       A list of Article that this composite consists of.
 	 * @throws IllegalArgumentException If the size of parts is zero.
 	 */
-	public Composite(@NotNull String name, @NotNull String description, @NotNull List<Article> parts)
+	public Composite(@NotNull String name, @NotNull String description, double priceNetto, double priceBrutto,@NotNull String eanCode, @NotNull List<Article> parts)
 			throws IllegalArgumentException {
-		super(name, description);
+		super(name, description,priceNetto,priceBrutto,eanCode);
 
 		if (parts.size() == 0) {
 			throw new IllegalArgumentException();
@@ -221,6 +222,8 @@ public class Composite extends Article {
 	public MonetaryAmount getPrice() {
 		return price;
 	}
+
+
 
 	/**
 	 * @return Returns the colour as a Set of String. This ensures that no colour
