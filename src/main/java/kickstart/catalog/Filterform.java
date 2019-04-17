@@ -10,15 +10,18 @@ public class Filterform {
 	@NotNull(message = "Bitte wählen Sie mindestens eine Farbe aus.")
 	private ArrayList<String> selectedColours;
 	@NotNull
-	@Min(1)
-	@Max(10000)
-	private Integer minPrice = 1;
+	@Min(0)
+	@Max(99999999)
+	private Integer minPriceNetto = 0;
 	@NotNull
-	@Min(1)
-	@Max(10000)
-	private Integer maxPrice = 10000;
+	@Min(0)
+	@Max(99999999)
+	private Integer maxPriceNetto = 99999999;
+	/*
 	@NotNull(message = "Bitte wählen Sie einen Produkttyp aus.")
 	private String type;
+	 */
+
 	@NotNull(message = "Bitte wählen Sie mindestens eine Kategorie aus.")
 	private ArrayList<String> selectedCategories;
 
@@ -30,22 +33,23 @@ public class Filterform {
 		return selectedColours;
 	}
 
-	public int getMaxPrice() {
-		return maxPrice;
+	public int getMaxPriceNetto() {
+		return maxPriceNetto;
 	}
 
-	public int getMinPrice() {
-		return minPrice;
+	public int getMinPriceNetto() {
+		return minPriceNetto;
 	}
 
-	public void setMaxPrice(int maxPrice) {
-		this.maxPrice = maxPrice;
+	public void setMaxPriceNetto(int maxPriceNetto) {
+		this.maxPriceNetto = maxPriceNetto;
 	}
 
-	public void setMinPrice(int minPrice) {
-		this.minPrice = minPrice;
+	public void setMinPriceNetto(int minPriceNetto) {
+		this.minPriceNetto = minPriceNetto;
 	}
 
+	/*
 	public String getType() {
 		return type;
 	}
@@ -53,6 +57,8 @@ public class Filterform {
 	public void setType(String type) {
 		this.type = type;
 	}
+	 */
+
 
 	public void setSelectedCategories(ArrayList<String> selectedCategories) {
 		this.selectedCategories = selectedCategories;

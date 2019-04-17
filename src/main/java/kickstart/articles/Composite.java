@@ -31,18 +31,23 @@ import org.salespointframework.quantity.Quantity;
 @Entity
 public class Composite extends Article {
 
-	// The List of all parts this composite consists of. It is annotated as
-	// transient,
-	// so it doesn't cause problems in the database, since it would be difficult
-	// to fetch multiple levels in this tree structure from the data base.
+	//<editor-fold desc="Info">
+	/* The List of all parts this composite consists of. It is annotated as
+	 transient,
+	 so it doesn't cause problems in the database, since it would be difficult
+	 to fetch multiple levels in this tree structure from the data base.*/
+	//</editor-fold>
 	@Transient
 	private List<Article> parts;
 
-	// This is list saves the ProductIdentifiers to reference the parts. This is
-	// easier
-	// to save as it doesn't consists of multiple levels. If changes in one of the
-	// parts occur
-	// the articles with these identifiers get loaded from the database.
+	//<editor-fold desc="info">
+	/* This is list saves the ProductIdentifiers to reference the parts. This is
+	 easier
+	 to save as it doesn't consists of multiple levels. If changes in one of the
+	 parts occur
+	 the articles with these identifiers get loaded from the database.
+	 */
+	//</editor-fold>
 	@ElementCollection
 	private Map<ProductIdentifier, Integer> partIds;
 	// private List<ProductIdentifier> partIds;
@@ -86,6 +91,7 @@ public class Composite extends Article {
 
 		this.parts = parts;
 
+		this.addCategory("Produkt");
 		this.setUpdateStatus(true);
 
 		this.partIds = new HashMap<ProductIdentifier, Integer>();
@@ -93,7 +99,8 @@ public class Composite extends Article {
 		this.type = ArticleType.COMPOSITE;
 
 		for (Article article : parts) {
-			article.getCategories().forEach(this::addCategory);
+			this.addCategory(article.getCategories().get().findFirst().get());
+			//article.getCategories().forEach(this::addCategory);
 
 			if (partIds.containsKey(article.getId())) {
 				partIds.put(article.getId(), partIds.get(article.getId()) + 1);
@@ -190,9 +197,14 @@ public class Composite extends Article {
 			price = price.add(article.getPrice());
 
 			this.colour=article.getColour();
-			for (String category : article.getCategories()) {
-				this.addCategory(category);
+			this.addCategory(article.getCategories().get().findFirst().get());
+
+			/*
+			for (String category : ) {
+
 			}
+			 */
+
 
 		}
 
@@ -267,8 +279,12 @@ public class Composite extends Article {
 	 * @return Returns all categories as a Set
 	 */
 	public Set<String> getAllCategories() {
-		HashSet<String> categories = new HashSet<String>();
+
+		/*
 		this.getCategories().forEach(categories::add);
+		 */
+		HashSet<String> categories = new HashSet<String>();
+		categories.add("Produkt");
 		return categories;
 	}
 

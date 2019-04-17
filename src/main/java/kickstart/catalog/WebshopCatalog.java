@@ -61,7 +61,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 	default Iterable<Article> findByPrice(MonetaryAmount minPrice, MonetaryAmount maxPrice) {
 		HashSet<Article> rightPrice = new HashSet<>();
 		this.findAll().forEach(article -> {
-			if (article.getPrice().isGreaterThan(minPrice.subtract(Money.of(1, EURO)))
+			if (article.getPriceNetto().isGreaterThan(minPrice.subtract(Money.of(1, EURO)))
 					&& article.getPrice().isLessThan(maxPrice.add(Money.of(1, EURO))))
 				rightPrice.add(article);
 		});

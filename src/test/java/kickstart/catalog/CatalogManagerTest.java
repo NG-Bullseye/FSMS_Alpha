@@ -246,15 +246,15 @@ class CatalogManagerTest {
 		form.setType("All");
 		form.setSelectedCategories(category);
 		form.setSelectedColours(colour);
-		form.setMinPrice(61);
-		form.setMaxPrice(69);
+		form.setMinPriceNetto(61);
+		form.setMaxPriceNetto(69);
 		manager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 		expected.add(tester3.getId());
 
 		assertEquals(expected, result, "Es werden nicht die richtigen Artikel mit dieser Farbe angezeigt.");
-		form.setMaxPrice(1000);
+		form.setMaxPriceNetto(1000);
 		colour.clear();
 		colour.add("lila");
 		form.setSelectedColours(colour);
@@ -272,8 +272,8 @@ class CatalogManagerTest {
 		form.setSelectedCategories(category);
 		colour.add("schwarz");
 		form.setSelectedColours(colour);
-		form.setMaxPrice(66);
-		form.setMinPrice(64);
+		form.setMaxPriceNetto(66);
+		form.setMinPriceNetto(64);
 
 		manager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
@@ -282,7 +282,7 @@ class CatalogManagerTest {
 		expected.add(tester1.getId());
 		assertEquals(expected, result, "Beim Filtern des Preises wird nicht der richtige Artikel angezeigt.");
 
-		form.setMinPrice(63);
+		form.setMinPriceNetto(63);
 		expected.clear();
 		expected.add(tester1.getId());
 		expected.add(tester2.getId());
@@ -292,8 +292,8 @@ class CatalogManagerTest {
 		});
 		assertEquals(expected, result, "Es werden nicht alle Artikel in diesem Preisbereich angezeigt");
 
-		form.setMinPrice(61);
-		form.setMaxPrice(62);
+		form.setMinPriceNetto(61);
+		form.setMaxPriceNetto(62);
 		expected.clear();
 		result.clear();
 		manager.filteredCatalog(form).forEach(article -> {
@@ -302,8 +302,8 @@ class CatalogManagerTest {
 		assertEquals(expected, result, "Es werden nicht alle Artikel in diesem Preisbereich angezeigt");
 
 		form.setType("part");
-		form.setMinPrice(61);
-		form.setMaxPrice(65);
+		form.setMinPriceNetto(61);
+		form.setMaxPriceNetto(65);
 		expected.clear();
 		expected.add(tester1.getId());
 		expected.add(tester2.getId());
@@ -313,8 +313,8 @@ class CatalogManagerTest {
 		});
 		assertEquals(expected, result, "Es gibt einen Fehler, wenn der Mindestpreis höher als der Maximalpreis ist.");
 
-		form.setMinPrice(259);
-		form.setMaxPrice(261);
+		form.setMinPriceNetto(259);
+		form.setMaxPriceNetto(261);
 		form.setType("composite");
 		expected.clear();
 		result.clear();
@@ -324,8 +324,8 @@ class CatalogManagerTest {
 		expected.add(com1.getId());
 		assertEquals(expected, result, "Es werden nicht die richtigen Artikel angezeigt.");
 
-		form.setMinPrice(65);
-		form.setMaxPrice(61);
+		form.setMinPriceNetto(65);
+		form.setMaxPriceNetto(61);
 		form.setType("part");
 		expected.clear();
 		expected.add(tester1.getId());

@@ -298,6 +298,9 @@ public class CatalogManager {
 	 */
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
+
+
+		/*
 		HashSet<Article> rightType = new HashSet<>();
 
 		if (filterform.getType().equals("composite")) {
@@ -310,15 +313,17 @@ public class CatalogManager {
 
 			}
 		}
+		 */
+
 		HashSet<Article> rightColours = new HashSet<>();
 		catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
 
 		HashSet<Article> rightPrice = new HashSet<>();
-		if (filterform.getMaxPrice() > filterform.getMinPrice()) {
-			catalog.findByPrice(Money.of(filterform.getMinPrice(), EURO), Money.of(filterform.getMaxPrice(), EURO))
+		if (filterform.getMaxPriceNetto() > filterform.getMinPriceNetto()) {
+			catalog.findByPrice(Money.of(filterform.getMinPriceNetto(), EURO), Money.of(filterform.getMaxPriceNetto(), EURO))
 					.forEach(rightPrice::add);
 		} else {
-			catalog.findByPrice(Money.of(filterform.getMaxPrice(), EURO), Money.of(filterform.getMinPrice(), EURO))
+			catalog.findByPrice(Money.of(filterform.getMaxPriceNetto(), EURO), Money.of(filterform.getMinPriceNetto(), EURO))
 					.forEach(rightPrice::add);
 		}
 
@@ -328,7 +333,9 @@ public class CatalogManager {
 		HashSet<Article> visible = new HashSet<>();
 		this.getVisibleCatalog().forEach(visible::add);
 		LinkedList<Article> result = new LinkedList<>();
+		/*
 		result.addAll(rightType);
+		 */
 		result.retainAll(visible);
 		if (!filterform.getSelectedColours().isEmpty()) {
 			result.retainAll(rightColours);
