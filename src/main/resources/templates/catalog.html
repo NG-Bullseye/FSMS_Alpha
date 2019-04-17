@@ -131,6 +131,9 @@
 					<th>Preis Netto</th>
 					<th>Preis Brutto</th>
 					<th>EAN Code</th>
+					<th>Bestellen</th>
+					<th>Bearbeiten</th>
+
 
 				</tr>
 				</thead>
@@ -144,11 +147,41 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
+					<td>
+						<div class="ui two buttons" >
+                            <div th:switch="${article.type}">
+
+                                <a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
+                                   th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">
+                                    <div class="ui red basic button">
+                                        <i class="edit icon"></i>Bearbeiten
+                                    </div>
+                                </a>
+
+								<a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+                                   th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">
+									<div class="ui red basic button">
+										<i class="edit icon"></i>Bearbeiten
+									</div>
+                                </a>
+                        </div>
+                            <a th:href="@{/reorder/{id}(id=${article.id})}">
+								<div class="ui green basic button">
+									<i class="chart bar icon"></i>Nachbestellen
+								</div>
+							</a>
+						</div>
+					</td>
+
 				</tr>
 				</tbody>
 			</table>
 		</div>
+
+
+
 		<!--
+
 		<div id="tablespace">
 			<div class="ui link cards" th:remove="all-but-first">
 				<div class="card" th:each="article : ${catalog}">
