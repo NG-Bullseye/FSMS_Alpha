@@ -15,14 +15,14 @@ public class PartOrderForm {
 	@NotEmpty(message = "Bitte geben Sie eine Beschreibung für das Produkt ein.")
 	@Size(min = 2, max = 255, message = "Die Beschreibung muss zwischen 2 und 255 Zeichen lang sein.")
 	private String description;
-	@NotEmpty(message = "Bitte wählen Sie mindestens eine Farbe aus")
-	private String selectedColour;
-	@NotNull(message = "Bitte geben Sie einen Preis für das Produkt ein.")
 
+	//@NotEmpty(message = "Bitte geben Sie einen Preis für das Produkt ein.")
+	private String selectedColour;
+	//@NotNull(message = )
 	private double price;
 	private double priceNetto;
 	private double priceBrutto;
-	@NotNull(message = "Bitte geben Sie ein eanCode ein")
+	//@NotNull(message = "Bitte geben Sie ein eanCode ein")
 	private String eanCode;
 
 	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")

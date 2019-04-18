@@ -64,8 +64,8 @@
 						<div class="menu">
 							<div class="item" th:each="category: ${categories}">
 								<input type="checkbox"
-									th:field="*{selectedCategories}"
-									th:value="${category}" />
+									   th:field="*{selectedCategories}"
+									   th:value="${category}" />
 								<label th:text="${category}"></label>
 							</div>
 						</div>
@@ -102,16 +102,16 @@
 				<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 				-->
 
-					<div class="item">
-						<div class="ui simple dropdown">
-							neuer Artikel
-							<i class="dropdown icon"></i>
-							<div class="menu">
-								<a class="item" th:href="@{/catalog/part/new}">Rohstoff</a>
-								<a class="item" th:href="@{/catalog/composite/new}">Einzelteil/Produkt</a>
-							</div>
+				<div class="item">
+					<div class="ui simple dropdown">
+						neuer Artikel
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<a class="item" th:href="@{/catalog/part/new}">Rohstoff</a>
+							<a class="item" th:href="@{/catalog/composite/new}">Einzelteil/Produkt</a>
 						</div>
 					</div>
+				</div>
 				<!--
 				</div>
 				-->

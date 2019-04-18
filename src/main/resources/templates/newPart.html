@@ -37,7 +37,7 @@
             <div class="ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Preis</div>
-                    <input type="number" min="1" step="0.01" th:field="*{price}" />
+                    <input type="number" min="0" step="0.01" th:field="*{price}" />
                     <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">
                         Bitte geben Sie eine Beschreibung ein.
                     </div>
@@ -46,21 +46,32 @@
             <div class="ui vertical segment">
                 <div class="ui labeled input">
                     <div class="ui label">Gewicht</div>
-                    <input type="number" min="1" step="0.1" th:field="*{weight}" />
+                    <input type="number" min="0" step="0.1" th:field="*{weight}" />
                     <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}">
                         Bitte geben Sie eine Beschreibung ein.
                     </div>
                 </div>
             </div>
+
+            <div class="ui vertical segment">
+                <div th:each="colour: ${colours}">
+                    <input name="radio-option-1" type="radio" th:field="*{selectedColour}" th:value="${colour}"/>
+                    <label th:text="${colour}">  </label>
+                </div>
+                <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedColour')}" th:errors="*{selectedColour}">
+                    Bitte geben Sie eine Beschreibung ein.
+                </div>
+            </div>
+
+            <!--
             <div class="ui vertical segment" id="buttonspace">
                 <div class="ui simple dropdown">
                     <div class="text"> Farben </div>
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div th:each="colour: ${colours}">
-                            <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
-                                                                  th:field="*{selectedColour}"
-                                                                  th:value="${colour}" />
+                            <div class="ui labeled input">
+                                <input class="ui checkbox" type="checkbox" th:field="*{selectedColour}" th:value="${colour}" />
                                 <label th:text="${colour}"></label>
                             </div>
                         </div>
@@ -70,6 +81,8 @@
                     Bitte geben Sie eine Beschreibung ein.
                 </div>
             </div>
+            -->
+
             <div class="ui vertical segment" id="buttonspace">
                 <div class="ui simple dropdown item">
                     Kategorien
