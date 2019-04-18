@@ -11,7 +11,7 @@ public class Form {
 	private String name;
 	@Size(max = 255, message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
 	private String description;
-	private HashSet<String> selectedColours;
+	private String selectedColour;
 	@Min(value = 0)
 	@Max(10000)
 	private double price;
@@ -52,12 +52,12 @@ public class Form {
 		this.weight = weight;
 	}
 
-	public HashSet<String> getSelectedColours() {
-		return selectedColours;
+	public String getSelectedColour() {
+		return selectedColour;
 	}
 
-	public void setSelectedColours(HashSet<String> colour) {
-		this.selectedColours = colour;
+	public void setSelectedColour(String selectedColour) {
+		this.selectedColour = selectedColour;
 	}
 
 	public HashSet<String> getSelectedCategories() {

@@ -143,9 +143,9 @@ public class CatalogManager {
 				afterEdit.getCategories().forEach(afterEdit::removeCategory);
 				article.getSelectedCategories().forEach(afterEdit::addCategory);
 			}
-			if (!article.getSelectedColours().isEmpty()) {
+			if (!article.getSelectedColour().isEmpty()) {
 				//afterEdit.removeColours();
-				article.getSelectedColours().forEach(afterEdit::setColour);
+				afterEdit.setColour(article.getSelectedColour());
 			}
 
 			catalog.save(afterEdit);
