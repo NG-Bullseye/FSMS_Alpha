@@ -147,31 +147,33 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
-					<td>
-						<div class="ui two buttons" >
-                            <div th:switch="${article.type}">
-
+                    <td>
+                        <a th:href="@{/reorder/{id}(id=${item.getProduct().getId()})}">
+                            <div class="ui green basic button">
+                                <i class="chart bar icon"></i>Nachbestellen
+                            </div>
+                        </a>23431{}
+                    </td>=;
+                    <td>
+                        <div class="ui two buttons" >
+                            <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
-                                   th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">
+                                   th:href="@{/edit/{id}(id=${item.getProduct().getId()})}" target="_self">
                                     <div class="ui red basic button">
                                         <i class="edit icon"></i>Bearbeiten
                                     </div>
                                 </a>
 
-								<a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
-                                   th:href="@{/edit/composite/{id}(id=${article.getId()})}" target="_self">
-									<div class="ui red basic button">
-										<i class="edit icon"></i>Bearbeiten
-									</div>
+                                <a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+                                   th:href="@{/edit/composite/{id}(id=${item.getProduct().getId()})}" target="_self">
+                                    <div class="ui red basic button">
+                                        <i class="edit icon"></i>Bearbeiten
+                                    </div>
                                 </a>
+                            </div>
+
                         </div>
-                            <a th:href="@{/reorder/{id}(id=${article.id})}">
-								<div class="ui green basic button">
-									<i class="chart bar icon"></i>Nachbestellen
-								</div>
-							</a>
-						</div>
-					</td>
+                    </td>
 
 				</tr>
 				</tbody>
