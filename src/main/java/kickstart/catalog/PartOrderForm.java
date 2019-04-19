@@ -24,6 +24,7 @@ public class PartOrderForm {
 	private double priceBrutto;
 	//@NotNull(message = "Bitte geben Sie ein eanCode ein")
 	private String eanCode;
+	private String herstellerUrl;
 
 	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")
 	@Min(0)
@@ -38,6 +39,14 @@ public class PartOrderForm {
 
 	public double getPriceBrutto() {
 		return priceBrutto;
+	}
+
+	public String getHerstellerUrl() {
+		return herstellerUrl;
+	}
+
+	public void setHerstellerUrl(String herstellerUrl) {
+		this.herstellerUrl = herstellerUrl;
 	}
 
 	public void setPriceBrutto(double priceBrutto) {
@@ -92,7 +101,7 @@ public class PartOrderForm {
 		return selectedColour;
 	}
 
-	public void setSelectedColours(String colour) {
+	public void setSelectedColour(String colour) {
 		this.selectedColour = colour;
 	}
 
@@ -103,4 +112,6 @@ public class PartOrderForm {
 	public void setSelectedCategories(HashSet<String> selectedCategories) {
 		this.selectedCategories = selectedCategories;
 	}
+
+
 }

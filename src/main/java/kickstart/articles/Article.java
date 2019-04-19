@@ -46,6 +46,7 @@ public abstract class Article extends Product {
 	private MonetaryAmount priceNetto;
 	private MonetaryAmount priceBrutto;
 	private String eanCode;
+	protected String herstellerUrl="Fishstone";
 
 	// This variable states whether a article needs to get updated after,
 	// one of it's children was edited. Update means in this context that attributes
@@ -201,6 +202,14 @@ public abstract class Article extends Product {
 
 	public abstract void setColour(@NotNull String colour);
 
+
+	public String getHerstellerUrl() {
+		return herstellerUrl;
+	}
+
+	public void setHerstellerUrl(String herstellerUrl) {
+		this.herstellerUrl = herstellerUrl;
+	}
 
 	/**
 	 * 

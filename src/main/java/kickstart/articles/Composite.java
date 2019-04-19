@@ -81,9 +81,11 @@ public class Composite extends Article {
 	 * @param parts       A list of Article that this composite consists of.
 	 * @throws IllegalArgumentException If the size of parts is zero.
 	 */
-	public Composite(@NotNull String name, @NotNull String description, double priceNetto, double priceBrutto,@NotNull String eanCode, @NotNull List<Article> parts)
+	public Composite(@NotNull String name, @NotNull String description, double priceNetto, double priceBrutto,@NotNull String eanCode,String herstellerUrl, @NotNull List<Article> parts)
 			throws IllegalArgumentException {
 		super(name, description,priceNetto,priceBrutto,eanCode);
+
+		this.herstellerUrl=herstellerUrl;
 
 		if (parts.size() == 0) {
 			throw new IllegalArgumentException();

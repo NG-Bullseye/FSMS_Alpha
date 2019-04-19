@@ -357,7 +357,7 @@ public class CatalogManager {
 	 */
 	public void newPart(PartOrderForm form) {
 		Part newArticle = new Part(form.getName(), form.getDescription(), form.getPrice(),
-				form.getPriceNetto(),form.getPriceBrutto(),form.getEanCode(), form.getWeight(), form.getSelectedColour(), form.getSelectedCategories());
+				form.getPriceNetto(),form.getPriceBrutto(),form.getEanCode(), form.getWeight(), form.getSelectedColour(), form.getHerstellerUrl(), form.getSelectedCategories());
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
@@ -373,7 +373,7 @@ public class CatalogManager {
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
 		Composite newArticle = new Composite(form.getName(), form.getDescription(),
-				form.getPriceNetto(),form.getPriceBrutto(),form.getEanCode(),this.compositeMapFiltering(partsCount));
+				form.getPriceNetto(),form.getPriceBrutto(),form.getEanCode(),form.getHerstellerUrl(),this.compositeMapFiltering(partsCount));
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}

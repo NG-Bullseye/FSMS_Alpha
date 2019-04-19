@@ -15,9 +15,28 @@ public class Form {
 	@Min(value = 0)
 	@Max(10000)
 	private double price;
+	private String eanCode;
+	private String herstellerUrl;
 	@Min(value = 0)
 	@Max(1500)
 	private double weight;
+
+	public String getHerstellerUrl() {
+		return herstellerUrl;
+	}
+
+	public void setHerstellerUrl(String herstellerUrl) {
+		this.herstellerUrl = herstellerUrl;
+	}
+
+	public String getEanCode() {
+		return eanCode;
+	}
+
+	public void setEanCode(String eanCode) {
+		this.eanCode = eanCode;
+	}
+
 	private HashSet<String> selectedCategories;
 
 	public void setDescription(String description) {

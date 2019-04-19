@@ -13,6 +13,15 @@ public class CompositeOrderForm {
 	private double priceNetto;
 	private double priceBrutto;
 	private String eanCode;
+	private String herstellerUrl;
+
+	public String getHerstellerUrl() {
+		return herstellerUrl;
+	}
+
+	public void setHerstellerUrl(String herstellerUrl) {
+		this.herstellerUrl = herstellerUrl;
+	}
 
 	public double getPriceBrutto() {
 		return priceBrutto;

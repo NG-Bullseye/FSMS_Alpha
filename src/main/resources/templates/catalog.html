@@ -130,6 +130,7 @@
 					<th>Farbe</th>
 					<th>Preis Netto</th>
 					<th>Preis Brutto</th>
+					<th>Hersteller Url</th>
 					<th>EAN Code</th>
 					<th>Bestellen</th>
 					<th>Bearbeiten</th>
@@ -146,6 +147,7 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}">Url</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
                     <td>
                         <a th:href="@{/reorder/{id}(id=${item.getProduct().getId()})}">
