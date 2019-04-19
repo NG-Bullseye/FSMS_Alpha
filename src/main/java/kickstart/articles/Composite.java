@@ -62,7 +62,7 @@ public class Composite extends Article {
 	 * Empty constructor for data base interactions. Shouldn't used otherwise.
 	 */
 	public Composite() {
-		super("a", "b",0,0,"");
+		super("a" ,0,0,"");
 
 		this.parts = new ArrayList<Article>();
 	}
@@ -77,13 +77,19 @@ public class Composite extends Article {
 	 * as it's the base class
 	 * 
 	 * @param name        The name of the article
-	 * @param description the description of the article
 	 * @param parts       A list of Article that this composite consists of.
 	 * @throws IllegalArgumentException If the size of parts is zero.
 	 */
-	public Composite(@NotNull String name, @NotNull String description, double priceNetto, double priceBrutto,@NotNull String eanCode,String herstellerUrl, @NotNull List<Article> parts)
+	public Composite(@NotNull String name,
+					 double priceNetto,
+					 double priceBrutto,
+					 @NotNull String eanCode,
+					 String herstellerUrl,
+					 String colour,
+					 String categorie,
+					 @NotNull List<Article> parts)
 			throws IllegalArgumentException {
-		super(name, description,priceNetto,priceBrutto,eanCode);
+		super(name, priceNetto,priceBrutto,eanCode);
 
 		this.herstellerUrl=herstellerUrl;
 

@@ -74,46 +74,16 @@
                 </div>
             </div>
 
-            <!--
-            <div class="ui vertical segment" id="buttonspace">
-                <div class="ui simple dropdown">
-                    <div class="text"> Farben </div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div th:each="colour: ${colours}">
-                            <div class="ui labeled input">
-                                <input class="ui checkbox" type="checkbox" th:field="*{selectedColour}" th:value="${colour}" />
-                                <label th:text="${colour}"></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedColour')}" th:errors="*{selectedColour}">
-                    Bitte geben Sie eine Beschreibung ein.
-                </div>
-            </div>
-            -->
-
-            <div class="ui vertical segment" id="buttonspace">
-                <div class="ui simple dropdown item">
-                    Kategorien
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                            <div th:each="category: ${categories}">
-                                <div class="ui labeled input"> <input class="ui checkbox" type="checkbox"
-                                                        th:field="*{selectedCategories}"
-                                                        th:value="${category}" />
-                                    <label
-                                            th:text="${category}"></label>
-                                </div>
-
-                            </div>
-                    </div>
+            <div class="ui vertical segment">
+                <div th:each="category: ${categories}">
+                    <input name="radio-option-1" type="radio" th:field="*{selectedCategories}" th:value="${category}"/>
+                    <label th:text="${category}">  </label>
                 </div>
                 <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">
                     Bitte geben Sie eine Beschreibung ein.
                 </div>
             </div>
+
             <div class="ui vertical segment">
 
                 <a class="item">

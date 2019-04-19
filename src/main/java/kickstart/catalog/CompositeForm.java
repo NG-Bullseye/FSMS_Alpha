@@ -1,17 +1,36 @@
 package kickstart.catalog;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 
 public class CompositeForm {
 	@Size(max = 255, message = "Der Name darf maximal 255 Zeichen lang sein.")
 	private String name;
-	@Size(max = 255, message = "Die Beschreibung darf maximal 255 Zeichen lang sein.")
-	private String description;
 	private double priceNetto;
 	private double priceBrutto;
 	private String eanCode;
 	private String herstellerUrl;
+	private String selectedColour;
+	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
+	private String selectedCategorie;
 
+
+	public String getSelectedColour() {
+		return selectedColour;
+	}
+
+	public void setSelectedColour(String selectedColour) {
+		this.selectedColour = selectedColour;
+	}
+
+	public String getSelectedCategorie() {
+		return selectedCategorie;
+	}
+
+	public void setSelectedCategorie(String selectedCategorie) {
+		this.selectedCategorie = selectedCategorie;
+	}
 
 	public double getPriceNetto() {
 		return priceNetto;
@@ -53,12 +72,5 @@ public class CompositeForm {
 		return name;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 }

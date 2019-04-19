@@ -42,7 +42,6 @@ public abstract class Article extends Product {
 		COMPOSITE, PART
 	}
 
-	private String description;
 	private MonetaryAmount priceNetto;
 	private MonetaryAmount priceBrutto;
 	private String eanCode;
@@ -71,11 +70,11 @@ public abstract class Article extends Product {
 	/**
 	 * 
 	 * @param name: The name of the article.
-	 * @param description: The description of this artile.
+
 	 * @throws IllegalArgumentException If name or description equal the empty
 	 *                                  string
 	 */
-	public Article(@NotNull String name, @NotNull String description, double priceNetto,double priceBrutto,String eanCode) throws IllegalArgumentException {
+	public Article(@NotNull String name, double priceNetto,double priceBrutto,String eanCode) throws IllegalArgumentException {
 		// Here the name is just set to test later whether name is valid. Therefore a
 		// placeholder is
 		// used and later changed. We can't check this before calling the super
@@ -87,13 +86,8 @@ public abstract class Article extends Product {
 			throw new IllegalArgumentException("Article.name should not be empty");
 		}
 
-		if (description.equals("")) {
-			throw new IllegalArgumentException("Article.description should not be empty");
-		}
-
 		setName(name);
 
-		this.description = description;
 		this.priceNetto=Money.of(priceNetto,"EUR");
 		this.priceBrutto=Money.of(priceBrutto,"EUR");
 		this.eanCode=eanCode;
@@ -104,26 +98,6 @@ public abstract class Article extends Product {
 		this.parents = new LinkedList<ProductIdentifier>();
 
 		orderedAmount = 0;
-	}
-
-	/**
-	 * @return Returns the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * 
-	 * @param description: The new description for this article.
-	 * @throws IllegalArgumentException If description equals the empty string
-	 */
-	public void setDescription(@NotNull String description) throws IllegalArgumentException {
-		if (description.equals("")) {
-			throw new IllegalArgumentException("Article.description should not be empty");
-		}
-
-		this.description = description;
 	}
 
 	/**

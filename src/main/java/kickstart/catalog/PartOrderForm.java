@@ -12,9 +12,6 @@ public class PartOrderForm {
 	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")
 	@Size(min = 2, max = 255, message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
 	private String name;
-	@NotEmpty(message = "Bitte geben Sie eine Beschreibung für das Produkt ein.")
-	@Size(min = 2, max = 255, message = "Die Beschreibung muss zwischen 2 und 255 Zeichen lang sein.")
-	private String description;
 
 	//@NotEmpty(message = "Bitte geben Sie einen Preis für das Produkt ein.")
 	private String selectedColour;
@@ -22,7 +19,6 @@ public class PartOrderForm {
 	private double price;
 	private double priceNetto;
 	private double priceBrutto;
-	//@NotNull(message = "Bitte geben Sie ein eanCode ein")
 	private String eanCode;
 	private String herstellerUrl;
 
@@ -63,14 +59,6 @@ public class PartOrderForm {
 
 	public void setPriceNetto(double priceNetto) {
 		this.priceNetto = priceNetto;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDescription() {
-		return description;
 	}
 
 	public String getName() {

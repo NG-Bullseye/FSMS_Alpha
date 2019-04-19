@@ -128,9 +128,7 @@ public class CatalogManager {
 			if (!article.getName().isEmpty()) {
 				afterEdit.setName(article.getName());
 			}
-			if (!article.getDescription().isEmpty()) {
-				afterEdit.setDescription(article.getDescription());
-			}
+
 			long l1 = Math.round(article.getPrice());
 			if (l1 != 0) {
 				afterEdit.setPrice(Money.of(article.getPrice(), EURO));
@@ -174,9 +172,6 @@ public class CatalogManager {
 			Article afterEdit = catalog.findById(identifier).get();
 			if (!form.getName().isEmpty()) {
 				afterEdit.setName(form.getName());
-			}
-			if (!form.getDescription().isEmpty()) {
-				afterEdit.setDescription(form.getDescription());
 			}
 
 			LinkedList<Article> partsBefore = new LinkedList<>();
@@ -356,8 +351,16 @@ public class CatalogManager {
 	 *             name, description, weight, price, colours, categories.
 	 */
 	public void newPart(PartOrderForm form) {
-		Part newArticle = new Part(form.getName(), form.getDescription(), form.getPrice(),
-				form.getPriceNetto(),form.getPriceBrutto(),form.getEanCode(), form.getWeight(), form.getSelectedColour(), form.getHerstellerUrl(), form.getSelectedCategories());
+		Part newArticle = new Part(
+				form.getName(),
+				form.getPrice(),
+				form.getPriceNetto(),
+				form.getPriceBrutto(),
+				form.getEanCode(),
+				form.getWeight(),
+				form.getSelectedColour(),
+				form.getHerstellerUrl(),
+				form.getSelectedCategories());
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
@@ -372,8 +375,15 @@ public class CatalogManager {
 	 */
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
-		Composite newArticle = new Composite(form.getName(), form.getDescription(),
-				form.getPriceNetto(),form.getPriceBrutto(),form.getEanCode(),form.getHerstellerUrl(),this.compositeMapFiltering(partsCount));
+		Composite newArticle = new Composite(
+				form.getName(),
+				form.getPriceNetto(),
+				form.getPriceBrutto(),
+				form.getEanCode(),
+				form.getHerstellerUrl(),
+				form.getSelectedColour(),
+				form.getSelectedCategorie(),
+				this.compositeMapFiltering(partsCount));
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
@@ -463,7 +473,7 @@ public class CatalogManager {
 	public void createAvailableForNewComposite() {
 		HashSet<Article> articlesWithoutParents = new HashSet<>();
 		catalog.findAll().forEach(articlesWithoutParents::add);
-
+		/*
 		HashSet<Article> allComposites = new HashSet<>();
 		catalog.findComposite().forEach(allComposites::add);
 		for (Article composite : allComposites) {
@@ -477,7 +487,7 @@ public class CatalogManager {
 				}
 			});
 		}
-
+		 */
 		this.availableForNewComposite = articlesWithoutParents;
 	}
 

@@ -9,8 +9,6 @@ import javax.validation.constraints.Size;
 public class Form {
 	@Size(max = 255, message = "Der Name darf maximal 255 Zeichen lang sein.")
 	private String name;
-	@Size(max = 255, message = "Die Beschreibung darf maximal  255 Zeichen lang sein.")
-	private String description;
 	private String selectedColour;
 	@Min(value = 0)
 	@Max(10000)
@@ -38,14 +36,6 @@ public class Form {
 	}
 
 	private HashSet<String> selectedCategories;
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDescription() {
-		return description;
-	}
 
 	public String getName() {
 		return name;

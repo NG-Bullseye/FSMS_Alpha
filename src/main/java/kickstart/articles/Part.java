@@ -37,22 +37,21 @@ public class Part extends Article {
 	 * Constructor for the database. It shouldn't be used otherwise.
 	 */
 	private Part() {
-		super("a", "b",0,0,"");
+		super("a", 0,0,"");
 	}
 
 	/**
 	 * 
 	 * @param name
-	 * @param description
 	 * @param price
 	 * @param weight
 	 * @param colour
 	 * @param categories
 	 * @throws IllegalArgumentException If the price or weight is not positive.
 	 */
-	public Part(@NotNull String name, @NotNull String description, double price, double priceNetto, double priceBrutto,String eanCode, double weight,
+	public Part(@NotNull String name, double price, double priceNetto, double priceBrutto,String eanCode, double weight,
 			@NotNull String colour,String herstellerUrl, @NotNull Set<String> categories) throws IllegalArgumentException {
-		super(name, description,priceNetto,priceBrutto,eanCode);
+		super(name,priceNetto,priceBrutto,eanCode);
 
 		this.herstellerUrl=herstellerUrl;
 
