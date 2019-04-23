@@ -91,23 +91,30 @@ public class Composite extends Article {
 			throws IllegalArgumentException {
 		super(name, priceNetto,priceBrutto,eanCode);
 
+		this.colour=colour;
+
 		this.herstellerUrl=herstellerUrl;
-
-		if (parts.size() == 0) {
-			throw new IllegalArgumentException();
-		}
-
-		this.parts = parts;
-
-		this.addCategory("Produkt");
-		this.setUpdateStatus(true);
 
 		this.partIds = new HashMap<ProductIdentifier, Integer>();
 
 		this.type = ArticleType.COMPOSITE;
 
+		//<editor-fold desc="Category zuordnung">
+		for (String c :
+				this.getAllCategories()) {
+			this.removeCategory(c);
+		}
+		this.addCategory(categorie);
+		//</editor-fold>
+
+		//<editor-fold desc="Parts Handling">
+		if (parts.size() == 0) {
+			throw new IllegalArgumentException();
+		}
+		this.setUpdateStatus(true);
+		this.parts = parts;
 		for (Article article : parts) {
-			this.addCategory(article.getCategories().get().findFirst().get());
+			//this.addCategory(article.getCategories().get().findFirst().get());
 			//article.getCategories().forEach(this::addCategory);
 
 			if (partIds.containsKey(article.getId())) {
@@ -118,8 +125,8 @@ public class Composite extends Article {
 			}
 
 		}
-
 		update(parts);
+		//</editor-fold>
 	}
 
 	/**
@@ -190,7 +197,7 @@ public class Composite extends Article {
 		}
 
 		Quantity weight = Quantity.of(0, Metric.KILOGRAM);
-		Set<String> colours = new HashSet<String>();
+		//Set<String> colours = new HashSet<String>();
 		MonetaryAmount price = Money.of(0, "EUR");
 
 		for (Article article : parts) {
@@ -204,8 +211,8 @@ public class Composite extends Article {
 
 			price = price.add(article.getPrice());
 
-			this.colour=article.getColour();
-			this.addCategory(article.getCategories().get().findFirst().get());
+			//this.colour=article.getColour();
+			//this.addCategory(article.getCategories().get().findFirst().get());
 
 			/*
 			for (String category : ) {

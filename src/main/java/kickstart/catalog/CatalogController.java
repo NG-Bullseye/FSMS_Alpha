@@ -213,7 +213,8 @@ public class CatalogController {
 	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form,
 			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping) {
 
-		if (manager.compositeMapFiltering(partsMapping).isEmpty()) {
+			List list=manager.compositeMapFiltering(partsMapping); //debugging purpose
+			if (manager.compositeMapFiltering(partsMapping).isEmpty()) {
 			return "redirect:/catalog/composite/new";
 		}
 		if (bindingResult.hasErrors()) {

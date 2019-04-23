@@ -353,14 +353,12 @@ public class CatalogManager {
 	public void newPart(PartOrderForm form) {
 		Part newArticle = new Part(
 				form.getName(),
-				form.getPrice(),
 				form.getPriceNetto(),
 				form.getPriceBrutto(),
 				form.getEanCode(),
 				form.getWeight(),
 				form.getSelectedColour(),
-				form.getHerstellerUrl(),
-				form.getSelectedCategories());
+				form.getHerstellerUrl());
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
@@ -375,6 +373,38 @@ public class CatalogManager {
 	 */
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
+
+
+		List<Article> list=this.compositeMapFiltering(partsCount);
+		List<Article> freshCatalogArticleList = new ArrayList();
+		for (Article a :
+				list) {
+			if(a instanceof Composite)
+				freshCatalogArticleList.add(
+						new Composite(
+							a.getName(),
+							a.getPriceNetto().getNumber().doubleValueExact(),
+							a.getPriceBrutto().getNumber().doubleValueExact(),
+							a.getEanCode(),
+							a.getHerstellerUrl(),
+							a.getColour(),
+							((Composite) a).getCategories().get().findFirst().toString(),
+							((Composite) a).getParts()
+						)
+				);
+			if(a instanceof Part)
+				freshCatalogArticleList.add(
+						new Part(
+							a.getName(),
+							a.getPriceNetto().getNumber().doubleValueExact(),
+							a.getPriceBrutto().getNumber().doubleValueExact(),
+							a.getEanCode(),
+							a.getWeight().getAmount().doubleValue(),
+							a.getHerstellerUrl(),
+							a.getColour()
+						)
+				);
+		}
 		Composite newArticle = new Composite(
 				form.getName(),
 				form.getPriceNetto(),
@@ -383,7 +413,9 @@ public class CatalogManager {
 				form.getHerstellerUrl(),
 				form.getSelectedColour(),
 				form.getSelectedCategorie(),
-				this.compositeMapFiltering(partsCount));
+				freshCatalogArticleList
+		);
+
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
@@ -399,11 +431,14 @@ public class CatalogManager {
 	// Eingabe von der Website Spring-seitig als Map<String,String>, weswegen in
 	// dieser Funktion die Map in eine Liste von Artikeln umgewandelt wird
 	public LinkedList<Article> compositeMapFiltering(Map<String, String> partsCount) {
+
+
 		HashMap<String, Integer> rightMap = new HashMap<>();
 		partsCount.forEach((article, id) -> {
-			if (article.contains("article_")) // Alle vorkommenden Article ais der Map auslesen
+			if (article.contains("article_")) // Alle vorkommenden Article aus der Map auslesen
 				rightMap.put(article.replace("article_", ""), Integer.parseInt(id));
 		});
+
 		HashMap<String, Article> ids = new HashMap<>();
 		catalog.findAll().forEach(article -> {
 			if (rightMap.containsKey(article.getId().toString()))
@@ -411,7 +446,6 @@ public class CatalogManager {
 		});
 
 		LinkedList<Article> parts = new LinkedList<>();
-
 		rightMap.forEach((article, count) -> {
 			int i = count;
 			while (i > 0) {
@@ -421,6 +455,7 @@ public class CatalogManager {
 			}
 
 		});
+
 		return parts;
 	}
 

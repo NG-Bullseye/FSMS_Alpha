@@ -43,21 +43,22 @@ public class Part extends Article {
 	/**
 	 * 
 	 * @param name
-	 * @param price
 	 * @param weight
 	 * @param colour
-	 * @param categories
 	 * @throws IllegalArgumentException If the price or weight is not positive.
 	 */
-	public Part(@NotNull String name, double price, double priceNetto, double priceBrutto,String eanCode, double weight,
-			@NotNull String colour,String herstellerUrl, @NotNull Set<String> categories) throws IllegalArgumentException {
+	public Part(
+			@NotNull String name,
+			double priceNetto,
+			double priceBrutto,
+			String eanCode,
+			double weight,
+			String colour,
+			String herstellerUrl
+	) throws IllegalArgumentException {
 		super(name,priceNetto,priceBrutto,eanCode);
 
 		this.herstellerUrl=herstellerUrl;
-
-		if (price <= 0) {
-			throw new IllegalArgumentException("Part.price should be positive.");
-		}
 
 		if (weight <= 0) {
 			throw new IllegalArgumentException("Part.weight should be positive");
@@ -65,15 +66,19 @@ public class Part extends Article {
 
 		this.colour = colour;
 
-		this.setPrice(Money.of(price, "EUR"));
+		this.setPrice(Money.of(0, "EUR"));
 
 		this.quantity = Quantity.of(weight, Metric.KILOGRAM);
 
 		this.type = ArticleType.PART;
 
-		for (String category : categories) {
-			this.addCategory(category);
+		//<editor-fold desc="Clear Categories and set it to Rohstoff">
+		for (String c :
+				this.getAllCategories()) {
+			this.removeCategory(c);
 		}
+		this.addCategory("Rohstoff");
+		//</editor-fold>
 	}
 
 	@Override

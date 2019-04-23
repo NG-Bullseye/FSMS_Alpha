@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 public class PartOrderForm {
 	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")
-	@Size(min = 2, max = 255, message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
+	@Size(min = 1, max = 255, message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
 	private String name;
 
 	//@NotEmpty(message = "Bitte geben Sie einen Preis für das Produkt ein.")

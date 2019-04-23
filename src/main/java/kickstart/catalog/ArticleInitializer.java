@@ -15,6 +15,17 @@ import kickstart.articles.Part;
 @Component
 @Order(20)
 public class ArticleInitializer implements DataInitializer {
+
+	public enum Color {
+		rocky,veggie,muddy
+	}
+
+	public enum Category{
+		produkt,einzelteil,rohstoff
+	}
+
+
+
 	private final WebshopCatalog catalog;
 
 	ArticleInitializer(WebshopCatalog catalog) {
@@ -24,29 +35,21 @@ public class ArticleInitializer implements DataInitializer {
 		this.catalog = catalog;
 	}
 
+
+
 	@Override
 	public void initialize() {
 
 		if (catalog.findAll().iterator().hasNext()) {
 			return;
 		}
-		HashSet<String> c1 = new HashSet<>();
-		c1.add("rocky");
-		c1.add("veggie");
-		c1.add("muddy");
 
 
-		HashSet<String> cat1 = new HashSet<>();
-		cat1.add("Produkt");
-		HashSet<String> cat2 = new HashSet<>();
-		cat2.add("Einzelteil");
-		HashSet<String> cat3 = new HashSet<>();
-		cat3.add("Rohstoff");
-
-		Part p1 = new Part("Latex",  15, 10,12,"F13FR4",15.0, "rocky","Https//:TheLatexParty.com", cat3);
+		//die kategorie ist hardcoded "Rohstoff" für alle parts
+		Part p1 = new Part("Latex",  15, 10,"F13FR4",15.0, "rocky","Https//:TheLatexParty.com");
 		catalog.save(p1);
 
-		Part p2 = new Part("PLA", 15,9 ,12,"AAAFR5",15.0, "muddy","https//:thePlaParty.com", cat3);
+		Part p2 = new Part("PLA", 15,9 ,"AAAFR5",15.0, "muddy","https//:thePlaParty.com");
 		catalog.save(p2);
 
 		LinkedList<Article> l1 = new LinkedList<>();
@@ -54,8 +57,9 @@ public class ArticleInitializer implements DataInitializer {
 			l1.add(p1);
 		}
 		l1.add(p2);
-		Composite com1 = new Composite("ZIP Body",20,25,"","","DD14F","",l1);
+		Composite com1 = new Composite("ZIP Body",20,25,"3345gg","www.t.de","muddy","Produkt",l1);
 		catalog.save(com1);
+
 
 	}
 }
