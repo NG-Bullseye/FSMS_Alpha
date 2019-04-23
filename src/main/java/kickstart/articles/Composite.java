@@ -92,11 +92,9 @@ public class Composite extends Article {
 		super(name, priceNetto,priceBrutto,eanCode);
 
 		this.colour=colour;
-
 		this.herstellerUrl=herstellerUrl;
-
+		this.parts = parts;
 		this.partIds = new HashMap<ProductIdentifier, Integer>();
-
 		this.type = ArticleType.COMPOSITE;
 
 		//<editor-fold desc="Category zuordnung">
@@ -107,7 +105,7 @@ public class Composite extends Article {
 		this.addCategory(categorie);
 		//</editor-fold>
 
-		this.parts = parts;
+
 		//<editor-fold desc="Parts Handling">
 		if (parts.size() == 0) {
 			throw new IllegalArgumentException();
