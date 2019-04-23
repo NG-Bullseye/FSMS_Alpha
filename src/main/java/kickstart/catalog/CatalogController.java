@@ -211,12 +211,12 @@ public class CatalogController {
 	@PostMapping("catalog/composite/new")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form,
-			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping) {
+			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping)
+	{
 
-			List list=manager.compositeMapFiltering(partsMapping); //debugging purpose
-			if (manager.compositeMapFiltering(partsMapping).isEmpty()) {
+		if (manager.compositeMapFiltering(partsMapping).isEmpty())
 			return "redirect:/catalog/composite/new";
-		}
+
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("compositeForm", form);
 			model.addAttribute("catalog", manager.getAvailableForNewComposite());

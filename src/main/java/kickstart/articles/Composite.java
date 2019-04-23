@@ -107,12 +107,13 @@ public class Composite extends Article {
 		this.addCategory(categorie);
 		//</editor-fold>
 
+		this.parts = parts;
 		//<editor-fold desc="Parts Handling">
 		if (parts.size() == 0) {
 			throw new IllegalArgumentException();
 		}
 		this.setUpdateStatus(true);
-		this.parts = parts;
+
 		for (Article article : parts) {
 			//this.addCategory(article.getCategories().get().findFirst().get());
 			//article.getCategories().forEach(this::addCategory);

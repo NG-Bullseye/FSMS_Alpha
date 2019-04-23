@@ -373,8 +373,6 @@ public class CatalogManager {
 	 */
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
-
-
 		List<Article> list=this.compositeMapFiltering(partsCount);
 		List<Article> freshCatalogArticleList = new ArrayList();
 		for (Article a :

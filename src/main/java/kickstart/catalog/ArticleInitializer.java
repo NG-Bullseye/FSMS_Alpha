@@ -1,5 +1,6 @@
 package kickstart.catalog;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -49,16 +50,38 @@ public class ArticleInitializer implements DataInitializer {
 		Part p1 = new Part("Latex",  15, 10,"F13FR4",15.0, "rocky","Https//:TheLatexParty.com");
 		catalog.save(p1);
 
-		Part p2 = new Part("PLA", 15,9 ,"AAAFR5",15.0, "muddy","https//:thePlaParty.com");
+		Part p2 = new Part("PLA", 15,9 ,"G44R5",15.0, "muddy","https//:thePlaParty.com");
 		catalog.save(p2);
 
-		LinkedList<Article> l1 = new LinkedList<>();
-		for (int i = 0; i < 2; i++) {
-			l1.add(p1);
-		}
-		l1.add(p2);
-		Composite com1 = new Composite("ZIP Body",20,25,"3345gg","www.t.de","muddy","Produkt",l1);
-		catalog.save(com1);
+		catalog.save(
+			new Composite(
+				"ZIP 1",
+				20,
+				25,
+				"3345gg",
+				"www.t.de",
+				"muddy",
+				"Produkt",
+				new LinkedList<>(
+						Arrays.asList(p1)
+				)
+			)
+		);
+
+		catalog.save(
+			new Composite(
+				"ZIP 2",
+				20,
+				25,
+				"3345gg",
+				"www.t.de",
+				"muddy",
+				"Produkt",
+				new LinkedList<>(
+						Arrays.asList(p2)
+				)
+			)
+		);
 
 
 	}
