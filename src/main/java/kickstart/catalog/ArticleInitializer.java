@@ -17,16 +17,6 @@ import kickstart.articles.Part;
 @Order(20)
 public class ArticleInitializer implements DataInitializer {
 
-	public enum Color {
-		rocky,veggie,muddy
-	}
-
-	public enum Category{
-		produkt,einzelteil,rohstoff
-	}
-
-
-
 	private final WebshopCatalog catalog;
 
 	ArticleInitializer(WebshopCatalog catalog) {
@@ -36,16 +26,12 @@ public class ArticleInitializer implements DataInitializer {
 		this.catalog = catalog;
 	}
 
-
-
 	@Override
 	public void initialize() {
 
 		if (catalog.findAll().iterator().hasNext()) {
 			return;
 		}
-
-
 		//die kategorie ist hardcoded "Rohstoff" für alle parts
 		Part p1 = new Part("Latex",  15, 10,"F13FR4",15.0, "rocky","Https//:TheLatexParty.com");
 		catalog.save(p1);
@@ -53,8 +39,7 @@ public class ArticleInitializer implements DataInitializer {
 		Part p2 = new Part("PLA", 15,9 ,"G44R5",15.0, "muddy","https//:thePlaParty.com");
 		catalog.save(p2);
 
-		catalog.save(
-			new Composite(
+		Composite c1=new Composite(
 				"ZIP 1",
 				20,
 				25,
@@ -65,11 +50,10 @@ public class ArticleInitializer implements DataInitializer {
 				new LinkedList<>(
 						Arrays.asList(p1)
 				)
-			)
 		);
+		catalog.save(c1);
 
-		catalog.save(
-			new Composite(
+		Composite c2=new Composite(
 				"ZIP 2",
 				20,
 				25,
@@ -78,11 +62,8 @@ public class ArticleInitializer implements DataInitializer {
 				"muddy",
 				"Produkt",
 				new LinkedList<>(
-						Arrays.asList(p2)
-				)
-			)
-		);
-
-
+						Arrays.asList(c1)
+				));
+		catalog.save(c2);
 	}
 }

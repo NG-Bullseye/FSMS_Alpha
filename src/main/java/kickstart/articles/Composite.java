@@ -63,8 +63,6 @@ public class Composite extends Article {
 	 */
 	public Composite() {
 		super("a" ,0,0,"");
-
-		this.parts = new ArrayList<Article>();
 	}
 
 	private MonetaryAmount price;
@@ -88,15 +86,20 @@ public class Composite extends Article {
 					 String colour,
 					 String categorie,
 					 @NotNull List<Article> parts)
-			throws IllegalArgumentException {
-		super(name, priceNetto,priceBrutto,eanCode);
+			throws IllegalArgumentException
+	{
+		super(name,priceNetto,priceBrutto,eanCode);
+
+		if (parts.size() == 0) {
+			throw new IllegalArgumentException();
+		}
 
 		this.colour=colour;
 		this.herstellerUrl=herstellerUrl;
 		this.parts = parts;
 		this.partIds = new HashMap<ProductIdentifier, Integer>();
 		this.type = ArticleType.COMPOSITE;
-
+		this.setUpdateStatus(true);
 		//<editor-fold desc="Category zuordnung">
 		for (String c :
 				this.getAllCategories()) {
@@ -105,13 +108,7 @@ public class Composite extends Article {
 		this.addCategory(categorie);
 		//</editor-fold>
 
-
 		//<editor-fold desc="Parts Handling">
-		if (parts.size() == 0) {
-			throw new IllegalArgumentException();
-		}
-		this.setUpdateStatus(true);
-
 		for (Article article : parts) {
 			//this.addCategory(article.getCategories().get().findFirst().get());
 			//article.getCategories().forEach(this::addCategory);

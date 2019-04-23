@@ -374,9 +374,10 @@ public class CatalogManager {
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 
 		List<Article> list=this.compositeMapFiltering(partsCount);
-		List<Article> freshCatalogArticleList = new ArrayList();
+		List<Article> freshCatalogArticleList = new ArrayList<>();
 		for (Article a :
-				list) {
+				list)
+		{
 			if(a instanceof Composite)
 				freshCatalogArticleList.add(
 						new Composite(
@@ -447,6 +448,7 @@ public class CatalogManager {
 		rightMap.forEach((article, count) -> {
 			int i = count;
 			while (i > 0) {
+
 				parts.add(catalog.findById(ids.get(article).getId()).get()); // Sucht den Article,der zu dem String
 																				// gemappt ist und übergibt diesen
 				i--;
