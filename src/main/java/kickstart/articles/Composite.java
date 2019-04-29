@@ -125,6 +125,28 @@ public class Composite extends Article {
 		//</editor-fold>
 	}
 
+	public Composite getClone(){
+		List<Article> clonedParts=new ArrayList<>();
+		for(Article a:parts){
+			if(a instanceof Composite)
+				clonedParts.add(((Composite)a).getClone());
+			if(a instanceof Part){
+				clonedParts.add(((Part)a).getClone());
+			}
+			else throw new IllegalArgumentException();
+		}
+		return new Composite(
+				this.getName(),
+				this.getPriceNetto().getNumber().doubleValueExact(),
+				this.getPriceBrutto().getNumber().doubleValueExact(),
+				this.getEanCode(),
+				this.getHerstellerUrl(),
+				this.getColour(),
+				this.getCategories().get().findFirst().toString(),
+				clonedParts
+		);
+	}
+
 	/**
 	 * Adds a new part to the list of parts.
 	 * 

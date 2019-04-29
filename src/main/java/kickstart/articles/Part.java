@@ -81,6 +81,18 @@ public class Part extends Article {
 		//</editor-fold>
 	}
 
+	public Part getClone(){
+		return new Part(
+				this.getName(),
+				this.getPriceNetto().getNumber().doubleValueExact(),
+				this.getPriceBrutto().getNumber().doubleValueExact(),
+				this.getEanCode(),
+				this.getWeight().getAmount().doubleValue(),
+				this.getHerstellerUrl(),
+				this.getColour()
+		);
+	}
+
 	@Override
 	public Quantity getWeight() {
 		return quantity;

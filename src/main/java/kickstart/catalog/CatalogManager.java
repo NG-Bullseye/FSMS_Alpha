@@ -372,36 +372,16 @@ public class CatalogManager {
 	 *                   included in the composite.
 	 */
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
-
-		List<Article> list=this.compositeMapFiltering(partsCount);
+		List<Article> listeMitAllenArtikelnAusDerForm=this.compositeMapFiltering(partsCount);
 		List<Article> freshCatalogArticleList = new ArrayList<>();
-		for (Article a :
-				list)
-		{
+		for (Article a : listeMitAllenArtikelnAusDerForm) {
 			if(a instanceof Composite)
 				freshCatalogArticleList.add(
-						new Composite(
-							a.getName(),
-							a.getPriceNetto().getNumber().doubleValueExact(),
-							a.getPriceBrutto().getNumber().doubleValueExact(),
-							a.getEanCode(),
-							a.getHerstellerUrl(),
-							a.getColour(),
-							((Composite) a).getCategories().get().findFirst().toString(),
-							((Composite) a).getParts()
-						)
+						((Composite) a).getClone()
 				);
 			if(a instanceof Part)
 				freshCatalogArticleList.add(
-						new Part(
-							a.getName(),
-							a.getPriceNetto().getNumber().doubleValueExact(),
-							a.getPriceBrutto().getNumber().doubleValueExact(),
-							a.getEanCode(),
-							a.getWeight().getAmount().doubleValue(),
-							a.getHerstellerUrl(),
-							a.getColour()
-						)
+						((Part)a).getClone()
 				);
 		}
 		Composite newArticle = new Composite(

@@ -81,22 +81,16 @@ public abstract class Article extends Product {
 		// constructor, since that
 		// has to be called first.
 		super("Name", Money.of(0, "EUR"), Metric.UNIT);
-
 		if (name.equals("")) {
 			throw new IllegalArgumentException("Article.name should not be empty");
 		}
-
 		setName(name);
-
 		this.priceNetto=Money.of(priceNetto,"EUR");
 		this.priceBrutto=Money.of(priceBrutto,"EUR");
 		this.eanCode=eanCode;
-
 		hidden = false;
-
 		updateStatus = true;
 		this.parents = new LinkedList<ProductIdentifier>();
-
 		orderedAmount = 0;
 	}
 
@@ -107,7 +101,6 @@ public abstract class Article extends Product {
 	 * @return Returns true if it could get updated. False otherwise
 	 */
 	public abstract boolean update(@NotNull List<Article> parts);
-
 
 	public MonetaryAmount getPriceNetto() {
 		return priceNetto;
