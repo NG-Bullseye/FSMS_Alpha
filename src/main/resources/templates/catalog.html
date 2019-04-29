@@ -130,6 +130,7 @@
 					<th>Farbe</th>
 					<th>Preis Netto</th>
 					<th>Preis Brutto</th>
+					<th>Besteht aus</th>
 					<th>Hersteller Url</th>
 					<th>EAN Code</th>
 					<th>Bestellen</th>
@@ -147,6 +148,31 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
+<!--
+
+<td>
+						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
+							<a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
+
+							</a>
+
+							<a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+								<div th:each="part : ${item.}">
+									<div class="ui labeled input">
+										<div class="ui label" th:text="${article.name}"></div>
+									</div>
+								</div>
+							   th:text="${item.getProduct().getId()).getPriceBrutto()}">
+								<div class="ui red basic button">
+									<i class="edit icon"></i>Bearbeiten
+								</div>
+							</a>
+						</div>
+					</td>
+-->
+
+
+
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}">Url</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
                     <td>

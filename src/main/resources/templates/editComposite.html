@@ -31,11 +31,7 @@
                     <input type="text" th:field="*{description}"/>
                 </td>
             </tr>
-            <tr>
-                <td><t3>enthaltene Artikel:</t3></td>
-                <td></td>
-                <td></td>
-            </tr>
+
             <tr th:each="article : ${catalog}">
                 <td th:text="${article.key.name}"></td>
                 <td class="center aligned" th:text="${article.value}"></td>
