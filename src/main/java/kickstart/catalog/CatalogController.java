@@ -21,6 +21,7 @@ import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import kickstart.articles.Composite;
 import kickstart.inventory.InventoryController;
 import kickstart.inventory.InventoryManager;
 import lombok.Getter;
@@ -90,7 +91,7 @@ public class CatalogController {
 		item.getQuantity().getAmount().toString();
 		catalogManager.getArticle(item.getProduct().getId()).getEanCode();
 		catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get();
-		item.getProduct().getCategories().get().findFirst().get();
+			((Composite)item.getProduct()).getIds() get getCategories().get().findFirst().get();
 		}
 		//</editor-fold>
 

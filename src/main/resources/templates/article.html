@@ -32,7 +32,7 @@
 				<div th:switch="${article.type}">
 					<br>
 					<t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
-						th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
+					   th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
 				</div>
 			</div>
 			<div class="ui buttons" sec:authorize="hasRole('ROLE_EMPLOYEE')">

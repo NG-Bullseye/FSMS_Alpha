@@ -148,6 +148,18 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
+					<td>
+						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
+							<br>
+							<t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
+								<div th:each="part : ${((Composit)item.getProduct()).getIds()}">
+									<div class="ui label" th:text="${part.getName()}"></div>
+								</div>
+							</t>
+						</div>
+					</td>
+
+
 <!--
 
 <td>
@@ -157,11 +169,7 @@
 							</a>
 
 							<a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
-								<div th:each="part : ${item.}">
-									<div class="ui labeled input">
-										<div class="ui label" th:text="${article.name}"></div>
-									</div>
-								</div>
+
 							   th:text="${item.getProduct().getId()).getPriceBrutto()}">
 								<div class="ui red basic button">
 									<i class="edit icon"></i>Bearbeiten
