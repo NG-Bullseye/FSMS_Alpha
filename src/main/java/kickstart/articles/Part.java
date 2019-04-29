@@ -26,6 +26,7 @@ import org.salespointframework.quantity.Quantity;
 @Entity
 public class Part extends Article {
 
+
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity quantity;
@@ -167,16 +168,6 @@ public class Part extends Article {
 	@Override
 	public Map<ProductIdentifier, Integer> getPartIds() {
 		return new HashMap<ProductIdentifier, Integer>();
-	}
-
-	/**
-	 * A part does not have parts of it's own.Therefore nothing gets changed. This
-	 * method is only to make casting in our composite tree not necessary.
-	 */
-	@Override
-	public void addPart(@NotNull Article article) {
-		// A part does not have parts of it's own.Therefore nothing gets changed.
-		// This method is only to make casting in our composite tree not necessary.
 	}
 
 	/**

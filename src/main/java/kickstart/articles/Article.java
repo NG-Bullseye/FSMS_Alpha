@@ -242,7 +242,6 @@ public abstract class Article extends Product {
 		hidden = !hidden;
 	}
 
-	public abstract void addPart(@NotNull Article article);
 
 	public abstract void removePart(@NotNull Article article);
 

@@ -38,7 +38,7 @@ public class Composite extends Article {
 	 to fetch multiple levels in this tree structure from the data base.*/
 	//</editor-fold>
 	@Transient
-	private List<Article> parts;
+	//private List<Article> parts;
 
 	//<editor-fold desc="info">
 	/* This is list saves the ProductIdentifiers to reference the parts. This is
@@ -75,7 +75,6 @@ public class Composite extends Article {
 	 * as it's the base class
 	 * 
 	 * @param name        The name of the article
-	 * @param parts       A list of Article that this composite consists of.
 	 * @throws IllegalArgumentException If the size of parts is zero.
 	 */
 	public Composite(@NotNull String name,
@@ -85,18 +84,14 @@ public class Composite extends Article {
 					 String herstellerUrl,
 					 String colour,
 					 String categorie,
-					 @NotNull List<Article> parts)
+					 List<Article>partList)
 			throws IllegalArgumentException
 	{
 		super(name,priceNetto,priceBrutto,eanCode);
 
-		if (parts.size() == 0) {
-			throw new IllegalArgumentException();
-		}
-
 		this.colour=colour;
 		this.herstellerUrl=herstellerUrl;
-		this.parts = parts;
+		//this.parts = parts;
 		this.partIds = new HashMap<ProductIdentifier, Integer>();
 		this.type = ArticleType.COMPOSITE;
 		this.setUpdateStatus(true);
@@ -106,54 +101,25 @@ public class Composite extends Article {
 			this.removeCategory(c);
 		}
 		this.addCategory(categorie);
+		for (Article a:partList
+			 ) {
+			addId(a);
+		}
 		//</editor-fold>
 
 		//<editor-fold desc="Parts Handling">
-		for (Article article : parts) {
-			//this.addCategory(article.getCategories().get().findFirst().get());
-			//article.getCategories().forEach(this::addCategory);
 
-			if (partIds.containsKey(article.getId())) {
-				partIds.put(article.getId(), partIds.get(article.getId()) + 1);
-			} else {
-				article.setParent(this.getId());
-				partIds.put(article.getId(), 1);
-			}
-
-		}
-		update(parts);
+		//update(parts);
 		//</editor-fold>
 	}
 
-	public Composite getClone(){
-		List<Article> clonedParts=new ArrayList<>();
-		for(Article a:parts){
-			if(a instanceof Composite)
-				clonedParts.add(((Composite)a).getClone());
-			if(a instanceof Part){
-				clonedParts.add(((Part)a).getClone());
-			}
-			else throw new IllegalArgumentException();
-		}
-		return new Composite(
-				this.getName(),
-				this.getPriceNetto().getNumber().doubleValueExact(),
-				this.getPriceBrutto().getNumber().doubleValueExact(),
-				this.getEanCode(),
-				this.getHerstellerUrl(),
-				this.getColour(),
-				this.getCategories().get().findFirst().toString(),
-				clonedParts
-		);
-	}
 
 	/**
 	 * Adds a new part to the list of parts.
 	 * 
 	 * @param article The new part to get added to parts
 	 */
-	public void addPart(@NotNull Article article) {
-		parts.add(article);
+	public void addId(@NotNull Article article) {
 		if (partIds.containsKey(article.getId())) {
 			partIds.put(article.getId(), partIds.get(article.getId()) + 1);
 		} else {
@@ -189,8 +155,8 @@ public class Composite extends Article {
 	 * @return All parts this article consists of. Since they don't get saved in the
 	 *         database, this list might be empty
 	 */
-	public List<Article> getParts() {
-		return parts;
+	public Map<ProductIdentifier, Integer> getIds() {
+		return partIds;
 	}
 
 	/**
