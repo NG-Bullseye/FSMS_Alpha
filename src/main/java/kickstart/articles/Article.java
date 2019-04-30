@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.CascadeType;
@@ -184,6 +185,9 @@ public abstract class Article extends Product {
 	 *         their amount as a value
 	 */
 	public abstract Map<ProductIdentifier, Integer> getPartIds();
+
+	public abstract Stream<ProductIdentifier> getIdsStream();
+
 
 	/**
 	 * 

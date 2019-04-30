@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.AttributeOverride;
@@ -155,8 +156,8 @@ public class Composite extends Article {
 	 * @return All parts this article consists of. Since they don't get saved in the
 	 *         database, this list might be empty
 	 */
-	public Map<ProductIdentifier, Integer> getIds() {
-		return partIds;
+	public Stream<ProductIdentifier> getIdsStream() {
+		return partIds.keySet().stream();
 	}
 
 	/**

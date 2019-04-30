@@ -91,7 +91,7 @@ public class CatalogController {
 		item.getQuantity().getAmount().toString();
 		catalogManager.getArticle(item.getProduct().getId()).getEanCode();
 		catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get();
-			((Composite)item.getProduct()).getIds() get getCategories().get().findFirst().get();
+		//	catalogManager.getArticle(item.getProduct().getId()).getIdsStream();
 		}
 		//</editor-fold>
 
