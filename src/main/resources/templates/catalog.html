@@ -151,10 +151,7 @@
 					<td>
 						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
 							<br>
-							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-								<div id="textnhead" th:each="id : ${catalogManager.getArticle(item.getProduct().getId()).getIdsStream()}">
-									<b th:text="${catalogManager.getArticle(id).getName()}">Name</b>
-								</div>
+							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${catalogManager.textOfAllComponents(item.getProduct().getId())}">
 							</div>
 						</div>
 					</td>
