@@ -83,15 +83,17 @@ public class CatalogController {
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	@GetMapping("/catalog")
 	String catalog(Model model) {
-
+		Iterable<ReorderableInventoryItem> t =inventoryManager.getInventory().findAll();
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
 		for (ReorderableInventoryItem item : inventoryManager.getInventory().findAll()) {
-		item.getProduct().getName();
-		item.getProduct().getCategories().get().findFirst().get();
-		item.getQuantity().getAmount().toString();
-		catalogManager.getArticle(item.getProduct().getId()).getEanCode();
-		catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get();
-		//	catalogManager.getArticle(item.getProduct().getId()).getIdsStream();
+			//catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get();
+			if(catalogManager.getArticle(item.getProduct().getId()).getType().equals(Article.ArticleType.COMPOSITE)){
+				System.out.println(catalogManager.getArticle(item.getProduct().getId()).getName()+"Besteht aus :");
+				for (ProductIdentifier id:catalogManager.getArticle(item.getProduct().getId()).getIdsSet())
+				{
+					System.out.println("Here123 "+catalogManager.getArticle(id).getName());
+				}
+			}
 		}
 		//</editor-fold>
 

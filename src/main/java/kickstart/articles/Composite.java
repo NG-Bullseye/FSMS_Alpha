@@ -9,13 +9,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.money.MonetaryAmount;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -38,7 +32,7 @@ public class Composite extends Article {
 	 so it doesn't cause problems in the database, since it would be difficult
 	 to fetch multiple levels in this tree structure from the data base.*/
 	//</editor-fold>
-	@Transient
+
 	//private List<Article> parts;
 
 	//<editor-fold desc="info">
@@ -49,7 +43,9 @@ public class Composite extends Article {
 	 the articles with these identifiers get loaded from the database.
 	 */
 	//</editor-fold>
+
 	@ElementCollection
+
 	private Map<ProductIdentifier, Integer> partIds;
 	// private List<ProductIdentifier> partIds;
 
@@ -121,11 +117,16 @@ public class Composite extends Article {
 	 * @param article The new part to get added to parts
 	 */
 	public void addId(@NotNull Article article) {
+		Set<ProductIdentifier> ids=article.getIdsSet();
+		int i=1;
 		if (partIds.containsKey(article.getId())) {
-			partIds.put(article.getId(), partIds.get(article.getId()) + 1);
+			this.partIds.put(article.getId(), partIds.get(article.getId()) + 1);
+			partIds.size();
 		} else {
-			partIds.put(article.getId(), 1);
+			this.partIds.put(article.getId(), 1);
+			partIds.size();
 		}
+
 	}
 
 	/**
@@ -159,7 +160,9 @@ public class Composite extends Article {
 	public Stream<ProductIdentifier> getIdsStream() {
 		return partIds.keySet().stream();
 	}
-
+	public Set<ProductIdentifier> getIdsSet(){
+		return partIds.keySet();
+	};
 	/**
 	 * 
 	 * @return Returns a list of the ids for every part

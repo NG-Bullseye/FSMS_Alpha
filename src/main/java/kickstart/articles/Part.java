@@ -125,6 +125,10 @@ public class Part extends Article {
 		return null;
 	}
 
+	public Set<ProductIdentifier> getIdsSet(){
+		return null;
+	};
+
 	/**
 	 *
 	 * 

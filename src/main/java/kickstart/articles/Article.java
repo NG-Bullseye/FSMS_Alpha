@@ -187,7 +187,7 @@ public abstract class Article extends Product {
 	public abstract Map<ProductIdentifier, Integer> getPartIds();
 
 	public abstract Stream<ProductIdentifier> getIdsStream();
-
+	public abstract Set<ProductIdentifier> getIdsSet();
 
 	/**
 	 * 
