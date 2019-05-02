@@ -13,11 +13,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import kickstart.accountancy.AccountancyManager;
+import lombok.Getter;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
+import org.salespointframework.time.Interval;
 import org.springframework.stereotype.Component;
 
 import kickstart.articles.Article;
@@ -25,12 +28,18 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.inventory.ReorderableInventoryItem;
 
+import javax.validation.constraints.NotNull;
+
 @Component
 public class CatalogManager {
 	private final WebshopCatalog catalog;
 	private Set<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
 	private HashSet<Article> availableForNewComposite;
+	@Getter
+	private AccountancyManager accountancy;
+	@Getter
+	private final long reorderTime = 0;
 
 	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.catalog = catalog;
@@ -551,6 +560,28 @@ public class CatalogManager {
 
 		return amount.intValue();
 	}
+
+
+	public void reorder(@NotNull InForm inForm) {
+		for (ProductIdentifier id :
+				inForm.getInMap().keySet()) {
+			Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);
+
+			if (item.isPresent()) {
+				item.get().addReorder(
+						Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
+						Quantity.of(inForm.getInMap().get(id), Metric.UNIT));
+				inventory.save(item.get());
+
+				accountancy.addEntry(
+						item.get().getProduct().getPrice()
+								.multiply(item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1))),
+						accountancy.getTime(), "Reordered " + item.get().getProduct().getName() + " "
+								+ item.get().getQuantity().toString() + " " + "times");
+			}
+		}
+	}
+
 
 	/**
 	 * Returns if the Article is hidden or not.

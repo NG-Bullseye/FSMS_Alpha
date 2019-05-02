@@ -21,15 +21,11 @@ import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import kickstart.articles.Composite;
-import kickstart.inventory.InventoryController;
 import kickstart.inventory.InventoryManager;
-import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.time.BusinessTime;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,6 +50,7 @@ public class CatalogController {
 
 
 
+
 	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory,
 					  @NotNull InventoryManager inventoryManager, BusinessTime businessTime,CatalogManager catalogManager) {
 		this.manager = new CatalogManager(catalog, inventory);
@@ -72,46 +69,51 @@ public class CatalogController {
 		return new String[] { "Rohstoffe", "Einzelteile", "Produkte" };
 	}
 
-	@GetMapping("/")
-	String startpage(Model model){
-			catalog(model);
-		return "catalog";
 
-	}
 
 
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
-	@GetMapping("/catalog")
-	String catalog(Model model) {
-		Iterable<ReorderableInventoryItem> t =inventoryManager.getInventory().findAll();
+	@GetMapping("/")
+	String catalog(Model model,@Valid @ModelAttribute("reorderForm") InForm inForm ) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
-
+		for (ReorderableInventoryItem item:inventoryManager.getInventory().findAll()
+			 ) {
+		}
 		//</editor-fold>
+
+
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
+		model.addAttribute("inForm", inForm);
 		model.addAttribute("catalogManager",catalogManager);
 		return "catalog";
 	}
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
-	@PostMapping("/catalog")
-	String catalogFiltered(@Valid @ModelAttribute("filterform") Filterform filterform,
+	@PostMapping("/")
+	String catalogFiltered(@Valid @ModelAttribute("filterform") Filterform filterform, @Valid @ModelAttribute("reorderForm") InForm inForm,
 			@RequestParam(required = false, name = "reset") String reset, BindingResult bindingResult, Model model) {
 		if (reset.equals("reset")) {
-			return "redirect:/catalog";
+			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("filterform", filterform);
+			model.addAttribute("inForm", inForm);
 			return "catalog";
 		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
 
+		catalogManager.reorder(inForm);
+
+
+
+
 		return "catalog";
 	}
 
-	@GetMapping("catalog/hidden")
+	@GetMapping("/hidden")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String completeCatalog(Model model) {
 		model.addAttribute("catalog", manager.getInvisibleCatalog());
@@ -180,7 +182,7 @@ public class CatalogController {
 		return "newPart";
 	}
 
-	@PostMapping("catalog/part/new")
+	@PostMapping("/part/new")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String editNew(@Valid @ModelAttribute("form") PartOrderForm form, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -192,7 +194,7 @@ public class CatalogController {
 		return "redirect:/catalog/";
 	}
 
-	@GetMapping("catalog/composite/new")
+	@GetMapping("/composite/new")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String newComposite(Model model) {
 
@@ -202,14 +204,14 @@ public class CatalogController {
 		return "newComposite";
 	}
 
-	@PostMapping("catalog/composite/new")
+	@PostMapping("/composite/new")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form,
 			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping)
 	{
 
 		if (manager.compositeMapFiltering(partsMapping).isEmpty())
-			return "redirect:/catalog/composite/new";
+			return "redirect:/composite/new";
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("compositeForm", form);
@@ -222,21 +224,21 @@ public class CatalogController {
 
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 
-		return "redirect:/catalog/";
+		return "redirect:/";
 	}
 
 	@GetMapping("hide/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model) {
 		manager.changeVisibility(identifier);
-		return "redirect:/catalog/";
+		return "redirect:/";
 	}
 
 	@GetMapping("show/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String visible(@PathVariable ProductIdentifier identifier, Model model) {
 		manager.changeVisibility(identifier);
-		return "redirect:/catalog/";
+		return "redirect:/";
 	}
 
 	@GetMapping("/edit/composite/{identifier}")

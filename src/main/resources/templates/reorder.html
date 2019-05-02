@@ -9,13 +9,13 @@
 		<div id="halfwidth" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 			<form method="post" role="form" class="ui form" id="form" th:object="${form}" th:action="@{/reorder/{id}(id=${id})}">
 				<div class="inline field">
-        			<label th:text="Anzahl">Anzahl</label><br/>
-        			<input autofocus type="number" th:id="amount" th:name="amount" th:field="*{amount}" th:errorclass="fieldError" value="1"/>
-        			<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">
+					<label th:text="Anzahl">Anzahl</label><br/>
+					<input autofocus type="number" th:id="amount" th:name="amount" th:field="*{amount}" th:errorclass="fieldError" value="1"/>
+					<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">
 						Bitte geben sie eine Anzahl ein.
-					</div>    		
-        		</div>
-        		<button type="submit" class="ui button">Nachbestellen</button> 
+					</div>
+				</div>
+				<button type="submit" class="ui button">Nachbestellen</button>
 			</form>
 		</div>
 		

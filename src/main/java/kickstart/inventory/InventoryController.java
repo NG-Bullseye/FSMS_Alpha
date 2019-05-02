@@ -1,6 +1,5 @@
 package kickstart.inventory;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,13 +88,14 @@ public class InventoryController {
 		return "inventory";
 	}
 
+
 	/**
 	 * This method shows all reorders that are currently active(that means they have
 	 * to yet arrive).
-	 * 
+	 *
 	 * @param model Stores the information for the view
 	 * @return
-	 */
+	 *
 	@GetMapping("/reorders")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String reorderView(Model model) {
@@ -112,6 +112,10 @@ public class InventoryController {
 
 		return "reorders";
 	}
+	*
+	*
+	* */
+
 
 	/**
 	 * This method shows a website where the desired amount for that reorder can be
@@ -123,6 +127,7 @@ public class InventoryController {
 	 * @param model      Stores the information for the view
 	 * @return
 	 */
+	/*
 	@GetMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String showReorder(@PathVariable ProductIdentifier identifier, ReorderForm form, Model model) {
@@ -137,6 +142,9 @@ public class InventoryController {
 
 		return "error";
 	}
+	 */
+
+
 
 	/**
 	 * This method adds an reorder for the article. If the form contains error, it
@@ -150,10 +158,11 @@ public class InventoryController {
 	 * @param result        Needed for validation
 	 * @return
 	 */
+	/*
 	@PostMapping("reorder/{identifier}")
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String reorder(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") ReorderForm form,
-			BindingResult bindingResult, Model model, Errors result) {
+						  BindingResult bindingResult, Model model, Errors result) {
 
 		if (result.hasErrors()) {
 			model.addAttribute("form", form);
@@ -164,10 +173,12 @@ public class InventoryController {
 		}
 
 		int amount = Integer.parseInt(form.getAmount());
-		manager.reorder(identifier, Quantity.of(amount, Metric.UNIT));
+		//manager.reorder(identifier, Quantity.of(amount, Metric.UNIT));
 
 		return "redirect:/reorders";
 	}
+	 */
+
 
 	/**
 	 * This method calls the update function for every ReorderableInventoryItem

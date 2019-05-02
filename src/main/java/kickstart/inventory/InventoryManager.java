@@ -93,14 +93,9 @@ public class InventoryManager {
 		}
 	}
 
-	/**
-	 * Creates a new reorder for the article so that after the specified reorder
-	 * time, the quantity increases. It also adds an AccountancyEntry to the
-	 * {@link AccountancyManager}
-	 * 
-	 * @param article  The article that should get reordered.
-	 * @param quantity The desired quantity
-	 */
+	/*
+
+
 	public void reorder(@NotNull Article article, @NotNull Quantity quantity) {
 		Optional<ReorderableInventoryItem> item = inventory.findByProduct(article);
 
@@ -120,15 +115,7 @@ public class InventoryManager {
 
 	}
 
-	/**
-	 * Creates a new reorder for the article so that after the specified reorder
-	 * time, the quantity increases. It also adds an AccountancyEntry to the
-	 * {@link AccountancyManager}
-	 *
-	 * @param id       The ProductIdentifier of the article that should get
-	 *                 reordered.
-	 * @param quantity The desired quantity
-	 */
+
 	public void reorder(@NotNull ProductIdentifier id, @NotNull Quantity quantity) {
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);
 
@@ -145,6 +132,24 @@ public class InventoryManager {
 							+ item.get().getQuantity().toString() + " " + "times");
 		}
 	}
+	public void reorder(@NotNull ReorderForm form, @NotNull Quantity quantity) {
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inventory.findByProductIdentifier);
+
+		if (item.isPresent()) {
+			item.get().addReorder(
+					Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
+					quantity);
+			inventory.save(item.get());
+
+			accountancy.addEntry(
+					item.get().getProduct().getPrice()
+							.multiply(item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1))),
+					accountancy.getTime(), "Reordered " + item.get().getProduct().getName() + " "
+							+ item.get().getQuantity().toString() + " " + "times");
+		}
+	}
+
+	*/
 
 	/**
 	 * This method decreases the amount of this article in process of e.g. an order.

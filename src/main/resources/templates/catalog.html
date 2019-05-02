@@ -124,10 +124,11 @@
 			<table id="articletable" class="ui celled table">
 				<thead>
 				<tr>
-					<th th:text="#{articletable.name}">Name</th>
-					<th th:text="#{articletable.amount}">Anzahl</th>
+					<th>Name</th>
+					<th>Vorhanden</th>
 					<th>Kategorie</th>
 					<th>Farbe</th>
+					<th>In</th>
 					<th>Preis Netto</th>
 					<th>Preis Brutto</th>
 					<th>Besteht aus</th>
@@ -146,6 +147,18 @@
 					<td th:text="${item.getQuantity().getAmount().toString()}">Anzahl</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Kategorie</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
+					<td>
+						<form method="post" role="form" class="ui form" id="form" th:object="${inForm}" th:action="@{/reorder/${id}(id=${item.getProduct().getId()})}">
+							<div class="inline field">
+								<!--  <label th:text="Anzahl">Anzahl</label><br/>  -->
+								analog zu partsmapping. Googeln wie man maps in htlm an controller übergibt
+								<input autofocus type="number" th:name="inMap" th:errorclass="fieldError" value="1"/>
+								<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('inMap')}" th:errors="*{amount}">
+								</div>
+								<button type="submit" class="ui button">In</button>
+							</div>
+						</form>
+					</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
 					<td>
@@ -155,38 +168,17 @@
 							</div>
 						</div>
 					</td>
-
-
-<!--
-
-<td>
-						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
-							<a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
-
-							</a>
-
-							<a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
-
-							   th:text="${item.getProduct().getId()).getPriceBrutto()}">
-								<div class="ui red basic button">
-									<i class="edit icon"></i>Bearbeiten
-								</div>
-							</a>
-						</div>
-					</td>
--->
-
-
-
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}">Url</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
-                    <td>
+					<!--
+					<td>
                         <a th:href="@{/reorder/{id}(id=${item.getProduct().getId()})}">
                             <div class="ui green basic button">
                                 <i class="chart bar icon"></i>Nachbestellen
                             </div>
                         </a>
                     </td>
+					-->
                     <td>
                         <div class="ui two buttons" >
                             <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
