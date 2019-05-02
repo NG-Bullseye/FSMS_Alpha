@@ -58,6 +58,9 @@ public interface WebshopCatalog extends Catalog<Article> {
 		return rightColours;
 	}
 
+	/*
+
+	 */
 	default Iterable<Article> findByPrice(MonetaryAmount minPrice, MonetaryAmount maxPrice) {
 		HashSet<Article> rightPrice = new HashSet<>();
 		this.findAll().forEach(article -> {

@@ -3,6 +3,8 @@ package kickstart.catalog;
 import static org.salespointframework.core.Currencies.EURO;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -568,15 +570,19 @@ public class CatalogManager {
 
 		if (item.isPresent()) {
 			item.get().addReorder(
-					Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
+					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
+					LocalDateTime.now(),
 					Quantity.of(inForm.getAmount(), Metric.UNIT));
 			inventory.save(item.get());
 
+			/*
 			accountancy.addEntry(
 					item.get().getProduct().getPrice()
 							.multiply(item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1))),
-					accountancy.getTime(), "Reordered " + item.get().getProduct().getName() + " "
+					LocalDateTime.now(), "Reordered " + item.get().getProduct().getName() + " "
 							+ item.get().getQuantity().toString() + " " + "times");
+			 */
+
 		}
 	}
 

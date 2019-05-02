@@ -77,7 +77,7 @@ public class CatalogController {
 	String catalog(Model model,@Valid @ModelAttribute("reorderForm") InForm inForm ) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
 		for (ReorderableInventoryItem item:inventoryManager.getInventory().findAll()
-			 ) {item.getProduct().getId().getIdentifier();
+			 ) {
 		}
 		//</editor-fold>
 
@@ -108,13 +108,9 @@ public class CatalogController {
 
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id, @Valid @ModelAttribute("inForm") InForm inForm,
-						    BindingResult bindingResult, Model model) {
+						     Model model) {
 
-		if (bindingResult.hasErrors()) {
 
-			model.addAttribute("inForm", inForm);
-			return "catalog";
-		}
 		inForm.setProductIdentifier(id);
 		catalogManager.reorder(inForm);
 

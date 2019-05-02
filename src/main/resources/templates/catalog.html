@@ -148,7 +148,7 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Kategorie</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
 					<td>
-						<form method="post" role="form" name="f" th:object="${inForm}" th:href="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
 								<!--
