@@ -151,8 +151,9 @@
 						<form method="post" role="form" class="ui form" id="form" th:object="${inForm}" th:action="@{/reorder/${id}(id=${item.getProduct().getId()})}">
 							<div class="inline field">
 								<!--  <label th:text="Anzahl">Anzahl</label><br/>  -->
-								analog zu partsmapping. Googeln wie man maps in htlm an controller übergibt
-								<input autofocus type="number" th:name="inMap" th:errorclass="fieldError" value="1"/>
+								<!--analog zu partsmapping. Googeln wie man maps in htlm an controller übergibt-->
+								<!--   th:errorclass="fieldError" value="1"-->
+								<input autofocus type="number" th:field="*{inMap.put(item.getProduct().getId(),amount)}" />
 								<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('inMap')}" th:errors="*{amount}">
 								</div>
 								<button type="submit" class="ui button">In</button>
