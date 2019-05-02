@@ -77,11 +77,9 @@ public class CatalogController {
 	String catalog(Model model,@Valid @ModelAttribute("reorderForm") InForm inForm ) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
 		for (ReorderableInventoryItem item:inventoryManager.getInventory().findAll()
-			 ) {
+			 ) {item.getProduct().getId().getIdentifier();
 		}
 		//</editor-fold>
-
-
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
@@ -92,35 +90,38 @@ public class CatalogController {
 		return "catalog";
 	}
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
-	@PostMapping("/")
-	String catalogFiltered(@Valid @ModelAttribute("filterform") Filterform filterform, @Valid @ModelAttribute("reorderForm") InForm inForm,
-			@RequestParam(required = false, name = "reset") String reset, BindingResult bindingResult, Model model) {
+	@PostMapping("/filter")
+	String catalogFiltered(@Valid @ModelAttribute("filterform") Filterform filterform,
+						   @RequestParam(required = false, name = "reset") String reset, BindingResult bindingResult, Model model) {
 		if (reset.equals("reset")) {
 			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("filterform", filterform);
-			model.addAttribute("inForm", inForm);
+
 			return "catalog";
 		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
 
+		return "catalog";
+	}
+
+	@PostMapping("/in/{id}")
+	String catalogIn(@PathVariable ProductIdentifier id, @Valid @ModelAttribute("inForm") InForm inForm,
+						    BindingResult bindingResult, Model model) {
+
+		if (bindingResult.hasErrors()) {
+
+			model.addAttribute("inForm", inForm);
+			return "catalog";
+		}
+		inForm.setProductIdentifier(id);
 		catalogManager.reorder(inForm);
 
-
-
-
 		return "catalog";
 	}
 
-	@GetMapping("/hidden")
-	//@PreAuthorize("hasRole('ROLE_BOSS')")
-	public String completeCatalog(Model model) {
-		model.addAttribute("catalog", manager.getInvisibleCatalog());
-		model.addAttribute("filterform", new Filterform());
-		return "catalog";
-	}
-
+	//<editor-fold desc="Article">
 	@GetMapping("/article/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model) {
@@ -133,19 +134,9 @@ public class CatalogController {
 		}
 		return "article";
 	}
+	//</editor-fold>
 
-	@PostMapping("article/{identifier}/comment")
-	//@PreAuthorize("hasRole('ROLE_BOSS')")
-	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload,
-			Model model) {
-		Article article = manager.getArticle(identifier);
-		article.addComment(payload.toComment(businessTime.getTime()));
-		manager.saveArticle(article);
-
-		return "redirect:/article/" + article.getId();
-
-	}
-
+	//<editor-fold desc="Edit Part">
 	@GetMapping("/edit/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model) {
@@ -174,8 +165,10 @@ public class CatalogController {
 
 		return "redirect:/catalog/";
 	}
+	//</editor-fold>
 
-	@GetMapping("catalog/part/new")
+	//<editor-fold desc="new Part">
+	@GetMapping("/part/new")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String showNew(Model model) {
 		model.addAttribute("form", new PartOrderForm());
@@ -193,7 +186,9 @@ public class CatalogController {
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		return "redirect:/catalog/";
 	}
+	//</editor-fold>
 
+	//<editor-fold desc="New Composite">
 	@GetMapping("/composite/new")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String newComposite(Model model) {
@@ -226,6 +221,16 @@ public class CatalogController {
 
 		return "redirect:/";
 	}
+	//</editor-fold>
+
+	//<editor-fold desc="Hide & Show">
+	@GetMapping("/hidden")
+	//@PreAuthorize("hasRole('ROLE_BOSS')")
+	public String completeCatalog(Model model) {
+		model.addAttribute("catalog", manager.getInvisibleCatalog());
+		model.addAttribute("filterform", new Filterform());
+		return "catalog";
+	}
 
 	@GetMapping("hide/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
@@ -240,7 +245,9 @@ public class CatalogController {
 		manager.changeVisibility(identifier);
 		return "redirect:/";
 	}
+	//</editor-fold>
 
+	//<editor-fold desc="Edit Compisite">
 	@GetMapping("/edit/composite/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String editComposite(@PathVariable ProductIdentifier identifier, Model model) {
@@ -260,6 +267,20 @@ public class CatalogController {
 		manager.editComposite(identifier, compositeForm, partsMapping);
 		return "redirect:/article/" + identifier;
 	}
+	//</editor-fold>
+
+	//<editor-fold desc="Comment">
+	@PostMapping("article/{identifier}/comment")
+	//@PreAuthorize("hasRole('ROLE_BOSS')")
+	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload,
+						  Model model) {
+		Article article = manager.getArticle(identifier);
+		article.addComment(payload.toComment(businessTime.getTime()));
+		manager.saveArticle(article);
+
+		return "redirect:/article/" + article.getId();
+
+	}
 
 	interface CommentAndRating {
 
@@ -273,4 +294,5 @@ public class CatalogController {
 			return new Comment(getComment(), getRating(), time);
 		}
 	}
+	//</editor-fold>
 }

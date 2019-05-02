@@ -8,14 +8,24 @@ import java.util.HashMap;
 
 public class InForm {
 
-	private HashMap<ProductIdentifier,Integer> inMap;
+	private ProductIdentifier productIdentifier;
 
-	public HashMap<ProductIdentifier, Integer> getInMap() {
-		return inMap;
+	private int amount;
+
+	public ProductIdentifier getProductIdentifier() {
+		return productIdentifier;
 	}
 
-	public void setInMap(HashMap<ProductIdentifier, Integer> inMap) {
-		this.inMap = inMap;
+	public void setProductIdentifier(ProductIdentifier productIdentifier) {
+		this.productIdentifier = productIdentifier;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }
 

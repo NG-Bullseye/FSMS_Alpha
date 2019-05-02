@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
-		<form method="post" th:action="@{/catalog}" th:object="${filterform}">
+		<form method="post" th:action="@{/filter}" th:object="${filterform}">
 			<div class="ui menu">
 				<!--
 				<div class="item">
@@ -148,15 +148,15 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Kategorie</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
 					<td>
-						<form method="post" role="form" class="ui form" id="form" th:object="${inForm}" th:action="@{/reorder/${id}(id=${item.getProduct().getId()})}">
+						<form method="post" role="form" name="f" th:object="${inForm}" th:href="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
-								<!--  <label th:text="Anzahl">Anzahl</label><br/>  -->
-								<!--analog zu partsmapping. Googeln wie man maps in htlm an controller übergibt-->
-								<!--   th:errorclass="fieldError" value="1"-->
-								<input autofocus type="number" th:field="*{inMap.put(item.getProduct().getId(),amount)}" />
-								<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('inMap')}" th:errors="*{amount}">
-								</div>
-								<button type="submit" class="ui button">In</button>
+								<input   autofocus type="number" th:field="*{amount}" />
+								<!--
+									<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('inForm')}" th:errors="*{inForm}">
+									</div>
+								-->
+
+								<button  type="submit" class="ui button"  >In</button>
 							</div>
 						</form>
 					</td>

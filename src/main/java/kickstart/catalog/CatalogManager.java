@@ -563,22 +563,20 @@ public class CatalogManager {
 
 
 	public void reorder(@NotNull InForm inForm) {
-		for (ProductIdentifier id :
-				inForm.getInMap().keySet()) {
-			Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(id);
 
-			if (item.isPresent()) {
-				item.get().addReorder(
-						Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
-						Quantity.of(inForm.getInMap().get(id), Metric.UNIT));
-				inventory.save(item.get());
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
 
-				accountancy.addEntry(
-						item.get().getProduct().getPrice()
-								.multiply(item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1))),
-						accountancy.getTime(), "Reordered " + item.get().getProduct().getName() + " "
-								+ item.get().getQuantity().toString() + " " + "times");
-			}
+		if (item.isPresent()) {
+			item.get().addReorder(
+					Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
+					Quantity.of(inForm.getAmount(), Metric.UNIT));
+			inventory.save(item.get());
+
+			accountancy.addEntry(
+					item.get().getProduct().getPrice()
+							.multiply(item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1))),
+					accountancy.getTime(), "Reordered " + item.get().getProduct().getName() + " "
+							+ item.get().getQuantity().toString() + " " + "times");
 		}
 	}
 

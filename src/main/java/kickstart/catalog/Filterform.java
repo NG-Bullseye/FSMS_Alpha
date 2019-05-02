@@ -7,13 +7,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class Filterform {
-	@NotNull(message = "Bitte wählen Sie mindestens eine Farbe aus.")
 	private ArrayList<String> selectedColours;
-	@NotNull
 	@Min(0)
 	@Max(99999999)
 	private Integer minPriceNetto = 0;
-	@NotNull
 	@Min(0)
 	@Max(99999999)
 	private Integer maxPriceNetto = 99999999;
@@ -22,7 +19,6 @@ public class Filterform {
 	private String type;
 	 */
 
-	@NotNull(message = "Bitte wählen Sie mindestens eine Kategorie aus.")
 	private ArrayList<String> selectedCategories;
 
 	public void setSelectedColours(ArrayList<String> selectedColours) {
