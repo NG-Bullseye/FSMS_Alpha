@@ -72,7 +72,7 @@ public class CatalogController {
 
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	@GetMapping("/")
-	String catalog(Model model,@Valid @ModelAttribute("reorderForm") InForm inForm ) {
+	String catalog(Model model) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
 		for (ReorderableInventoryItem item:inventoryManager.getInventory().findAll()
 			 ) {
@@ -106,7 +106,6 @@ public class CatalogController {
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id, @Valid @ModelAttribute("inForm") InForm inForm,
 						     Model model) {
-
 		ProductIdentifier p= id;
 		inForm.setProductIdentifier(p);
 		catalogManager.reorder(inForm);
