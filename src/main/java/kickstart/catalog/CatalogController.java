@@ -59,17 +59,15 @@ public class CatalogController {
 		this.catalogManager=catalogManager;
 	}
 
-	@ModelAttribute("colours")
-	public String[] colours() {
-		return new String[] { "rocky", "veggie", "muddy" };
-	}
-
 	@ModelAttribute("categories")
 	public String[] categories() {
 		return new String[] { "Rohstoffe", "Einzelteile", "Produkte" };
 	}
 
-
+	@ModelAttribute("colours")
+	public String[] colours() {
+		return new String[] { "rocky", "veggie", "muddy" };
+	}
 
 
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
@@ -80,24 +78,23 @@ public class CatalogController {
 			 ) {
 		}
 		//</editor-fold>
-
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", manager.getVisibleCatalog());
-		model.addAttribute("filterform", new Filterform());
-		model.addAttribute("inForm", inForm);
+		model.addAttribute("filterForm", new Filterform());
+		model.addAttribute("inForm", new InForm());
 		model.addAttribute("catalogManager",catalogManager);
 		return "catalog";
 	}
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	@PostMapping("/filter")
-	String catalogFiltered(@Valid @ModelAttribute("filterform") Filterform filterform,
+	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform,
 						   @RequestParam(required = false, name = "reset") String reset, BindingResult bindingResult, Model model) {
 		if (reset.equals("reset")) {
 			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("filterform", filterform);
+			model.addAttribute("filterForm", filterform);
 
 			return "catalog";
 		}
@@ -110,8 +107,8 @@ public class CatalogController {
 	String catalogIn(@PathVariable ProductIdentifier id, @Valid @ModelAttribute("inForm") InForm inForm,
 						     Model model) {
 
-
-		inForm.setProductIdentifier(id);
+		ProductIdentifier p= id;
+		inForm.setProductIdentifier(p);
 		catalogManager.reorder(inForm);
 
 		return "catalog";

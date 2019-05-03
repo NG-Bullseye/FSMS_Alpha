@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class Filterform {
+	@NotNull
 	private ArrayList<String> selectedColours;
 	@Min(0)
 	@Max(99999999)
