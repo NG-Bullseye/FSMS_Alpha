@@ -65,7 +65,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 		HashSet<Article> rightPrice = new HashSet<>();
 		this.findAll().forEach(article -> {
 			if (article.getPriceNetto().isGreaterThan(minPrice.subtract(Money.of(1, EURO)))
-					&& article.getPrice().isLessThan(maxPrice.add(Money.of(1, EURO))))
+					&& article.getPriceBrutto().isLessThan(maxPrice.add(Money.of(1, EURO))))
 				rightPrice.add(article);
 		});
 		return rightPrice;

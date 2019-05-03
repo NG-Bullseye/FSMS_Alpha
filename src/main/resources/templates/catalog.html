@@ -124,6 +124,7 @@
 					<th>Kategorie</th>
 					<th>Farbe</th>
 					<th>In</th>
+					<th>Out</th>
 					<th>Preis Netto</th>
 					<th>Preis Brutto</th>
 					<th>Besteht aus</th>
@@ -146,12 +147,15 @@
 						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
-								<!--
-									<div class="ui left pointing red basic label" th:if="${#fields.hasErrors('inForm')}" th:errors="*{inForm}">
-									</div>
-								-->
-
 								<button  type="submit" class="ui button"  >In</button>
+							</div>
+						</form>
+					</td>
+					<td>
+						<form method="post" role="form" name="f" th:object="${outForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+							<div class="inline field">
+								<input   autofocus type="number" th:field="*{amount}" />
+								<button  type="submit" class="ui button"  >Out</button>
 							</div>
 						</form>
 					</td>
@@ -166,15 +170,6 @@
 					</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}">Url</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
-					<!--
-					<td>
-                        <a th:href="@{/reorder/{id}(id=${item.getProduct().getId()})}">
-                            <div class="ui green basic button">
-                                <i class="chart bar icon"></i>Nachbestellen
-                            </div>
-                        </a>
-                    </td>
-					-->
                     <td>
                         <div class="ui two buttons" >
                             <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">

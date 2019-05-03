@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import kickstart.inventory.InventoryManager;
+import kickstart.order.CartOrderManager;
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -46,17 +47,23 @@ public class CatalogController {
 	private final BusinessTime businessTime;
 	private InventoryManager inventoryManager;
 	private CatalogManager catalogManager;
+    private CartOrderManager cartOrderManager;
 
 
 
 
-
-	CatalogController(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory,
-					  @NotNull InventoryManager inventoryManager, BusinessTime businessTime,CatalogManager catalogManager) {
+	CatalogController(WebshopCatalog catalog,
+					  Inventory<ReorderableInventoryItem> inventory,
+					  @NotNull InventoryManager inventoryManager,
+					  BusinessTime businessTime,
+					  CatalogManager catalogManager,
+					  CartOrderManager cartOrderManager
+	) {
 		this.manager = new CatalogManager(catalog, inventory);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
 		this.catalogManager=catalogManager;
+		this.cartOrderManager=cartOrderManager;
 	}
 
 	@ModelAttribute("categories")
@@ -89,29 +96,53 @@ public class CatalogController {
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	@PostMapping("/filter")
 	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform,
-						   @RequestParam(required = false, name = "reset") String reset, BindingResult bindingResult, Model model) {
+						   @RequestParam(required = false, name = "reset") String reset,
+						   BindingResult bindingResult, Model model) {
 		if (reset.equals("reset")) {
 			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("filterForm", filterform);
+			Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
+			model.addAttribute("inventoryItems",list );
+			model.addAttribute("catalog", manager.getVisibleCatalog());
+			model.addAttribute("catalogManager",catalogManager);
 
 			return "catalog";
 		}
 		model.addAttribute("catalog", manager.filteredCatalog(filterform));
 
-		return "catalog";
+		return "redirect:/";
 	}
 
 	@PostMapping("/in/{id}")
-	String catalogIn(@PathVariable ProductIdentifier id, @Valid @ModelAttribute("inForm") InForm inForm,
+	String catalogIn(@PathVariable ProductIdentifier id,
+					 @Valid @ModelAttribute("inForm") InForm inForm,
 						     Model model) {
-		ProductIdentifier p= id;
-		inForm.setProductIdentifier(p);
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("catalog", manager.getVisibleCatalog());
+		model.addAttribute("catalogManager",catalogManager);
+		inForm.setProductIdentifier(id);
 		catalogManager.reorder(inForm);
-
-		return "catalog";
+		return "redirect:/";
 	}
+
+	@PostMapping("/out/{id}")
+	String catalogOut(@PathVariable ProductIdentifier id,
+					 @Valid @ModelAttribute("outForm") OutForm outForm,
+					 Model model) {
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("catalog", manager.getVisibleCatalog());
+		model.addAttribute("filterForm",new Filterform());
+		model.addAttribute("inForm", new InForm());
+		model.addAttribute("catalogManager",catalogManager);
+		outForm.setProductIdentifier(id);
+		 cartOrderManager.
+
+		return "redirect:/";
+	}
+
 
 	//<editor-fold desc="Article">
 	@GetMapping("/article/{identifier}")

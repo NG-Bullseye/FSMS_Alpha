@@ -563,7 +563,6 @@ public class CatalogManager {
 		return amount.intValue();
 	}
 
-
 	public void reorder(@NotNull InForm inForm) {
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
@@ -585,7 +584,6 @@ public class CatalogManager {
 
 		}
 	}
-
 
 	/**
 	 * Returns if the Article is hidden or not.
