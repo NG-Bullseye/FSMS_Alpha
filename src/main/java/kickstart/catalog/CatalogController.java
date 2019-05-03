@@ -21,12 +21,15 @@ import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import kickstart.accountancy.AccountancyManager;
 import kickstart.inventory.InventoryManager;
 import kickstart.order.CartOrderManager;
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
+import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
+import org.salespointframework.useraccount.UserAccount;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,6 +51,8 @@ public class CatalogController {
 	private InventoryManager inventoryManager;
 	private CatalogManager catalogManager;
     private CartOrderManager cartOrderManager;
+    private OrderManager orderManager;
+    private AccountancyManager accountancyManager;
 
 
 
@@ -59,7 +64,7 @@ public class CatalogController {
 					  CatalogManager catalogManager,
 					  CartOrderManager cartOrderManager
 	) {
-		this.manager = new CatalogManager(catalog, inventory);
+		this.manager = new CatalogManager(catalog, inventory,orderManager,cartOrderManager,accountancyManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
 		this.catalogManager=catalogManager;
@@ -138,9 +143,12 @@ public class CatalogController {
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("catalogManager",catalogManager);
 		outForm.setProductIdentifier(id);
-		 cartOrderManager.
+		if (cartOrderManager.getAccount() == null){
+			return "redirect:/login";
+		}
+		catalogManager.placeOrder(outForm, cartOrderManager.getAccount());
 
-		return "redirect:/";
+		//return "redirect:/";
 	}
 
 

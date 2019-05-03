@@ -16,13 +16,20 @@ import java.util.Optional;
 import java.util.Set;
 
 import kickstart.accountancy.AccountancyManager;
+import kickstart.inventory.InventoryManager;
+import kickstart.order.CartOrderManager;
+import kickstart.order.CustomerOrder;
 import lombok.Getter;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
+import org.salespointframework.order.Cart;
+import org.salespointframework.order.Order;
+import org.salespointframework.order.OrderManager;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.Interval;
+import org.salespointframework.useraccount.UserAccount;
 import org.springframework.stereotype.Component;
 
 import kickstart.articles.Article;
@@ -38,15 +45,21 @@ public class CatalogManager {
 	private Set<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
 	private HashSet<Article> availableForNewComposite;
+	private OrderManager orderManager;
+	private InventoryManager inventoryManager;
+	@Getter
+	private CartOrderManager cartOrderManager;
 	@Getter
 	private AccountancyManager accountancy;
 	@Getter
 	private final long reorderTime = 0;
 
-	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
+	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager, AccountancyManager accountancy) {
 		this.catalog = catalog;
 		this.inventory = inventory;
-		this.hiddenArticles = catalog.findHidden();
+		this.orderManager = orderManager;
+		this.cartOrderManager = cartOrderManager;
+		this.accountancy = accountancy;
 	}
 
 	/**
@@ -621,5 +634,21 @@ public class CatalogManager {
 		}
 
 		return result;
+	}
+
+	public CustomerOrder placeOrder(OutForm outForm, UserAccount userAccount) {
+
+		Cart cart=new Cart();
+		Article a=this.getArticle(outForm.getProductIdentifier());
+		if(a instanceof Part){
+			cartOrderManager.addPart((Part)a,outForm.getAmount(),cart);
+		}
+		CustomerOrder customerOrder= cartOrderManager.newOrder(cart);
+		Order order=orderManager.save(customerOrder);
+
+		if(	customerOrder!=null && order!=null){
+			return customerOrder;
+		}
+		return null;
 	}
 }
