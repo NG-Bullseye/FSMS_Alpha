@@ -24,12 +24,16 @@ import javax.validation.constraints.NotNull;
 import kickstart.accountancy.AccountancyManager;
 import kickstart.inventory.InventoryManager;
 import kickstart.order.CartOrderManager;
+import kickstart.user.User;
+import kickstart.user.UserManagement;
 import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccount;
+import org.salespointframework.useraccount.UserAccountManager;
+import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,8 +57,8 @@ public class CatalogController {
     private CartOrderManager cartOrderManager;
     private OrderManager orderManager;
     private AccountancyManager accountancyManager;
-
-
+	private UserManagement userManagement;
+	private UserAccountManager userAccountManager;
 
 
 	CatalogController(WebshopCatalog catalog,
@@ -62,13 +66,17 @@ public class CatalogController {
 					  @NotNull InventoryManager inventoryManager,
 					  BusinessTime businessTime,
 					  CatalogManager catalogManager,
-					  CartOrderManager cartOrderManager
+					  CartOrderManager cartOrderManager,
+					  UserManagement userManagement,
+					  UserAccountManager userAccountManager
 	) {
 		this.manager = new CatalogManager(catalog, inventory,orderManager,cartOrderManager,accountancyManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
 		this.catalogManager=catalogManager;
 		this.cartOrderManager=cartOrderManager;
+		this.userManagement=userManagement;
+		this.userAccountManager=userAccountManager;
 	}
 
 	@ModelAttribute("categories")
@@ -95,6 +103,7 @@ public class CatalogController {
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());
 		model.addAttribute("inForm", new InForm());
+		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("catalogManager",catalogManager);
 		return "catalog";
 	}
@@ -123,32 +132,37 @@ public class CatalogController {
 	String catalogIn(@PathVariable ProductIdentifier id,
 					 @Valid @ModelAttribute("inForm") InForm inForm,
 						     Model model) {
+		inForm.setProductIdentifier(id);
+		catalogManager.reorder(inForm);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("catalogManager",catalogManager);
-		inForm.setProductIdentifier(id);
-		catalogManager.reorder(inForm);
 		return "redirect:/";
 	}
 
 	@PostMapping("/out/{id}")
 	String catalogOut(@PathVariable ProductIdentifier id,
 					 @Valid @ModelAttribute("outForm") OutForm outForm,
+					  @LoggedIn UserAccount loggedInUserWeb,
 					 Model model) {
+		outForm.setProductIdentifier(id);
+		try {
+			User loggedInUser = userManagement.findUser(loggedInUserWeb);
+			cartOrderManager.addCostumer(loggedInUser.getUserAccount());
+		}catch (Exception e){
+			return "redirect:/login";
+		}
+
+
+		catalogManager.placeOrder(outForm, cartOrderManager.getAccount());
+
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", manager.getVisibleCatalog());
-		model.addAttribute("filterForm",new Filterform());
-		model.addAttribute("inForm", new InForm());
 		model.addAttribute("catalogManager",catalogManager);
-		outForm.setProductIdentifier(id);
-		if (cartOrderManager.getAccount() == null){
-			return "redirect:/login";
-		}
-		catalogManager.placeOrder(outForm, cartOrderManager.getAccount());
+		return "redirect:/";
 
-		//return "redirect:/";
 	}
 
 

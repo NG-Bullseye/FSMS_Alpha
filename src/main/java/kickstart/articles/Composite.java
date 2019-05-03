@@ -86,6 +86,7 @@ public class Composite extends Article {
 	{
 		super(name,priceNetto,priceBrutto,eanCode);
 
+		this.price=Money.of(priceNetto,"EUR");
 		this.colour=colour;
 		this.herstellerUrl=herstellerUrl;
 		//this.parts = parts;

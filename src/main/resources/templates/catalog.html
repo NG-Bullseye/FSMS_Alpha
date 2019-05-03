@@ -152,7 +152,8 @@
 						</form>
 					</td>
 					<td>
-						<form method="post" role="form" name="f" th:object="${outForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<!--/*@thymesVar id="outForm" type="kickstart.catalog.CatalogController"*/-->
+						<form method="post" role="form" name="f2" th:object="${outForm}" th:action="@{/out/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
 								<button  type="submit" class="ui button"  >Out</button>

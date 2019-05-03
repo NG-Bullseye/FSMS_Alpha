@@ -185,7 +185,7 @@ public class CartOrderManager {
 
 	public String addComposite(Composite article, int count, Cart cart) {
 
-		wight = wight.add(article.getWeight());
+		//wight = wight.add(article.getWeight());
 
 		cart.addOrUpdateItem(article, Quantity.of(count));
 

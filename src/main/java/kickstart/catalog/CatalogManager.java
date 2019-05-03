@@ -4,7 +4,6 @@ import static org.salespointframework.core.Currencies.EURO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,7 +27,6 @@ import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
-import org.salespointframework.time.Interval;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.stereotype.Component;
 
@@ -92,7 +90,7 @@ public class CatalogManager {
 		LinkedList<Article> visible = new LinkedList<>();
 		catalog.findAll().forEach(article -> {
 			if (article.getId() != null && inventory.findByProductIdentifier(article.getId()).isPresent()
-					&& !hiddenArticles.contains(article)
+					//&& !hiddenArticles.contains(article)
 					&& !inventory.findByProductIdentifier(article.getId()).get().getQuantity().isZeroOrNegative()) {
 
 				visible.add(article);
@@ -636,19 +634,27 @@ public class CatalogManager {
 		return result;
 	}
 
-	public CustomerOrder placeOrder(OutForm outForm, UserAccount userAccount) {
+	public void placeOrder(OutForm outForm, UserAccount userAccount) {
+
+
 
 		Cart cart=new Cart();
 		Article a=this.getArticle(outForm.getProductIdentifier());
+		CustomerOrder customerOrder= cartOrderManager.newOrder(cart);
 		if(a instanceof Part){
 			cartOrderManager.addPart((Part)a,outForm.getAmount(),cart);
 		}
-		CustomerOrder customerOrder= cartOrderManager.newOrder(cart);
-		Order order=orderManager.save(customerOrder);
-
-		if(	customerOrder!=null && order!=null){
-			return customerOrder;
+		if(a instanceof Composite){
+			cartOrderManager.addComposite((Composite) a,outForm.getAmount(),cart);
 		}
-		return null;
+
+		cartOrderManager.addCostumer(userAccount);
+
+		Order order=orderManager.save(customerOrder);
+		cartOrderManager.cancelorpayOrder(customerOrder,"bezahlen");
+		cartOrderManager.getOrderManager().completeOrder(customerOrder);
+
+		//System.out.println("Order Erfolgeich abgeschlossen. Neue Menge="+inventoryManager.getInventory().findByProductIdentifier(outForm.getProductIdentifier()).get().getQuantity().getAmount().toString());
+
 	}
 }

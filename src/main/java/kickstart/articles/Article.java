@@ -81,7 +81,7 @@ public abstract class Article extends Product {
 		// used and later changed. We can't check this before calling the super
 		// constructor, since that
 		// has to be called first.
-		super("Name", Money.of(0, "EUR"), Metric.UNIT);
+		super("Name", Money.of(priceNetto, "EUR"), Metric.UNIT);
 		if (name.equals("")) {
 			throw new IllegalArgumentException("Article.name should not be empty");
 		}
