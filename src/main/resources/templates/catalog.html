@@ -25,9 +25,9 @@
 						<div class="menu">
 							<div class="item" th:each="colour: ${colours}">
 								<input type="checkbox"
-									   th:text="${colour}"
 									   th:field="*{selectedColours}"
 									   th:value="${colour}">
+								<label th:text="${colour}"></label>
 							</div>
 						</div>
 					</div>
