@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.time.LocalDateTime;
+
 
 import kickstart.accountancy.AccountancyManager;
 import kickstart.inventory.InventoryManager;
@@ -35,6 +37,7 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.inventory.ReorderableInventoryItem;
 
+
 import javax.validation.constraints.NotNull;
 
 @Component
@@ -52,12 +55,13 @@ public class CatalogManager {
 	@Getter
 	private final long reorderTime = 0;
 
-	public CatalogManager(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager, AccountancyManager accountancy) {
+	public CatalogManager(WebshopCatalog catalog,InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager, AccountancyManager accountancy) {
 		this.catalog = catalog;
 		this.inventory = inventory;
 		this.orderManager = orderManager;
 		this.cartOrderManager = cartOrderManager;
 		this.accountancy = accountancy;
+		this.inventoryManager=inventoryManager;
 	}
 
 	/**
@@ -378,7 +382,6 @@ public class CatalogManager {
 				form.getPriceNetto(),
 				form.getPriceBrutto(),
 				form.getEanCode(),
-				form.getWeight(),
 				form.getSelectedColour(),
 				form.getHerstellerUrl());
 		catalog.save(newArticle);
@@ -648,9 +651,23 @@ public class CatalogManager {
 		}
 		cartOrderManager.addCostumer(userAccount);
 		cartOrderManager.cancelorpayOrder(customerOrder,"bezahlen");
+		inventoryManager.decreaseQuantity(a,Quantity.of(outForm.getAmount()) );
 		cartOrderManager.getOrderManager().completeOrder(customerOrder);
 		orderManager.save(customerOrder);
-		ReorderableInventoryItem item=inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().update(LocalDateTime.now());
+
+		Inventory inv= inventoryManager.getInventory();
+		if (inv.findByProduct(a).get() instanceof ReorderableInventoryItem){
+			ReorderableInventoryItem item=(ReorderableInventoryItem) inv.findByProduct(a).get();
+
+			boolean changed = item.update(LocalDateTime.now());
+			int i =item.getQuantity().getAmount().intValue();
+			System.out.println(item.getProduct().getName()+" updated? "+changed+".");
+			System.out.println("inventoryitem.getAmount="+i);
+		}
+			else {
+				new RuntimeException("Cast exception");
+		}
+
 
 		//System.out.println("Order Erfolgeich abgeschlossen. Neue Menge="+inventoryManager.getInventory().findByProductIdentifier(outForm.getProductIdentifier()).get().getQuantity().getAmount().toString());
 

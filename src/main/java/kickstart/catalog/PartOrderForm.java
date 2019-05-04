@@ -16,18 +16,10 @@ public class PartOrderForm {
 	//@NotEmpty(message = "Bitte geben Sie einen Preis für das Produkt ein.")
 	private String selectedColour;
 	//@NotNull(message = )
-	private double price;
 	private double priceNetto;
 	private double priceBrutto;
 	private String eanCode;
 	private String herstellerUrl;
-
-	@NotNull(message = "Bitte geben Sie ein Gewicht für das Produkt ein.")
-	@Min(0)
-	@Max(1500)
-	private double weight;
-	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
-	private HashSet<String> selectedCategories;
 
 	public double getPriceNetto() {
 		return priceNetto;
@@ -69,22 +61,6 @@ public class PartOrderForm {
 		this.name = name;
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public double getWeight() {
-		return weight;
-	}
-
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-
 	public String getSelectedColour() {
 		return selectedColour;
 	}
@@ -92,14 +68,4 @@ public class PartOrderForm {
 	public void setSelectedColour(String colour) {
 		this.selectedColour = colour;
 	}
-
-	public HashSet<String> getSelectedCategories() {
-		return selectedCategories;
-	}
-
-	public void setSelectedCategories(HashSet<String> selectedCategories) {
-		this.selectedCategories = selectedCategories;
-	}
-
-
 }

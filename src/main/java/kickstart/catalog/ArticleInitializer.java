@@ -38,11 +38,16 @@ public class ArticleInitializer implements DataInitializer {
 			return;
 		}
 		//die kategorie ist hardcoded "Rohstoff" für alle parts
-		Part p1 = new Part("Latex",  15, 10,"F13FR4",15.0, "rocky","Https//:TheLatexParty.com");
+		Part p1 = new Part("Latex",
+				15,
+				10,
+				"F13FR4",
+				"rocky",
+				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p1);
 		inventory.save(new ReorderableInventoryItem(p1, Quantity.of(0, Metric.UNIT)));
 
-		Part p2 = new Part("PLA", 15,9 ,"G44R5",15.0, "muddy","https//:thePlaParty.com");
+		Part p2 = new Part("PLA", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");
 		catalog.save(p2);
 		inventory.save(new ReorderableInventoryItem(p2, Quantity.of(0, Metric.UNIT)));
 

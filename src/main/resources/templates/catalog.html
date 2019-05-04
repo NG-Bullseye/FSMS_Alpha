@@ -102,8 +102,8 @@
 								neuer Artikel
 						<i class="dropdown icon"></i>
 						<div class="menu">
-							<a class="item" th:href="@{/catalog/part/new}">Rohstoff</a>
-							<a class="item" th:href="@{/catalog/composite/new}">Einzelteil/Produkt</a>
+							<a class="item" th:href="@{/part/new}">Rohstoff</a>
+							<a class="item" th:href="@{/composite/new}">Einzelteil/Produkt</a>
 						</div>
 					</div>
 				</div>
@@ -130,7 +130,6 @@
 					<th>Besteht aus</th>
 					<th>Hersteller Url</th>
 					<th>EAN Code</th>
-					<th>Bestellen</th>
 					<th>Bearbeiten</th>
 
 
@@ -169,7 +168,10 @@
 							</div>
 						</div>
 					</td>
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}">Url</td>
+					<td>  <a th:href="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
+							th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
+							 target="_blank" />
+					</td>
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
                     <td>
                         <div class="ui two buttons" >

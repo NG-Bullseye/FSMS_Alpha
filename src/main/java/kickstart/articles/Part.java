@@ -45,7 +45,6 @@ public class Part extends Article {
 	/**
 	 * 
 	 * @param name
-	 * @param weight
 	 * @param colour
 	 * @throws IllegalArgumentException If the price or weight is not positive.
 	 */
@@ -54,23 +53,18 @@ public class Part extends Article {
 			double priceNetto,
 			double priceBrutto,
 			String eanCode,
-			double weight,
 			String colour,
 			String herstellerUrl
 	) throws IllegalArgumentException {
 		super(name,priceNetto,priceBrutto,eanCode);
 
 		this.herstellerUrl=herstellerUrl;
-
-		if (weight <= 0) {
-			throw new IllegalArgumentException("Part.weight should be positive");
-		}
-
+		this.addCategory("Rohstoff");
 		this.colour = colour;
 
 		this.setPrice(Money.of(0, "EUR"));
 
-		this.quantity = Quantity.of(weight, Metric.KILOGRAM);
+		this.quantity = Quantity.of(0, Metric.KILOGRAM);
 
 		this.type = ArticleType.PART;
 
@@ -89,7 +83,6 @@ public class Part extends Article {
 				this.getPriceNetto().getNumber().doubleValueExact(),
 				this.getPriceBrutto().getNumber().doubleValueExact(),
 				this.getEanCode(),
-				this.getWeight().getAmount().doubleValue(),
 				this.getHerstellerUrl(),
 				this.getColour()
 		);

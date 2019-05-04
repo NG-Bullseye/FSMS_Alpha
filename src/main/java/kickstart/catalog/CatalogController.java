@@ -70,7 +70,7 @@ public class CatalogController {
 					  UserManagement userManagement,
 					  UserAccountManager userAccountManager
 	) {
-		this.manager = new CatalogManager(catalog, inventory,orderManager,cartOrderManager,accountancyManager);
+		this.manager = new CatalogManager(catalog, inventoryManager,inventory,orderManager,cartOrderManager,accountancyManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
 		this.catalogManager=catalogManager;
@@ -81,7 +81,7 @@ public class CatalogController {
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] { "Rohstoffe", "Einzelteile", "Produkte" };
+		return new String[] { "Einzelteile", "Produkte" };
 	}
 
 	@ModelAttribute("colours")
@@ -160,7 +160,6 @@ public class CatalogController {
 		model.addAttribute("catalog", manager.getVisibleCatalog());
 		model.addAttribute("catalogManager",catalogManager);
 		return "redirect:/";
-
 	}
 
 
@@ -227,7 +226,7 @@ public class CatalogController {
 		}
 		manager.newPart(form);
 		model.addAttribute("catalog", manager.getVisibleCatalog());
-		return "redirect:/catalog/";
+		return "redirect:/";
 	}
 	//</editor-fold>
 

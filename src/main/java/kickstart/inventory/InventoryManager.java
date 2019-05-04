@@ -38,7 +38,7 @@ public class InventoryManager {
 
 	// The time difference (in days) until a reorder is completed
 	@Getter
-	private final long reorderTime = 4;
+	private final long reorderTime = 0;
 
 	/**
 	 * 

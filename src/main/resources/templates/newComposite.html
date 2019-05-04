@@ -8,7 +8,7 @@
 		<nav th:include="navbar :: navbar"></nav>
 		<div class="ui  center aligned page grid">
 			<div class=" ui segment">
-                <form method="post" th:action="@{/catalog/composite/new}" th:object="${compositeForm}">
+                <form method="post" th:action="@{/composite/new}" th:object="${compositeForm}">
                     <div class="ui negative message" th:if="${#fields.hasErrors('*')}">
                         <p>Bitte überprüfen Sie ihre Eingabe.</p>
                     </div>
