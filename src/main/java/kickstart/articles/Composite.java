@@ -212,7 +212,7 @@ public class Composite extends Article {
 
 		}
 
-		this.weight = weight;
+		//this.weight = weight;
 		//this.price = price;
 		//this.colour = colour;
 

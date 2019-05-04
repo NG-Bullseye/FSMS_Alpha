@@ -636,10 +636,9 @@ public class CatalogManager {
 
 	public void placeOrder(OutForm outForm, UserAccount userAccount) {
 
-
-
 		Cart cart=new Cart();
 		Article a=this.getArticle(outForm.getProductIdentifier());
+		//int amount= inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().getQuantity().getAmount().intValue();
 		CustomerOrder customerOrder= cartOrderManager.newOrder(cart);
 		if(a instanceof Part){
 			cartOrderManager.addPart((Part)a,outForm.getAmount(),cart);
@@ -647,12 +646,11 @@ public class CatalogManager {
 		if(a instanceof Composite){
 			cartOrderManager.addComposite((Composite) a,outForm.getAmount(),cart);
 		}
-
 		cartOrderManager.addCostumer(userAccount);
-
-		Order order=orderManager.save(customerOrder);
 		cartOrderManager.cancelorpayOrder(customerOrder,"bezahlen");
 		cartOrderManager.getOrderManager().completeOrder(customerOrder);
+		orderManager.save(customerOrder);
+		ReorderableInventoryItem item=inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().update(LocalDateTime.now());
 
 		//System.out.println("Order Erfolgeich abgeschlossen. Neue Menge="+inventoryManager.getInventory().findByProductIdentifier(outForm.getProductIdentifier()).get().getQuantity().getAmount().toString());
 

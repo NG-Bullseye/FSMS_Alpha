@@ -147,13 +147,11 @@ public class CatalogController {
 					  @LoggedIn UserAccount loggedInUserWeb,
 					 Model model) {
 		outForm.setProductIdentifier(id);
-		try {
-			User loggedInUser = userManagement.findUser(loggedInUserWeb);
-			cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-		}catch (Exception e){
+		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
 		}
-
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
 		catalogManager.placeOrder(outForm, cartOrderManager.getAccount());
 

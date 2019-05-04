@@ -93,9 +93,13 @@ public class UserManagement {
 	 * @return {@link User} for given {@link UserAccount}.
 	 */
 	public User findUser(@NonNull UserAccount userAccount) {
+		try {
+			User user = users.findByUserAccount(userAccount);
+			return user;
+		}catch (Exception e){
+			return null;
+		}
 
-		User user = users.findByUserAccount(userAccount);
-		return user;
 	}
 
 	/**
