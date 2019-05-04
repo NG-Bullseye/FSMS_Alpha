@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import kickstart.exception.UnAllowedException;
-import kickstart.mail.JavaMailer;
 import lombok.NonNull;
 
 /**
@@ -26,25 +25,19 @@ public class UserManagement {
 
 	private final UserRepository users;
 	private final UserAccountManager userAccounts;
-	private final JavaMailer mailSender;
 
 	/**
-	 * Creates a new {@link UserManagement} with the {@link UserRepository},
-	 * {@link UserAccountManager} and a {@link JavaMailer}.
-	 * 
+	 * Creates a new {@link UserManagement} with the {@link UserRepository},*
 	 * @param users        must not be {@literal null}.
 	 * @param userAccounts must not be {@literal null}.
-	 * @param mailSender   must not be {@literal null}.
 	 */
-	UserManagement(UserRepository users, UserAccountManager userAccounts, JavaMailer mailSender) {
+	UserManagement(UserRepository users, UserAccountManager userAccounts) {
 
 		Assert.notNull(users, "UserRepository must not be null!");
 		Assert.notNull(userAccounts, "UserAccountManager must not be null!");
-		Assert.notNull(mailSender, "JavaMailer must not be null!");
 
 		this.users = users;
 		this.userAccounts = userAccounts;
-		this.mailSender = mailSender;
 	}
 
 	/**
@@ -57,7 +50,7 @@ public class UserManagement {
 	public User createUser(@NonNull RegistrationForm form) {
 
 		UserAccount userAccount = userAccounts.create(form.getName(), form.getPassword(), Role.of("ROLE_CUSTOMER"));
-		mailSender.sendCustomerRegistrationMessage(form.getEmail());
+		//mailSender.sendCustomerRegistrationMessage(form.getEmail());
 		return users.save(
 				new User(userAccount, form.getFirstname(), form.getLastname(), form.getEmail(), form.getAddress()));
 	}

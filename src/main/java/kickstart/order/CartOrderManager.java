@@ -29,7 +29,6 @@ import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
 import kickstart.catalog.WebshopCatalog;
-import kickstart.mail.JavaMailer;
 import kickstart.user.UserManagement;
 
 @Component
@@ -43,7 +42,6 @@ public class CartOrderManager {
 	private String destination = "home";
 	private final List<String> destinations;
 	private final WebshopCatalog catalog;
-	private final JavaMailer javaMailer;
 	private final UserManagement userManagement;
 
 	/**
@@ -54,13 +52,12 @@ public class CartOrderManager {
 	 */
 
 	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime,
-			CarpoolManager carpoolManager, JavaMailer javaMailer, UserManagement userManagement) {
+			CarpoolManager carpoolManager, UserManagement userManagement) {
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
 		this.carpoolManager = carpoolManager;
 		this.destinations = new ArrayList<String>();
 		this.catalog = catalog;
-		this.javaMailer = javaMailer;
 		this.userManagement = userManagement;
 
 		this.destinations.add("Berlin");
@@ -301,14 +298,14 @@ public class CartOrderManager {
 					&& interval.getStart().getYear() - interval.getEnd().getYear() < 0) {
 				order.setStatus(Status.abholbereit);
 				orderManager.save(order);
-				javaMailer.sendCustomerConfirmationMessage(userManagement.findUser(order.getUserAccount()).getEmail());
+				//javaMailer.sendCustomerConfirmationMessage(userManagement.findUser(order.getUserAccount()).getEmail());
 
 			}
 			if (order.isCompleted() && order.isversendet()
 					&& interval.getStart().getDayOfYear() - interval.getEnd().getDayOfYear() < 0) {
 				order.setStatus(Status.abholbereit);
 				orderManager.save(order);
-				javaMailer.sendCustomerConfirmationMessage(userManagement.findUser(order.getUserAccount()).getEmail());
+				//javaMailer.sendCustomerConfirmationMessage(userManagement.findUser(order.getUserAccount()).getEmail());
 			}
 
 		}

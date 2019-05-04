@@ -62,7 +62,7 @@ public class Composite extends Article {
 		super("a" ,0,0,"");
 	}
 
-	private MonetaryAmount price;
+	//private MonetaryAmount price;
 
 
 	private String colour;
@@ -86,7 +86,7 @@ public class Composite extends Article {
 	{
 		super(name,priceNetto,priceBrutto,eanCode);
 
-		this.price=Money.of(priceNetto,"EUR");
+		//this.price=Money.of(priceNetto,"EUR");
 		this.colour=colour;
 		this.herstellerUrl=herstellerUrl;
 		//this.parts = parts;
@@ -213,7 +213,7 @@ public class Composite extends Article {
 		}
 
 		this.weight = weight;
-		this.price = price;
+		//this.price = price;
 		//this.colour = colour;
 
 		this.setUpdateStatus(true);
@@ -235,9 +235,12 @@ public class Composite extends Article {
 	 * @return Returns the price of this composite. The price is received by adding
 	 *         the prices of the parts.
 	 */
+	/*
 	public MonetaryAmount getPrice() {
 		return price;
 	}
+	 */
+
 
 
 

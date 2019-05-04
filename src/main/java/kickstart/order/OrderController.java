@@ -21,7 +21,6 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.catalog.WebshopCatalog;
-import kickstart.mail.JavaMailer;
 import kickstart.user.UserManagement;
 
 @Controller
@@ -37,7 +36,7 @@ public class OrderController {
 	private String payment;
 
 	OrderController(OrderManager<CustomerOrder> orderManager, WebshopCatalog catalog, BusinessTime businesstime,
-			CarpoolManager carpoolManager, UserManagement userManagement, JavaMailer javaMailer) {
+			CarpoolManager carpoolManager, UserManagement userManagement) {
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
@@ -45,7 +44,7 @@ public class OrderController {
 		this.carpoolManager = carpoolManager;
 		this.catalog = catalog;
 		this.userManagement = userManagement;
-		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager, javaMailer,
+		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager,
 				userManagement);
 
 		payment = "Bar";
