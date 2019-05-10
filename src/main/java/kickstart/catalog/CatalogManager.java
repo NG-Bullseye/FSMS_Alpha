@@ -29,7 +29,6 @@ import org.salespointframework.order.OrderManager;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Component;
 
 import kickstart.articles.Article;
@@ -698,52 +697,46 @@ public class CatalogManager {
 	 * @param identifier ProductIdentifier of the given Article
 	 * @return String containing all included Articles separated by ","
 	 */
-	public String textOfAllComponents(ProductIdentifier identifier) {
-		if(catalog.findById(identifier)
-				.get() instanceof Part
-				){
+	public String textOfAllComponents(ProductIdentifier identifier){
+		getCollapsedProduktIntegerMap(identifier,new HashMap<>());
+
+
+		return names
+	}
+
+	private Map<Article,Integer> getCollapsedProduktIntegerMap(ProductIdentifier identifier, HashMap<Article,Integer> collapsedPartIds) {
+		//<editor-fold desc="NullChecks">
+		if(!catalog.findById(identifier).isPresent())
+			return "";
+		if(catalog.findById(identifier).get() instanceof Part||catalog.findById(identifier).get().getType()!= Article.ArticleType.COMPOSITE){
 			return "";
 		}
-		String result = "";
-		Optional<Article> composite = catalog.findById(identifier);
-		if (composite.isPresent()) {
-			if(composite.get().getPartIds()==null){
-				throw new NullPointerException();
-			}
-			LinkedList<String> names = new LinkedList<>();
-			composite.get().getPartIds().keySet().forEach(article -> {
-				if(!catalog.findById(this.getProduktIdFromString(article) )
-						.isPresent()) throw new NullPointerException();
+		Optional<Article> article = catalog.findById(identifier);
+		if(!article.isPresent())throw new NullPointerException();
+		if(article.get().getPartIds()==null) throw new NullPointerException();
+		//</editor-fold>
 
+		map werte benutzen anstatt String und int.
+				auslesen wieviel
 
-
-				Map<ProductIdentifier,Integer> map=
-						convertStringIntegeMapToProductIdentifierIntegerHashMap(
-								catalog.findById(this.getProduktIdFromString(article))
-								.get()
-								.getPartIds());
-
-						names.add(catalog.findById(this.getProduktIdFromString(article))
-						.get()
-						.getName()
-						+" "
-						+ map.get(article).toString());
-						System.out.println(catalog.findById(this.getProduktIdFromString(article))
-								.get()
-								.getName()
-								+" "
-								+ map.get(article).toString());
-			});
-			for (int i = names.size(); i > 0; i--) {
-				if (i != 1) {
-					result = result + names.get(i - 1) + ", ";
-				} else {
-					result = result + names.get(i - 1) + ".";
-				}
-			}
+		// this is Leave
+		if(article.get() instanceof Part){
+			names=names+" "+article.get().getName()+":"+collapsedPartIds.;
+			System.out.println("MYERROR"+ names);
+			return names;
 		}
 
-		return result;
+		//this is Node
+		else{
+			 Map<ProductIdentifier,Integer>	map =this.convertStringIntegeMapToProductIdentifierIntegerHashMap(article.get().getPartIds());
+			for (ProductIdentifier componentId :
+				map.keySet()) {
+				getCollapsedProduktIntegerMap(componentId, names,map.get(componentId));
+			}
+		}
+		return  names;
+
+
 	}
 
 	public ProductIdentifier getProduktIdFromString(String idString){
