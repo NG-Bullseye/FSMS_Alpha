@@ -1,24 +1,60 @@
 package kickstart.catalog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class Filterform {
-	@NotNull
 	private ArrayList<String> selectedColours;
+	@Min(0)
+	@Max(99999999)
+	private Integer minPriceBrutto = 0;
+	@Min(0)
+	@Max(99999999)
+	private Integer maxPriceBrutto = 99999999;
 	@Min(0)
 	@Max(99999999)
 	private Integer minPriceNetto = 0;
 	@Min(0)
 	@Max(99999999)
 	private Integer maxPriceNetto = 99999999;
-	/*
-	@NotNull(message = "Bitte wählen Sie einen Produkttyp aus.")
-	private String type;
-	 */
+
+	private String categorie;
+
+	public String getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(String categorie) {
+		this.categorie = categorie;
+	}
+
+	public Integer getMinPriceBrutto() {
+		return minPriceBrutto;
+	}
+
+	public void setMinPriceBrutto(Integer minPriceBrutto) {
+		this.minPriceBrutto = minPriceBrutto;
+	}
+
+	public Integer getMaxPriceBrutto() {
+		return maxPriceBrutto;
+	}
+
+	public void setMaxPriceBrutto(Integer maxPriceBrutto) {
+		this.maxPriceBrutto = maxPriceBrutto;
+	}
+
+	public void setMinPriceNetto(Integer minPriceNetto) {
+		this.minPriceNetto = minPriceNetto;
+	}
+
+	public void setMaxPriceNetto(Integer maxPriceNetto) {
+		this.maxPriceNetto = maxPriceNetto;
+	}
 
 	private ArrayList<String> selectedCategories;
 

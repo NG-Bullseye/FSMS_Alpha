@@ -20,7 +20,7 @@
 		<div id="registration" sec:authorize="!hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')">
 			<t2>Sie möchten ohne Registrierung fortfahren?</t2>
 			<div id="buttonspace">
-				<a class="ui button" href="catalog.html" th:href="@{/catalog}" th:text="'Zum ' + 'Katalog'">Zum Katalog</a>
+				<a class="ui button" href="catalog.html" th:href="@{/}" th:text="'Zum ' + 'Manager'">Zum Manager</a>
 			</div>
 		</div>
 		<div id="registration" sec:authorize="hasAnyRole('CUSTOMER')">

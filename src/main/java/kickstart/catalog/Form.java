@@ -11,13 +11,27 @@ public class Form {
 	private String name;
 	private String selectedColour;
 	@Min(value = 0)
-	@Max(10000)
-	private double price;
+	private double priceNetto;
+	@Min(value = 0)
+	private double priceBrutto;
 	private String eanCode;
 	private String herstellerUrl;
-	@Min(value = 0)
-	@Max(1500)
-	private double weight;
+
+	public double getPriceNetto() {
+		return priceNetto;
+	}
+
+	public void setPriceNetto(double priceNetto) {
+		this.priceNetto = priceNetto;
+	}
+
+	public double getPriceBrutto() {
+		return priceBrutto;
+	}
+
+	public void setPriceBrutto(double priceBrutto) {
+		this.priceBrutto = priceBrutto;
+	}
 
 	public String getHerstellerUrl() {
 		return herstellerUrl;
@@ -45,22 +59,6 @@ public class Form {
 		this.name = name;
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public double getWeight() {
-		return weight;
-	}
-
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-
 	public String getSelectedColour() {
 		return selectedColour;
 	}
@@ -69,11 +67,5 @@ public class Form {
 		this.selectedColour = selectedColour;
 	}
 
-	public HashSet<String> getSelectedCategories() {
-		return selectedCategories;
-	}
 
-	public void setSelectedCategories(HashSet<String> selectedCategories) {
-		this.selectedCategories = selectedCategories;
-	}
 }

@@ -184,10 +184,10 @@ public abstract class Article extends Product {
 	 * @return Returns a map that contains the identifiers of the parts as a key and
 	 *         their amount as a value
 	 */
-	public abstract Map<ProductIdentifier, Integer> getPartIds();
+	public abstract Map<String, Integer> getPartIds();
 
-	public abstract Stream<ProductIdentifier> getIdsStream();
-	public abstract Set<ProductIdentifier> getIdsSet();
+	public abstract Stream<String> getIdsStream();
+
 
 	/**
 	 * 

@@ -1,10 +1,11 @@
-
-
-<nav id="navmenu" th:fragment="navbar">
+<nav id="navmenu" th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 	<div class="ui secondary menu">
 
-		<a class="item" href="catalog.html" th:href="@{/catalog}" th:text="Katalog"> Katalog </a>
+		<div class="item" >
+			<h1>Fishstone Management System</h1>
+		</div>
 		<!--
+		<a class="item" href="catalog.html" th:href="@{/}" th:text="Manager"> Manager </a>
 		<a class="item"
 		   href="customeraccount.html" th:href="@{/customeraccount}"
 		   sec:authorize="isAuthenticated()">Eigenes Konto</a>

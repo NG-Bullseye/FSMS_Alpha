@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import kickstart.inventory.ReorderableInventoryItem;
+import org.salespointframework.catalog.Product;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
@@ -46,10 +48,13 @@ public class ArticleInitializer implements DataInitializer {
 				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p1);
 		inventory.save(new ReorderableInventoryItem(p1, Quantity.of(0, Metric.UNIT)));
+		print(p1);
 
 		Part p2 = new Part("PLA", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");
 		catalog.save(p2);
 		inventory.save(new ReorderableInventoryItem(p2, Quantity.of(0, Metric.UNIT)));
+		print(p2);
+
 
 		Composite c1=new Composite(
 				"ZIP 1",
@@ -65,6 +70,7 @@ public class ArticleInitializer implements DataInitializer {
 		);
 		catalog.save(c1);
 		inventory.save(new ReorderableInventoryItem(c1, Quantity.of(0, Metric.UNIT)));
+		print(c1);
 
 
 		Composite c2=new Composite(
@@ -80,5 +86,12 @@ public class ArticleInitializer implements DataInitializer {
 				));
 		catalog.save(c2);
 		inventory.save(new ReorderableInventoryItem(c2, Quantity.of(0, Metric.UNIT)));
+		print(c2);
+
+	}
+
+	void print(Product s){
+		//System.out.println( s.getId()+" ID of "+s.getName() );
+
 	}
 }

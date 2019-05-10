@@ -3,7 +3,7 @@
 <!-- Erklärung: Den Head und das nav unten bitte eins zu eins in JEDE Seite kopieren. Nicht vergessen: Den Page Title noch anpassen!  -->
 
 <head th:include="header :: head">
-    <title id="pageTitle">Startseite</title>
+    <title id="pageTitle">Edit</title>
 </head>
 <body>
 <nav th:include="navbar :: navbar"></nav>
@@ -25,35 +25,25 @@
             </td>
         </tr>
         <tr>
-            <td><t3>Beschreibung:</t3></td>
-            <td th:text="${article.description}">Name</td>
+            <td><t3>Preis Netto:</t3></td>
+            <td th:text="${article.priceNetto.getNumber().doubleValueExact()}+' '+${article.priceNetto.getCurrency()}">Name</td>
             <td>
-                <input type="text" th:field="*{description}"/>
+                <input type="number" min="0" step="0.01" th:field="*{priceNetto}" />
+                <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceNetto')}" th:errors="*{priceNetto}"></div>
             </td>
         </tr>
         <tr>
-            <td><t3>Preis:</t3></td>
-            <td th:text="${article.price.getNumber().doubleValueExact()}+' '+${article.price.getCurrency()}">Name</td>
+            <td><t3>Preis Brutto:</t3></td>
+            <td th:text="${article.priceBrutto.getNumber().doubleValueExact()}+' '+${article.priceBrutto.getCurrency()}">priveBrutto</td>
             <td>
-                <input type="number" th:field="*{price}" min="0" max="50000" step="0.01"/>
-                <a th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Bitte richtigen Preis eingeben</a>
-            </td>
-        </tr>
-        <tr>
-            <td><t3>Gewicht:</t3></td>
-            <td th:text="${article.weight}">Name</td>
-            <td>
-                <input type="number" th:field="*{weight}" min="0" max="5000" step="0.01"/>
-                <a th:if="${#fields.hasErrors('weight')}" th:errors="*{weight}">Bitte richtiges Gewicht eingeben</a>
+                <input type="number" min="0" step="0.1" th:field="*{priceBrutto}" />
+                <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceBrutto')}" th:errors="*{priceBrutto}"></div>
             </td>
         </tr>
         <tr>
             <td><t3>Farben:</t3></td>
-            <td></td>
-            <td></td>
         </tr>
         <tr th:each="colour : ${colours}">
-            <td></td>
             <div th:switch="${article.getColour().contains(colour)}">
                 <td th:case="true" th:text="${colour}"></td>
                 <td th:case="*"></td>
@@ -61,36 +51,29 @@
             <td>
                 <div class="ui labeled input">
                     <input class="ui checkbox" type="checkbox"
-                                                     th:field="*{selectedColours}"
+                                                     th:field="*{selectedColour}"
                                                      th:value="${colour}" />
                     <label
                             th:text="${colour}">
                     </label>
                 </div>
             </td>
+        </tr>
+        <tr>
+            <td><t3>EAN Code:</t3></td>
+            <td th:text="${article.eanCode}">EAN</td>
+            <td>
+                <input type="text" th:field="*{eanCode}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><t3>Hersteller URL:</t3></td>
+            <td th:text="${article.herstellerUrl}">URL</td>
+            <td>
+                <input type="text" th:field="*{herstellerUrl}"/>
+            </td>
+        </tr>
 
-            </tr>
-            <tr>
-                <td><t3>Kategorien:</t3></td>
-            </tr>
-            <tr th:each="category : ${categories}">
-                <td></td>
-                <div th:switch="${articleCategories.contains(category)}">
-                <td th:case="true" th:text="${category}"></td>
-                <td th:case="false"></td>
-                </div>
-                <td>
-                    <div class="ui labeled input">
-                        <input class="ui checkbox" type="checkbox"
-                               th:field="*{selectedCategories}"
-                               th:value="${category}" />
-                        <label
-                                th:text="${category}">
-                        </label>
-                    </div>
-                </td>
-
-            </tr>
         </tbody>
     <tfoot class="full width">
     <tr>

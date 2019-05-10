@@ -17,6 +17,7 @@ package kickstart.catalog;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
 import org.hibernate.validator.constraints.Range;
+import org.omg.CORBA.portable.Streamable;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
@@ -116,18 +118,25 @@ public class CatalogController {
 			return "redirect:/";
 		}
 		if (bindingResult.hasErrors()) {
-			Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-			model.addAttribute("inventoryItems",list );
+
 			model.addAttribute("catalog", manager.getVisibleCatalog());
 			model.addAttribute("catalogManager",catalogManager);
 
 			return "catalog";
 		}
-		model.addAttribute("catalog", manager.filteredCatalog(filterform));
-
-		return "redirect:/";
+		Iterable<ReorderableInventoryItem> list=manager.filteredReorderableInventoryItems(filterform);
+		model.addAttribute("inventoryItems",list );
+		//model.addAttribute("catalog", manager.getVisibleCatalog());
+		model.addAttribute("catalogManager",catalogManager);
+		for (ReorderableInventoryItem item:list
+			 ) {
+			Article a= catalogManager.getArticle(item.getProduct().getId());
+			String s=  a.getCategories().get().findFirst().get();
+		}
+		return "catalog";
 	}
 
+	//<editor-fold desc="In Out">
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id,
 					 @Valid @ModelAttribute("inForm") InForm inForm,
@@ -161,7 +170,7 @@ public class CatalogController {
 		model.addAttribute("catalogManager",catalogManager);
 		return "redirect:/";
 	}
-
+	//</editor-fold>
 
 	//<editor-fold desc="Article">
 	@GetMapping("/article/{identifier}")
@@ -178,34 +187,37 @@ public class CatalogController {
 	}
 	//</editor-fold>
 
-	//<editor-fold desc="Edit Part">
+	//<editor-fold desc="Edit">
 	@GetMapping("/edit/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
-	public String detailEdit(@PathVariable ProductIdentifier identifier, Model model) {
-
+	public String detailEdit(@PathVariable ProductIdentifier identifier,
+							 Model model) {
 		model.addAttribute("article", manager.getArticle(identifier));
-		HashSet<String> articleCategories = new HashSet<>();
-		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+			HashSet<String> articleCategories = new HashSet<>();
+			HashSet<String> articleColours = new HashSet<>();
+			manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
 		model.addAttribute("articleCategories", articleCategories);
 		model.addAttribute("form", new Form()); // Damit man im folgenden form bearbeiten kann
-		return "edit";
+			return "edit";
 	}
 
 	@PostMapping("/edit/{identifier}")
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 
-	public String editArticle(@PathVariable ProductIdentifier identifier, @Valid @ModelAttribute("form") Form form,
-			BindingResult bindingResult, Model model) {
+	public String editArticle(@PathVariable ProductIdentifier identifier,
+							  @Valid @ModelAttribute("form") Form form,
+							  BindingResult bindingResult,
+							  Model model) {
 		model.addAttribute("article", manager.getArticle(identifier));
-		HashSet<String> articleCategories = new HashSet<>();
-		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
-		model.addAttribute("articleCategories", articleCategories);
-		if (bindingResult.hasErrors()) {
-			return "edit";
-		}
-		manager.editPart(form, identifier);
+			HashSet<String> articleCategories = new HashSet<>();
+			manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
 
-		return "redirect:/catalog/";
+		model.addAttribute("articleCategories", articleCategories);
+			if (bindingResult.hasErrors()) {
+				return "edit";
+			}
+			manager.editPart(form, identifier);
+			return "redirect:/catalog/";
 	}
 	//</editor-fold>
 
@@ -251,9 +263,9 @@ public class CatalogController {
 			return "redirect:/composite/new";
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("compositeForm", form);
-			model.addAttribute("catalog", manager.getAvailableForNewComposite());
-			return "newComposite";
+	//		model.addAttribute("compositeForm", form);
+	//		model.addAttribute("catalog", manager.getAvailableForNewComposite());
+			return "redirect:/composite/new";
 		}
 		model.addAttribute("compositeForm", new CompositeForm());
 

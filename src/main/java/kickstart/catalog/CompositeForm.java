@@ -16,6 +16,8 @@ public class CompositeForm {
 	private String selectedCategorie;
 
 
+
+
 	public String getSelectedColour() {
 		return selectedColour;
 	}

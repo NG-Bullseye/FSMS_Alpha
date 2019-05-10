@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 
 import kickstart.accountancy.AccountancyManager;
@@ -25,11 +25,11 @@ import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.Cart;
-import org.salespointframework.order.Order;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Component;
 
 import kickstart.articles.Article;
@@ -151,23 +151,26 @@ public class CatalogManager {
 		this.createAvailableForNewComposite();
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			if (!article.getName().isEmpty()) {
+			if (article.getName()!=null) {
 				afterEdit.setName(article.getName());
 			}
-
-			long l1 = Math.round(article.getPrice());
+			long l1 = Math.round(article.getPriceNetto());
 			if (l1 != 0) {
-				afterEdit.setPrice(Money.of(article.getPrice(), EURO));
+				afterEdit.setPrice(Money.of(article.getPriceNetto(), EURO));
 			}
-			long l2 = Math.round(article.getWeight());
+			long l2 = Math.round(article.getPriceBrutto());
 			if (l2 != 0) {
-				afterEdit.setWeight(article.getWeight());
+				afterEdit.setPrice(Money.of(article.getPriceBrutto(), EURO));
 			}
-			if (!article.getSelectedCategories().isEmpty()) {
-				afterEdit.getCategories().forEach(afterEdit::removeCategory);
-				article.getSelectedCategories().forEach(afterEdit::addCategory);
+			if (article.getEanCode()!=null) {
+				//afterEdit.removeColours();
+				afterEdit.setColour(article.getEanCode());
 			}
-			if (!article.getSelectedColour().isEmpty()) {
+			if (article.getHerstellerUrl()!=null) {
+				//afterEdit.removeColours();
+				afterEdit.setColour(article.getHerstellerUrl());
+			}
+			if (article.getSelectedColour()!=null&&!article.getSelectedColour().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setColour(article.getSelectedColour());
 			}
@@ -201,13 +204,7 @@ public class CatalogManager {
 			}
 
 			LinkedList<Article> partsBefore = new LinkedList<>();
-			afterEdit.getPartIds().forEach((article, count) -> {
-				int i = count;
-				while (i > 0) {
-					partsBefore.add(catalog.findById(article).get());
-					i--;
-				}
-			});
+			partsBefore.addAll(convertIdStringToArticleSet( afterEdit.getPartIds().keySet()));
 			LinkedList<Article> partsAfter = new LinkedList<>();
 			partsAfter.addAll(this.compositeMapFiltering(partsCount));
 
@@ -231,6 +228,47 @@ public class CatalogManager {
 		}
 
 	}
+
+	private Set<ProductIdentifier> convertIdStringToIdSet(Map<String, Integer> partIds) {
+		Set<ProductIdentifier> result=new HashSet<>();
+		for(String stringId:partIds.keySet()){
+			for(Article a:catalog.findAll()){
+				if (a.getId().getIdentifier().equals(stringId)){
+					result.add(a.getId());
+				}
+
+			}
+		}
+		return result;
+	}
+
+	private Set<Article> convertIdStringToArticleSet(Set<String> idsString) {
+		Set<Article> result=new HashSet<>();
+		for(String stringId:idsString){
+			for(Article a:catalog.findAll()){
+				if (a.getId().getIdentifier().equals(stringId)){
+					result.add(a);
+				}
+
+			}
+		}
+		return result;
+	}
+
+	public Stream<ProductIdentifier> convertIdStringToIdStream(Map<String, Integer> partIds) {
+		Set<ProductIdentifier> result=new HashSet<>();
+		for(String stringId:partIds.keySet()){
+			for(Article a:catalog.findAll()){
+				if (a.getId().getIdentifier().equals(stringId)){
+					result.add(a.getId());
+				}
+
+			}
+		}
+		return result.stream();
+	}
+
+
 
 	public void editAffectedArticles(Article afterEdit) {
 		List<Article> affectedArticles = new ArrayList<>();
@@ -267,7 +305,10 @@ public class CatalogManager {
 			// Get the parts for the composite update
 			if (affectedArticles.get(0).getType() == Article.ArticleType.COMPOSITE) {
 				Composite c = (Composite) affectedArticles.get(0);
-				parts = getArticlesFromIdentifiers(c.getPartIds());
+				if(c.getPartIds()==null){
+					throw new NullPointerException();
+				}
+				parts = getArticleFrom_IdIntMapping(convertStringIntegeMapToProductIdentifierIntegerHashMap(c.getPartIds()) );
 			}
 
 			// Update was successful. Remove it from the list and save the changes
@@ -286,6 +327,24 @@ public class CatalogManager {
 
 	}
 
+	public HashMap<ProductIdentifier,Integer> convertStringIntegeMapToProductIdentifierIntegerHashMap(Map<String,Integer> stringIntegerHashMap){
+		HashMap<ProductIdentifier,Integer> productIdentifierIntegerHashMap=new HashMap<>();
+		if(stringIntegerHashMap==null){
+			throw new NullPointerException("this Articles PartsMap is Null ");
+		}
+		for (String s:stringIntegerHashMap.keySet()
+			 ) {
+
+			for (Article a:catalog.findAll()
+				 ) {
+				if(a.getId().getIdentifier().equals(s))
+				productIdentifierIntegerHashMap.put(a.getId(),stringIntegerHashMap.get(s));
+			}
+
+		}
+		return  productIdentifierIntegerHashMap;
+	}
+
 	/**
 	 * Returns all articles with the given ProductIdentifiers and how many times
 	 * they are contained in the Map.
@@ -295,7 +354,7 @@ public class CatalogManager {
 	 * @return All articles that there mapped.
 	 *
 	 */
-	public List<Article> getArticlesFromIdentifiers(Map<ProductIdentifier, Integer> map) {
+	public List<Article> getArticleFrom_IdIntMapping(Map<ProductIdentifier, Integer> map) {
 		List<Article> articles = new ArrayList<>();
 
 		for (ProductIdentifier id : map.keySet()) {
@@ -319,50 +378,65 @@ public class CatalogManager {
 	 */
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
-
-
-		/*
-		HashSet<Article> rightType = new HashSet<>();
-
-		if (filterform.getType().equals("composite")) {
-			catalog.findComposite().forEach(rightType::add);
-		} else {
-			if (filterform.getType().equals("part")) {
-				catalog.findPart().forEach(rightType::add);
-			} else {
-				catalog.findAll().forEach(rightType::add);
-
-			}
-		}
-		 */
-
 		HashSet<Article> rightColours = new HashSet<>();
-		catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
+		if (filterform.getSelectedColours()!=null){
+			catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
+		}
+		else{
+			System.out.println("filtered Colors are null");
+			catalog.findAll().forEach(rightColours::add);
+		}
 
-		HashSet<Article> rightPrice = new HashSet<>();
+		HashSet<Article> rightNettoPrice = new HashSet<>();
 		if (filterform.getMaxPriceNetto() > filterform.getMinPriceNetto()) {
-			catalog.findByPrice(Money.of(filterform.getMinPriceNetto(), EURO), Money.of(filterform.getMaxPriceNetto(), EURO))
-					.forEach(rightPrice::add);
+			catalog.findByPrice(Money.of(filterform.getMinPriceNetto(), EURO),
+								Money.of(filterform.getMaxPriceNetto(), EURO))
+									.forEach(rightNettoPrice::add);
 		} else {
-			catalog.findByPrice(Money.of(filterform.getMaxPriceNetto(), EURO), Money.of(filterform.getMinPriceNetto(), EURO))
-					.forEach(rightPrice::add);
+			catalog.findByPrice(Money.of(filterform.getMaxPriceNetto(), EURO),
+								Money.of(filterform.getMinPriceNetto(), EURO))
+									.forEach(rightNettoPrice::add);
+		}
+
+		HashSet<Article> rightBruttoPrice = new HashSet<>();
+		if (filterform.getMaxPriceNetto() > filterform.getMinPriceNetto()) {
+			catalog.findByPrice(Money.of(filterform.getMinPriceBrutto(), EURO),
+								Money.of(filterform.getMaxPriceBrutto(), EURO))
+									.forEach(rightBruttoPrice::add);
+		} else {
+			catalog.findByPrice(Money.of(filterform.getMaxPriceBrutto(), EURO),
+								Money.of(filterform.getMinPriceBrutto(), EURO))
+									.forEach(rightBruttoPrice::add);
 		}
 
 		HashSet<Article> rightCategories = new HashSet<>();
-		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
+		if(filterform.getSelectedCategories()!=null&&filterform.getSelectedCategories().size()>0)
+			catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
+		else {
+			//System.out.println("No Categories choosen");
+			catalog.findAll().forEach(rightCategories::add);
+		}
+
 
 		HashSet<Article> visible = new HashSet<>();
 		this.getVisibleCatalog().forEach(visible::add);
+
 		LinkedList<Article> result = new LinkedList<>();
-		/*
-		result.addAll(rightType);
-		 */
-		result.retainAll(visible);
-		if (!filterform.getSelectedColours().isEmpty()) {
+		result.addAll(visible);
+
+		if (filterform.getSelectedColours()!=null) {
 			result.retainAll(rightColours);
 		}
-		result.retainAll(rightPrice);
-		if (!filterform.getSelectedCategories().isEmpty()) {
+
+		if (filterform.getMaxPriceNetto()!=0 && filterform.getMinPriceNetto()!=0) {
+			result.retainAll(rightNettoPrice);
+		}
+
+		if (filterform.getMaxPriceBrutto()!=0 && filterform.getMinPriceBrutto()!=0) {
+			result.retainAll(rightBruttoPrice);
+		}
+
+		if (filterform.getSelectedCategories()!=null) {
 			result.retainAll(rightCategories);
 		}
 
@@ -397,6 +471,7 @@ public class CatalogManager {
 	 *                   included in the composite.
 	 */
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
+		Set<String> inputFormArticleSet=partsCount.keySet();
 		List<Article> listeMitAllenArtikelnAusDerForm=this.compositeMapFiltering(partsCount);
 		Composite newArticle = new Composite(
 				form.getName(),
@@ -408,9 +483,6 @@ public class CatalogManager {
 				form.getSelectedCategorie(),
 				listeMitAllenArtikelnAusDerForm
 		);
-		for (Article a : listeMitAllenArtikelnAusDerForm) {
-			newArticle.addId(a);
-		}
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
 	}
@@ -553,12 +625,21 @@ public class CatalogManager {
 	public Map<Article, Integer> getArticlesForCompositeEdit(ProductIdentifier identifier) {
 		HashMap<Article, Integer> parts = new HashMap<>();
 		this.getAvailableForNewComposite().forEach(article -> parts.put(article, 0));
+
 		if (catalog.findById(identifier).isPresent()) {
-			catalog.findById(identifier).get().getPartIds().forEach((article, count) -> {
-				if (catalog.findById(article).isPresent()) {
-					parts.put(catalog.findById(article).get(), count);
-				}
-			});
+			if(catalog.findById(identifier)
+					.get()
+					.getPartIds()==null){
+				throw new NullPointerException();
+			}
+			convertStringIntegeMapToProductIdentifierIntegerHashMap(catalog.findById(identifier)
+					.get()
+					.getPartIds())
+					.forEach((article, count) -> {
+						if (catalog.findById(article).isPresent()) {
+							parts.put(catalog.findById(article).get(), count);
+						}
+					});
 			parts.remove(catalog.findById(identifier).get()); // Damit man den Artikel nicht sich selbst hinzufügen kann
 		}
 		return parts;
@@ -618,12 +699,40 @@ public class CatalogManager {
 	 * @return String containing all included Articles separated by ","
 	 */
 	public String textOfAllComponents(ProductIdentifier identifier) {
+		if(catalog.findById(identifier)
+				.get() instanceof Part
+				){
+			return "";
+		}
 		String result = "";
 		Optional<Article> composite = catalog.findById(identifier);
 		if (composite.isPresent()) {
+			if(composite.get().getPartIds()==null){
+				throw new NullPointerException();
+			}
 			LinkedList<String> names = new LinkedList<>();
 			composite.get().getPartIds().keySet().forEach(article -> {
-				names.add(catalog.findById(article).get().getName());
+				if(!catalog.findById(this.getProduktIdFromString(article) )
+						.isPresent()) throw new NullPointerException();
+
+
+
+				Map<ProductIdentifier,Integer> map=
+						convertStringIntegeMapToProductIdentifierIntegerHashMap(
+								catalog.findById(this.getProduktIdFromString(article))
+								.get()
+								.getPartIds());
+
+						names.add(catalog.findById(this.getProduktIdFromString(article))
+						.get()
+						.getName()
+						+" "
+						+ map.get(article).toString());
+						System.out.println(catalog.findById(this.getProduktIdFromString(article))
+								.get()
+								.getName()
+								+" "
+								+ map.get(article).toString());
 			});
 			for (int i = names.size(); i > 0; i--) {
 				if (i != 1) {
@@ -635,6 +744,14 @@ public class CatalogManager {
 		}
 
 		return result;
+	}
+
+	public ProductIdentifier getProduktIdFromString(String idString){
+		for (Article a :catalog.findAll()) {
+			if (a.getId().getIdentifier().equals(idString))return a.getId();
+
+		}
+		throw new NullPointerException("no Produkt found with that given id");
 	}
 
 	public void placeOrder(OutForm outForm, UserAccount userAccount) {
@@ -671,5 +788,22 @@ public class CatalogManager {
 
 		//System.out.println("Order Erfolgeich abgeschlossen. Neue Menge="+inventoryManager.getInventory().findByProductIdentifier(outForm.getProductIdentifier()).get().getQuantity().getAmount().toString());
 
+	}
+
+	public LinkedList<ReorderableInventoryItem> filteredReorderableInventoryItems(Filterform filterform) {
+
+
+		Iterable<Article> filteredCatalog = filteredCatalog(filterform);
+		LinkedList<ReorderableInventoryItem> filteredReorderableInventoryItems=new LinkedList<>();
+		for (Article a :
+				filteredCatalog) {
+			if(inventoryManager.getInventory().findByProduct(a).isPresent())
+			filteredReorderableInventoryItems.add(inventoryManager.getInventory().findByProduct(a).get());
+			else {
+				System.out.println("Optional not found in filteredReorderableInventoryItems()");
+				throw new IllegalArgumentException();
+			}
+		}
+		return filteredReorderableInventoryItems;
 	}
 }

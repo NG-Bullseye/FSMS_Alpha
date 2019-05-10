@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import kickstart.catalog.CatalogManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Metric;
@@ -46,7 +47,7 @@ public class Composite extends Article {
 
 	@ElementCollection
 
-	private Map<ProductIdentifier, Integer> partIds;
+	private Map<String, Integer> partIds;
 	// private List<ProductIdentifier> partIds;
 
 	private ArticleType type;
@@ -85,12 +86,12 @@ public class Composite extends Article {
 			throws IllegalArgumentException
 	{
 		super(name,priceNetto,priceBrutto,eanCode);
-
-		//this.price=Money.of(priceNetto,"EUR");
+		System.out.println(this.getId().toString()+" id of "+this.getName());
+		//this.price=Money.of(priceNetto,"EUR");+
 		this.colour=colour;
 		this.herstellerUrl=herstellerUrl;
 		//this.parts = parts;
-		this.partIds = new HashMap<ProductIdentifier, Integer>();
+		this.partIds = new HashMap<String, Integer>();
 		this.type = ArticleType.COMPOSITE;
 		this.setUpdateStatus(true);
 		//<editor-fold desc="Category zuordnung">
@@ -118,15 +119,35 @@ public class Composite extends Article {
 	 * @param article The new part to get added to parts
 	 */
 	public void addId(@NotNull Article article) {
-		Set<ProductIdentifier> ids=article.getIdsSet();
-		int i=1;
+		Set<String> ids=this.getIdsSet();
+		if (ids.size()>0) {
+			System.out.println("PART LIST OF "+this.getName()+" BEVOR THE ADD OF "+ article.getName());
+			for (String p :
+					ids) {
+				System.out.println("  "+p);
+			}
+		} else {System.out.println("NO COMPONENTS IN "+this.getName()); }
+
+		System.out.println(article.getId().toString()+
+				" FROM " +article.getName()+
+				" ADDED TO "+
+				this.getName());
 		if (partIds.containsKey(article.getId())) {
-			this.partIds.put(article.getId(), partIds.get(article.getId()) + 1);
+			this.partIds.put(article.getId().getIdentifier(), partIds.get(article.getId()) + 1);
 			partIds.size();
 		} else {
-			this.partIds.put(article.getId(), 1);
+
+			this.partIds.put(article.getId().getIdentifier(), 1);
 			partIds.size();
 		}
+
+		if (ids.size()>0) {
+			System.out.println("PART LIST OF "+this.getName()+" AFTER THE ADD OF "+ article.getName());
+			for (String p :
+					ids) {
+				System.out.println("  "+p);
+			}
+		} else {System.out.println("NO COMPONENTS IN "+this.getName()+"AFTER ADDING "+article.getName()); }
 
 	}
 
@@ -148,7 +169,7 @@ public class Composite extends Article {
 			if (partIds.get(article.getId()) == 1) {
 				partIds.remove(article.getId());
 			} else {
-				partIds.put(article.getId(), partIds.get(article.getId()) - 1);
+				partIds.put(article.getId().getIdentifier(), partIds.get(article.getId()) - 1);
 			}
 		}
 	}
@@ -158,17 +179,17 @@ public class Composite extends Article {
 	 * @return All parts this article consists of. Since they don't get saved in the
 	 *         database, this list might be empty
 	 */
-	public Stream<ProductIdentifier> getIdsStream() {
+	public Stream<String> getIdsStream() {
 		return partIds.keySet().stream();
 	}
-	public Set<ProductIdentifier> getIdsSet(){
+	public Set<String> getIdsSet(){
 		return partIds.keySet();
 	};
 	/**
 	 * 
 	 * @return Returns a list of the ids for every part
 	 */
-	public Map<ProductIdentifier, Integer> getPartIds() {
+	public Map<String, Integer> getPartIds() {
 		return partIds;
 	}
 

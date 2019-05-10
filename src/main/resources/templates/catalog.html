@@ -1,9 +1,16 @@
-
-
+<!--
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
 	<head th:include="header :: head">
-		<title id="pageTitle">Katalog</title>
+
+		<!--
+		<link rel="shortcut icon" type="image/png" href="https://fishstone.de/wp-content/uploads/2016/09/Fishstone_Logo_Full.png"/>
+
+		-->
+		<link rel="shortcut icon" type="image/ico" href="C:\Users\Bullseye\IdeaProjects\Mangment Webapplikation\src\main\resources\static\resources\favicon.ico"/>
+		<title id="pageTitle">Fishstone</title>
+
 	</head>
 	<body>
 		<nav th:include="navbar :: navbar"></nav>
@@ -31,7 +38,9 @@
 							</div>
 						</div>
 					</div>
+				</div>
 
+				<div class="item">
 					<div class="ui simple dropdown">
 						<div class="text">Preis Netto</div>
 						<i class="dropdown icon"></i>
@@ -46,6 +55,27 @@
 								<div class="ui labeled input">
 									<div class="ui label">Maximalpreis</div>
 									<input type="number" th:value="50000.0" th:field="*{maxPriceNetto}">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="item">
+					<div class="ui simple dropdown">
+						<div class="text">Preis Brutto</div>
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="item">
+								<div class="ui labeled input">
+									<div class="ui label">Mindestpreis</div>
+									<input type="number" th:value="0" th:field="*{minPriceBrutto}">
+								</div>
+							</div>
+							<div class="item">
+								<div class="ui labeled input">
+									<div class="ui label">Maximalpreis</div>
+									<input type="number" th:value="50000.0" th:field="*{maxPriceBrutto}">
 								</div>
 							</div>
 						</div>
@@ -84,7 +114,7 @@
 				</div>
 				<!--
 				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-					<a th:href="@{/catalog/hidden}">
+					<a th:href="@{/hidden}">
 						<div class="ui button">
 							<i class="eye icon"></i>
 							Versteckte Artikel
@@ -124,7 +154,7 @@
 					<th>Kategorie</th>
 					<th>Farbe</th>
 					<th>In</th>
-					<th>Out</th>
+					<th sec:authorize="isAuthenticated()">Out</th>
 					<th>Preis Netto</th>
 					<th>Preis Brutto</th>
 					<th>Besteht aus</th>
@@ -139,9 +169,13 @@
 				<!--/*@thymesVar id="inventoryItems" type="kickstart.catalog.CatalogController"*/-->
 				<tr th:each="item: ${inventoryItems}">
 					<td th:text="${item.getProduct().getName()}">Name</td>
+
 					<td th:text="${item.getQuantity().getAmount().toString()}">Anzahl</td>
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Kategorie</td>
+
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
+
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
+
 					<td>
 						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
@@ -150,8 +184,8 @@
 							</div>
 						</form>
 					</td>
-					<td>
-						<!--/*@thymesVar id="outForm" type="kickstart.catalog.CatalogController"*/-->
+
+					<td sec:authorize="isAuthenticated()">
 						<form method="post" role="form" name="f2" th:object="${outForm}" th:action="@{/out/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
@@ -159,8 +193,11 @@
 							</div>
 						</form>
 					</td>
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto()}">Netto</td>
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto()}">Brutto</td>
+
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto().getNumber().doubleValueExact()}">Netto</td>
+
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto().getNumber().doubleValueExact()}">Brutto</td>
+
 					<td>
 						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
 							<br>
@@ -168,11 +205,14 @@
 							</div>
 						</div>
 					</td>
+
 					<td>  <a th:href="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
 							th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
 							 target="_blank" />
 					</td>
+
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
+
                     <td>
                         <div class="ui two buttons" >
                             <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
@@ -193,7 +233,6 @@
 
                         </div>
                     </td>
-
 				</tr>
 				</tbody>
 			</table>

@@ -184,7 +184,7 @@ class CatalogManagerTest {
 
 	@Test
 	@Transient
-	void getArticlesFromIdentifiers() {
+	void getArticleFrom_IdIntMapping() {
 		int tester1Amount = 2;
 		int tester2Amount = 1;
 
@@ -194,7 +194,7 @@ class CatalogManagerTest {
 
 		int count = 0;
 
-		List<Article> list = manager.getArticlesFromIdentifiers(map);
+		List<Article> list = manager.getArticleFrom_IdIntMapping(map);
 
 		for (ProductIdentifier id : map.keySet()) {
 			Optional<Article> a = catalog.findById(id);

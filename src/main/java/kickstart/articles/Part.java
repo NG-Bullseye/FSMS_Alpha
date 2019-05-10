@@ -114,7 +114,7 @@ public class Part extends Article {
 		return colour;
 	}
 
-	public Stream<ProductIdentifier> getIdsStream() {
+	public Stream<String> getIdsStream() {
 		return null;
 	}
 
@@ -168,8 +168,8 @@ public class Part extends Article {
 	 * @return Returns a empty Map, since this class never has parts
 	 */
 	@Override
-	public Map<ProductIdentifier, Integer> getPartIds() {
-		return new HashMap<ProductIdentifier, Integer>();
+	public Map<String, Integer> getPartIds() {
+		return null;
 	}
 
 	/**
