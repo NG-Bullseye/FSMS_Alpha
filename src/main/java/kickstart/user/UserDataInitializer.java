@@ -21,8 +21,8 @@ class UserDataInitializer implements DataInitializer {
 
 	private final UserAccountManager userAccountManager;
 	private final UserRepository userRepository;
-	private static final int salary = 150;
-	private static final int bigSalary = 300;
+	private static final int salary = 0;
+	private static final int bigSalary = 0;
 
 	/**
 	 * Creates a new {@link UserDataInitializer} with the given
@@ -48,23 +48,25 @@ class UserDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		if (userAccountManager.findByUsername("chef").isPresent()) {
+		if (userAccountManager.findByUsername("admin").isPresent()) {
 			return;
 		}
 
-		UserAccount ua1 = userAccountManager.create("daniel", "123", Role.of("ROLE_CUSTOMER"));
-		UserAccount ua4 = userAccountManager.create("hans", "123", Role.of("ROLE_CUSTOMER"));
-		UserAccount ua2 = userAccountManager.create("mitarbeitah", "123", Role.of("ROLE_EMPLOYEE"));
-		UserAccount ua3 = userAccountManager.create("chef", "123", Role.of("ROLE_BOSS"));
-		ua3.add(Role.of("ROLE_EMPLOYEE"));
+		UserAccount ua1 = userAccountManager.create("admin", "123", Role.of("ROLE_EMPLOYEE"));
+		ua1.add(Role.of("ROLE_MANAGER"));
+		ua1.add(Role.of("ROLE_ADMIN"));
 
-		User c1 = new User(ua1, "Daniel", "Körsten", "daniel@beispiel.de", "Coole Straße 18, Gera");
-		User c4 = new User(ua4, "Hans", "Schrödinger", "hans@katze.de", "Katzenweg 18, 06688 Krumbach");
-		User c2 = new User(ua2, "Alfons", "Zitterbacke", "alfons@moebl-hier.de", "Arbeiterstraße 1, Dresden");
-		User c3 = new User(ua3, "Daniel", "Matusek", "besterTutor@tu-dresden.de", "Private Straße 15, Dresden");
+		UserAccount ua2 = userAccountManager.create("mitarbeiter", "123", Role.of("ROLE_EMPLOYEE"));
+
+		UserAccount ua3 = userAccountManager.create("chef", "123", Role.of("ROLE_EMPLOYEE"));
+		ua3.add(Role.of("ROLE_MANAGER"));
+
+		User c1 = new User(ua1, "Karsten", "unbekannt", "Karstrn@gmail.com", "irgendwo in Berlin");
+		User c2 = new User(ua2, "Leonard", "Wecke", "Leonard.r.Wecke@gmail.com", "Wu7, Dresden");
+		User c3 = new User(ua3, "Toni", "Stark", "ironman@gmail.com", "Private Straße 15, NY");
 		c2.setSalary(salary);
 		c3.setSalary(bigSalary);
 
-		userRepository.saveAll(Arrays.asList(c1, c2, c3, c4));
+		userRepository.saveAll(Arrays.asList(c1, c2, c3));
 	}
 }

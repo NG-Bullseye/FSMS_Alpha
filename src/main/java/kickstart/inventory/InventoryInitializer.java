@@ -23,14 +23,20 @@ public class InventoryInitializer implements DataInitializer {
 	}
 
 	@Override
-	public void initialize() {
-		inventory.deleteAll();
+	public void initialize() {/*
+
+
+
+	inventory.deleteAll();
 
 		for (Article article : catalog.findAll()) {
 			if (!inventory.findByProductIdentifier(article.getId()).isPresent()) {
 				inventory.save(new ReorderableInventoryItem(article, Quantity.of(10, Metric.UNIT)));
 			}
 		}
+
+	*/
+
 	}
 
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html"
-	  xmlns:sec="http://www.w3.org/1999/xhtml">
+	  xmlns:sec="http://www.w3.org/1999/xhtml" >
 	<head th:include="header :: head">
 
 		<!--
@@ -92,7 +92,7 @@
 								<input type="checkbox"
 									   th:field="*{selectedCategories}"
 									   th:value="${category}" />
-								<label th:text="${category}"></label>
+								<label th:text="${category}+e"></label>
 							</div>
 						</div>
 					</div>
@@ -128,7 +128,7 @@
 				<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 				-->
 
-				<div class="item">
+				<div class="item" sec:authorize="hasRole('ROLE_ADMIN')" >
 					<div class="ui simple dropdown">
 								neuer Artikel
 						<i class="dropdown icon"></i>
@@ -138,9 +138,9 @@
 						</div>
 					</div>
 				</div>
-				<!--
+				<div class="item black">
 				</div>
-				-->
+
 
 			</div>
 		</form>
@@ -151,17 +151,19 @@
 				<thead>
 				<tr>
 					<th>Name</th>
-					<th>Vorhanden</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')"h>Vorhanden</th>
 					<th>Kategorie</th>
 					<th>Farbe</th>
-					<th>In</th>
-					<th sec:authorize="isAuthenticated()">Out</th>
-					<th>Preis Netto</th>
-					<th>Preis Brutto</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')"h>In</th>
+					<th>Herstellen(dummy)</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')">Herstellbar</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')">Out</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')">Preis Netto</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')">Preis Brutto</th>
 					<th>Besteht aus</th>
-					<th>Hersteller Url</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')">Hersteller Url</th>
 					<th>EAN Code</th>
-					<th>Bearbeiten</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')">Bearbeiten</th>
 
 
 				</tr>
@@ -171,13 +173,13 @@
 				<tr th:each="item: ${inventoryItems}">
 					<td th:text="${item.getProduct().getName()}">Name</td>
 
-					<td th:text="${item.getQuantity().getAmount().toString()}">Anzahl</td>
+					<td th:text="${item.getQuantity().getAmount().intValue()}"sec:authorize="hasRole('ROLE_MANAGER')" >Anzahl</td>
 
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
 
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
 
-					<td>
+					<td sec:authorize="hasRole('ROLE_MANAGER')" >
 						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
@@ -186,7 +188,18 @@
 						</form>
 					</td>
 
-					<td sec:authorize="isAuthenticated()">
+					<td>
+						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craftbar/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+							<div class="inline field">
+								<input   autofocus type="number" th:field="*{amount}" />
+								<button  type="submit" class="ui button"  >Craft</button>
+							</div>
+						</form>
+
+					<td  sec:authorize="hasRole('ROLE_MANAGER') "th:text="${catalogManager.craftbar(item.getProduct().getId())}">craftable</td>
+
+
+					<td sec:authorize="hasRole('ROLE_MANAGER')" >
 						<form method="post" role="form" name="f2" th:object="${outForm}" th:action="@{/out/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
@@ -195,26 +208,27 @@
 						</form>
 					</td>
 
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto().getNumber().doubleValueExact()}">Netto</td>
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto().getNumber().doubleValueExact()}"sec:authorize="hasRole('ROLE_MANAGER')" >Netto</td>
 
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto().getNumber().doubleValueExact()}">Brutto</td>
+					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto().getNumber().doubleValueExact()}" sec:authorize="hasRole('ROLE_MANAGER')">Brutto</td>
 
 					<td>
 						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
 							<br>
-							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${catalogManager.textOfAllComponents(item.getProduct().getId())}">
+							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${catalogManager.getTextOfSubComponents(item.getProduct().getId())}">
 							</div>
 						</div>
 					</td>
 
-					<td>  <a th:href="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
+					<td sec:authorize="hasRole('ROLE_MANAGER')" >  <a th:href="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
 							th:text="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
 							 target="_blank" />
 					</td>
 
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
 
-                    <td>
+
+                    <td sec:authorize="hasRole('ROLE_MANAGER')">
                         <div class="ui two buttons" >
                             <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).PART}"

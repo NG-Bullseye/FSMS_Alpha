@@ -12,7 +12,6 @@ public class CompositeForm {
 	private String eanCode;
 	private String herstellerUrl;
 	private String selectedColour;
-	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private String selectedCategorie;
 
 

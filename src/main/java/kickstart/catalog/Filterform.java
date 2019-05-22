@@ -22,15 +22,8 @@ public class Filterform {
 	@Max(99999999)
 	private Integer maxPriceNetto = 99999999;
 
-	private String categorie;
+	private ArrayList<String> selectedCategories;
 
-	public String getCategorie() {
-		return categorie;
-	}
-
-	public void setCategorie(String categorie) {
-		this.categorie = categorie;
-	}
 
 	public Integer getMinPriceBrutto() {
 		return minPriceBrutto;
@@ -56,7 +49,7 @@ public class Filterform {
 		this.maxPriceNetto = maxPriceNetto;
 	}
 
-	private ArrayList<String> selectedCategories;
+
 
 	public void setSelectedColours(ArrayList<String> selectedColours) {
 		this.selectedColours = selectedColours;
@@ -81,17 +74,6 @@ public class Filterform {
 	public void setMinPriceNetto(int minPriceNetto) {
 		this.minPriceNetto = minPriceNetto;
 	}
-
-	/*
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	 */
-
 
 	public void setSelectedCategories(ArrayList<String> selectedCategories) {
 		this.selectedCategories = selectedCategories;

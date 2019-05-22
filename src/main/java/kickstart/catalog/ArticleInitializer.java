@@ -47,25 +47,25 @@ public class ArticleInitializer implements DataInitializer {
 				"rocky",
 				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p1);
-		inventory.save(new ReorderableInventoryItem(p1, Quantity.of(0, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(p1, Quantity.of(8, Metric.UNIT)));
 		print(p1);
 
 		Part p2 = new Part("PLA", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");
 		catalog.save(p2);
-		inventory.save(new ReorderableInventoryItem(p2, Quantity.of(0, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(p2, Quantity.of(10, Metric.UNIT)));
 		print(p2);
 
 
 		Composite c1=new Composite(
-				"ZIP 1",
+				"ZIP Body",
 				20,
 				25,
 				"3345gg",
 				"www.t.de",
 				"muddy",
-				"Produkt",
+				"Einzelteil",
 				new LinkedList<>(
-						Arrays.asList(p1)
+						Arrays.asList(p1,p1,p2)
 				)
 		);
 		catalog.save(c1);
@@ -74,7 +74,7 @@ public class ArticleInitializer implements DataInitializer {
 
 
 		Composite c2=new Composite(
-				"ZIP 2",
+				"Box",
 				20,
 				25,
 				"3345gg",
@@ -82,7 +82,7 @@ public class ArticleInitializer implements DataInitializer {
 				"muddy",
 				"Produkt",
 				new LinkedList<>(
-						Arrays.asList(c1)
+						Arrays.asList(c1,c1,c1)
 				));
 		catalog.save(c2);
 		inventory.save(new ReorderableInventoryItem(c2, Quantity.of(0, Metric.UNIT)));

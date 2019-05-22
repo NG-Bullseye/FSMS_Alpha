@@ -38,6 +38,7 @@ import kickstart.inventory.ReorderableInventoryItem;
 
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Component
 public class CatalogManager {
@@ -54,7 +55,7 @@ public class CatalogManager {
 	@Getter
 	private final long reorderTime = 0;
 
-	public CatalogManager(WebshopCatalog catalog,InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager, AccountancyManager accountancy) {
+	public CatalogManager(WebshopCatalog catalog,InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager) {
 		this.catalog = catalog;
 		this.inventory = inventory;
 		this.orderManager = orderManager;
@@ -138,40 +139,41 @@ public class CatalogManager {
 	 * Changes the information of the part, such as name, description, price, weight
 	 * colours, categories.
 	 *
-	 * @param article    The form containing information like the new
+	 * @param form    The form containing information like the new
 	 *                   name,description,colours and categories for the edited
 	 *                   article.
 	 * @param identifier The ProductIdentifier of the article,which will be edited.
 	 * @throws IllegalArgumentException If the article is not present in the
 	 *                                  catalog.
 	 */
-	public void editPart(Form article, ProductIdentifier identifier) throws IllegalArgumentException {
+	public void editPart(Form form
+			, ProductIdentifier identifier) throws IllegalArgumentException {
 
 		this.createAvailableForNewComposite();
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			if (article.getName()!=null) {
-				afterEdit.setName(article.getName());
+			if (form.getName()!=null) {
+				afterEdit.setName(form.getName());
 			}
-			long l1 = Math.round(article.getPriceNetto());
+			long l1 = Math.round(form.getPriceNetto());
 			if (l1 != 0) {
-				afterEdit.setPrice(Money.of(article.getPriceNetto(), EURO));
+				afterEdit.setPrice(Money.of(form.getPriceNetto(), EURO));
 			}
-			long l2 = Math.round(article.getPriceBrutto());
+			long l2 = Math.round(form.getPriceBrutto());
 			if (l2 != 0) {
-				afterEdit.setPrice(Money.of(article.getPriceBrutto(), EURO));
+				afterEdit.setPrice(Money.of(form.getPriceBrutto(), EURO));
 			}
-			if (article.getEanCode()!=null) {
+			if (form.getEanCode()!=null) {
 				//afterEdit.removeColours();
-				afterEdit.setColour(article.getEanCode());
+				afterEdit.setEanCode(form.getEanCode());
 			}
-			if (article.getHerstellerUrl()!=null) {
+			if (form.getHerstellerUrl()!=null) {
 				//afterEdit.removeColours();
-				afterEdit.setColour(article.getHerstellerUrl());
+				afterEdit.setHerstellerUrl(form.getHerstellerUrl());
 			}
-			if (article.getSelectedColour()!=null&&!article.getSelectedColour().equals("")) {
+			if (form.getSelectedColour()!=null&&!form.getSelectedColour().equals("")) {
 				//afterEdit.removeColours();
-				afterEdit.setColour(article.getSelectedColour());
+				afterEdit.setColour(form.getSelectedColour());
 			}
 
 			catalog.save(afterEdit);
@@ -200,6 +202,26 @@ public class CatalogManager {
 			Article afterEdit = catalog.findById(identifier).get();
 			if (!form.getName().isEmpty()) {
 				afterEdit.setName(form.getName());
+			}
+			long l1 = Math.round(form.getPriceNetto());
+			if (l1 != 0) {
+				afterEdit.setPrice(Money.of(form.getPriceNetto(), EURO));
+			}
+			long l2 = Math.round(form.getPriceBrutto());
+			if (l2 != 0) {
+				afterEdit.setPrice(Money.of(form.getPriceBrutto(), EURO));
+			}
+			if (form.getEanCode()!=null) {
+				//afterEdit.removeColours();
+				afterEdit.setEanCode(form.getEanCode());
+			}
+			if (form.getHerstellerUrl()!=null) {
+				//afterEdit.removeColours();
+				afterEdit.setHerstellerUrl(form.getHerstellerUrl());
+			}
+			if (form.getSelectedColour()!=null&&!form.getSelectedColour().equals("")) {
+				//afterEdit.removeColours();
+				afterEdit.setColour(form.getSelectedColour());
 			}
 
 			LinkedList<Article> partsBefore = new LinkedList<>();
@@ -307,7 +329,7 @@ public class CatalogManager {
 				if(c.getPartIds()==null){
 					throw new NullPointerException();
 				}
-				parts = getArticleFrom_IdIntMapping(convertStringIntegeMapToProductIdentifierIntegerHashMap(c.getPartIds()) );
+				parts = getArticleFrom_IdIntMapping(convertDatabaseMap(c.getPartIds()) );
 			}
 
 			// Update was successful. Remove it from the list and save the changes
@@ -326,7 +348,7 @@ public class CatalogManager {
 
 	}
 
-	public HashMap<ProductIdentifier,Integer> convertStringIntegeMapToProductIdentifierIntegerHashMap(Map<String,Integer> stringIntegerHashMap){
+	public HashMap<ProductIdentifier,Integer> convertDatabaseMap(Map<String,Integer> stringIntegerHashMap){
 		HashMap<ProductIdentifier,Integer> productIdentifierIntegerHashMap=new HashMap<>();
 		if(stringIntegerHashMap==null){
 			throw new NullPointerException("this Articles PartsMap is Null ");
@@ -409,10 +431,11 @@ public class CatalogManager {
 		}
 
 		HashSet<Article> rightCategories = new HashSet<>();
-		if(filterform.getSelectedCategories()!=null&&filterform.getSelectedCategories().size()>0)
+		ArrayList<String> categories = filterform.getSelectedCategories();
+		if(categories!=null&&categories.size()>0)
 			catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 		else {
-			//System.out.println("No Categories choosen");
+			System.out.println("No Categories choosen");
 			catalog.findAll().forEach(rightCategories::add);
 		}
 
@@ -420,10 +443,10 @@ public class CatalogManager {
 		HashSet<Article> visible = new HashSet<>();
 		this.getVisibleCatalog().forEach(visible::add);
 
-		LinkedList<Article> result = new LinkedList<>();
+		List<Article> result = new ArrayList<>();
 		result.addAll(visible);
 
-		if (filterform.getSelectedColours()!=null) {
+		if (filterform.getSelectedColours()!=null&& filterform.getSelectedColours().size()>0) {
 			result.retainAll(rightColours);
 		}
 
@@ -435,7 +458,7 @@ public class CatalogManager {
 			result.retainAll(rightBruttoPrice);
 		}
 
-		if (filterform.getSelectedCategories()!=null) {
+		if (filterform.getSelectedCategories()!=null&&filterform.getSelectedCategories().size()>0) {
 			result.retainAll(rightCategories);
 		}
 
@@ -501,6 +524,11 @@ public class CatalogManager {
 
 		HashMap<String, Integer> rightMap = new HashMap<>();
 		partsCount.forEach((article, id) -> {
+			if (article.isEmpty()){
+				System.out.println("MyError:  empty string "+rightMap.toString());
+				return;
+
+			}
 			if (article.contains("article_")) // Alle vorkommenden Article aus der Map auslesen
 				rightMap.put(article.replace("article_", ""), Integer.parseInt(id));
 		});
@@ -631,7 +659,7 @@ public class CatalogManager {
 					.getPartIds()==null){
 				throw new NullPointerException();
 			}
-			convertStringIntegeMapToProductIdentifierIntegerHashMap(catalog.findById(identifier)
+			convertDatabaseMap(catalog.findById(identifier)
 					.get()
 					.getPartIds())
 					.forEach((article, count) -> {
@@ -691,53 +719,85 @@ public class CatalogManager {
 																														// Statement
 	}
 
+
+	public String getTextOfSubComponents(ProductIdentifier p){
+
+		String text="";
+		Article a=null;
+		if (catalog.findById(p).isPresent()){
+			a=catalog.findById(p).get();
+		}
+		else throw  new NullPointerException();
+		Map<ProductIdentifier,Integer> map=this.convertDatabaseMap(a.getPartIds());
+		if (a instanceof Composite)
+			for (ProductIdentifier pSub:map.keySet()) {
+
+				text=text+" "+map.get(pSub)+"x"+catalog.findById(pSub).get().getName()+" ";
+			}
+
+
+
+
+		return text;
+	}
+
 	/**
 	 * Returns all contained Articles concatenated in a String
 	 *
 	 * @param identifier ProductIdentifier of the given Article
 	 * @return String containing all included Articles separated by ","
 	 */
-	public String textOfAllComponents(ProductIdentifier identifier){
-		getCollapsedProduktIntegerMap(identifier,new HashMap<>());
+	public String textOfAllColapsedLeafs(ProductIdentifier identifier){
 
-
-		return names
+		if(!catalog.findById(identifier).isPresent()) throw new IllegalArgumentException("identifier cant be found in database");
+		if((catalog.findById(identifier).get() instanceof Part)||catalog.findById(identifier).get().getType()!= Article.ArticleType.COMPOSITE){
+			return "";
+		}
+		String leafNames="";
+		HashMap<ProductIdentifier,Integer> leafMap =getCollapsedProduktIntegerMap(identifier,1,new HashMap<>());
+		if (leafMap==null)new NullPointerException();
+		for (ProductIdentifier id :
+				leafMap.keySet()) {
+			Article article=catalog.findById(id).get();
+			if (!(article instanceof Part)){
+				throw new IllegalArgumentException("found composite in leafmap");
+			}
+			leafNames=leafNames+leafMap.get(id)+"x"+article.getName()+" ";
+		}
+		System.out.println(leafNames);
+		return leafNames;
 	}
 
-	private Map<Article,Integer> getCollapsedProduktIntegerMap(ProductIdentifier identifier, HashMap<Article,Integer> collapsedPartIds) {
+	private HashMap<ProductIdentifier,Integer> getCollapsedProduktIntegerMap(
+			ProductIdentifier identifier
+			,Integer quantity
+			, HashMap<ProductIdentifier,Integer> leafPartIds)
+	{
 		//<editor-fold desc="NullChecks">
-		if(!catalog.findById(identifier).isPresent())
-			return "";
-		if(catalog.findById(identifier).get() instanceof Part||catalog.findById(identifier).get().getType()!= Article.ArticleType.COMPOSITE){
-			return "";
-		}
-		Optional<Article> article = catalog.findById(identifier);
-		if(!article.isPresent())throw new NullPointerException();
-		if(article.get().getPartIds()==null) throw new NullPointerException();
+
+		Optional<Article> article1 = catalog.findById(identifier);
+		if(!article1.isPresent()) throw new NullPointerException();
+		if(article1.get() instanceof Composite && article1.get().getPartIds()==null)
+			throw new NullPointerException();
 		//</editor-fold>
-
-		map werte benutzen anstatt String und int.
-				auslesen wieviel
-
-		// this is Leave
-		if(article.get() instanceof Part){
-			names=names+" "+article.get().getName()+":"+collapsedPartIds.;
-			System.out.println("MYERROR"+ names);
-			return names;
+		Article article=article1.get();
+	// this is Leaf
+		if(article instanceof Part){
+			leafPartIds.put(identifier, quantity);
+					System.out.println("LEAF ADDED: "+ article.getName());
+			return leafPartIds;
 		}
 
-		//this is Node
+	//this is Node
 		else{
-			 Map<ProductIdentifier,Integer>	map =this.convertStringIntegeMapToProductIdentifierIntegerHashMap(article.get().getPartIds());
-			for (ProductIdentifier componentId :
-				map.keySet()) {
-				getCollapsedProduktIntegerMap(componentId, names,map.get(componentId));
+			Map<ProductIdentifier,Integer>	mapOfThisComposite =this.convertDatabaseMap(article.getPartIds());
+			for (ProductIdentifier componentId : mapOfThisComposite.keySet()) {
+				leafPartIds= getCollapsedProduktIntegerMap(componentId,mapOfThisComposite.get(componentId),leafPartIds);
 			}
 		}
-		return  names;
-
-
+		return  leafPartIds;
 	}
+
 
 	public ProductIdentifier getProduktIdFromString(String idString){
 		for (Article a :catalog.findAll()) {
@@ -746,6 +806,138 @@ public class CatalogManager {
 		}
 		throw new NullPointerException("no Produkt found with that given id");
 	}
+
+	//wird im html aufgerufen
+	public int craftbar(ProductIdentifier p){
+		int craftbar=0;
+		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
+			int inStock = inventory.findByProductIdentifier(p).get().getQuantity().getAmount().intValue();
+			if(1<inStock)
+				craftbar= inStock;
+		}
+		else{
+			craftbar=maxCraft_Layer(p,1,999999999);
+		}
+		return craftbar;
+
+	}
+
+	//aktuell nicht benutzt
+	public int craftbar(CraftForm craftForm){
+		int craftbar=0;
+		if (catalog.findById(craftForm.getProductIdentifier()).isPresent()&& catalog.findById(craftForm.getProductIdentifier()).get() instanceof Part ){
+			int inStock = inventory.findByProductIdentifier(craftForm.getProductIdentifier()).get().getQuantity().getAmount().intValue();
+			if(craftForm.getAmount()<inStock)
+				craftbar= Math.floorDiv(inStock,craftForm.getAmount());
+		}
+		else{
+			craftbar=maxCraft_Layer(craftForm.getProductIdentifier(),craftForm.getAmount(),999999999);
+		}
+
+		System.out.println("Could craft "+catalog.findById(craftForm.getProductIdentifier()).get().getName() +" "+craftbar+" times.");
+		return craftbar;
+
+	}
+
+	public int maxCraft_Layer(ProductIdentifier thisComponentId, int requiredForSuperComposite, int maximalCraftNumberForPreviousLayer){
+		//<editor-fold desc="NullChecks">
+		if(thisComponentId==null)new NullPointerException();
+		//</editor-fold>
+		//<editor-fold desc="Update maximale Craft Zahl">
+		int xMalCraftbarInThisLayer=maximalCraftNumberForPreviousLayer;
+		//</editor-fold>
+		//<editor-fold desc="Ini Konten der auf Craftbarkeit untersucht wird">
+		Article superComponent =catalog.findById(thisComponentId).get();
+		Map<ProductIdentifier,Integer> superCompositeRezept= convertDatabaseMap(superComponent.getPartIds());
+		System.out.println(superCompositeRezept);
+
+		//</editor-fold>
+		//<editor-fold desc="Für jede Komponente">
+		for (ProductIdentifier subKomponentenId : superCompositeRezept.keySet())
+		//</editor-fold>
+			{
+				//<editor-fold desc="Suche das nächste Bestandteil">
+				Article subKomponente=	catalog.findById(subKomponentenId).get();
+				int requiretForOneSuperComposite=superCompositeRezept.get(subKomponentenId);
+				int subComponentInStock=inventory
+						.findByProductIdentifier(subKomponentenId)
+						.get()
+						.getQuantity()
+						.getAmount()
+						.intValue();
+				//</editor-fold>
+
+				//<editor-fold desc="Wenn genügend von dem Composite vorhanden auch wenn mehrmals als im rezept benötig durch fehlende Teile zuvor">
+
+				if(requiretForOneSuperComposite * requiredForSuperComposite < subComponentInStock)
+				//</editor-fold>
+				{
+					//<editor-fold desc="Errechne wie oft dieses Composite craftbar ist.">
+					//Benötigte Anzahlt für EINE Super Komponente dividiert durch vorhandene anzahl dieser SubKomponente
+					int subKomponenteCraftbar=0;
+					try{
+						subKomponenteCraftbar=Math.floorDiv(
+								subComponentInStock
+								,requiretForOneSuperComposite*requiredForSuperComposite)	;
+
+					}
+					catch (Exception e){
+						throw new IllegalArgumentException();
+					}
+					//</editor-fold>
+
+					//<editor-fold desc="Update minimale Craftbarkeit auf diesem Layer">
+					if(xMalCraftbarInThisLayer>=subKomponenteCraftbar)
+						xMalCraftbarInThisLayer=subKomponenteCraftbar;
+					//</editor-fold>
+
+					//<editor-fold desc="gehe zur nächsten Komponente über">
+					continue;
+					//</editor-fold>
+				}
+
+				//<editor-fold desc="Wenn nicht genügend von der Komponente im Lager ist">
+				else
+				//</editor-fold>
+				{
+
+					//<editor-fold desc="Wenn SubPart">
+					if (subKomponente instanceof Part)
+					//</editor-fold>
+					{
+						//<editor-fold desc="Dann nicht craftbar">
+						return 0;
+						//</editor-fold>
+					}
+
+					//<editor-fold desc="Wenn SubComposite">
+					if (subKomponente instanceof Composite)
+					//</editor-fold>
+					{
+						//<editor-fold desc="finde herraus wie viele für das SuperComposite * SubComposite - SubCompositStock fehlen">
+						int subComposite_inStock=inventory
+								.findByProductIdentifier(subKomponentenId)
+								.get()
+								.getQuantity()
+								.getAmount()
+								.intValue();
+						int rezeptMenge=superCompositeRezept.get(subKomponente.getId());
+						int fehlendeSubComposites=rezeptMenge*requiredForSuperComposite-subComposite_inStock;
+						//</editor-fold>
+
+						//<editor-fold desc="nimmt recursiv über alle Layer das Minimum von MaxCraftbar_Layer und gibt es zurück">
+						return Math.min(
+								xMalCraftbarInThisLayer
+								, maxCraft_Layer(subKomponentenId,fehlendeSubComposites,xMalCraftbarInThisLayer))  ;
+						//</editor-fold>
+					}
+
+				}
+			}
+			return xMalCraftbarInThisLayer;
+	}
+
+
 
 	public void placeOrder(OutForm outForm, UserAccount userAccount) {
 
@@ -784,7 +976,6 @@ public class CatalogManager {
 	}
 
 	public LinkedList<ReorderableInventoryItem> filteredReorderableInventoryItems(Filterform filterform) {
-
 
 		Iterable<Article> filteredCatalog = filteredCatalog(filterform);
 		LinkedList<ReorderableInventoryItem> filteredReorderableInventoryItems=new LinkedList<>();

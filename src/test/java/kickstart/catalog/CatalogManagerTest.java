@@ -4,27 +4,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.salespointframework.core.Currencies.EURO;
 
 import java.beans.Transient;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.javamoney.moneta.Money;
-import org.junit.jupiter.api.AfterEach;
+import kickstart.accountancy.AccountancyManager;
+import kickstart.inventory.InventoryManager;
+import kickstart.order.CartOrderManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.salespointframework.catalog.ProductIdentifier;
+import org.salespointframework.accountancy.Accountancy;
 import org.salespointframework.inventory.Inventory;
+import org.salespointframework.order.OrderManager;
+import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,13 +36,83 @@ import kickstart.inventory.ReorderableInventoryItem;
 @Transactional
 
 class CatalogManagerTest {
+
+	private @Autowired WebshopCatalog catalog;
+	private @Autowired CatalogManager catalogManager;
+	private @Autowired Inventory<ReorderableInventoryItem> inventory;
+	private @Autowired InventoryManager inventoryManager;
+	private @Autowired Accountancy accountancy;
+	private @Autowired AccountancyManager accountancyManager;
+	private @Autowired CartOrderManager cartOrderManager;
+	private @Autowired OrderManager orderManager;
+
+
+	private Part stock;
+	private Part eisen;
+	private Composite eisenaxt;
+	private CraftForm craftForm;
+	private Composite packet;
+
+	@BeforeEach
+	@Transient
+	void setUp() {
+		inventoryManager = new InventoryManager(inventory,accountancyManager);
+		catalogManager = new CatalogManager(catalog,inventoryManager , inventory,orderManager,cartOrderManager);
+		HashSet<String> cat1 = new HashSet<>();
+		cat1.add("Tisch");
+
+		stock = new Part("Stock",1,2,"002","rocky","www");
+		catalog.save(stock);
+		inventory.save(new ReorderableInventoryItem(stock, Quantity.of(5)));
+		eisen = new Part("Eisen",2,4,"003","rocky","www");
+
+		inventory.save(new ReorderableInventoryItem(eisen, Quantity.of(5)));
+
+		LinkedList<Article> axtRezept = new LinkedList<>(Arrays.asList(
+				eisen
+				,eisen
+				,eisen
+				,eisen
+				,stock));
+		eisenaxt = new Composite("Eisenaxt",5,6,"001","www","rocky","Einzelteil",axtRezept);
+
+
+		LinkedList<Article> packetInhalt=new LinkedList<>(Arrays.asList(
+				eisenaxt
+				,eisenaxt));
+		packet= new Composite("Packet",6,7,"004","www","rocky","Einzelteil",packetInhalt);
+
+
+		inventory.save(new ReorderableInventoryItem(stock, Quantity.of(3, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(eisen, Quantity.of(12,Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(eisenaxt, Quantity.of(1,Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(packet, Quantity.of(1,Metric.UNIT)));
+
+
+	}
+
+
+	@Test
+	@Transient
+	void testCraftable() {
+
+		catalog.save(eisen);
+		catalog.save(eisenaxt);
+		catalog.save(packet);
+		craftForm=new CraftForm();
+		craftForm.setProductIdentifier(packet.getId());
+		craftForm.setAmount(1);
+		assertThat(catalogManager.craftbar(craftForm)).as("Nicht in angegebener anzahl craftbar")
+				.isEqualTo(2);
+	}
+
 /*private @Autowired WebshopCatalog catalog;
 
-	private @Autowired CatalogManager manager;
+	private @Autowired CatalogManager catalogManager;
 	private @Autowired Inventory<ReorderableInventoryItem> inventory;
-	private Part tester1;
-	private Part tester2;
-	private Composite com1;
+	private Part stock;
+	private Part eisen;
+	private Composite eisenaxt;
 	private Form form1;
 	private CompositeForm form2;
 	private HashSet<ProductIdentifier> result;
@@ -53,25 +120,25 @@ class CatalogManagerTest {
 	@BeforeEach
 	@Transient
 	void setUp() {
-		manager = new CatalogManager(catalog, inventory);
+		catalogManager = new CatalogManager(catalog, inventory);
 
 		HashSet<String> cat1 = new HashSet<>();
 		cat1.add("Tisch");
 
-		tester1 = new Part("Test1", "Test1", 65, 15.0, "schwarz", cat1);
-		catalog.save(tester1);
-		inventory.save(new ReorderableInventoryItem(tester1, Quantity.of(5)));
-		tester2 = new Part("Test2", "Test2", 63, 50.0,"braun" , cat1);
-		catalog.save(tester2);
-		inventory.save(new ReorderableInventoryItem(tester2, Quantity.of(5)));
+		stock = new Part("Test1", "Test1", 65, 15.0, "schwarz", cat1);
+		catalog.save(stock);
+		inventory.save(new ReorderableInventoryItem(stock, Quantity.of(5)));
+		eisen = new Part("Test2", "Test2", 63, 50.0,"braun" , cat1);
+		catalog.save(eisen);
+		inventory.save(new ReorderableInventoryItem(eisen, Quantity.of(5)));
 
 		LinkedList<Article> l1 = new LinkedList<>();
 		for (int i = 0; i < 4; i++) {
-			l1.add(tester1);
+			l1.add(stock);
 		}
-		com1 = new Composite("com1", "ecom1", l1);
-		catalog.save(com1);
-		inventory.save(new ReorderableInventoryItem(com1, Quantity.of(5)));
+		eisenaxt = new Composite("eisenaxt", "ecom1", l1);
+		catalog.save(eisenaxt);
+		inventory.save(new ReorderableInventoryItem(eisenaxt, Quantity.of(5)));
 
 		HashSet<String> c3 = new HashSet<>();
 		c2.add("rot");
@@ -102,18 +169,18 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void getWholeCatalog() {
-		catalog.save(tester1);
-		catalog.save(tester2);
-		assertThat(manager.getWholeCatalog()).as("Die Artikel werden nicht richtig angezeigt.")
+		catalog.save(stock);
+		catalog.save(eisen);
+		assertThat(catalogManager.getWholeCatalog()).as("Die Artikel werden nicht richtig angezeigt.")
 				.isEqualTo(catalog.findAll());
 	}
 
 	@Test
 	@Transient
 	void testGetInvisibleCatalog() {
-		manager.changeVisibility(tester1.getId());
+		catalogManager.changeVisibility(stock.getId());
 
-		List<Article> articles = manager.getInvisibleCatalog();
+		List<Article> articles = catalogManager.getInvisibleCatalog();
 
 		for (Article a : catalog.findAll()) {
 			if (a.isHidden()) {
@@ -128,25 +195,25 @@ class CatalogManagerTest {
 	@Transient
 	void getVisibleCatalog() {
 		HashSet<ProductIdentifier> test = new HashSet<>();
-		manager.getVisibleCatalog().forEach(article -> {
-			if (article.getId() != tester1.getId() && article.getId() != tester2.getId()
-					&& article.getId() != com1.getId()) {
+		catalogManager.getVisibleCatalog().forEach(article -> {
+			if (article.getId() != stock.getId() && article.getId() != eisen.getId()
+					&& article.getId() != eisenaxt.getId()) {
 				test.add(article.getId());
 			}
 
 		});
 
-		manager.changeVisibility(tester2.getId());
+		catalogManager.changeVisibility(eisen.getId());
 
-		manager.getVisibleCatalog().forEach(article -> {
+		catalogManager.getVisibleCatalog().forEach(article -> {
 			if (!test.contains(article.getId())) {
 				result.add(article.getId());
 			}
 		});
 
 		test.clear();
-		test.add(tester1.getId());
-		test.add(com1.getId());
+		test.add(stock.getId());
+		test.add(eisenaxt.getId());
 
 		assertEquals(test, result, "Der Artikel wird nicht richtig versteckt.");
 
@@ -155,29 +222,29 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void getArticle() {
-		assertThat(manager.getArticle(tester1.getId())).as("Es wird nicht der richtige Artikel zurückgegeben.")
-				.isEqualTo(tester1);
+		assertThat(catalogManager.getArticle(stock.getId())).as("Es wird nicht der richtige Artikel zurückgegeben.")
+				.isEqualTo(stock);
 	}
 
 	@Test
 	@Transient
 	void editAffectedArticles() {
 		form1.setPrice(100);
-		manager.editPart(form1, tester1.getId());
+		catalogManager.editPart(form1, stock.getId());
 
-		assertEquals(Money.of(400, EURO), manager.getArticle(com1.getId()).getPrice(),
+		assertEquals(Money.of(400, EURO), catalogManager.getArticle(eisenaxt.getId()).getPrice(),
 				"Der Artikel wurde nicht verändert, obwohl ein Teil von ihm geändert wurde.");
 
 		LinkedList<Article> parts = new LinkedList<>();
-		parts.add(com1);
-		parts.add(com1);
+		parts.add(eisenaxt);
+		parts.add(eisenaxt);
 		Composite com2 = new Composite("Testcomposite", "Composite", parts);
 		catalog.save(com2);
 
 		form1.setPrice(50);
-		manager.editPart(form1, tester1.getId());
+		catalogManager.editPart(form1, stock.getId());
 
-		assertEquals(Money.of(400, EURO), manager.getArticle(com2.getId()).getPrice(),
+		assertEquals(Money.of(400, EURO), catalogManager.getArticle(com2.getId()).getPrice(),
 				"Der Artikel wurde nicht verändert, obwohl ein Teil von ihm geändert wurde.");
 
 	}
@@ -189,12 +256,12 @@ class CatalogManagerTest {
 		int tester2Amount = 1;
 
 		Map<ProductIdentifier, Integer> map = new HashMap<ProductIdentifier, Integer>();
-		map.put(tester1.getId(), tester1Amount);
-		map.put(tester2.getId(), tester2Amount);
+		map.put(stock.getId(), tester1Amount);
+		map.put(eisen.getId(), tester2Amount);
 
 		int count = 0;
 
-		List<Article> list = manager.getArticleFrom_IdIntMapping(map);
+		List<Article> list = catalogManager.getArticleFrom_IdIntMapping(map);
 
 		for (ProductIdentifier id : map.keySet()) {
 			Optional<Article> a = catalog.findById(id);
@@ -234,7 +301,7 @@ class CatalogManagerTest {
 		HashSet<String> cat2 = new HashSet<>();
 		cat2.add("Tisch");
 		Part tester3 = new Part("Test3", "Test3", 67, 12, c2, cat2);
-		manager.saveArticle(tester3);
+		catalogManager.saveArticle(tester3);
 		inventory.save(new ReorderableInventoryItem(tester3, Quantity.of(5)));
 
 		expected.clear();
@@ -248,7 +315,7 @@ class CatalogManagerTest {
 		form.setSelectedColours(colour);
 		form.setMinPriceNetto(61);
 		form.setMaxPriceNetto(69);
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 		expected.add(tester3.getId());
@@ -260,9 +327,9 @@ class CatalogManagerTest {
 		form.setSelectedColours(colour);
 		expected.clear();
 		result.clear();
-		expected.add(tester1.getId());
-		expected.add(com1.getId());
-		manager.filteredCatalog(form).forEach(article -> {
+		expected.add(stock.getId());
+		expected.add(eisenaxt.getId());
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 			System.out.println(article.getName());
 		});
@@ -275,19 +342,19 @@ class CatalogManagerTest {
 		form.setMaxPriceNetto(66);
 		form.setMinPriceNetto(64);
 
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 
-		expected.add(tester1.getId());
+		expected.add(stock.getId());
 		assertEquals(expected, result, "Beim Filtern des Preises wird nicht der richtige Artikel angezeigt.");
 
 		form.setMinPriceNetto(63);
 		expected.clear();
-		expected.add(tester1.getId());
-		expected.add(tester2.getId());
+		expected.add(stock.getId());
+		expected.add(eisen.getId());
 		result.clear();
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 		assertEquals(expected, result, "Es werden nicht alle Artikel in diesem Preisbereich angezeigt");
@@ -296,7 +363,7 @@ class CatalogManagerTest {
 		form.setMaxPriceNetto(62);
 		expected.clear();
 		result.clear();
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 		assertEquals(expected, result, "Es werden nicht alle Artikel in diesem Preisbereich angezeigt");
@@ -305,10 +372,10 @@ class CatalogManagerTest {
 		form.setMinPriceNetto(61);
 		form.setMaxPriceNetto(65);
 		expected.clear();
-		expected.add(tester1.getId());
-		expected.add(tester2.getId());
+		expected.add(stock.getId());
+		expected.add(eisen.getId());
 		result.clear();
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 		assertEquals(expected, result, "Es gibt einen Fehler, wenn der Mindestpreis höher als der Maximalpreis ist.");
@@ -318,35 +385,35 @@ class CatalogManagerTest {
 		form.setType("composite");
 		expected.clear();
 		result.clear();
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
-		expected.add(com1.getId());
+		expected.add(eisenaxt.getId());
 		assertEquals(expected, result, "Es werden nicht die richtigen Artikel angezeigt.");
 
 		form.setMinPriceNetto(65);
 		form.setMaxPriceNetto(61);
 		form.setType("part");
 		expected.clear();
-		expected.add(tester1.getId());
-		expected.add(tester2.getId());
+		expected.add(stock.getId());
+		expected.add(eisen.getId());
 		result.clear();
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
 		assertEquals(expected, result, "Es gibt einen Fehler, wenn der Mindestpreis höher als der Maximalpreis ist.");
 
-		tester1.addCategory("Bett");
-		catalog.save(tester1);
+		stock.addCategory("Bett");
+		catalog.save(stock);
 		category.clear();
 		category.add("Bett");
 		form.setSelectedCategories(category);
 		expected.clear();
 		result.clear();
-		manager.filteredCatalog(form).forEach(article -> {
+		catalogManager.filteredCatalog(form).forEach(article -> {
 			result.add(article.getId());
 		});
-		expected.add(tester1.getId());
+		expected.add(stock.getId());
 		assertEquals(expected, result, "Es werden nicht die richtigen Artikel beim Filtern nach Kategorien angezeigt.");
 
 	}
@@ -361,7 +428,7 @@ class CatalogManagerTest {
 		partOrderForm.setWeight(form1.getWeight());
 		partOrderForm.setSelectedCategories(form1.getSelectedCategories());
 		partOrderForm.setSelectedColours(form1.getSelectedColours());
-		manager.newPart(partOrderForm);
+		catalogManager.newPart(partOrderForm);
 		assertFalse(catalog.findByName(form1.getName()).isEmpty(), "Der Artikel wurde nicht dem Katalog hinzugefügt.");
 
 		LinkedList<Article> test = new LinkedList<>();
@@ -377,20 +444,20 @@ class CatalogManagerTest {
 		compositeOrderForm.setName(form2.getName());
 		compositeOrderForm.setDescription(form2.getDescription());
 		HashSet<Article> before = new HashSet<>();
-		manager.getVisibleCatalog().forEach(before::add);
-		manager.getInvisibleCatalog().forEach(before::add);
+		catalogManager.getVisibleCatalog().forEach(before::add);
+		catalogManager.getInvisibleCatalog().forEach(before::add);
 
 		HashMap<String, String> input = new HashMap<>();
-		input.put("article_" + Objects.requireNonNull(tester2.getId()).getIdentifier(), "2");
-		manager.newComposite(compositeOrderForm, input);
+		input.put("article_" + Objects.requireNonNull(eisen.getId()).getIdentifier(), "2");
+		catalogManager.newComposite(compositeOrderForm, input);
 
 		LinkedList<Article> l2 = new LinkedList<>();
-		l2.add(tester2);
-		l2.add(tester2);
+		l2.add(eisen);
+		l2.add(eisen);
 		Composite expected = new Composite(form2.getName(), form2.getDescription(), l2);
 
 		LinkedList<Article> actualList = new LinkedList<>();
-		manager.getWholeCatalog().forEach(article -> {
+		catalogManager.getWholeCatalog().forEach(article -> {
 			if (!before.contains(article)) {
 				actualList.add(article);
 			}
@@ -413,11 +480,11 @@ class CatalogManagerTest {
 	@Transient
 	void compositeMapFiltering() {
 		HashMap<String, String> input = new HashMap<>();
-		input.put("article_" + Objects.requireNonNull(tester2.getId()).getIdentifier(), "2");
+		input.put("article_" + Objects.requireNonNull(eisen.getId()).getIdentifier(), "2");
 		LinkedList<Article> test = new LinkedList<>();
-		test.add(tester2);
-		test.add(tester2);
-		assertEquals(manager.compositeMapFiltering(input), test,
+		test.add(eisen);
+		test.add(eisen);
+		assertEquals(catalogManager.compositeMapFiltering(input), test,
 				"Es werden nicht die richtigen Artikel herausgefiltert.");
 
 	}
@@ -432,37 +499,37 @@ class CatalogManagerTest {
 
 		HashSet<String> cat1 = new HashSet<>();
 		cat1.add("Tisch");
-		manager.saveArticle(new Part("Test3", "Test3", 10, 10, c1, cat1));
-		assertEquals(catalog.findAll(), manager.getWholeCatalog(), "Der Artikel wurde nicht hinzugefügt."); // TODO-------------------------------------------
+		catalogManager.saveArticle(new Part("Test3", "Test3", 10, 10, c1, cat1));
+		assertEquals(catalog.findAll(), catalogManager.getWholeCatalog(), "Der Artikel wurde nicht hinzugefügt."); // TODO-------------------------------------------
 	}
 
 	@Test
 	@Transient
 	void changeVisibility() {
 
-		manager.changeVisibility(tester1.getId());
-		tester1.hide();
-		assertEquals(tester1, manager.getArticle(tester1.getId()), "Der Artikel wurde nicht richtig versteckt.");
+		catalogManager.changeVisibility(stock.getId());
+		stock.hide();
+		assertEquals(stock, catalogManager.getArticle(stock.getId()), "Der Artikel wurde nicht richtig versteckt.");
 	}
 
 	@Test
 	@Transient
 	void getAvailableForNewComposite() {
 		HashSet<ProductIdentifier> expected = new HashSet<>();
-		manager.getAvailableForNewComposite().forEach(article -> {
-			if (article.getId() != tester1.getId() && article.getId() != tester2.getId()
-					&& article.getId() != com1.getId()) {
+		catalogManager.getAvailableForNewComposite().forEach(article -> {
+			if (article.getId() != stock.getId() && article.getId() != eisen.getId()
+					&& article.getId() != eisenaxt.getId()) {
 				expected.add(article.getId());
 			}
 		});
 
-		manager.getAvailableForNewComposite().forEach(article -> {
+		catalogManager.getAvailableForNewComposite().forEach(article -> {
 			if (!expected.contains(article.getId()))
 				result.add(article.getId());
 		});
 		expected.clear();
-		expected.add(tester2.getId());
-		expected.add(com1.getId());
+		expected.add(eisen.getId());
+		expected.add(eisenaxt.getId());
 		assertEquals(expected, result, "Es wurden nicht die richtigen Artikel angezeigt.");
 	}
 
@@ -477,8 +544,8 @@ class CatalogManagerTest {
 	void getParents() {
 
 		LinkedList<ProductIdentifier> test = new LinkedList<>();
-		test.add(com1.getId());
-		assertEquals(test, manager.getParents(tester1),
+		test.add(eisenaxt.getId());
+		assertEquals(test, catalogManager.getParents(stock),
 				"Es wurden nicht alle Artikel angezeigt in denen der Artikel enthalten ist.");
 
 	}
@@ -488,21 +555,21 @@ class CatalogManagerTest {
 	void getArticlesForCompositeEdit() {
 		HashSet<ProductIdentifier> test = new HashSet<>();
 
-		manager.getWholeCatalog().forEach(article -> {
-			if (article.getId() != tester1.getId() && article.getId() != tester2.getId()
-					&& article.getId() != com1.getId()) {
+		catalogManager.getWholeCatalog().forEach(article -> {
+			if (article.getId() != stock.getId() && article.getId() != eisen.getId()
+					&& article.getId() != eisenaxt.getId()) {
 				test.add(article.getId());
 			}
 		});
 
-		manager.getArticlesForCompositeEdit(com1.getId()).forEach((article, count) -> {
+		catalogManager.getArticlesForCompositeEdit(eisenaxt.getId()).forEach((article, count) -> {
 			if (!test.contains(article.getId()))
 				result.add(article.getId());
 		});
 
 		test.clear();
-		test.add(tester2.getId());
-		test.add(tester1.getId());
+		test.add(eisen.getId());
+		test.add(stock.getId());
 		assertEquals(test, result, "Es werden nicht die richtigen Artikel angezeigt.");
 	}
 
@@ -515,8 +582,8 @@ class CatalogManagerTest {
 	@Test
 	@Transient
 	void isHidden() {
-		manager.changeVisibility(tester1.getId());
-		assertTrue(manager.isHidden(tester1.getId()), "Der Artikel wurde nicht für den Kunden unsichtbar gemacht.");
+		catalogManager.changeVisibility(stock.getId());
+		assertTrue(catalogManager.isHidden(stock.getId()), "Der Artikel wurde nicht für den Kunden unsichtbar gemacht.");
 
 	}
 
@@ -533,10 +600,10 @@ class CatalogManagerTest {
 		categories.add("braun");
 		categories.add("rot");
 		form1.setSelectedColours(colours);
-		manager.editPart(form1, tester1.getId());
-		assertTrue(manager.getArticle(tester1.getId()).getPrice().isEqualTo(Money.of(25, EURO)),
+		catalogManager.editPart(form1, stock.getId());
+		assertTrue(catalogManager.getArticle(stock.getId()).getPrice().isEqualTo(Money.of(25, EURO)),
 				"Der Preis wurde nicht richtig geändert.");
-		assertEquals(manager.getArticle(tester1.getId()).getWeight().getAmount().intValue(), 20,
+		assertEquals(catalogManager.getArticle(stock.getId()).getWeight().getAmount().intValue(), 20,
 				"Das Gewicht wird nicht richtig geändert.");
 
 	}
@@ -545,17 +612,17 @@ class CatalogManagerTest {
 	@Transient
 	void editComposite() {
 		HashMap<String, String> input = new HashMap<>();
-		input.put("article_" + tester2.getId().toString(), "2"); // Simulierter Input der Website
-		manager.editComposite(com1.getId(), form2, input);
+		input.put("article_" + eisen.getId().toString(), "2"); // Simulierter Input der Website
+		catalogManager.editComposite(eisenaxt.getId(), form2, input);
 
-		assertThat(manager.getArticle(com1.getId()).getName())
+		assertThat(catalogManager.getArticle(eisenaxt.getId()).getName())
 				.as("Der Name des Composites wurde nicht korrekt geändert.").isEqualTo("Peter");
-		assertThat(manager.getArticle(com1.getId()).getDescription())
+		assertThat(catalogManager.getArticle(eisenaxt.getId()).getDescription())
 				.as("Die Beschreibung des Composites wurde nicht korrekt geändert.").isEqualTo("Lustig");
 
 		Map<ProductIdentifier, Integer> partIds = new HashMap<>();
-		partIds.put(tester2.getId(), 2);
-		assertThat(manager.getArticle(com1.getId()).getPartIds()).as("Das Composite wurde nicht korrekt geändert.")
+		partIds.put(eisen.getId(), 2);
+		assertThat(catalogManager.getArticle(eisenaxt.getId()).getPartIds()).as("Das Composite wurde nicht korrekt geändert.")
 				.isEqualTo(partIds);
 	}
 
@@ -563,7 +630,7 @@ class CatalogManagerTest {
 	@Transient
 	void textOfAllComponents() {
 		String expected = "Test1.";
-		assertEquals(expected, manager.textOfAllComponents(com1.getId()),
+		assertEquals(expected, catalogManager.textOfAllComponents(eisenaxt.getId()),
 				"Die enthaltenen Artikel werden nicht richtig angezeigt.");
 	}
 * */

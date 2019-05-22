@@ -11,35 +11,83 @@
     <form method="post" th:action="@{/edit/composite/{id}(id=${article.id})}" th:object="${compositeForm}">
         <table id="editspace" class="ui definition table ">
             <thead>
-            <th></th>
-            <th><t3>Bisherige Werte</t3></th>
-            <th><t3>neue Werte</t3></th>
+                <th></th>
+                <th><t3>Bisherige Werte</t3></th>
+                <th><t3>neue Werte</t3></th>
             </thead>
             <tbody>
+                <tr>
+                    <td><t3>Bezeichnung:</t3></td>
+                    <td th:text="${article.name}">Name</td>
+                    <td>
+                        <input type="text" th:field="*{name}"/>
+                    </td>
+                </tr>
 
-            <tr>
-                <td><t3>Bezeichnung:</t3></td>
-                <td th:text="${article.name}">Name</td>
-                <td>
-                    <input type="text" th:field="*{name}"/>
-                </td>
-            </tr>
-            <tr>
-                <td><t3>Beschreibung:</t3></td>
-                <td th:text="${article.description}">Name</td>
-                <td>
-                    <input type="text" th:field="*{description}"/>
-                </td>
-            </tr>
+                <tr th:each="article : ${catalog}">
+                    <td th:text="${article.key.name}"></td>
+                    <td class="center aligned" th:text="${article.value}"></td>
+                    <td>
+                        <input type="number" min="0" th:value="${article.value}" th:name="article_+${article.key.id}" >
+                    </td>
 
-            <tr th:each="article : ${catalog}">
-                <td th:text="${article.key.name}"></td>
-                <td class="center aligned" th:text="${article.value}"></td>
-                <td>
-                    <input type="number" min="0" th:value="${article.value}" th:name="article_+${article.key.id}" >
-                </td>
+                </tr>
 
-            </tr>
+                <tr>
+                    <td><t3>Preis Netto:</t3></td>
+                    <td th:text="${article.priceNetto.getNumber().doubleValueExact()}+' '+${article.priceNetto.getCurrency()}">Name</td>
+                    <td>
+                        <input type="number" min="0" step="0.01" th:field="*{priceNetto}" />
+                        <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceNetto')}" th:errors="*{priceNetto}"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><t3>Preis Brutto:</t3></td>
+                    <td th:text="${article.priceBrutto.getNumber().doubleValueExact()}+' '+${article.priceBrutto.getCurrency()}">priveBrutto</td>
+                    <td>
+                        <input type="number" min="0" step="0.1" th:field="*{priceBrutto}" />
+                        <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceBrutto')}" th:errors="*{priceBrutto}"></div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><t3>Farben:</t3></td>
+                </tr>
+
+                <tr th:each="colour : ${colours}">
+                    <div th:switch="${article.getColour().contains(colour)}">
+                        <td th:case="true" th:text="${colour}"></td>
+                        <td th:case="*"></td>
+                    </div>
+                    <td>
+                        <div class="ui labeled input">
+                            <input class="ui checkbox" type="checkbox"
+                                   th:field="*{selectedColour}"
+                                   th:value="${colour}" />
+                            <label
+                                    th:text="${colour}">
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><t3>EAN Code:</t3></td>
+                    <td th:text="${article.eanCode}">EAN</td>
+                    <td>
+                        <input type="text" th:field="*{eanCode}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><t3>Hersteller URL:</t3></td>
+                    <td th:text="${article.herstellerUrl}">URL</td>
+                    <td>
+                        <input type="text" th:field="*{herstellerUrl}"/>
+                    </td>
+                </tr>
+
             </tbody>
             <tfoot class="full width">
             <tr>

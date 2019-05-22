@@ -6,87 +6,99 @@
     <title id="pageTitle">Edit</title>
 </head>
 <body>
-<nav th:include="navbar :: navbar"></nav>
+    <nav th:include="navbar :: navbar"></nav>
 
-<form method="post" th:action="@{/edit/{id}(id=${article.getId()})}" th:object="${form}">
-    <table id="editspace" class="ui definition table">
-    <thead>
-        <th></th>
-        <th><t3>Bisherige Werte</t3></th>
-        <th><t3>neue Werte</t3></th>
-    </thead>
-        <tbody>
+    <form method="post" th:action="@{/edit/{id}(id=${article.getId()})}" th:object="${form}">
 
-        <tr>
-            <td><t3>Bezeichnung:</t3></td>
-            <td th:text="${article.name}">Name</td>
-            <td>
-                <input type="text" th:field="*{name}"/>
-            </td>
-        </tr>
-        <tr>
-            <td><t3>Preis Netto:</t3></td>
-            <td th:text="${article.priceNetto.getNumber().doubleValueExact()}+' '+${article.priceNetto.getCurrency()}">Name</td>
-            <td>
-                <input type="number" min="0" step="0.01" th:field="*{priceNetto}" />
-                <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceNetto')}" th:errors="*{priceNetto}"></div>
-            </td>
-        </tr>
-        <tr>
-            <td><t3>Preis Brutto:</t3></td>
-            <td th:text="${article.priceBrutto.getNumber().doubleValueExact()}+' '+${article.priceBrutto.getCurrency()}">priveBrutto</td>
-            <td>
-                <input type="number" min="0" step="0.1" th:field="*{priceBrutto}" />
-                <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceBrutto')}" th:errors="*{priceBrutto}"></div>
-            </td>
-        </tr>
-        <tr>
-            <td><t3>Farben:</t3></td>
-        </tr>
-        <tr th:each="colour : ${colours}">
-            <div th:switch="${article.getColour().contains(colour)}">
-                <td th:case="true" th:text="${colour}"></td>
-                <td th:case="*"></td>
-            </div>
-            <td>
-                <div class="ui labeled input">
-                    <input class="ui checkbox" type="checkbox"
-                                                     th:field="*{selectedColour}"
-                                                     th:value="${colour}" />
-                    <label
-                            th:text="${colour}">
-                    </label>
+        <table id="editspace" class="ui definition table">
+
+        <thead>
+            <th></th>
+            <th><t3>Bisherige Werte</t3></th>
+            <th><t3>neue Werte</t3></th>
+
+        </thead>
+            <tbody>
+
+            <tr>
+                <td><t3>Bezeichnung:</t3></td>
+                <td th:text="${article.name}">Name</td>
+                <td>
+                    <input type="text" th:field="*{name}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td><t3>Preis Netto:</t3></td>
+                <td th:text="${article.priceNetto.getNumber().doubleValueExact()}+' '+${article.priceNetto.getCurrency()}">Name</td>
+                <td>
+                    <input type="number" min="0" step="0.01" th:field="*{priceNetto}" />
+                    <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceNetto')}" th:errors="*{priceNetto}"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><t3>Preis Brutto:</t3></td>
+                <td th:text="${article.priceBrutto.getNumber().doubleValueExact()}+' '+${article.priceBrutto.getCurrency()}">priveBrutto</td>
+                <td>
+                    <input type="number" min="0" step="0.1" th:field="*{priceBrutto}" />
+                    <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceBrutto')}" th:errors="*{priceBrutto}"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><t3>Farben:</t3></td>
+            </tr>
+
+            <tr th:each="colour : ${colours}">
+                <div th:switch="${article.getColour().contains(colour)}">
+                    <td th:case="true" th:text="${colour}"></td>
+                    <td th:case="*"></td>
                 </div>
-            </td>
-        </tr>
+                <td>
+                    <div class="ui labeled input">
+                        <input class="ui checkbox" type="checkbox"
+                                                         th:field="*{selectedColour}"
+                                                         th:value="${colour}" />
+                        <label
+                                th:text="${colour}">
+                        </label>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><t3>EAN Code:</t3></td>
+                <td th:text="${article.eanCode}">EAN</td>
+                <td>
+                    <input type="text" th:field="*{eanCode}"/>
+                </td>
+            </tr>
+            <tr>
+                <td><t3>Hersteller URL:</t3></td>
+                <td th:text="${article.herstellerUrl}">URL</td>
+                <td>
+                    <input type="text" th:field="*{herstellerUrl}"/>
+                </td>
+            </tr>
+
+            </tbody>
+
+        <tfoot class="full width">
+
         <tr>
-            <td><t3>EAN Code:</t3></td>
-            <td th:text="${article.eanCode}">EAN</td>
-            <td>
-                <input type="text" th:field="*{eanCode}"/>
-            </td>
-        </tr>
-        <tr>
-            <td><t3>Hersteller URL:</t3></td>
-            <td th:text="${article.herstellerUrl}">URL</td>
-            <td>
-                <input type="text" th:field="*{herstellerUrl}"/>
-            </td>
+            <th></th>
+            <th colspan="4">
+                <div>
+                        <input type="submit" value="Ändern" class="ui fluid button" />
+                </div>
+            </th>
         </tr>
 
-        </tbody>
-    <tfoot class="full width">
-    <tr>
-        <th></th>
-        <th colspan="4">
-            <div>
-                    <input type="submit" value="Ändern" class="ui fluid button" />
-            </div>
-        </th>
-    </tr>
-    </tfoot>
-    </table>
+        </tfoot>
 
-        </form>
+        </table>
+
+    </form>
 </body>
 </html>

@@ -120,20 +120,14 @@ public class Composite extends Article {
 	 */
 	public void addId(@NotNull Article article) {
 		Set<String> ids=this.getIdsSet();
-		if (ids.size()>0) {
-			System.out.println("PART LIST OF "+this.getName()+" BEVOR THE ADD OF "+ article.getName());
-			for (String p :
-					ids) {
-				System.out.println("  "+p);
-			}
-		} else {System.out.println("NO COMPONENTS IN "+this.getName()); }
+		if (ids.size()<=0) {
+			System.out.println("NO COMPONENTS IN "+this.getName()); }
 
-		System.out.println(article.getId().toString()+
-				" FROM " +article.getName()+
+		System.out.println(article.getName()+
 				" ADDED TO "+
 				this.getName());
-		if (partIds.containsKey(article.getId())) {
-			this.partIds.put(article.getId().getIdentifier(), partIds.get(article.getId()) + 1);
+		if (partIds.containsKey(article.getId().getIdentifier())) {
+			this.partIds.put(article.getId().getIdentifier(), partIds.get(article.getId().getIdentifier()) + 1);
 			partIds.size();
 		} else {
 
@@ -145,7 +139,7 @@ public class Composite extends Article {
 			System.out.println("PART LIST OF "+this.getName()+" AFTER THE ADD OF "+ article.getName());
 			for (String p :
 					ids) {
-				System.out.println("  "+p);
+				System.out.println("  "+p+" "+partIds.get(p)+" MAL");
 			}
 		} else {System.out.println("NO COMPONENTS IN "+this.getName()+"AFTER ADDING "+article.getName()); }
 
@@ -216,8 +210,6 @@ public class Composite extends Article {
 			if (!article.getUpdateStatus()) {
 				return false;
 			}
-
-			weight = weight.add(article.getWeight());
 
 			price = price.add(article.getPrice());
 
