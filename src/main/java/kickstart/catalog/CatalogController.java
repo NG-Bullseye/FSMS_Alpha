@@ -87,7 +87,7 @@ public class CatalogController {
 
 	@ModelAttribute("colours")
 	public String[] colours() {
-		return new String[] { "rocky", "veggie", "muddy" };
+		return new String[] { "rocky", "veggie", "muddy","farblos" };
 	}
 
 

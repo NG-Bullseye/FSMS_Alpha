@@ -48,24 +48,28 @@
 
             <tr>
                 <td><t3>Farben:</t3></td>
-            </tr>
 
-            <tr th:each="colour : ${colours}">
-                <div th:switch="${article.getColour().contains(colour)}">
-                    <td th:case="true" th:text="${colour}"></td>
-                    <td th:case="*"></td>
-                </div>
-                <td>
-                    <div class="ui labeled input">
-                        <input class="ui checkbox" type="checkbox"
-                                                         th:field="*{selectedColour}"
-                                                         th:value="${colour}" />
-                        <label
-                                th:text="${colour}">
-                        </label>
-                    </div>
+                <td th:each="colour : ${colours}">
+                    <td th:switch="${article.getColour().contains(colour)}">
+                        <td th:case="true" th:text="${colour}"></td>
+                        <td th:case="*"></td>
+                    </td>
+                    <td>
+                        <div class="ui labeled input">
+                            <input class="ui checkbox" type="checkbox"
+                                   th:field="*{selectedColour}"
+                                   th:value="${colour}" />
+                            <label
+                                    th:text="${colour}">
+                            </label>
+                        </div>
+                    </td>
+                </td>
+
                 </td>
             </tr>
+
+
 
             <tr>
                 <td><t3>EAN Code:</t3></td>
