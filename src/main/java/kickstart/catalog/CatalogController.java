@@ -222,39 +222,7 @@ public class CatalogController {
 	}
 	//</editor-fold>
 
-	//<editor-fold desc="Edit">
-	@GetMapping("/edit/{identifier}")
-	@PreAuthorize("hasRole('ROLE_MANAGER')")
-	public String detailEdit(@PathVariable ProductIdentifier identifier,
-							 Model model) {
-		model.addAttribute("article", manager.getArticle(identifier));
-			HashSet<String> articleCategories = new HashSet<>();
-			HashSet<String> articleColours = new HashSet<>();
-			manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
-		model.addAttribute("articleCategories", articleCategories);
-		model.addAttribute("form", new Form()); // Damit man im folgenden form bearbeiten kann
-			return "edit";
-	}
 
-	@PostMapping("/edit/{identifier}")
-	@PreAuthorize("hasRole('ROLE_MANAGER')")
-
-	public String editArticle(@PathVariable ProductIdentifier identifier,
-							  @Valid @ModelAttribute("form") Form form,
-							  BindingResult bindingResult,
-							  Model model) {
-		model.addAttribute("article", manager.getArticle(identifier));
-			HashSet<String> articleCategories = new HashSet<>();
-			manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
-
-		model.addAttribute("articleCategories", articleCategories);
-			if (bindingResult.hasErrors()) {
-				return "edit";
-			}
-			manager.editPart(form, identifier);
-			return "redirect:/catalog/";
-	}
-	//</editor-fold>
 
 	//<editor-fold desc="new Part">
 	@GetMapping("/part/new")
@@ -336,6 +304,40 @@ public class CatalogController {
 	}
 	//</editor-fold>
 
+	//<editor-fold desc="Edit">
+
+	//<editor-fold desc="Edit Part">
+	@GetMapping("/edit/{identifier}")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
+	public String detailEdit(@PathVariable ProductIdentifier identifier,
+							 Model model) {
+		model.addAttribute("article", manager.getArticle(identifier));
+		HashSet<String> articleCategories = new HashSet<>();
+		HashSet<String> articleColours = new HashSet<>();
+		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+		model.addAttribute("articleCategories", articleCategories);
+		model.addAttribute("form", new Form()); // Damit man im folgenden form bearbeiten kann
+		return "edit";
+	}
+
+	@PostMapping("/edit/{identifier}")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
+	public String editArticle(@PathVariable ProductIdentifier identifier,
+							  @Valid @ModelAttribute("form") Form form,
+							  BindingResult bindingResult,
+							  Model model) {
+		model.addAttribute("article", manager.getArticle(identifier));
+		HashSet<String> articleCategories = new HashSet<>();
+		manager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+
+		model.addAttribute("articleCategories", articleCategories);
+		if (bindingResult.hasErrors()) {
+			return "edit";
+		}
+		manager.editPart(form, identifier);
+		return "redirect:/";
+	}
+	//</editor-fold>
 	//<editor-fold desc="Edit Compisite">
 	@GetMapping("/edit/composite/{identifier}")
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
@@ -355,8 +357,10 @@ public class CatalogController {
 			return "redirect:/edit/composite/" + identifier;
 		}
 		manager.editComposite(identifier, compositeForm, partsMapping);
-		return "redirect:/article/" + identifier;
+		return "redirect:/";
 	}
+	//</editor-fold>
+
 	//</editor-fold>
 
 	//<editor-fold desc="Comment">

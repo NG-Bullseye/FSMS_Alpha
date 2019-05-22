@@ -53,9 +53,11 @@
 
                 <tr>
                     <td><t3>Farben:</t3></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-
                 <tr th:each="colour : ${colours}">
+                    <td></td>
                     <div th:switch="${article.getColour().contains(colour)}">
                         <td th:case="true" th:text="${colour}"></td>
                         <td th:case="*"></td>

@@ -152,22 +152,22 @@ public class CatalogManager {
 		this.createAvailableForNewComposite();
 		if (catalog.findById(identifier).isPresent()) {
 			Article afterEdit = catalog.findById(identifier).get();
-			if (form.getName()!=null) {
+			if (form.getName()!=null&&!form.getName().equals("")) {
 				afterEdit.setName(form.getName());
 			}
 			long l1 = Math.round(form.getPriceNetto());
 			if (l1 != 0) {
-				afterEdit.setPrice(Money.of(form.getPriceNetto(), EURO));
+				afterEdit.setPriceNetto(Money.of(form.getPriceNetto(), EURO));
 			}
 			long l2 = Math.round(form.getPriceBrutto());
 			if (l2 != 0) {
-				afterEdit.setPrice(Money.of(form.getPriceBrutto(), EURO));
+				afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
 			}
-			if (form.getEanCode()!=null) {
+			if (form.getEanCode()!=null&&!form.getEanCode().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setEanCode(form.getEanCode());
 			}
-			if (form.getHerstellerUrl()!=null) {
+			if (form.getHerstellerUrl()!=null&&!form.getHerstellerUrl().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setHerstellerUrl(form.getHerstellerUrl());
 			}
@@ -205,17 +205,17 @@ public class CatalogManager {
 			}
 			long l1 = Math.round(form.getPriceNetto());
 			if (l1 != 0) {
-				afterEdit.setPrice(Money.of(form.getPriceNetto(), EURO));
+				afterEdit.setPriceNetto(Money.of(form.getPriceNetto(), EURO));
 			}
 			long l2 = Math.round(form.getPriceBrutto());
 			if (l2 != 0) {
-				afterEdit.setPrice(Money.of(form.getPriceBrutto(), EURO));
+				afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
 			}
-			if (form.getEanCode()!=null) {
+			if (form.getEanCode()!=null&&!form.getEanCode().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setEanCode(form.getEanCode());
 			}
-			if (form.getHerstellerUrl()!=null) {
+			if (form.getHerstellerUrl()!=null&&!form.getHerstellerUrl().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setHerstellerUrl(form.getHerstellerUrl());
 			}
@@ -225,10 +225,12 @@ public class CatalogManager {
 			}
 
 			LinkedList<Article> partsBefore = new LinkedList<>();
+
+
+
 			partsBefore.addAll(convertIdStringToArticleSet( afterEdit.getPartIds().keySet()));
 			LinkedList<Article> partsAfter = new LinkedList<>();
 			partsAfter.addAll(this.compositeMapFiltering(partsCount));
-
 			partsAfter.forEach(article -> {
 				if (partsBefore.contains(article)) {
 					partsBefore.remove(article);
@@ -236,11 +238,16 @@ public class CatalogManager {
 					if (afterEdit instanceof Composite)((Composite)afterEdit).addId(article);
 				}
 			});
+
+
+
 			if (!partsBefore.isEmpty()) {
 				for (int i = 0; i <= partsBefore.size() - 1; i++) {
 					afterEdit.removePart(partsBefore.get(i));
 				}
 			}
+
+
 			afterEdit.update(partsAfter);
 			catalog.save(afterEdit);
 			this.editAffectedArticles(afterEdit);
@@ -409,7 +416,7 @@ public class CatalogManager {
 		}
 
 		HashSet<Article> rightNettoPrice = new HashSet<>();
-		if (filterform.getMaxPriceNetto() > filterform.getMinPriceNetto()) {
+		if (filterform.getMaxPriceNetto() >= filterform.getMinPriceNetto()) {
 			catalog.findByPrice(Money.of(filterform.getMinPriceNetto(), EURO),
 								Money.of(filterform.getMaxPriceNetto(), EURO))
 									.forEach(rightNettoPrice::add);
@@ -432,7 +439,7 @@ public class CatalogManager {
 
 		HashSet<Article> rightCategories = new HashSet<>();
 		ArrayList<String> categories = filterform.getSelectedCategories();
-		if(categories!=null&&categories.size()>0)
+		if(categories!=null && categories.size()>0)
 			catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 		else {
 			System.out.println("No Categories choosen");
@@ -446,19 +453,19 @@ public class CatalogManager {
 		List<Article> result = new ArrayList<>();
 		result.addAll(visible);
 
-		if (filterform.getSelectedColours()!=null&& filterform.getSelectedColours().size()>0) {
+		if (filterform.getSelectedColours()!=null && filterform.getSelectedColours().size()>0) {
 			result.retainAll(rightColours);
 		}
 
-		if (filterform.getMaxPriceNetto()!=0 && filterform.getMinPriceNetto()!=0) {
+		if (filterform.getMaxPriceNetto()!=0 || filterform.getMinPriceNetto()!=0) {
 			result.retainAll(rightNettoPrice);
 		}
 
-		if (filterform.getMaxPriceBrutto()!=0 && filterform.getMinPriceBrutto()!=0) {
+		if (filterform.getMaxPriceBrutto()!=0 || filterform.getMinPriceBrutto()!=0) {
 			result.retainAll(rightBruttoPrice);
 		}
 
-		if (filterform.getSelectedCategories()!=null&&filterform.getSelectedCategories().size()>0) {
+		if (filterform.getSelectedCategories()!=null && filterform.getSelectedCategories().size()>0) {
 			result.retainAll(rightCategories);
 		}
 
@@ -719,7 +726,6 @@ public class CatalogManager {
 																														// Statement
 	}
 
-
 	public String getTextOfSubComponents(ProductIdentifier p){
 
 		String text="";
@@ -936,8 +942,6 @@ public class CatalogManager {
 			}
 			return xMalCraftbarInThisLayer;
 	}
-
-
 
 	public void placeOrder(OutForm outForm, UserAccount userAccount) {
 
