@@ -3,7 +3,7 @@
 -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html"
 	  xmlns:sec="http://www.w3.org/1999/xhtml" >
-	<head th:include="header :: head">
+	<head th:include="header :: head" >
 
 		<!--
 		<link rel="shortcut icon" type="image/png" href="https://fishstone.de/wp-content/uploads/2016/09/Fishstone_Logo_Full.png"/>
@@ -11,9 +11,12 @@
 		-->
 		<link rel="shortcut icon" type="image/ico" href="C:\Users\Bullseye\IdeaProjects\Mangment Webapplikation\src\main\resources\static\resources\favicon.ico"/>
 		<title id="pageTitle">Fishstone</title>
+		<!--
+		<img class="normal" src="https://fishstone.de/wp-content/uploads/2016/09/Fishstone_Logo_Full.png" alt="Logo" style="height: 100%;">
+		-->
 
 	</head>
-	<body>
+	<body >
 		<nav th:include="navbar :: navbar"></nav>
 		<form method="post" th:action="@{/filter}" th:object="${filterForm}">
 			<div class="ui menu">
@@ -102,13 +105,13 @@
 				<a th:if="${#fields.hasErrors('minPriceNetto')}" th:errors="*{minPriceNetto}">MaxPrice Error</a>
 				<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
 				<div class="item">
-					<button class="ui button" type="submit" value="filter" name="reset">
+					<button class="ui button" type="submit" value="filter" name="reset" style="background-color: #68D4D0;">
 					<i class="filter icon"></i>
 					Filtern
 					</button>
 				</div>
 				<div class="item">
-					<button class="ui button" type="submit" value="reset" name="reset">
+					<button class="ui button" type="submit" value="reset" name="reset" style="background-color: #68D4D0;">
 					<i class="recycle icon"></i>
 					Filter zurücksetzen
 					</button>
@@ -196,7 +199,7 @@
 						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
-								<button  type="submit" class="ui button"  >In</button>
+								<button  type="submit" class="ui button" style="background-color: #68D4D0;" >In</button>
 							</div>
 						</form>
 					</td>
@@ -207,7 +210,7 @@
 								<br>
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input   autofocus type="number" th:field="*{amount}" />
-									<button  type="submit" class="ui button"  >Craft</button>
+									<button  type="submit" class="ui button"  style="background-color: #68D4D0;">Craft</button>
 								</div>
 
 							</div>
@@ -218,7 +221,7 @@
 						<form method="post" role="form" name="f2" th:object="${outForm}" th:action="@{/out/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<input   autofocus type="number" th:field="*{amount}" />
-								<button  type="submit" class="ui button"  >Out</button>
+								<button  type="submit" class="ui button" style="background-color: #68D4D0;" >Out</button>
 							</div>
 						</form>
 					</td>
@@ -240,7 +243,7 @@
 					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
 
 					<td sec:authorize="hasRole('ROLE_MANAGER')">
-                        <div class="ui two buttons" >
+                        <div class="ui two buttons" style="background-color: #68D4D0;">
                             <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
                                    th:href="@{/edit/{id}(id=${item.getProduct().getId()})}" target="_self">
