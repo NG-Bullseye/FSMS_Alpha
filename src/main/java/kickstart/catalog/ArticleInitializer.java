@@ -28,7 +28,7 @@ public class ArticleInitializer implements DataInitializer {
 
 	ArticleInitializer(WebshopCatalog catalog, Inventory<ReorderableInventoryItem> inventory) {
 		this.inventory=inventory;
-		Assert.notNull(catalog, "VideoCatalog must not be null!");
+		Assert.notNull(catalog, "Catalog must not be null!");
 
 		this.catalog = catalog;
 	}
@@ -36,7 +36,9 @@ public class ArticleInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		if (catalog.findAll().iterator().hasNext()) {
+
+
+if (catalog.findAll().iterator().hasNext()) {
 			return;
 		}
 		//die kategorie ist hardcoded "Rohstoff" für alle parts
@@ -65,7 +67,7 @@ public class ArticleInitializer implements DataInitializer {
 				"muddy",
 				"Einzelteil",
 				new LinkedList<>(
-						Arrays.asList(p1,p1,p2)
+						Arrays.asList(p1,p1,p2,p2 )
 				)
 		);
 		catalog.save(c1);
@@ -74,7 +76,7 @@ public class ArticleInitializer implements DataInitializer {
 
 
 		Composite c2=new Composite(
-				"Box",
+				"Zip Kit",
 				20,
 				25,
 				"3345gg",
@@ -92,6 +94,7 @@ public class ArticleInitializer implements DataInitializer {
 
 	void print(Product s){
 		//System.out.println( s.getId()+" ID of "+s.getName() );
+
 
 	}
 }

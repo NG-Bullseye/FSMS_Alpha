@@ -478,13 +478,13 @@ class CatalogManagerTest {
 
 	@Test
 	@Transient
-	void compositeMapFiltering() {
+	void listOfAllArticlesChousen() {
 		HashMap<String, String> input = new HashMap<>();
 		input.put("article_" + Objects.requireNonNull(eisen.getId()).getIdentifier(), "2");
 		LinkedList<Article> test = new LinkedList<>();
 		test.add(eisen);
 		test.add(eisen);
-		assertEquals(catalogManager.compositeMapFiltering(input), test,
+		assertEquals(catalogManager.listOfAllArticlesChousen(input), test,
 				"Es werden nicht die richtigen Artikel herausgefiltert.");
 
 	}

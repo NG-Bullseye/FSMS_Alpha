@@ -38,7 +38,6 @@ import kickstart.inventory.ReorderableInventoryItem;
 
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 @Component
 public class CatalogManager {
@@ -115,7 +114,6 @@ public class CatalogManager {
 		catalog.findAll().forEach(article -> {
 			articles.add(article);
 		});
-
 		return articles;
 	}
 
@@ -224,33 +222,23 @@ public class CatalogManager {
 				afterEdit.setColour(form.getSelectedColour());
 			}
 
-			LinkedList<Article> partsBefore = new LinkedList<>();
 
 
-
-			partsBefore.addAll(convertIdStringToArticleSet( afterEdit.getPartIds().keySet()));
 			LinkedList<Article> partsAfter = new LinkedList<>();
-			partsAfter.addAll(this.compositeMapFiltering(partsCount));
-			partsAfter.forEach(article -> {
-				if (partsBefore.contains(article)) {
-					partsBefore.remove(article);
-				} else {
-					if (afterEdit instanceof Composite)((Composite)afterEdit).addId(article);
-				}
-			});
-
-
-
-			if (!partsBefore.isEmpty()) {
-				for (int i = 0; i <= partsBefore.size() - 1; i++) {
-					afterEdit.removePart(partsBefore.get(i));
-				}
+			//fügt alle gewählten article hinzu
+			partsAfter.addAll(this.listOfAllArticlesChousen(partsCount));
+			if (partsAfter.size()==0){
+				throw  new IllegalArgumentException();
 			}
 
+			if(afterEdit instanceof Composite) ((Composite) afterEdit).clearParts();
+			for (Article a:partsAfter
+			) {
+				((Composite) afterEdit).addId(a);
+			}
 
-			afterEdit.update(partsAfter);
 			catalog.save(afterEdit);
-			this.editAffectedArticles(afterEdit);
+			//this.editAffectedArticles(afterEdit);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -501,7 +489,7 @@ public class CatalogManager {
 	 */
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 		Set<String> inputFormArticleSet=partsCount.keySet();
-		List<Article> listeMitAllenArtikelnAusDerForm=this.compositeMapFiltering(partsCount);
+		List<Article> listeMitAllenArtikelnAusDerForm=this.listOfAllArticlesChousen(partsCount);
 		Composite newArticle = new Composite(
 				form.getName(),
 				form.getPriceNetto(),
@@ -526,7 +514,7 @@ public class CatalogManager {
 	 */
 	// Eingabe von der Website Spring-seitig als Map<String,String>, weswegen in
 	// dieser Funktion die Map in eine Liste von Artikeln umgewandelt wird
-	public LinkedList<Article> compositeMapFiltering(Map<String, String> partsCount) {
+	public LinkedList<Article> listOfAllArticlesChousen(Map<String, String> partsCount) {
 
 
 		HashMap<String, Integer> rightMap = new HashMap<>();
@@ -692,6 +680,11 @@ public class CatalogManager {
 		return amount.intValue();
 	}
 
+	public void loggedReorder(@NotNull InForm inForm,UserAccount user){
+		//Log user in
+		reorder(inForm);
+	}
+
 	public void reorder(@NotNull InForm inForm) {
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
@@ -701,6 +694,9 @@ public class CatalogManager {
 					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
 					LocalDateTime.now(),
 					Quantity.of(inForm.getAmount(), Metric.UNIT));
+
+				boolean changed = item.get().update(LocalDateTime.now());
+				System.out.println("Inventory Item Reordered");
 			inventory.save(item.get());
 
 			/*
@@ -831,10 +827,8 @@ public class CatalogManager {
 	//aktuell nicht benutzt
 	public int craftbar(CraftForm craftForm){
 		int craftbar=0;
-		if (catalog.findById(craftForm.getProductIdentifier()).isPresent()&& catalog.findById(craftForm.getProductIdentifier()).get() instanceof Part ){
-			int inStock = inventory.findByProductIdentifier(craftForm.getProductIdentifier()).get().getQuantity().getAmount().intValue();
-			if(craftForm.getAmount()<inStock)
-				craftbar= Math.floorDiv(inStock,craftForm.getAmount());
+		if ( (catalog.findById(craftForm.getProductIdentifier()).isPresent()&& catalog.findById(craftForm.getProductIdentifier()).get() instanceof Part )|| craftForm.getAmount()==0){
+			return 0;
 		}
 		else{
 			craftbar=maxCraft_Layer(craftForm.getProductIdentifier(),craftForm.getAmount(),999999999);
@@ -845,7 +839,7 @@ public class CatalogManager {
 
 	}
 
-	public int maxCraft_Layer(ProductIdentifier thisComponentId, int requiredForSuperComposite, int maximalCraftNumberForPreviousLayer){
+	public int maxCraft_Layer(ProductIdentifier thisComponentId, int amountOfSuperKomponent, int maximalCraftNumberForPreviousLayer){
 		//<editor-fold desc="NullChecks">
 		if(thisComponentId==null)new NullPointerException();
 		//</editor-fold>
@@ -862,7 +856,7 @@ public class CatalogManager {
 		for (ProductIdentifier subKomponentenId : superCompositeRezept.keySet())
 		//</editor-fold>
 			{
-				//<editor-fold desc="Suche das nächste Bestandteil">
+				//<editor-fold desc="Init SubKomponente">
 				Article subKomponente=	catalog.findById(subKomponentenId).get();
 				int requiretForOneSuperComposite=superCompositeRezept.get(subKomponentenId);
 				int subComponentInStock=inventory
@@ -873,31 +867,47 @@ public class CatalogManager {
 						.intValue();
 				//</editor-fold>
 
-				//<editor-fold desc="Wenn genügend von dem Composite vorhanden auch wenn mehrmals als im rezept benötig durch fehlende Teile zuvor">
+				//<editor-fold desc="Wenn genügend von der Komponente vorhanden, regarding mehrmals als im rezept benötig">
 
-				if(requiretForOneSuperComposite * requiredForSuperComposite < subComponentInStock)
+				if(requiretForOneSuperComposite * amountOfSuperKomponent <= subComponentInStock)
 				//</editor-fold>
 				{
-					//<editor-fold desc="Errechne wie oft dieses Composite craftbar ist.">
+					//<editor-fold desc="Errechne wie oft SuperKomponente damit craftbar wäre.">
 					//Benötigte Anzahlt für EINE Super Komponente dividiert durch vorhandene anzahl dieser SubKomponente
-					int subKomponenteCraftbar=0;
-					try{
-						subKomponenteCraftbar=Math.floorDiv(
-								subComponentInStock
-								,requiretForOneSuperComposite*requiredForSuperComposite)	;
+					int superKomponenteFuerSubKomponenteCraftbar=0;
+					if (requiretForOneSuperComposite*amountOfSuperKomponent!=0)
+					{
+							int menge= superCompositeRezept.get(subKomponentenId);
+							//<editor-fold desc="Wenn subKomponente ein subLeaf">
+							if (subKomponente instanceof Part){
+								int maximalOverAllCraftbarOfSubComposite =subComponentInStock;
+								int requiredForSuperCompositeRezept=requiretForOneSuperComposite*amountOfSuperKomponent;
+								superKomponenteFuerSubKomponenteCraftbar=Math.floorDiv(
+										maximalOverAllCraftbarOfSubComposite,requiredForSuperCompositeRezept)	;
 
+							}
+							//</editor-fold>
+							//<editor-fold desc="Wenn subKomponente ein subComposite schaue weiter im Baum wieviele maximal herstellbar sind">
+							else{
+								int subCompositeCraftbar=maxCraft_Layer(subKomponentenId,1,99999999);
+								int maximalOverAllCraftbarOfSubComposite =subComponentInStock+subCompositeCraftbar  ;
+								int requiredForSuperCompositeRezept=requiretForOneSuperComposite*amountOfSuperKomponent;
+
+								superKomponenteFuerSubKomponenteCraftbar=Math.floorDiv(
+										maximalOverAllCraftbarOfSubComposite,requiredForSuperCompositeRezept)	;
+
+							}
+						//</editor-fold>
 					}
-					catch (Exception e){
-						throw new IllegalArgumentException();
-					}
+
 					//</editor-fold>
 
 					//<editor-fold desc="Update minimale Craftbarkeit auf diesem Layer">
-					if(xMalCraftbarInThisLayer>=subKomponenteCraftbar)
-						xMalCraftbarInThisLayer=subKomponenteCraftbar;
+					if(xMalCraftbarInThisLayer>superKomponenteFuerSubKomponenteCraftbar)
+						xMalCraftbarInThisLayer=superKomponenteFuerSubKomponenteCraftbar;
 					//</editor-fold>
 
-					//<editor-fold desc="gehe zur nächsten Komponente über">
+					//<editor-fold desc="gehe zur nächsten SubKomponente über">
 					continue;
 					//</editor-fold>
 				}
@@ -920,15 +930,17 @@ public class CatalogManager {
 					if (subKomponente instanceof Composite)
 					//</editor-fold>
 					{
-						//<editor-fold desc="finde herraus wie viele für das SuperComposite * SubComposite - SubCompositStock fehlen">
+						//<editor-fold desc="finde herraus wie viele für das rezept für SuperC von SubC fehlen (MengeAnSuperComposite * rezeptMengeAnSubComposite - SubCompositStock) ">
 						int subComposite_inStock=inventory
 								.findByProductIdentifier(subKomponentenId)
 								.get()
 								.getQuantity()
 								.getAmount()
 								.intValue();
-						int rezeptMenge=superCompositeRezept.get(subKomponente.getId());
-						int fehlendeSubComposites=rezeptMenge*requiredForSuperComposite-subComposite_inStock;
+						int rezeptMengeFürSubComposite=superCompositeRezept.get(subKomponente.getId());
+						int fehlendeSubComposites=rezeptMengeFürSubComposite*amountOfSuperKomponent-subComposite_inStock;
+						if (fehlendeSubComposites<=0)
+							System.out.println("ERROR: Fehler in der Rechnung von craftbar. Fehlende Menge Darf nicht kleiner gleich null sein");
 						//</editor-fold>
 
 						//<editor-fold desc="nimmt recursiv über alle Layer das Minimum von MaxCraftbar_Layer und gibt es zurück">
@@ -993,5 +1005,32 @@ public class CatalogManager {
 			}
 		}
 		return filteredReorderableInventoryItems;
+	}
+
+	public boolean craft(CraftForm craftForm, UserAccount user) {
+		if(0!=craftbar(craftForm)){
+			InForm InForm=new InForm();
+			InForm.setProductIdentifier(craftForm.getProductIdentifier());
+			InForm.setAmount(craftForm.getAmount());
+			this.loggedReorder(InForm,user);
+
+			Map<ProductIdentifier,Integer> map=convertDatabaseMap(catalog.findById(craftForm.getProductIdentifier()).get().getPartIds());
+			for (ProductIdentifier p:map.keySet()){
+				OutForm outForm=new OutForm();
+				outForm.setProductIdentifier(p);
+				int requiredAmount =craftForm.getAmount()*map.get(p);
+				if (inventoryManager.hasSufficientQuantity(catalog.findById(p).get(),Quantity.of(requiredAmount))){
+					outForm.setAmount(requiredAmount);
+					this.placeOrder(outForm,user);
+				}
+				else{
+					System.out.println("Kann nicht direkt hergestellt werden");
+					return false;
+				}
+			}
+
+		}
+		System.out.println("Nicht genügend Materialien für die Herstellung vorhanden");
+		return false;
 	}
 }

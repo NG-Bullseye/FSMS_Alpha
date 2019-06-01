@@ -48,7 +48,7 @@ class UserDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		if (userAccountManager.findByUsername("admin").isPresent()) {
+		if (userAccountManager.findByUsername("admin").isPresent()||userAccountManager.findByUsername("chef").isPresent()||userAccountManager.findByUsername("mitarbeiter").isPresent()) {
 			return;
 		}
 

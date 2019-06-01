@@ -25,6 +25,7 @@ import org.salespointframework.quantity.Quantity;
  * composite pattern for information about the design.
  */
 @Entity
+@Table(name = "composites")
 public class Composite extends Article {
 
 	//<editor-fold desc="Info">
@@ -44,13 +45,29 @@ public class Composite extends Article {
 	 the articles with these identifiers get loaded from the database.
 	 */
 	//</editor-fold>
+/*
+@Entity
+@Table(name = "orders")
+public class Order {
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
 
+    @ElementCollection
+    @CollectionTable(name = "order_item_mapping",
+      joinColumns = {@JoinColumn(name = "order_id", referencedColumnName = "id")})
+    @MapKeyColumn(name = "item_name")
+    @Column(name = "price")
+    private Map<String, Double> itemPriceMap;
+
+ */
 	@ElementCollection
-
 	private Map<String, Integer> partIds;
+
 	// private List<ProductIdentifier> partIds;
 
-	private ArticleType type;
+
 
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
@@ -176,6 +193,12 @@ public class Composite extends Article {
 	public Stream<String> getIdsStream() {
 		return partIds.keySet().stream();
 	}
+
+
+	public void clearParts(){
+		this.partIds.clear();
+	}
+
 	public Set<String> getIdsSet(){
 		return partIds.keySet();
 	};

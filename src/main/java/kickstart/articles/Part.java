@@ -33,7 +33,6 @@ public class Part extends Article {
 	private Quantity quantity;
 
 	private String colour;
-	private ArticleType type;
 
 	/**
 	 * Constructor for the database. It shouldn't be used otherwise.

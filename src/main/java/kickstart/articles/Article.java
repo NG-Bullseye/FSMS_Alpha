@@ -42,7 +42,7 @@ public abstract class Article extends Product {
 	public enum ArticleType {
 		COMPOSITE, PART
 	}
-
+	protected ArticleType type;
 	private MonetaryAmount priceNetto;
 	private MonetaryAmount priceBrutto;
 	private String eanCode;
@@ -164,7 +164,9 @@ public abstract class Article extends Product {
 
 	public abstract String getColour();
 
-	public abstract ArticleType getType();
+	public ArticleType getType(){
+		return this.type;
+	}
 
 	public abstract void setWeight(double weight);
 
@@ -261,4 +263,6 @@ public abstract class Article extends Product {
 
 		orderedAmount += amount;
 	}
+
+
 }
