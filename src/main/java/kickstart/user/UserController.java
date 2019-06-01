@@ -35,6 +35,7 @@ class UserController {
 		this.orders = orders;
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/register")
 	String registerNew(@Valid @ModelAttribute("form") RegistrationForm form, BindingResult bindingResult, Model model,
 			Errors result) {
@@ -49,6 +50,7 @@ class UserController {
 		return "redirect:/";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/register")
 	String register(RegistrationForm form, Model model) {
 		model.addAttribute("form", form);
@@ -56,7 +58,7 @@ class UserController {
 	}
 
 	@GetMapping("/customeraccount")
-	@PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String userAccount(@LoggedIn UserAccount loggedInUserWeb, Model model) {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		String completeName = loggedInUser.getFirstname() + " " + loggedInUser.getLastname();
@@ -70,7 +72,7 @@ class UserController {
 	}
 
 	@GetMapping("/managecustomer")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String manageUserAccount(@RequestParam(value = "user") long requestId, Model model) {
 		User requestedUser = userManagement.findUserById(requestId);
 		String completeName = requestedUser.getFirstname() + " " + requestedUser.getLastname();
@@ -88,7 +90,7 @@ class UserController {
 	}
 
 	@GetMapping("/customers")
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String customers(Model model) {
 
 		model.addAttribute("customerList", userManagement.findAllCustomers());
@@ -97,7 +99,7 @@ class UserController {
 	}
 
 	@GetMapping("/employees")
-	@PreAuthorize("hasRole('ROLE_BOSS')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String employees(@LoggedIn UserAccount loggedInUserWeb, Model model) {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		model.addAttribute("loggedin", loggedInUser.getId());
@@ -107,7 +109,7 @@ class UserController {
 	}
 
 	@GetMapping("/activation")
-	@PreAuthorize("hasRole('ROLE_BOSS')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String activation(@RequestParam(value = "user") long requestId, @RequestParam(value = "type") int type) {
 		User requestedUser = userManagement.findUserById(requestId);
 		UserAccountIdentifier accountId = requestedUser.getUserAccount().getId();
@@ -116,7 +118,7 @@ class UserController {
 	}
 
 	@GetMapping("/deactivateMyself")
-	@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String deactivateMyself(@LoggedIn UserAccount loggedInUser) {
 		UserAccountIdentifier accountId = loggedInUser.getId();
 		userManagement.useraccountActivation(accountId, 0);
@@ -124,7 +126,7 @@ class UserController {
 	}
 
 	@GetMapping("/changeRole")
-	@PreAuthorize("hasRole('ROLE_BOSS')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String changeRole(@RequestParam(value = "user") long requestId, @LoggedIn UserAccount loggedInUserWeb,
 			@RequestParam(value = "type") int type) throws UnAllowedException {
 		User requestedUser = userManagement.findUserById(requestId);
@@ -133,6 +135,7 @@ class UserController {
 		return "redirect:/employees";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/editData")
 	String editData(@RequestParam(value = "user") long requestId, @LoggedIn UserAccount loggedInUserWeb, EditForm form,
 			Model model) {
@@ -154,6 +157,7 @@ class UserController {
 		return "editdata";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/editData")
 	String editNow(@Valid @ModelAttribute("form") EditForm form, BindingResult bindingResult,
 			@LoggedIn UserAccount loggedInUserWeb, Model model, Errors result) {
@@ -181,7 +185,7 @@ class UserController {
 	}
 
 	@GetMapping("/salary")
-	@PreAuthorize("hasRole('ROLE_BOSS')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String changeSalary(@RequestParam(value = "user") long requestId, MoneyForm form, Model model) {
 		User requestedUser = userManagement.findUserById(requestId);
 		model.addAttribute("user", requestedUser);
@@ -190,7 +194,7 @@ class UserController {
 	}
 
 	@PostMapping("/salary")
-	@PreAuthorize("hasRole('ROLE_BOSS')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	String changeSalaryNow(@Valid @ModelAttribute("form") MoneyForm form, BindingResult bindingResult, Model model,
 			Errors result) {
 

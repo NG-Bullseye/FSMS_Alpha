@@ -20,7 +20,7 @@
 		-->
 
 	</head>
-	<body style="background-color: #F7F7F7">
+	<body style="background-color: #ECEFEF;letter-spacing: 3px;font-weight: bold">
 		<nav th:include="navbar :: navbar"></nav>
 		<form method="post" th:action="@{/filter}" th:object="${filterForm}">
 			<div  class="ui menu">
@@ -109,13 +109,13 @@
 				<a th:if="${#fields.hasErrors('minPriceNetto')}" th:errors="*{minPriceNetto}">MaxPrice Error</a>
 				<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
 				<div class="item">
-					<button class="ui button" type="submit" value="filter" name="reset" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF;background-color: #FFFFFF">
+					<button class="ui button" type="submit" value="filter" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 					<i class="filter icon"></i>
 					Filtern
 					</button>
 				</div>
 				<div class="item">
-					<button class="ui button" type="submit" value="reset" name="reset" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF">
+					<button class="ui button" type="submit" value="reset" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 					<i class="recycle icon"></i>
 					Filter zurücksetzen
 					</button>
@@ -154,23 +154,23 @@
 
 
 		<div id="tablespace">
-			<table id="articletable" class="ui celled table" >
+			<table id="articletable" class="ui celled table" width="400" >
 				<thead>
 				<tr>
 					<th>Name</th>
 					<th>Farbe</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')"h>Vorhanden</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')">Herstellbar</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')">Hersteller URL</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')"h>In</th>
-					<th>Herstellen</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')">Out</th>
-					<th>Besteht aus</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')">Preis Netto</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')">Preis Brutto</th>
-					<th>EAN Code</th>
-					<th>Kategorie</th>
-					<th sec:authorize="hasRole('ROLE_MANAGER')">Bearbeiten</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">Vorhanden</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">Herstellbar</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">Hersteller URL</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">In</th>
+					<th style="text-align: center">Herstellen</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">Out</th>
+					<th style="text-align: center">Besteht aus</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">Preis Netto</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">Preis Brutto</th>
+					<th style="text-align: center">EAN Code</th>
+					<th style="text-align: center">Kategorie</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" style="text-align: center">Bearbeiten</th>
 
 
 				</tr>
@@ -186,7 +186,6 @@
 
 					<td  sec:authorize="hasRole('ROLE_MANAGER') ">
 						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
-							<br>
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 								<span th:text="${catalogManager.craftbar(item.getProduct().getId())}?:''">
 								</span>
@@ -194,7 +193,7 @@
 						</div>
 					</td>
 
-					<td sec:authorize="hasRole('ROLE_MANAGER')" >  <a style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF" th:href="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
+					<td sec:authorize="hasRole('ROLE_MANAGER')" >  <a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
 																	  th:text="Link"
 																	  target="_blank" />
 					</td>
@@ -202,8 +201,11 @@
 					<td sec:authorize="hasRole('ROLE_MANAGER')" >
 						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
-								<input style="width: 70px"  autofocus type="number" th:field="*{amount}" />
-								<button  type="submit" class="ui button" style="color: #68d4d0;font-size: 20px;background-color: #FFFFFF" >In</button>
+								<div>
+									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
+									<button  type="submit" class="ui button" style="color: #68d4d0;margin: 0px;font-size: 20px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;" >In</button>
+								</div>
+
 							</div>
 						</form>
 					</td>
@@ -211,10 +213,9 @@
 					<td>
 						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craft/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field" th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
-								<br>
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-									<input  style="width: 70px" autofocus type="number" th:field="*{amount}" />
-									<button  type="submit" class="ui button"  style="color: #68d4d0;background-color: #FFFFFF;font-size: 20px;">Craft</button>
+									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />
+									<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Craft</button>
 								</div>
 
 							</div>
@@ -224,15 +225,17 @@
 					<td sec:authorize="hasRole('ROLE_MANAGER')" >
 						<form method="post" role="form" name="f2" th:object="${outForm}" th:action="@{/out/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
-								<input style="width: 70px"  autofocus type="number" th:field="*{amount}" />
-								<button  type="submit" class="ui button" style="color: #68d4d0;background-color: #FFFFFF;font-size: 20px;" >Out</button>
+								<div>
+									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
+									<button  type="submit" class="ui button" style="color: #68d4d0;background-color: #FFFFFF;font-size: 20px;margin: 0px;letter-spacing: 3px;" >Out</button>
+								</div>
+
 							</div>
 						</form>
 					</td>
 
 					<td>
 						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
-							<br>
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${catalogManager.getTextOfSubComponents(item.getProduct().getId())}">
 							</div>
 						</div>
@@ -251,15 +254,15 @@
                             <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
                                    th:href="@{/edit/{id}(id=${item.getProduct().getId()})}" target="_self">
-                                    <div class="ui basic button" style="color: #68d4d0;background-color: #FFFFFF;">
-										<span style="color: #68d4d0;background-color: #FFFFFF;font-size: 17px">Bearbeiten</span>
+                                    <div class="ui basic button">
+										<span style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">Bearbeiten</span>
                                     </div>
                                 </a>
 
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
                                    th:href="@{/edit/composite/{id}(id=${item.getProduct().getId()})}" target="_self">
-                                    <div class="ui basic button" >
-                                        <span style="color: #68d4d0;background-color: #FFFFFF;font-size: 17px">Bearbeiten</span>
+                                    <div class="ui basic button">
+                                        <span style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">Bearbeiten</span>
                                     </div>
                                 </a>
                             </div>

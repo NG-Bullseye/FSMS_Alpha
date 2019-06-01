@@ -1,8 +1,15 @@
 <nav id="navmenu" th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 	<div class="ui secondary menu">
 
-		<div  class="item" >
-			<h1>Fishstone Management System</h1>
+		<div class="right menu">
+			<a th:href="@{/}" style="height: 87px; visibility: visible;margin: 24px">
+				<img class="normal" src="https://fishstone.de/wp-content/uploads/2016/09/Fishstone_Logo_Full.png" alt="Logo" style="height: 100%;">
+			</a>
+		</div>
+
+
+		<div  class="right menu" >
+			<h1 style="font-size: 45px;font-family: sans-serif;color: #202020;letter-spacing: 7px;padding-top:45px;">Fishstone Management System</h1>
 		</div>
 		<!--
 		<a class="item" href="catalog.html" th:href="@{/}" th:text="Manager"> Manager </a>
