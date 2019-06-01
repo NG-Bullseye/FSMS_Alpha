@@ -1,7 +1,7 @@
 <nav id="navmenu" th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 	<div class="ui secondary menu">
 
-		<div class="item" >
+		<div  class="item" >
 			<h1>Fishstone Management System</h1>
 		</div>
 		<!--
@@ -36,12 +36,12 @@
 			Nutzer</t3>
 			<div class="item" sec:authorize="!isAuthenticated()">
 				<a th:href="@{/login}">
-					<div class="ui primary button">Login</div>
+					<div class="ui button" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold">Login</div>
 				</a>
 			</div>
 			<form class="item" sec:authorize="isAuthenticated()"
 				th:action="@{/logout}" method="post">
-				<button type="submit" class="ui primary button">Logout</button>
+				<button type="submit" class="ui button" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold">Logout</button>
 			</form>
 		</div>
 	</div>

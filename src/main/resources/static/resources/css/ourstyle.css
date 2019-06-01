@@ -1,6 +1,6 @@
 body {
   font-family: sans-serif;
-  background-color: #F9F9F9;
+  background-color: #68D4D0;
 }
 
 /*divs*/
@@ -9,6 +9,29 @@ body {
   /*Title*/
   text-align:center;
   margin: 5em 0em 4em 0em;
+}
+
+@font-face{
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fishstone.de/wp-content/themes/stockholm/fonts/raleway-v12-latin-regular.eot'); /* IE9 Compat Modes */
+    src: local('Raleway'), local('Raleway-Regular'),
+    url('https://fishstone.de/wp-content/themes/stockholm/fonts/raleway-v12-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('https://fishstone.de/wp-content/themes/stockholm/fonts/raleway-v12-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('https://fishstone.de/wp-content/themes/stockholm/fonts/raleway-v12-latin-regular.woff') format('woff'), /* Modern Browsers */
+    url('https://fishstone.de/wp-content/themes/stockholm/fonts/raleway-v12-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('https://fishstone.de/wp-content/themes/stockholm/fonts/raleway-v12-latin-regular.svg#Raleway') format('svg'); /* Legacy iOS */
+}
+
+#customBody{
+    color: red;
+    background-color: #D0E8EA;
+}
+
+#customDiv{
+    color: red;
+    background-color: #D0E8EA;
 }
 
 #registration {
