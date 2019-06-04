@@ -26,8 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
-import kickstart.carManagement.CarpoolManager;
-import kickstart.carManagement.Truck;
 import kickstart.administration.WebshopCatalog;
 import kickstart.user.UserManagement;
 
@@ -38,7 +36,7 @@ public class CartOrderManager {
 	private UserAccount account;
 	private final BusinessTime businesstime;
 	private Quantity wight = Quantity.of(0, Metric.KILOGRAM);
-	private final CarpoolManager carpoolManager;
+
 	private String destination = "home";
 	private final List<String> destinations;
 	private final WebshopCatalog catalog;
@@ -48,14 +46,12 @@ public class CartOrderManager {
 	 *
 	 * @param ordermanager   The repository where Orders are saved
 	 * @param businesstime   The internal Time
-	 * @param carpoolManager The repository where Trucks are saved
 	 */
 
 	CartOrderManager(OrderManager<CustomerOrder> ordermanager, WebshopCatalog catalog, BusinessTime businesstime,
-			CarpoolManager carpoolManager, UserManagement userManagement) {
+			 UserManagement userManagement) {
 		this.orderManager = ordermanager;
 		this.businesstime = businesstime;
-		this.carpoolManager = carpoolManager;
 		this.destinations = new ArrayList<String>();
 		this.catalog = catalog;
 		this.userManagement = userManagement;
@@ -161,10 +157,6 @@ public class CartOrderManager {
 		if (choose.equals("stornieren")) {
 			orderManager.cancelOrder(order);
 			orderManager.save(order);
-			if (!order.getUserAccount().getUsername().isEmpty()
-					&& order.getChargeLines().get().findFirst().isPresent()) {
-				carpoolManager.returnTruckByUsername(order.getUserAccount().getUsername());
-			}
 		}
 
 		changeStatus();
@@ -212,9 +204,6 @@ public class CartOrderManager {
 	 * @return Matching truck
 	 */
 
-	public Truck checkLKW() {
-		return carpoolManager.checkTruckAvailable(wight);
-	}
 
 	/**
 	 * a matching truck is added to the cart
@@ -223,27 +212,7 @@ public class CartOrderManager {
 	 * @return a new order
 	 */
 
-	public String addLKW(Cart cart) {
 
-		Truck truck = carpoolManager.rentTruckByWeight(wight, account);
-		if (truck == null) {
-			return "redirect:/";
-		}
-		// cart.addOrUpdateItem(truck, Quantity.of(1));
-
-		// return newOrder(cart);
-
-		if (cart.isEmpty()) {
-			return "redirect:/catalog";
-		}
-		ChargeLine chargeLine = new ChargeLine(truck.getPrice(), truck.getName());
-		CustomerOrder helper = newOrder(cart);
-		helper.add(chargeLine);
-		orderManager.save(helper);
-
-		return "redirect:/";
-
-	}
 
 	/**
 	 *

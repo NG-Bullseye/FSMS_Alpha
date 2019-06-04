@@ -1,0 +1,54 @@
+<!--
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.w3.org/1999/xhtml" sec:authorize="hasRole('ROLE_MANAGER')" >
+<head th:include="header :: head">
+
+    <link rel="stylesheet" type="text/css" href="static/resources/css/ourstyle.css">
+
+
+    <link rel="shortcut icon" type="image/ico" href="C:\Users\Bullseye\IdeaProjects\Mangment Webapplikation\src\main\resources\static\resources\favicon.ico"/>
+    <title id="pageTitle">Fishstone</title>
+    <!--
+    <img class="normal" src="https://fishstone.de/wp-content/uploads/2016/09/Fishstone_Logo_Full.png" alt="Logo" style="height: 100%;">
+    -->
+
+</head>
+<body style="background-color: #ECEFEF;letter-spacing: 3px;font-weight: bold">
+<nav th:include="navbar :: navbar"></nav>
+
+
+
+
+<div id="tablespace">
+    <table id="articletable" class="ui celled table" width="400" >
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>User</th>
+                <th>Activity</th>
+            </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="inventoryItems" type="kickstart.administration.AdministrationController"*/-->
+            <tr th:each="log: ${logList}">
+                <td th:text="${#temporals.format(log.getDate().get(),'dd.MM.yyyy HH:mm')}"
+                    style="font-size: 20px;font-weight: bold;text-align: center">Datum</td>
+
+                <td th:text="${log.getUserName()}"
+                    style="font-size: 20px;font-weight: bold;text-align: center">User</td>
+
+                <td th:text="${log.getActivity()}"
+                    style="font-size: 20px;font-weight: bold;text-align: center" >Activity</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+</body>
+</html>
+

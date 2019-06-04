@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
-import kickstart.carManagement.CarpoolManager;
+
 import kickstart.administration.WebshopCatalog;
 import kickstart.user.UserManagement;
 
@@ -30,21 +30,19 @@ public class OrderController {
 	private final CartOrderManager cartordermanager;
 	private final OrderManager<CustomerOrder> orderManager;
 	private final BusinessTime businesstime;
-	private final CarpoolManager carpoolManager;
 	private final UserManagement userManagement;
 	private final WebshopCatalog catalog;
 	private String payment;
 
-	OrderController(OrderManager<CustomerOrder> orderManager, WebshopCatalog catalog, BusinessTime businesstime,
-			CarpoolManager carpoolManager, UserManagement userManagement) {
+	OrderController(OrderManager<CustomerOrder> orderManager, WebshopCatalog catalog, BusinessTime businesstime, UserManagement userManagement) {
 
 		Assert.notNull(orderManager, "OrderManager must not be null!");
 		this.orderManager = orderManager;
 		this.businesstime = businesstime;
-		this.carpoolManager = carpoolManager;
+
 		this.catalog = catalog;
 		this.userManagement = userManagement;
-		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime, carpoolManager,
+		this.cartordermanager = new CartOrderManager(orderManager, catalog, businesstime,
 				userManagement);
 
 		payment = "Bar";
@@ -76,12 +74,6 @@ public class OrderController {
 	String question(Model model) {
 		if (cartordermanager.getAccount() == null) {
 			return "redirect:/customers";
-		}
-		if (cartordermanager.checkLKW() == null) {
-			model.addAttribute("available", false);
-		} else {
-			model.addAttribute("available", true);
-			model.addAttribute("lkwprice", cartordermanager.checkLKW().getPrice());
 		}
 		if (cartordermanager.getDestination().equals("Home")) {
 			model.addAttribute("ishome", true);
@@ -116,13 +108,6 @@ public class OrderController {
 	String addPart(@RequestParam("part") Part part, @RequestParam("count") int count, @ModelAttribute Cart cart) {
 
 		return cartordermanager.addPart(part, count, cart);
-
-	}
-
-	@RequestMapping("/renttruck")
-	String addLKW(Cart cart) {
-
-		return cartordermanager.addLKW(cart);
 
 	}
 

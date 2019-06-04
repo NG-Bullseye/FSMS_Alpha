@@ -12,12 +12,10 @@ import java.time.LocalDateTime;
 @Controller
 public class ActivityLogController {
 
-	private ActivityLogManager activityLogManager;
-	private LogContainer logContainer;
+	private LogRepository logRepository;
 
-	public ActivityLogController() {
-		this.activityLogManager=new ActivityLogManager();
-		this.logContainer=new LogContainer();
+	public ActivityLogController(LogRepository logRepository) {
+		this.logRepository=logRepository;
 	}
 
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
@@ -25,9 +23,9 @@ public class ActivityLogController {
 
 	String activityLog(Model model, @LoggedIn UserAccount loggedInUserWeb) {
 
-		 logContainer.addLog(new Log(LocalDateTime.now(),loggedInUserWeb,"Test Message"));
+		 logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb,"Test Message"));
 
-		model.addAttribute("logList", activityLogManager.getLogList());
+		model.addAttribute("logList", logRepository.findAll());
 		return "activityLog";
 	}
 }

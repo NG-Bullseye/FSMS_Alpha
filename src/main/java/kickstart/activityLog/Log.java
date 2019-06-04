@@ -1,45 +1,34 @@
 package kickstart.activityLog;
 
+import lombok.*;
+import org.salespointframework.core.AbstractEntity;
+import org.salespointframework.core.SalespointIdentifier;
 import org.salespointframework.useraccount.UserAccount;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 
 @Entity
-public class Log {
-	private LocalDateTime date;
-	private UserAccount user;
-	private String activity;
+@ToString
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
+public class Log extends AbstractEntity<SalespointIdentifier> {
 
-	public Log(LocalDateTime date, UserAccount user, String change) {
-		this.date = date;
-		this.user = user;
-		this.activity = change;
-	}
+	@EmbeddedId //
+	@AttributeOverride(name = "id", column = @Column(name = "LOG_ID")) //
+	private @NonNull @Getter SalespointIdentifier id=new SalespointIdentifier();
+	private @NonNull @Getter @Setter LocalDateTime date;
+	private @NonNull @Getter @Setter String userName;
+	private @NonNull @Getter @Setter String activity;
 
-
-	public LocalDateTime getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
-	public UserAccount getUser() {
-		return user;
-	}
-
-	public void setUser(UserAccount user) {
-		this.user = user;
-	}
-
-	public String getActivity() {
-		return activity;
-	}
-
-	public void setActivity(String activity) {
+	public Log(LocalDateTime date, UserAccount user, String activity) {
+		this.date = date.getDate();
+		this.userName = user.getUsername();
 		this.activity = activity;
 	}
+
+
 }
