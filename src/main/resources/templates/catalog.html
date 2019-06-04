@@ -131,9 +131,14 @@
 				</div>
 				-->
 
-				<!--
 				<div class="right menu" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-				-->
+					<a th:href="@{/activityLog}">
+						<div class="ui button" style="margin: 10px">
+							<i class="eye icon"></i>
+							<span style="color: #68d4d0;font-size: 20px;font-weight: bold;text-align: center">Vorgänge</span>
+						</div>
+					</a>
+				</div>
 
 				<div class="item" sec:authorize="hasRole('ROLE_ADMIN')" >
 					<div class="ui simple dropdown">
@@ -145,8 +150,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="item black">
-				</div>
+
 
 
 			</div>
@@ -255,14 +259,14 @@
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
                                    th:href="@{/edit/{id}(id=${item.getProduct().getId()})}" target="_self">
                                     <div class="ui basic button">
-										<span style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">Bearbeiten</span>
+										<span style="color: #68d4d0;font-size: 15px;font-weight: bold;background-color: #FFFFFF;text-align: center">Bearbeiten</span>
                                     </div>
                                 </a>
 
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
                                    th:href="@{/edit/composite/{id}(id=${item.getProduct().getId()})}" target="_self">
                                     <div class="ui basic button">
-                                        <span style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">Bearbeiten</span>
+                                        <span style="color: #68d4d0;font-size: 15px;font-weight: bold;background-color: #FFFFFF;text-align: center">Bearbeiten</span>
                                     </div>
                                 </a>
                             </div>

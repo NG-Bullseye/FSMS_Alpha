@@ -97,10 +97,8 @@ public class AdministrationController {
 
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@GetMapping("/")
-	String catalog(Model model,@LoggedIn UserAccount loggedInUserWeb) {
+	String catalog(Model model) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
-		logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb," Administartion besucht"));
-
 		//</editor-fold>
 		//administrationManager.getVisibleCatalog();
 		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();

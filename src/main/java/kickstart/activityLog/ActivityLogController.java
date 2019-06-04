@@ -1,5 +1,6 @@
 package kickstart.activityLog;
 
+
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.web.LoggedIn;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 @Controller
 public class ActivityLogController {
@@ -25,7 +27,13 @@ public class ActivityLogController {
 
 		logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb,"Loggs besucht"));
 
-		model.addAttribute("logList", logRepository.findAll());
+		LinkedList<Log> sortedList=new LinkedList<>();
+		for (Log l :
+				logRepository.findAll()) {
+			sortedList.addFirst(l);
+		}
+
+		model.addAttribute("logList", sortedList);
 		return "activityLog";
 	}
 }
