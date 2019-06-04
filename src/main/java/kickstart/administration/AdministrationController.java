@@ -22,6 +22,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import kickstart.accountancy.AccountancyManager;
+import kickstart.activityLog.Log;
+import kickstart.activityLog.LogRepository;
 import kickstart.inventory.InventoryManager;
 import kickstart.order.CartOrderManager;
 import kickstart.user.User;
@@ -51,6 +53,7 @@ import kickstart.inventory.ReorderableInventoryItem;
 @Controller
 public class AdministrationController {
 
+	private  LogRepository logRepository;
 	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
 	private InventoryManager inventoryManager;
@@ -61,7 +64,8 @@ public class AdministrationController {
 	private UserAccountManager userAccountManager;
 
 
-	AdministrationController(WebshopCatalog catalog,
+	AdministrationController(LogRepository logRepository,
+			WebshopCatalog catalog,
 							 Inventory<ReorderableInventoryItem> inventory,
 							 @NotNull InventoryManager inventoryManager,
 							 BusinessTime businessTime,
@@ -70,6 +74,7 @@ public class AdministrationController {
 							 UserManagement userManagement,
 							 UserAccountManager userAccountManager
 	) {
+		this.logRepository=logRepository;
 		this.administrationManager = new AdministrationManager(catalog, inventoryManager,inventory,orderManager,cartOrderManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
@@ -92,14 +97,9 @@ public class AdministrationController {
 
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@GetMapping("/")
-	String catalog(Model model) {
+	String catalog(Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
-		if(inventoryManager.getInventory().findAll().iterator().hasNext()){
-			for (ReorderableInventoryItem item:inventoryManager.getInventory().findAll()
-			) {
-
-			}
-		}
+		logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb," Administartion besucht"));
 
 		//</editor-fold>
 		//administrationManager.getVisibleCatalog();
@@ -173,13 +173,17 @@ public class AdministrationController {
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id,
 					 @Valid @ModelAttribute("inForm") InForm inForm,
-						     Model model) {
+						     Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		inForm.setProductIdentifier(id);
 		administrationManager.reorder(inForm);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal hinzugefügt"));
 		return "redirect:/";
 	}
 
@@ -225,6 +229,10 @@ public class AdministrationController {
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				administrationManager.getArticle(outForm.getProductIdentifier()).getName()+" "+ outForm.getAmount()+"x mal verkauft"));
 		return "redirect:/";
 	}
 
@@ -247,6 +255,10 @@ public class AdministrationController {
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt"));
 		return "redirect:/";
 	}
 
@@ -257,7 +269,6 @@ public class AdministrationController {
 	//<editor-fold desc="Article">
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/article/{identifier}")
-	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model) {
 
 		model.addAttribute("article", administrationManager.getArticle(identifier));
@@ -356,7 +367,7 @@ public class AdministrationController {
 	@GetMapping("/edit/{identifier}")
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String detailEdit(@PathVariable ProductIdentifier identifier,
-							 Model model) {
+							 Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
 		HashSet<String> articleColours = new HashSet<>();
@@ -370,7 +381,7 @@ public class AdministrationController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String editArticle(@PathVariable ProductIdentifier identifier,
 							  @Valid @ModelAttribute("form") Form form,
-							  BindingResult bindingResult,
+							  BindingResult bindingResult,@LoggedIn UserAccount loggedInUserWeb,
 							  Model model) {
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
@@ -381,13 +392,17 @@ public class AdministrationController {
 			return "edit";
 		}
 		administrationManager.editPart(form, identifier);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				form.getName()+" bearbeitet"));
 		return "redirect:/";
 	}
 	//</editor-fold>
 	//<editor-fold desc="Edit Compisite">
 	@GetMapping("/edit/composite/{identifier}")
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
-	public String editComposite(@PathVariable ProductIdentifier identifier, Model model) {
+	public String editComposite(@PathVariable ProductIdentifier identifier, Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		model.addAttribute("compositeForm", new CompositeForm());
 		model.addAttribute("catalog", administrationManager.getArticlesForCompositeEdit(identifier));
@@ -397,43 +412,20 @@ public class AdministrationController {
 
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/edit/composite/{identifier}")
-	public String editCompositeFinished(@PathVariable ProductIdentifier identifier, Model model,
+	public String editCompositeFinished(@PathVariable ProductIdentifier identifier, Model model,@LoggedIn UserAccount loggedInUserWeb,
 			@NotNull @RequestParam Map<String, String> partsMapping, @ModelAttribute CompositeForm compositeForm) {
 		if (administrationManager.listOfAllArticlesChousen(partsMapping).isEmpty()) {
 			return "redirect:/edit/composite/" + identifier;
 		}
 		administrationManager.editComposite(identifier, compositeForm, partsMapping);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				compositeForm.getName()+" bearbeitet"));
 		return "redirect:/";
 	}
 	//</editor-fold>
 
 	//</editor-fold>
 
-	//<editor-fold desc="Comment">
-	@PostMapping("article/{identifier}/comment")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload,
-						  Model model) {
-		Article article = administrationManager.getArticle(identifier);
-		article.addComment(payload.toComment(businessTime.getTime()));
-		administrationManager.saveArticle(article);
-
-		return "redirect:/article/" + article.getId();
-
-	}
-
-
-	interface CommentAndRating {
-
-		/* @NotEmpty */
-		String getComment();
-
-		@Range(min = 1, max = 10)
-		int getRating();
-
-		default Comment toComment(LocalDateTime time) {
-			return new Comment(getComment(), getRating(), time);
-		}
-	}
-	//</editor-fold>
 }

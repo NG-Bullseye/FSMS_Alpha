@@ -25,7 +25,7 @@ public class Log extends AbstractEntity<SalespointIdentifier> {
 	private @NonNull @Getter @Setter String activity;
 
 	public Log(LocalDateTime date, UserAccount user, String activity) {
-		this.date = date.getDate();
+		this.date = date;
 		this.userName = user.getUsername();
 		this.activity = activity;
 	}

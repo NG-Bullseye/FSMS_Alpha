@@ -18,12 +18,12 @@ public class ActivityLogController {
 		this.logRepository=logRepository;
 	}
 
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@GetMapping("/activityLog")
 
 	String activityLog(Model model, @LoggedIn UserAccount loggedInUserWeb) {
 
-		 logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb,"Test Message"));
+		logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb,"Loggs besucht"));
 
 		model.addAttribute("logList", logRepository.findAll());
 		return "activityLog";
