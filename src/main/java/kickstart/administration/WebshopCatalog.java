@@ -1,4 +1,4 @@
-package kickstart.catalog;
+package kickstart.administration;
 
 import static org.salespointframework.core.Currencies.EURO;
 

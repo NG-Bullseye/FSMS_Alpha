@@ -2,13 +2,10 @@ package kickstart.inventory;
 
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
-import org.salespointframework.quantity.Metric;
-import org.salespointframework.quantity.Quantity;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import kickstart.articles.Article;
-import kickstart.catalog.WebshopCatalog;
+import kickstart.administration.WebshopCatalog;
 
 @Component
 @Order(20)

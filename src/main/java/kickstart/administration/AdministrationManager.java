@@ -1,4 +1,4 @@
-package kickstart.catalog;
+package kickstart.administration;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -40,7 +40,7 @@ import kickstart.inventory.ReorderableInventoryItem;
 import javax.validation.constraints.NotNull;
 
 @Component
-public class CatalogManager {
+public class AdministrationManager {
 	private final WebshopCatalog catalog;
 	private Set<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
@@ -54,7 +54,7 @@ public class CatalogManager {
 	@Getter
 	private final long reorderTime = 0;
 
-	public CatalogManager(WebshopCatalog catalog,InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager) {
+	public AdministrationManager(WebshopCatalog catalog, InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager) {
 		this.catalog = catalog;
 		this.inventory = inventory;
 		this.orderManager = orderManager;

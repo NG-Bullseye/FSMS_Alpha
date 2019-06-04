@@ -22,7 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kickstart.articles.Article;
-import kickstart.catalog.WebshopCatalog;
+import kickstart.administration.WebshopCatalog;
 
 @Controller
 public class WelcomeController {

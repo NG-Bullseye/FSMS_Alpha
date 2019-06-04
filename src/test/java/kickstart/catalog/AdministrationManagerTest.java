@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import javax.transaction.Transactional;
 
 import kickstart.accountancy.AccountancyManager;
+import kickstart.administration.AdministrationManager;
+import kickstart.administration.CraftForm;
+import kickstart.administration.WebshopCatalog;
 import kickstart.inventory.InventoryManager;
 import kickstart.order.CartOrderManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,10 +38,12 @@ import kickstart.inventory.ReorderableInventoryItem;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
 
-class CatalogManagerTest {
+class AdministrationManagerTest {
 
-	private @Autowired WebshopCatalog catalog;
-	private @Autowired CatalogManager catalogManager;
+	private @Autowired
+	WebshopCatalog catalog;
+	private @Autowired
+	AdministrationManager administrationManager;
 	private @Autowired Inventory<ReorderableInventoryItem> inventory;
 	private @Autowired InventoryManager inventoryManager;
 	private @Autowired Accountancy accountancy;
@@ -57,7 +62,7 @@ class CatalogManagerTest {
 	@Transient
 	void setUp() {
 		inventoryManager = new InventoryManager(inventory,accountancyManager);
-		catalogManager = new CatalogManager(catalog,inventoryManager , inventory,orderManager,cartOrderManager);
+		administrationManager = new AdministrationManager(catalog,inventoryManager , inventory,orderManager,cartOrderManager);
 		HashSet<String> cat1 = new HashSet<>();
 		cat1.add("Tisch");
 
@@ -102,7 +107,7 @@ class CatalogManagerTest {
 		craftForm=new CraftForm();
 		craftForm.setProductIdentifier(packet.getId());
 		craftForm.setAmount(1);
-		assertThat(catalogManager.craftbar(craftForm)).as("Nicht in angegebener anzahl craftbar")
+		assertThat(administrationManager.craftbar(craftForm)).as("Nicht in angegebener anzahl craftbar")
 				.isEqualTo(2);
 	}
 

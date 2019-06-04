@@ -1,21 +1,20 @@
-package kickstart.catalog;
+package kickstart.administration;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 
-public class CompositeForm {
-	@Size(max = 255, message = "Der Name darf maximal 255 Zeichen lang sein.")
+public class CompositeOrderForm {
+	@NotEmpty
+	@Size(min = 2, max = 255, message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
 	private String name;
 	private double priceNetto;
 	private double priceBrutto;
 	private String eanCode;
 	private String herstellerUrl;
 	private String selectedColour;
+	@NotEmpty(message = "Bitte wählen Sie mindestens eine Kategorie für den Artikel aus.")
 	private String selectedCategorie;
-
-
-
 
 	public String getSelectedColour() {
 		return selectedColour;
@@ -33,12 +32,12 @@ public class CompositeForm {
 		this.selectedCategorie = selectedCategorie;
 	}
 
-	public double getPriceNetto() {
-		return priceNetto;
+	public String getHerstellerUrl() {
+		return herstellerUrl;
 	}
 
-	public void setPriceNetto(double priceNetto) {
-		this.priceNetto = priceNetto;
+	public void setHerstellerUrl(String herstellerUrl) {
+		this.herstellerUrl = herstellerUrl;
 	}
 
 	public double getPriceBrutto() {
@@ -57,12 +56,12 @@ public class CompositeForm {
 		this.eanCode = eanCode;
 	}
 
-	public String getHerstellerUrl() {
-		return herstellerUrl;
+	public double getPriceNetto() {
+		return priceNetto;
 	}
 
-	public void setHerstellerUrl(String herstellerUrl) {
-		this.herstellerUrl = herstellerUrl;
+	public void setPriceNetto(double priceNetto) {
+		this.priceNetto = priceNetto;
 	}
 
 	public void setName(String name) {
@@ -72,6 +71,5 @@ public class CompositeForm {
 	public String getName() {
 		return name;
 	}
-
 
 }

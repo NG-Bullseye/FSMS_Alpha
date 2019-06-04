@@ -1,6 +1,5 @@
 package kickstart.articles;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,12 +9,9 @@ import java.util.stream.Stream;
 
 import javax.money.MonetaryAmount;
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import kickstart.catalog.CatalogManager;
 import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 

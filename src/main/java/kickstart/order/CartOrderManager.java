@@ -28,7 +28,7 @@ import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
 import kickstart.carManagement.Truck;
-import kickstart.catalog.WebshopCatalog;
+import kickstart.administration.WebshopCatalog;
 import kickstart.user.UserManagement;
 
 @Component

@@ -1,4 +1,4 @@
-package kickstart.catalog;
+package kickstart.administration;
 
 import java.util.ArrayList;
 import java.util.Arrays;

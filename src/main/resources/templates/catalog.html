@@ -176,24 +176,24 @@
 				</tr>
 				</thead>
 				<tbody>
-				<!--/*@thymesVar id="inventoryItems" type="kickstart.catalog.CatalogController"*/-->
+				<!--/*@thymesVar id="inventoryItems" type="kickstart.administration.AdministrationController"*/-->
 				<tr th:each="item: ${inventoryItems}">
-					<td th:text="${item.getProduct().getName()}">Name</td>
+					<td th:text="${item.getProduct().getName()}" style="font-size: 20px;font-weight: bold;text-align: center">Name</td>
 
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getColour()}">Farbe</td>
+					<td th:text="${administrationManager.getArticle(item.getProduct().getId()).getColour()}" style="font-size: 20px;font-weight: bold;text-align: center">Farbe</td>
 
-					<td th:text="${item.getQuantity().getAmount().intValue()}"sec:authorize="hasRole('ROLE_MANAGER')" >Vorhanden</td>
+					<td th:text="${item.getQuantity().getAmount().intValue()}"sec:authorize="hasRole('ROLE_MANAGER')" style="font-size: 20px;font-weight: bold;text-align: center" >Vorhanden</td>
 
 					<td  sec:authorize="hasRole('ROLE_MANAGER') ">
-						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
+						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-								<span th:text="${catalogManager.craftbar(item.getProduct().getId())}?:''">
+								<span th:text="${administrationManager.craftbar(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center">
 								</span>
 							</div>
 						</div>
 					</td>
 
-					<td sec:authorize="hasRole('ROLE_MANAGER')" >  <a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${catalogManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
+					<td sec:authorize="hasRole('ROLE_MANAGER')" >  <a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}"
 																	  th:text="Link"
 																	  target="_blank" />
 					</td>
@@ -206,13 +206,13 @@
 									<button  type="submit" class="ui button" style="color: #68d4d0;margin: 0px;font-size: 20px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;" >In</button>
 								</div>
 
-							</div>j
+							</div>
 						</form>
 					</td>
 
 					<td>
 						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craft/{id}(id=${item.getProduct().getId().getIdentifier()})}">
-							<div class="inline field" th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
+							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />
 									<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Craft</button>
@@ -235,23 +235,23 @@
 					</td>
 
 					<td>
-						<div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
-							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${catalogManager.getTextOfSubComponents(item.getProduct().getId())}">
+						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
+							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(item.getProduct().getId())}">
 							</div>
 						</div>
 					</td>
 
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto().getNumber().doubleValueExact()}+' '+${catalogManager.getArticle(item.getProduct().getId()).getPriceNetto().getCurrency()}"sec:authorize="hasRole('ROLE_MANAGER')" >Netto</td>
+					<td th:text="${administrationManager.getArticle(item.getProduct().getId()).getPriceNetto().getNumber().doubleValueExact()}+' '+${administrationManager.getArticle(item.getProduct().getId()).getPriceNetto().getCurrency()}"sec:authorize="hasRole('ROLE_MANAGER')" >Netto</td>
 
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto().getNumber().doubleValueExact()}+' '+${catalogManager.getArticle(item.getProduct().getId()).getPriceBrutto().getCurrency()}" sec:authorize="hasRole('ROLE_MANAGER')">Brutto</td>
+					<td th:text="${administrationManager.getArticle(item.getProduct().getId()).getPriceBrutto().getNumber().doubleValueExact()}+' '+${administrationManager.getArticle(item.getProduct().getId()).getPriceBrutto().getCurrency()}" sec:authorize="hasRole('ROLE_MANAGER')">Brutto</td>
 
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
+					<td th:text="${administrationManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
 
-					<td th:text="${catalogManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
+					<td th:text="${administrationManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
 
 					<td sec:authorize="hasRole('ROLE_MANAGER')">
                         <div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
-                            <div th:switch="${catalogManager.getArticle(item.getProduct().getId()).getType()}">
+                            <div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
                                 <a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
                                    th:href="@{/edit/{id}(id=${item.getProduct().getId()})}" target="_self">
                                     <div class="ui basic button">

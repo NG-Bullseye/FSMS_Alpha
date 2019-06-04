@@ -1,12 +1,10 @@
-package kickstart.catalog;
+package kickstart.administration;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 import kickstart.inventory.ReorderableInventoryItem;
 import org.salespointframework.catalog.Product;
-import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
@@ -15,7 +13,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 

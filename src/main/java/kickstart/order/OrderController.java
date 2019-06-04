@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.carManagement.CarpoolManager;
-import kickstart.catalog.WebshopCatalog;
+import kickstart.administration.WebshopCatalog;
 import kickstart.user.UserManagement;
 
 @Controller

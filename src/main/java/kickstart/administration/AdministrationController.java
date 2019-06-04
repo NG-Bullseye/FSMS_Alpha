@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kickstart.catalog;
+package kickstart.administration;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -27,7 +27,6 @@ import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
 import org.hibernate.validator.constraints.Range;
-import org.salespointframework.catalog.Catalog;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
@@ -50,9 +49,9 @@ import kickstart.articles.Comment;
 import kickstart.inventory.ReorderableInventoryItem;
 
 @Controller
-public class CatalogController {
+public class AdministrationController {
 
-	private CatalogManager catalogManager;
+	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
 	private InventoryManager inventoryManager;
     private CartOrderManager cartOrderManager;
@@ -62,19 +61,19 @@ public class CatalogController {
 	private UserAccountManager userAccountManager;
 
 
-	CatalogController(WebshopCatalog catalog,
-					  Inventory<ReorderableInventoryItem> inventory,
-					  @NotNull InventoryManager inventoryManager,
-					  BusinessTime businessTime,
-					  CatalogManager catalogManager,
-					  CartOrderManager cartOrderManager,
-					  UserManagement userManagement,
-					  UserAccountManager userAccountManager
+	AdministrationController(WebshopCatalog catalog,
+							 Inventory<ReorderableInventoryItem> inventory,
+							 @NotNull InventoryManager inventoryManager,
+							 BusinessTime businessTime,
+							 AdministrationManager administrationManager,
+							 CartOrderManager cartOrderManager,
+							 UserManagement userManagement,
+							 UserAccountManager userAccountManager
 	) {
-		this.catalogManager = new CatalogManager(catalog, inventoryManager,inventory,orderManager,cartOrderManager);
+		this.administrationManager = new AdministrationManager(catalog, inventoryManager,inventory,orderManager,cartOrderManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
-		this.catalogManager=catalogManager;
+		this.administrationManager = administrationManager;
 		this.cartOrderManager=cartOrderManager;
 		this.userManagement=userManagement;
 
@@ -103,7 +102,7 @@ public class CatalogController {
 		}
 
 		//</editor-fold>
-		//catalogManager.getVisibleCatalog();
+		//administrationManager.getVisibleCatalog();
 		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
 		LinkedList<ReorderableInventoryItem> sortedReordInvItemList=new LinkedList<>();
 		for (ReorderableInventoryItem r :
@@ -135,7 +134,7 @@ public class CatalogController {
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
 
-		model.addAttribute("catalogManager",catalogManager);
+		model.addAttribute("administrationManager", administrationManager);
 		return "catalog";
 	}
 
@@ -149,21 +148,21 @@ public class CatalogController {
 		}
 		if (bindingResult.hasErrors()) {
 
-			model.addAttribute("catalog", catalogManager.getVisibleCatalog());
-			model.addAttribute("catalogManager",catalogManager);
+			model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+			model.addAttribute("administrationManager", administrationManager);
 
 			return "catalog";
 		}
-		Iterable<ReorderableInventoryItem> list= catalogManager.filteredReorderableInventoryItems(filterform);
+		Iterable<ReorderableInventoryItem> list= administrationManager.filteredReorderableInventoryItems(filterform);
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
-		//model.addAttribute("catalog", catalogManager.getVisibleCatalog());
-		model.addAttribute("catalogManager",catalogManager);
+		//model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
 		for (ReorderableInventoryItem item:list
 			 ) {
-			Article a= catalogManager.getArticle(item.getProduct().getId());
+			Article a= administrationManager.getArticle(item.getProduct().getId());
 			String s=  a.getCategories().get().findFirst().get();
 		}
 		return "catalog";
@@ -176,11 +175,11 @@ public class CatalogController {
 					 @Valid @ModelAttribute("inForm") InForm inForm,
 						     Model model) {
 		inForm.setProductIdentifier(id);
-		catalogManager.reorder(inForm);
+		administrationManager.reorder(inForm);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", catalogManager.getVisibleCatalog());
-		model.addAttribute("catalogManager",catalogManager);
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
 		return "redirect:/";
 	}
 
@@ -198,12 +197,12 @@ public class CatalogController {
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
 		//siehe html
-		catalogManager.craftbar(craftForm);
+		administrationManager.craftbar(craftForm);
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", catalogManager.getVisibleCatalog());
-		model.addAttribute("catalogManager",catalogManager);
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
 		return "redirect:/";
 	}
 
@@ -220,12 +219,12 @@ public class CatalogController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		catalogManager.placeOrder(outForm, cartOrderManager.getAccount());
+		administrationManager.placeOrder(outForm, cartOrderManager.getAccount());
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", catalogManager.getVisibleCatalog());
-		model.addAttribute("catalogManager",catalogManager);
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
 		return "redirect:/";
 	}
 
@@ -242,12 +241,12 @@ public class CatalogController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		catalogManager.craft(craftForm, cartOrderManager.getAccount());
+		administrationManager.craft(craftForm, cartOrderManager.getAccount());
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", catalogManager.getVisibleCatalog());
-		model.addAttribute("catalogManager",catalogManager);
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
 		return "redirect:/";
 	}
 
@@ -261,11 +260,11 @@ public class CatalogController {
 	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String detail(@PathVariable ProductIdentifier identifier, Model model) {
 
-		model.addAttribute("article", catalogManager.getArticle(identifier));
-		model.addAttribute("max", catalogManager.maximumOrderAmount(identifier));
-		model.addAttribute("hidden", catalogManager.isHidden(identifier));
-		if (catalogManager.getArticle(identifier).getType() == Article.ArticleType.COMPOSITE) {
-			model.addAttribute("parts", catalogManager.textOfAllColapsedLeafs(identifier));
+		model.addAttribute("article", administrationManager.getArticle(identifier));
+		model.addAttribute("max", administrationManager.maximumOrderAmount(identifier));
+		model.addAttribute("hidden", administrationManager.isHidden(identifier));
+		if (administrationManager.getArticle(identifier).getType() == Article.ArticleType.COMPOSITE) {
+			model.addAttribute("parts", administrationManager.textOfAllColapsedLeafs(identifier));
 		}
 		return "article";
 	}
@@ -286,8 +285,8 @@ public class CatalogController {
 			model.addAttribute("form", form);
 			return "newPart";
 		}
-		catalogManager.newPart(form);
-		model.addAttribute("catalog", catalogManager.getVisibleCatalog());
+		administrationManager.newPart(form);
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		return "redirect:/";
 	}
 	//</editor-fold>
@@ -299,7 +298,7 @@ public class CatalogController {
 
 		CompositeOrderForm composite = new CompositeOrderForm();
 		model.addAttribute("compositeForm", composite);
-		model.addAttribute("catalog", catalogManager.getAvailableForNewComposite());
+		model.addAttribute("catalog", administrationManager.getAvailableForNewComposite());
 		return "newComposite";
 	}
 
@@ -309,19 +308,19 @@ public class CatalogController {
 			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping)
 	{
 
-		if (catalogManager.listOfAllArticlesChousen(partsMapping).isEmpty())
+		if (administrationManager.listOfAllArticlesChousen(partsMapping).isEmpty())
 			return "redirect:/composite/new";
 
 		if (bindingResult.hasErrors()) {
 	//		model.addAttribute("compositeForm", form);
-	//		model.addAttribute("catalog", catalogManager.getAvailableForNewComposite());
+	//		model.addAttribute("catalog", administrationManager.getAvailableForNewComposite());
 			return "redirect:/composite/new";
 		}
 		model.addAttribute("compositeForm", new CompositeForm());
 
-		catalogManager.newComposite(form, partsMapping);
+		administrationManager.newComposite(form, partsMapping);
 
-		model.addAttribute("catalog", catalogManager.getVisibleCatalog());
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 
 		return "redirect:/";
 	}
@@ -331,7 +330,7 @@ public class CatalogController {
 	@GetMapping("/hidden")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String completeCatalog(Model model) {
-		model.addAttribute("catalog", catalogManager.getInvisibleCatalog());
+		model.addAttribute("catalog", administrationManager.getInvisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
 		return "catalog";
 	}
@@ -339,14 +338,14 @@ public class CatalogController {
 	@GetMapping("hide/{identifier}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String hide(@PathVariable ProductIdentifier identifier, Model model) {
-		catalogManager.changeVisibility(identifier);
+		administrationManager.changeVisibility(identifier);
 		return "redirect:/";
 	}
 
 	@GetMapping("show/{identifier}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String visible(@PathVariable ProductIdentifier identifier, Model model) {
-		catalogManager.changeVisibility(identifier);
+		administrationManager.changeVisibility(identifier);
 		return "redirect:/";
 	}
 	//</editor-fold>
@@ -358,10 +357,10 @@ public class CatalogController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String detailEdit(@PathVariable ProductIdentifier identifier,
 							 Model model) {
-		model.addAttribute("article", catalogManager.getArticle(identifier));
+		model.addAttribute("article", administrationManager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
 		HashSet<String> articleColours = new HashSet<>();
-		catalogManager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+		administrationManager.getArticle(identifier).getCategories().forEach(articleCategories::add);
 		model.addAttribute("articleCategories", articleCategories);
 		model.addAttribute("form", new Form()); // Damit man im folgenden form bearbeiten kann
 		return "edit";
@@ -373,15 +372,15 @@ public class CatalogController {
 							  @Valid @ModelAttribute("form") Form form,
 							  BindingResult bindingResult,
 							  Model model) {
-		model.addAttribute("article", catalogManager.getArticle(identifier));
+		model.addAttribute("article", administrationManager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
-		catalogManager.getArticle(identifier).getCategories().forEach(articleCategories::add);
+		administrationManager.getArticle(identifier).getCategories().forEach(articleCategories::add);
 
 		model.addAttribute("articleCategories", articleCategories);
 		if (bindingResult.hasErrors()) {
 			return "edit";
 		}
-		catalogManager.editPart(form, identifier);
+		administrationManager.editPart(form, identifier);
 		return "redirect:/";
 	}
 	//</editor-fold>
@@ -389,9 +388,9 @@ public class CatalogController {
 	@GetMapping("/edit/composite/{identifier}")
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String editComposite(@PathVariable ProductIdentifier identifier, Model model) {
-		model.addAttribute("article", catalogManager.getArticle(identifier));
+		model.addAttribute("article", administrationManager.getArticle(identifier));
 		model.addAttribute("compositeForm", new CompositeForm());
-		model.addAttribute("catalog", catalogManager.getArticlesForCompositeEdit(identifier));
+		model.addAttribute("catalog", administrationManager.getArticlesForCompositeEdit(identifier));
 
 		return "editComposite";
 	}
@@ -400,10 +399,10 @@ public class CatalogController {
 	@PostMapping("/edit/composite/{identifier}")
 	public String editCompositeFinished(@PathVariable ProductIdentifier identifier, Model model,
 			@NotNull @RequestParam Map<String, String> partsMapping, @ModelAttribute CompositeForm compositeForm) {
-		if (catalogManager.listOfAllArticlesChousen(partsMapping).isEmpty()) {
+		if (administrationManager.listOfAllArticlesChousen(partsMapping).isEmpty()) {
 			return "redirect:/edit/composite/" + identifier;
 		}
-		catalogManager.editComposite(identifier, compositeForm, partsMapping);
+		administrationManager.editComposite(identifier, compositeForm, partsMapping);
 		return "redirect:/";
 	}
 	//</editor-fold>
@@ -415,9 +414,9 @@ public class CatalogController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String comment(@PathVariable("identifier") ProductIdentifier identifier, @Valid CommentAndRating payload,
 						  Model model) {
-		Article article = catalogManager.getArticle(identifier);
+		Article article = administrationManager.getArticle(identifier);
 		article.addComment(payload.toComment(businessTime.getTime()));
-		catalogManager.saveArticle(article);
+		administrationManager.saveArticle(article);
 
 		return "redirect:/article/" + article.getId();
 

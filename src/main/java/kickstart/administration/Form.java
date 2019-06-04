@@ -1,22 +1,18 @@
-package kickstart.catalog;
+package kickstart.administration;
 
 import java.util.HashSet;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class PartOrderForm {
-	@NotEmpty(message = "Bitte geben Sie einen Namen für das Produkt ein.")
-	@Size(min = 1, max = 255, message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
+public class Form {
+	@Size(max = 255, message = "Der Name darf maximal 255 Zeichen lang sein.")
 	private String name;
-
-	//@NotEmpty(message = "Bitte geben Sie einen Preis für das Produkt ein.")
 	private String selectedColour;
-	//@NotNull(message = )
+	@Min(value = 0)
 	private double priceNetto;
+	@Min(value = 0)
 	private double priceBrutto;
 	private String eanCode;
 	private String herstellerUrl;
@@ -25,8 +21,16 @@ public class PartOrderForm {
 		return priceNetto;
 	}
 
+	public void setPriceNetto(double priceNetto) {
+		this.priceNetto = priceNetto;
+	}
+
 	public double getPriceBrutto() {
 		return priceBrutto;
+	}
+
+	public void setPriceBrutto(double priceBrutto) {
+		this.priceBrutto = priceBrutto;
 	}
 
 	public String getHerstellerUrl() {
@@ -37,10 +41,6 @@ public class PartOrderForm {
 		this.herstellerUrl = herstellerUrl;
 	}
 
-	public void setPriceBrutto(double priceBrutto) {
-		this.priceBrutto = priceBrutto;
-	}
-
 	public String getEanCode() {
 		return eanCode;
 	}
@@ -49,9 +49,7 @@ public class PartOrderForm {
 		this.eanCode = eanCode;
 	}
 
-	public void setPriceNetto(double priceNetto) {
-		this.priceNetto = priceNetto;
-	}
+	private HashSet<String> selectedCategories;
 
 	public String getName() {
 		return name;
@@ -65,7 +63,9 @@ public class PartOrderForm {
 		return selectedColour;
 	}
 
-	public void setSelectedColour(String colour) {
-		this.selectedColour = colour;
+	public void setSelectedColour(String selectedColour) {
+		this.selectedColour = selectedColour;
 	}
+
+
 }

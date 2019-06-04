@@ -1,4 +1,4 @@
-package kickstart.catalog;
+package kickstart.administration;
 
 import org.salespointframework.catalog.ProductIdentifier;
 
