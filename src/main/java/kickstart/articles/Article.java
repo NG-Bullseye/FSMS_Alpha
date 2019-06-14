@@ -43,9 +43,9 @@ public abstract class Article extends Product {
 		COMPOSITE, PART
 	}
 	protected ArticleType type;
-	private MonetaryAmount priceNetto;
-	private MonetaryAmount priceBrutto;
-	private String eanCode;
+	protected MonetaryAmount priceNetto;
+	protected MonetaryAmount priceBrutto;
+	protected String eanCode;
 	protected String herstellerUrl="Fishstone";
 
 	// This variable states whether a article needs to get updated after,
@@ -54,7 +54,8 @@ public abstract class Article extends Product {
 	private boolean updateStatus;
 
 	// This variable saves whether the article is visible at the web shop.
-	private boolean hidden;
+	protected boolean hidden;
+	protected String colour;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
@@ -75,7 +76,7 @@ public abstract class Article extends Product {
 	 * @throws IllegalArgumentException If name or description equal the empty
 	 *                                  string
 	 */
-	public Article(@NotNull String name, double priceNetto,double priceBrutto,String eanCode) throws IllegalArgumentException {
+	public Article(@NotNull String name,String colour, double priceNetto,double priceBrutto,String eanCode) throws IllegalArgumentException {
 		// Here the name is just set to test later whether name is valid. Therefore a
 		// placeholder is
 		// used and later changed. We can't check this before calling the super
@@ -85,7 +86,8 @@ public abstract class Article extends Product {
 		if (name.equals("")) {
 			throw new IllegalArgumentException("Article.name should not be empty");
 		}
-		setName(name);
+		this.colour=colour;
+		setName(name+" "+colour);
 		this.priceNetto=Money.of(priceNetto,"EUR");
 		this.priceBrutto=Money.of(priceBrutto,"EUR");
 		this.eanCode=eanCode;
@@ -143,6 +145,8 @@ public abstract class Article extends Product {
 		this.updateStatus = status;
 	}
 
+
+
 	/**
 	 * 
 	 * @param id The id of a parent(i.e. an article that has this article as it's
@@ -162,7 +166,9 @@ public abstract class Article extends Product {
 
 	public abstract Quantity getWeight();
 
-	public abstract String getColour();
+	public  String getColour(){
+		return colour;
+	}
 
 	public ArticleType getType(){
 		return this.type;
@@ -170,7 +176,9 @@ public abstract class Article extends Product {
 
 	public abstract void setWeight(double weight);
 
-	public abstract void setColour(@NotNull String colour);
+	public  void setColour(@NotNull String colour){
+		this.colour=colour;
+	}
 
 
 	public String getHerstellerUrl() {
@@ -230,6 +238,8 @@ public abstract class Article extends Product {
 			return gerundet;
 		}
 	}
+
+
 
 	/**
 	 * 

@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.InventoryItem;
+import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
 import lombok.Getter;
@@ -28,18 +29,23 @@ public class ReorderableInventoryItem extends InventoryItem {
 	@Getter
 	@ElementCollection
 	private Map<LocalDateTime, Quantity> reorders;
-
+	private String unitQuant;
 	/**
 	 * 
 	 * @param product  The article this item represents
 	 * @param quantity The amount of this article in the inventory
 	 */
-	public ReorderableInventoryItem(Product product, Quantity quantity) {
+	public ReorderableInventoryItem(Product product, Quantity quantity,String unitQuant) {
 		super(product, quantity);
-
+		this.unitQuant=unitQuant;
 		reorders = new TreeMap<LocalDateTime, Quantity>();
 	}
 
+	public ReorderableInventoryItem(Product product, Quantity quantity) {
+		super(product, quantity);
+		this.unitQuant="";
+		reorders = new TreeMap<LocalDateTime, Quantity>();
+	}
 	/**
 	 * Empty constructor for spring functions
 	 */
@@ -57,7 +63,6 @@ public class ReorderableInventoryItem extends InventoryItem {
 		if (quantity.isLessThan(Quantity.of(0))) {
 			throw new IllegalArgumentException();
 		}
-
 		reorders.put(time, quantity);
 	}
 
@@ -91,4 +96,7 @@ public class ReorderableInventoryItem extends InventoryItem {
 		return changed;
 	}
 
+	public String getUnitQuant() {
+		return unitQuant;
+	}
 }

@@ -86,7 +86,7 @@ public class AdministrationController {
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] { "Rohstoff","Einzelteil", "Produkt" };
+		return new String[] { "Rohstoff","Einzelteil Gekauft", "Produkt" ,"Einzelteil Produziert","Kit"};
 	}
 
 	@ModelAttribute("colours")
@@ -111,7 +111,7 @@ public class AdministrationController {
 
 
 		//<editor-fold desc="Standart Sortierung">
-		System.out.println("NEW ORDER");
+		//System.out.println("NEW ORDER");
 		Collections.sort(sortedReordInvItemList, new Comparator<ReorderableInventoryItem>() {
 			@Override
 			public int compare(ReorderableInventoryItem o1, ReorderableInventoryItem o2) {
@@ -247,16 +247,21 @@ public class AdministrationController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		administrationManager.craft(craftForm, cartOrderManager.getAccount());
+		if(administrationManager.craft(craftForm, cartOrderManager.getAccount())){
+			logRepository.save(new Log(
+					LocalDateTime.now(),
+					loggedInUserWeb,
+					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt"));
+		}
+		else System.out.println("Nicht Direkt Herstellbar");
+
+
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
-		logRepository.save(new Log(
-				LocalDateTime.now(),
-				loggedInUserWeb,
-				administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt"));
+
 		return "redirect:/";
 	}
 

@@ -32,13 +32,13 @@ public class Part extends Article {
 	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
 	private Quantity quantity;
 
-	private String colour;
+
 
 	/**
 	 * Constructor for the database. It shouldn't be used otherwise.
 	 */
 	private Part() {
-		super("a", 0,0,"");
+		super("a","", 0,0,"");
 	}
 
 	/**
@@ -55,11 +55,10 @@ public class Part extends Article {
 			String colour,
 			String herstellerUrl
 	) throws IllegalArgumentException {
-		super(name,priceNetto,priceBrutto,eanCode);
+		super(name,colour, priceNetto,priceBrutto,eanCode);
 
 		this.herstellerUrl=herstellerUrl;
 		this.addCategory("Rohstoff");
-		this.colour = colour;
 
 		this.setPrice(Money.of(0, "EUR"));
 
@@ -74,17 +73,6 @@ public class Part extends Article {
 		}
 		this.addCategory("Rohstoff");
 		//</editor-fold>
-	}
-
-	public Part getClone(){
-		return new Part(
-				this.getName(),
-				this.getPriceNetto().getNumber().doubleValueExact(),
-				this.getPriceBrutto().getNumber().doubleValueExact(),
-				this.getEanCode(),
-				this.getHerstellerUrl(),
-				this.getColour()
-		);
 	}
 
 	@Override
@@ -108,10 +96,7 @@ public class Part extends Article {
 	 * @return This returns a Set of size 1. Every part just has 1 colour. It's a
 	 *         set for the composite structure.
 	 */
-	@Override
-	public String getColour() {
-		return colour;
-	}
+
 
 	public Stream<String> getIdsStream() {
 		return null;
@@ -126,15 +111,7 @@ public class Part extends Article {
 	 * 
 	 * @throws IllegalArgumentException If colour is an empty string
 	 */
-	@Override
-	public void setColour(@NotNull String colour) throws IllegalArgumentException {
 
-		if (colour.equals("")) {
-			throw new IllegalArgumentException("Part.colour shouldn't equal \"\"");
-		}
-
-		this.colour=colour;
-	}
 
 	/**
 	 * @return: Returns always ArticleType.PART. See {@link ArticleType}

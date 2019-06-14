@@ -11,7 +11,9 @@ import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import kickstart.administration.CompositeForm;
 import org.javamoney.moneta.Money;
+import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
@@ -22,7 +24,7 @@ import org.salespointframework.quantity.Quantity;
  */
 @Entity
 @Table(name = "composites")
-public class Composite extends Article {
+ public class Composite extends Article {
 
 	//<editor-fold desc="Info">
 	/* The List of all parts this composite consists of. It is annotated as
@@ -64,28 +66,25 @@ public class Order {
 	// private List<ProductIdentifier> partIds;
 
 
-
 	@Embedded
-	@AttributeOverrides({ @AttributeOverride(name = "metric", column = @Column(name = "quantity_metric")) })
+	@AttributeOverrides({@AttributeOverride(name = "metric", column = @Column(name = "quantity_metric"))})
 	private Quantity weight;
 
 	/**
 	 * Empty constructor for data base interactions. Shouldn't used otherwise.
 	 */
 	public Composite() {
-		super("a" ,0,0,"");
+		super("a", "b", 0, 0, "");
 	}
 
 	//private MonetaryAmount price;
 
 
-	private String colour;
-
 	/**
 	 * Standard constructor for Composite. See {@link Article} for more information
 	 * as it's the base class
-	 * 
-	 * @param name        The name of the article
+	 *
+	 * @param name The name of the article
 	 * @throws IllegalArgumentException If the size of parts is zero.
 	 */
 	public Composite(@NotNull String name,
@@ -95,14 +94,13 @@ public class Order {
 					 String herstellerUrl,
 					 String colour,
 					 String categorie,
-					 List<Article>partList)
-			throws IllegalArgumentException
-	{
-		super(name,priceNetto,priceBrutto,eanCode);
-		System.out.println(this.getId().toString()+" id of "+this.getName());
+					 HashMap<Article, Long> partMap)
+			throws IllegalArgumentException {
+		super(name, colour, priceNetto, priceBrutto, eanCode);
+		//System.out.println(this.getId().toString() + " id of " + this.getName());
 		//this.price=Money.of(priceNetto,"EUR");+
-		this.colour=colour;
-		this.herstellerUrl=herstellerUrl;
+
+		this.herstellerUrl = herstellerUrl;
 		//this.parts = parts;
 		this.partIds = new HashMap<String, Integer>();
 		this.type = ArticleType.COMPOSITE;
@@ -113,17 +111,31 @@ public class Order {
 			this.removeCategory(c);
 		}
 		this.addCategory(categorie);
-		for (Article a:partList
-			 ) {
-			addId(a);
+
+
+		//administrationManager.editComposite(a.getId(), new CompositeForm(), partsMap);
+
+		for (Article a :
+				partMap.keySet()) {
+			int i=0;
+			while (i<partMap.get(a)){
+				addId(a);
+				i++;
+			}
+
 		}
-		//</editor-fold>
 
-		//<editor-fold desc="Parts Handling">
-
-		//update(parts);
-		//</editor-fold>
+		//
 	}
+	//</editor-fold>
+
+	//<editor-fold desc="Parts Handling">
+
+	//update(parts);
+	//</editor-fold>
+
+
+
 
 
 	/**
@@ -149,10 +161,10 @@ public class Order {
 		}
 
 		if (ids.size()>0) {
-			System.out.println("PART LIST OF "+this.getName()+" AFTER THE ADD OF "+ article.getName());
+			//System.out.println("PART LIST OF "+this.getName()+" AFTER THE ADD OF "+ article.getName());
 			for (String p :
 					ids) {
-				System.out.println("  "+p+" "+partIds.get(p)+" MAL");
+				//System.out.println("  "+p+" "+partIds.get(p)+" MAL");
 			}
 		} else {System.out.println("NO COMPONENTS IN "+this.getName()+"AFTER ADDING "+article.getName()); }
 
@@ -280,9 +292,6 @@ public class Order {
 	 * @return Returns the colour as a Set of String. This ensures that no colour
 	 *         appears twice or more.
 	 */
-	public String getColour() {
-		return colour;
-	}
 
 	/**
 	 * @return Returns the type of the article

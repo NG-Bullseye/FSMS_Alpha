@@ -490,6 +490,14 @@ public class AdministrationManager {
 	public void newComposite(CompositeOrderForm form, Map<String, String> partsCount) {
 		Set<String> inputFormArticleSet=partsCount.keySet();
 		List<Article> listeMitAllenArtikelnAusDerForm=this.listOfAllArticlesChousen(partsCount);
+		HashMap<Article,Long> map1=new HashMap<>();
+		for (String s :
+				partsCount.keySet()) {
+			if(!(this.getArticle(this.getProduktIdFromString(s))  instanceof Part))
+				throw new IllegalArgumentException();
+			map1.put(((Part)this.getArticle(this.getProduktIdFromString(s))),Long.valueOf(partsCount.get(s))); ;
+		}
+
 		Composite newArticle = new Composite(
 				form.getName(),
 				form.getPriceNetto(),
@@ -498,7 +506,7 @@ public class AdministrationManager {
 				form.getHerstellerUrl(),
 				form.getSelectedColour(),
 				form.getSelectedCategorie(),
-				listeMitAllenArtikelnAusDerForm
+				map1
 		);
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
@@ -766,7 +774,7 @@ public class AdministrationManager {
 			}
 			leafNames=leafNames+leafMap.get(id)+"x"+article.getName()+" ";
 		}
-		System.out.println(leafNames);
+		//System.out.println(leafNames);
 		return leafNames;
 	}
 
@@ -786,7 +794,7 @@ public class AdministrationManager {
 	// this is Leaf
 		if(article instanceof Part){
 			leafPartIds.put(identifier, quantity);
-					System.out.println("LEAF ADDED: "+ article.getName());
+					//System.out.println("LEAF ADDED: "+ article.getName());
 			return leafPartIds;
 		}
 
@@ -849,7 +857,7 @@ public class AdministrationManager {
 		//<editor-fold desc="Ini Konten der auf Craftbarkeit untersucht wird">
 		Article superComponent =catalog.findById(thisComponentId).get();
 		Map<ProductIdentifier,Integer> superCompositeRezept= convertDatabaseMap(superComponent.getPartIds());
-		System.out.println(superCompositeRezept);
+		//System.out.println(superCompositeRezept);
 
 		//</editor-fold>
 		//<editor-fold desc="Für jede Komponente">
@@ -977,10 +985,10 @@ public class AdministrationManager {
 		if (inv.findByProduct(a).get() instanceof ReorderableInventoryItem){
 			ReorderableInventoryItem item=(ReorderableInventoryItem) inv.findByProduct(a).get();
 
-			boolean changed = item.update(LocalDateTime.now());
-			int i =item.getQuantity().getAmount().intValue();
-			System.out.println(item.getProduct().getName()+" updated? "+changed+".");
-			System.out.println("inventoryitem.getAmount="+i);
+			//boolean changed = item.update(LocalDateTime.now());
+			//int i =item.getQuantity().getAmount().intValue();
+			//System.out.println(item.getProduct().getName()+" updated? "+changed+".");
+			//System.out.println("inventoryitem.getAmount="+i);
 		}
 			else {
 				new RuntimeException("Cast exception");
@@ -1008,29 +1016,37 @@ public class AdministrationManager {
 	}
 
 	public boolean craft(CraftForm craftForm, UserAccount user) {
-		if(0!=craftbar(craftForm)){
-			InForm InForm=new InForm();
-			InForm.setProductIdentifier(craftForm.getProductIdentifier());
-			InForm.setAmount(craftForm.getAmount());
-			this.loggedReorder(InForm,user);
+		if(direktCraftbar(craftForm)){
+			InForm inForm=new InForm();
+			inForm.setProductIdentifier(craftForm.getProductIdentifier());
+			inForm.setAmount(craftForm.getAmount());
+			this.loggedReorder(inForm,user);
 
 			Map<ProductIdentifier,Integer> map=convertDatabaseMap(catalog.findById(craftForm.getProductIdentifier()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
 				OutForm outForm=new OutForm();
 				outForm.setProductIdentifier(p);
 				int requiredAmount =craftForm.getAmount()*map.get(p);
-				if (inventoryManager.hasSufficientQuantity(catalog.findById(p).get(),Quantity.of(requiredAmount))){
-					outForm.setAmount(requiredAmount);
-					this.placeOrder(outForm,user);
-				}
-				else{
-					System.out.println("Kann nicht direkt hergestellt werden");
-					return false;
-				}
+				outForm.setAmount(requiredAmount);
+				this.placeOrder(outForm,user);
 			}
-
+			return true;
 		}
-		System.out.println("Nicht genügend Materialien für die Herstellung vorhanden");
 		return false;
+	}
+
+	private boolean  direktCraftbar(CraftForm craftForm) {
+
+		Article a= this.getArticle(craftForm.getProductIdentifier())	;
+		Map<ProductIdentifier,Integer> rezept =this.convertDatabaseMap(a.getPartIds())  ;
+		for (ProductIdentifier p :
+				rezept.keySet()) {
+			long neededAmountForOne=rezept.get(p);
+			long inStock=inventoryManager.getInventory().findByProductIdentifier(p).get().getQuantity().getAmount().longValue();
+			if (inStock<neededAmountForOne)
+				return false;
+		}
+
+		return true;
 	}
 }
