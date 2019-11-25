@@ -33,7 +33,7 @@ public class Application {
 	@Configuration
 	static class WebSecurityConfiguration extends SalespointSecurityConfiguration {
 
-		@Override
+		 @Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests().antMatchers("/**").permitAll().and().formLogin().loginProcessingUrl("/login").and()
 					.logout().logoutUrl("/logout").logoutSuccessUrl("/");

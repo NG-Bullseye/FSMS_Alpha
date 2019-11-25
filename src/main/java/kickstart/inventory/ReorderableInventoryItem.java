@@ -30,6 +30,9 @@ public class ReorderableInventoryItem extends InventoryItem {
 	@ElementCollection
 	private Map<LocalDateTime, Quantity> reorders;
 	private String unitQuant;
+	private Integer amountBwB;
+	private Integer amountHl;
+
 	/**
 	 * 
 	 * @param product  The article this item represents
@@ -38,12 +41,16 @@ public class ReorderableInventoryItem extends InventoryItem {
 	public ReorderableInventoryItem(Product product, Quantity quantity,String unitQuant) {
 		super(product, quantity);
 		this.unitQuant=unitQuant;
+		this.amountHl=quantity.getAmount().intValue();
+		this.amountBwB=0;
 		reorders = new TreeMap<LocalDateTime, Quantity>();
 	}
 
 	public ReorderableInventoryItem(Product product, Quantity quantity) {
 		super(product, quantity);
 		this.unitQuant="";
+		this.amountHl=quantity.getAmount().intValue();
+		this.amountBwB=0;
 		reorders = new TreeMap<LocalDateTime, Quantity>();
 	}
 	/**
@@ -99,4 +106,48 @@ public class ReorderableInventoryItem extends InventoryItem {
 	public String getUnitQuant() {
 		return unitQuant;
 	}
+
+	public boolean recieveFromHl(@NotNull int amount) {
+
+		if (amountHl-amount>=0) {
+
+			this.amountBwB=this.amountBwB+amount;
+			this.amountHl=amountHl-amount;
+			return true;
+		} else {
+
+
+			return false;
+		}
+	}
+
+	public boolean sendToHl(@NotNull int amount) {
+
+		if (amountBwB-amount>=0) {
+
+			this.amountHl=this.amountHl+amount;
+			this.amountBwB=amountBwB-amount;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public int getAmountBwB() {
+		return amountBwB;
+	}
+
+	public void setAmountBwB(@NotNull int amountBwB) {
+		this.amountBwB = amountBwB;
+	}
+
+	public int getAmountHl() {
+		return amountHl;
+	}
+
+	public void setAmountHl(@NotNull int amountHl) {
+		this.amountHl = amountHl;
+	}
+
+
 }

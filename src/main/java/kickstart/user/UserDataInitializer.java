@@ -24,6 +24,7 @@ class UserDataInitializer implements DataInitializer {
 	private static final int salary = 0;
 	private static final int bigSalary = 0;
 
+
 	/**
 	 * Creates a new {@link UserDataInitializer} with the given
 	 * {@link UserAccountManager} and {@link UserRepository}.
@@ -48,22 +49,27 @@ class UserDataInitializer implements DataInitializer {
 	@Override
 	public void initialize() {
 
-		if (userAccountManager.findByUsername("admin").isPresent()||userAccountManager.findByUsername("chef").isPresent()||userAccountManager.findByUsername("mitarbeiter").isPresent()) {
+
+
+		if ((userAccountManager.findByUsername("admin").isPresent()||userAccountManager.findByUsername("chef").isPresent()||userAccountManager.findByUsername("mitarbeiter").isPresent())) {
 			return;
 		}
 
-		UserAccount ua1 = userAccountManager.create("admin", "123", Role.of("ROLE_EMPLOYEE"));
+		UserAccount ua2 = userAccountManager.create("mitarbeiter", "123",Role.of("ROLE_PERMITTED") );
+		ua2.add(Role.of("ROLE_EMPLOYEE"));
+
+		UserAccount ua3 = userAccountManager.create("chef", "123",Role.of("ROLE_PERMITTED"));
+		ua3.add(Role.of("ROLE_MANAGER"));
+
+		UserAccount ua1 = userAccountManager.create("admin", "123", Role.of("ROLE_PERMITTED"));
+		ua1.add(Role.of("ROLE_EMPLOYEE"));
 		ua1.add(Role.of("ROLE_MANAGER"));
 		ua1.add(Role.of("ROLE_ADMIN"));
 
-		UserAccount ua2 = userAccountManager.create("mitarbeiter", "123", Role.of("ROLE_EMPLOYEE"));
 
-		UserAccount ua3 = userAccountManager.create("chef", "123", Role.of("ROLE_EMPLOYEE"));
-		ua3.add(Role.of("ROLE_MANAGER"));
-
-		User c1 = new User(ua1, "Karsten", "unbekannt", "Karstrn@gmail.com", "irgendwo in Berlin");
-		User c2 = new User(ua2, "Leonard", "Wecke", "Leonard.r.Wecke@gmail.com", "Wu7, Dresden");
-		User c3 = new User(ua3, "Toni", "Stark", "ironman@gmail.com", "Private Straße 15, NY");
+		User c1 = new User(ua1, "Karsten", "unbekannt", "Karsten@gmail.com", " Berlin");
+		User c2 = new User(ua2, "Leonard", "Wecke", "Leonard.r.Wecke@gmail.com", "Strehlen, Dresden");
+		User c3 = new User(ua3, "Marcell", "Budich", "Marcell.Budich@gmail.com", "Private Straße 15, Berlin");
 		c2.setSalary(salary);
 		c3.setSalary(bigSalary);
 

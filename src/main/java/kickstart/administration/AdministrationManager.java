@@ -693,6 +693,7 @@ public class AdministrationManager {
 		reorder(inForm);
 	}
 
+	//insert Items into Hauptlager
 	public void reorder(@NotNull InForm inForm) {
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
@@ -716,6 +717,38 @@ public class AdministrationManager {
 			 */
 
 		}
+	}
+
+
+	public boolean receiveFromHl(@NotNull InForm inForm) {
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
+		if (item.isPresent()) {
+
+			if (item.get().recieveFromHl(inForm.getAmount())==false) {
+				return false;
+			}
+
+			boolean changed = item.get().update(LocalDateTime.now());
+			System.out.println("Inventory Item Reordered");
+			inventory.save(item.get());
+
+
+		}return true;
+	}
+
+	public boolean sendToHl(@NotNull InForm inForm) {
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
+		if (item.isPresent()) {
+
+			if (item.get().sendToHl(inForm.getAmount())==false) {
+				return false;
+			}
+
+			boolean changed = item.get().update(LocalDateTime.now());
+			System.out.println("Inventory Item Reordered");
+			inventory.save(item.get());
+
+		}return true;
 	}
 
 	/**
@@ -1049,4 +1082,6 @@ public class AdministrationManager {
 
 		return true;
 	}
+
+
 }

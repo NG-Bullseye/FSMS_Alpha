@@ -48,7 +48,7 @@ public class AccountancyController {
 	 * @param yearFilterForm information about the year to filter
 	 * @param model          information for the html
 	 */
-	@PreAuthorize("hasRole('ROLE_BOSS')")
+	//@PreAuthorize("hasRole('ROLE_BOSS')")
 	@RequestMapping("/accountancy")
 	public String show(@ModelAttribute("yearFilterForm") YearFilterForm yearFilterForm, Model model) {
 		model.addAttribute("time", accountancyManager.getTime());

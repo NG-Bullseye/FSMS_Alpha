@@ -95,7 +95,7 @@ public class AdministrationController {
 	}
 
 
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@GetMapping("/")
 	String catalog(Model model) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
@@ -136,7 +136,7 @@ public class AdministrationController {
 		return "catalog";
 	}
 
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@PostMapping("/filter")
 	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform,
 						   @RequestParam(required = false, name = "reset") String reset,
@@ -166,12 +166,73 @@ public class AdministrationController {
 		return "catalog";
 	}
 
+
+
+
+
 	//<editor-fold desc="In Out">
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PostMapping("/receive/{id}")
+	String catalogReceiveFromHl(@PathVariable ProductIdentifier id,
+					 @Valid @ModelAttribute("inForm") InForm inForm,
+						     Model model,@LoggedIn UserAccount loggedInUserWeb) {
+		inForm.setProductIdentifier(id);
+
+		//administrationManager.reorder(inForm); //old
+
+		if (administrationManager.receiveFromHl(inForm)==false) {//Add itemes to BwB and remove from Hauptlager
+			logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
+					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"));
+			return "redirect:/";
+		}
+
+		//Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //old
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
+
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in catalog.html
+		model.addAttribute("administrationManager", administrationManager);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal vom Hauptlager Empfangen"));
+		return "redirect:/";
+	}
+
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PostMapping("/send/{id}")
+	String catalogsendToHl(@PathVariable ProductIdentifier id,
+								@Valid @ModelAttribute("inForm") InForm inForm,
+								Model model,@LoggedIn UserAccount loggedInUserWeb) {
+		inForm.setProductIdentifier(id);
+
+		//administrationManager.reorder(inForm); //old
+
+		if (administrationManager.sendToHl(inForm)==false) {//Add itemes to Hl and remove from BwB
+			logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
+					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen"));
+			return "redirect:/";
+		}
+
+		//Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //old
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
+
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in catalog.html
+		model.addAttribute("administrationManager", administrationManager);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal zum; Hauptlager gesendet"));
+		return "redirect:/";
+	}
+
+
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id,
 					 @Valid @ModelAttribute("inForm") InForm inForm,
-						     Model model,@LoggedIn UserAccount loggedInUserWeb) {
+					 Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		inForm.setProductIdentifier(id);
 		administrationManager.reorder(inForm);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
@@ -185,7 +246,7 @@ public class AdministrationController {
 		return "redirect:/";
 	}
 
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/craftbar/{id}")
 	String catalogCraftbar(@PathVariable ProductIdentifier id,
 					 @Valid @ModelAttribute("craftForm") CraftForm craftForm,

@@ -15,10 +15,7 @@ import org.springframework.util.Assert;
 import kickstart.exception.UnAllowedException;
 import lombok.NonNull;
 
-/**
- * @author Daniel Koersten
- *
- */
+
 @Service
 @Transactional
 public class UserManagement {
