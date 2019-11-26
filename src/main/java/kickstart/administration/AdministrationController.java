@@ -295,7 +295,7 @@ public class AdministrationController {
 		return "redirect:/";
 	}
 
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@PostMapping("/craft/{id}")
 	String catalogCraft(@PathVariable ProductIdentifier id,
 					  @Valid @ModelAttribute("craftForm") CraftForm craftForm,

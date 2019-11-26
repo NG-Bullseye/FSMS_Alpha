@@ -1008,6 +1008,7 @@ public class AdministrationManager {
 		if(a instanceof Composite){
 			cartOrderManager.addComposite((Composite) a,outForm.getAmount(),cart);
 		}
+
 		cartOrderManager.addCostumer(userAccount);
 		cartOrderManager.cancelorpayOrder(customerOrder,"bezahlen");
 		inventoryManager.decreaseQuantity(a,Quantity.of(outForm.getAmount()) );
@@ -1017,7 +1018,8 @@ public class AdministrationManager {
 		Inventory inv= inventoryManager.getInventory();
 		if (inv.findByProduct(a).get() instanceof ReorderableInventoryItem){
 			ReorderableInventoryItem item=(ReorderableInventoryItem) inv.findByProduct(a).get();
-
+			item.setAmountHl(item.getAmountHl()-outForm.getAmount());
+			inv.save(item);
 			//boolean changed = item.update(LocalDateTime.now());
 			//int i =item.getQuantity().getAmount().intValue();
 			//System.out.println(item.getProduct().getName()+" updated? "+changed+".");
