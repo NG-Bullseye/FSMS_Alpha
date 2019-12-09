@@ -168,8 +168,6 @@ public class AdministrationController {
 
 
 
-
-
 	//<editor-fold desc="In Out">
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/receive/{id}")
@@ -242,11 +240,11 @@ public class AdministrationController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal hinzugefügt"));
+				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal gekauft"));
 		return "redirect:/";
 	}
 
-	@PreAuthorize("hasRole('ROLE_MANAGER')")
+	/*@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/craftbar/{id}")
 	String catalogCraftbar(@PathVariable ProductIdentifier id,
 					 @Valid @ModelAttribute("craftForm") CraftForm craftForm,
@@ -260,14 +258,14 @@ public class AdministrationController {
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
 		//siehe html
-		administrationManager.craftbar(craftForm);
+		administrationManager.craftbarGesamt(craftForm);
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		return "redirect:/";
-	}
+	}*/
 
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/out/{id}")
@@ -282,7 +280,7 @@ public class AdministrationController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		administrationManager.placeOrder(outForm, cartOrderManager.getAccount());
+		administrationManager.placeOrder(outForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
@@ -295,12 +293,12 @@ public class AdministrationController {
 		return "redirect:/";
 	}
 
-	@PreAuthorize("hasRole('ROLE_PERMITTED')")
-	@PostMapping("/craft/{id}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@PostMapping("/craftBwB/{id}")
 	String catalogCraft(@PathVariable ProductIdentifier id,
-					  @Valid @ModelAttribute("craftForm") CraftForm craftForm,
-					  @LoggedIn UserAccount loggedInUserWeb,
-					  Model model) {
+						@Valid @ModelAttribute("craftForm") CraftForm craftForm,
+						@LoggedIn UserAccount loggedInUserWeb,
+						Model model) {
 		craftForm.setProductIdentifier(id);
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
@@ -308,11 +306,42 @@ public class AdministrationController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		if(administrationManager.craft(craftForm, cartOrderManager.getAccount())){
+		if(administrationManager.craftBwB(craftForm, cartOrderManager.getAccount())){
 			logRepository.save(new Log(
 					LocalDateTime.now(),
 					loggedInUserWeb,
 					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt"));
+		}
+		else System.out.println("Nicht Direkt Herstellbar");
+
+
+
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
+
+		return "redirect:/";
+	}
+
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
+	@PostMapping("/craftHl/{id}")
+	String catalogCraftHl(@PathVariable ProductIdentifier id,
+						@Valid @ModelAttribute("craftForm") CraftForm craftForm,
+						@LoggedIn UserAccount loggedInUserWeb,
+						Model model) {
+		craftForm.setProductIdentifier(id);
+		if(userManagement.findUser(loggedInUserWeb)==null){
+			return "redirect:/login";
+		}
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
+		//craft HL
+		if(administrationManager.craftHl(craftForm, cartOrderManager.getAccount())){
+			logRepository.save(new Log(
+					LocalDateTime.now(),
+					loggedInUserWeb,
+					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt in Hauptlager"));
 		}
 		else System.out.println("Nicht Direkt Herstellbar");
 

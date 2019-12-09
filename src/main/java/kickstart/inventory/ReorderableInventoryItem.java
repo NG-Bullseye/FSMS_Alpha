@@ -70,7 +70,7 @@ public class ReorderableInventoryItem extends InventoryItem {
 		if (quantity.isLessThan(Quantity.of(0))) {
 			throw new IllegalArgumentException();
 		}
-		this.amountHl=quantity.getAmount().intValue();
+		this.amountHl=amountHl+quantity.getAmount().intValue();
 		reorders.put(time, quantity);
 	}
 

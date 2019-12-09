@@ -1,10 +1,12 @@
 package kickstart.inventory;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import kickstart.administration.Location;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
@@ -175,6 +177,39 @@ public class InventoryManager {
 		item.decreaseQuantity(quantity);
 		inventory.save(item);
 	}
+	public void decreaseAmountInHL(@NotNull Article article, @NotNull Quantity quantity)throws IllegalArgumentException{
+		if (inventory.findByProduct(article).isPresent() == false) {
+			return;
+		}
+		if (!quantity.isCompatibleWith(Metric.UNIT)) {
+			throw new IllegalArgumentException();
+		}
+		if (quantity.isGreaterThan(inventory.findByProduct(article).get().getQuantity())) {
+			return;
+		}
+
+		ReorderableInventoryItem item = inventory.findByProduct(article).get();
+		item.decreaseQuantity(quantity);
+		item.setAmountHl(item.getAmountHl()-quantity.getAmount().intValue());
+		inventory.save(item);
+	}
+
+	public void decreaseAmountInBwB(@NotNull Article article, @NotNull Quantity quantity)throws IllegalArgumentException{
+		if (inventory.findByProduct(article).isPresent() == false) {
+			return;
+		}
+		if (!quantity.isCompatibleWith(Metric.UNIT)) {
+			throw new IllegalArgumentException();
+		}
+		if (quantity.isGreaterThan(inventory.findByProduct(article).get().getQuantity())) {
+			return;
+		}
+
+		ReorderableInventoryItem item = inventory.findByProduct(article).get();
+		item.decreaseQuantity(quantity);
+		item.setAmountBwB(item.getAmountBwB()-quantity.getAmount().intValue());
+		inventory.save(item);
+	}
 
 	/**
 	 * @param article
@@ -207,6 +242,13 @@ public class InventoryManager {
 			if (item.update(accountancy.getTime())) {
 				inventory.save(item);
 			}
+		}
+	}
+
+	public void decreaseBestand(Article a, Quantity of, Location lager) {
+		switch(lager){
+			case LOCATION_HL:decreaseAmountInHL(a,of);break;
+			case LOCATION_BWB:decreaseAmountInBwB(a,of);break;
 		}
 	}
 }

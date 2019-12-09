@@ -278,18 +278,18 @@
 					<!--</editor-fold>-->
 
 					<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
-					<td th:text="${item.getAmountBwB()}+${item.getUnitQuant()}"sec:authorize="hasRole('ROLE_PERMITTED')" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
+					<td th:text="${item.getAmountBwB()}+${item.getUnitQuant()}"sec:authorize="hasRole('ROLE_PERMITTED')" style="font-size: 20px;font-weight: bold;text-align: center" >BWBbestand</td>
 					<!--</editor-fold>-->
 
 					<!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
-					<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
+					<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >HlBestand</td>
 					<!--</editor-fold>-->
 
 					<!--5--> <!--<editor-fold desc="Herstallbar Hl View:M">-->
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-								<span th:text="${administrationManager.craftbar(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center">
+								<span th:text="${administrationManager.craftbarHl(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center">
 								</span>
 							</div>
 						</div>
@@ -300,7 +300,7 @@
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-								<span th:text="${administrationManager.craftbar(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center">
+								<span th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center">
 								</span>
 							</div>
 						</div>
@@ -372,7 +372,7 @@
 
 					<!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
 					<td sec:authorize="hasRole('ROLE_MANAGER')" width="100px">
-						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craft/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craftHl/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />
@@ -386,7 +386,7 @@
 
 					<!--11--> <!--<editor-fold desc="Herstellen BwB View:E">-->
 					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" width="100px">
-						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craft/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craftBwB/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />

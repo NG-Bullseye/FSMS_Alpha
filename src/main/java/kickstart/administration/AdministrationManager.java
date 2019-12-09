@@ -683,9 +683,8 @@ public class AdministrationManager {
 	 *         on how many units are in stock right now.
 	 */
 	public int maximumOrderAmount(ProductIdentifier identifier) {
-		BigDecimal amount = inventory.findByProductIdentifier(identifier).get().getQuantity().getAmount();
-
-		return amount.intValue();
+		int amount = inventory.findByProductIdentifier(identifier).get().getAmountHl();
+		return amount;
 	}
 
 	public void loggedReorder(@NotNull InForm inForm,UserAccount user){
@@ -850,37 +849,38 @@ public class AdministrationManager {
 		throw new NullPointerException("no Produkt found with that given id");
 	}
 
-	//wird im html aufgerufen
-	public int craftbar(ProductIdentifier p){
+	public int craftbarBwB(ProductIdentifier p){
 		int craftbar=0;
 		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
-			int inStock = inventory.findByProductIdentifier(p).get().getQuantity().getAmount().intValue();
-			if(1<inStock)
+			int inStock = inventory.findByProductIdentifier(p).get().getAmountBwB();
+			if(1<=inStock)
 				craftbar= inStock;
 		}
 		else{
-			craftbar=maxCraft_Layer(p,1,999999999);
+			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_BWB);
 		}
 		return craftbar;
-
 	}
 
-	//aktuell nicht benutzt
-	public int craftbar(CraftForm craftForm){
+	public int craftbarHl(ProductIdentifier p){
 		int craftbar=0;
-		if ( (catalog.findById(craftForm.getProductIdentifier()).isPresent()&& catalog.findById(craftForm.getProductIdentifier()).get() instanceof Part )|| craftForm.getAmount()==0){
-			return 0;
+		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
+			int inStock = inventory.findByProductIdentifier(p).get().getAmountHl();
+			if(1<=inStock)
+				craftbar= inStock;
 		}
 		else{
-			craftbar=maxCraft_Layer(craftForm.getProductIdentifier(),craftForm.getAmount(),999999999);
+			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_HL);
 		}
-
-		System.out.println("Could craft "+catalog.findById(craftForm.getProductIdentifier()).get().getName() +" "+craftbar+" times.");
 		return craftbar;
-
 	}
 
-	public int maxCraft_Layer(ProductIdentifier thisComponentId, int amountOfSuperKomponent, int maximalCraftNumberForPreviousLayer){
+
+
+
+
+
+	public int maxCraft_Layer(ProductIdentifier thisComponentId, int amountOfSuperKomponent, int maximalCraftNumberForPreviousLayer, Location bestandLocation){
 		//<editor-fold desc="NullChecks">
 		if(thisComponentId==null)new NullPointerException();
 		//</editor-fold>
@@ -900,12 +900,8 @@ public class AdministrationManager {
 				//<editor-fold desc="Init SubKomponente">
 				Article subKomponente=	catalog.findById(subKomponentenId).get();
 				int requiretForOneSuperComposite=superCompositeRezept.get(subKomponentenId);
-				int subComponentInStock=inventory
-						.findByProductIdentifier(subKomponentenId)
-						.get()
-						.getQuantity()
-						.getAmount()
-						.intValue();
+
+				int subComponentInStock = getSubComponentInStock(bestandLocation, subKomponentenId);
 				//</editor-fold>
 
 				//<editor-fold desc="Wenn genügend von der Komponente vorhanden, regarding mehrmals als im rezept benötig">
@@ -930,7 +926,7 @@ public class AdministrationManager {
 							//</editor-fold>
 							//<editor-fold desc="Wenn subKomponente ein subComposite schaue weiter im Baum wieviele maximal herstellbar sind">
 							else{
-								int subCompositeCraftbar=maxCraft_Layer(subKomponentenId,1,99999999);
+								int subCompositeCraftbar=maxCraft_Layer(subKomponentenId,1,99999999,bestandLocation);
 								int maximalOverAllCraftbarOfSubComposite =subComponentInStock+subCompositeCraftbar  ;
 								int requiredForSuperCompositeRezept=requiretForOneSuperComposite*amountOfSuperKomponent;
 
@@ -972,12 +968,9 @@ public class AdministrationManager {
 					//</editor-fold>
 					{
 						//<editor-fold desc="finde herraus wie viele für das rezept für SuperC von SubC fehlen (MengeAnSuperComposite * rezeptMengeAnSubComposite - SubCompositStock) ">
-						int subComposite_inStock=inventory
-								.findByProductIdentifier(subKomponentenId)
-								.get()
-								.getQuantity()
-								.getAmount()
-								.intValue();
+						int subComposite_inStock=0;
+						subComposite_inStock = getSubComponentInStock(bestandLocation, subKomponentenId);
+
 						int rezeptMengeFürSubComposite=superCompositeRezept.get(subKomponente.getId());
 						int fehlendeSubComposites=rezeptMengeFürSubComposite*amountOfSuperKomponent-subComposite_inStock;
 						if (fehlendeSubComposites<=0)
@@ -987,7 +980,7 @@ public class AdministrationManager {
 						//<editor-fold desc="nimmt recursiv über alle Layer das Minimum von MaxCraftbar_Layer und gibt es zurück">
 						return Math.min(
 								xMalCraftbarInThisLayer
-								, maxCraft_Layer(subKomponentenId,fehlendeSubComposites,xMalCraftbarInThisLayer))  ;
+								, maxCraft_Layer(subKomponentenId,fehlendeSubComposites,xMalCraftbarInThisLayer,bestandLocation))  ;
 						//</editor-fold>
 					}
 
@@ -996,7 +989,24 @@ public class AdministrationManager {
 			return xMalCraftbarInThisLayer;
 	}
 
-	public void placeOrder(OutForm outForm, UserAccount userAccount) {
+	private int getSubComponentInStock(Location bestandLocation, ProductIdentifier subKomponentenId) {
+		int subComponentInStock=0;
+		switch(bestandLocation){
+			case LOCATION_HL:{
+				subComponentInStock=inventory
+						.findByProductIdentifier(subKomponentenId)
+						.get().getAmountHl();break;
+			}
+			case LOCATION_BWB:{
+				subComponentInStock=inventory
+						.findByProductIdentifier(subKomponentenId)
+						.get().getAmountBwB();break;
+			}
+		}
+		return subComponentInStock;
+	}
+
+	public void placeOrder(OutForm outForm, UserAccount userAccount,Location materialQuelle) {
 
 		Cart cart=new Cart();
 		Article a=this.getArticle(outForm.getProductIdentifier());
@@ -1011,14 +1021,16 @@ public class AdministrationManager {
 
 		cartOrderManager.addCostumer(userAccount);
 		cartOrderManager.cancelorpayOrder(customerOrder,"bezahlen");
-		inventoryManager.decreaseQuantity(a,Quantity.of(outForm.getAmount()) );
+
+
+
 		cartOrderManager.getOrderManager().completeOrder(customerOrder);
 		orderManager.save(customerOrder);
 
 		Inventory inv= inventoryManager.getInventory();
 		if (inv.findByProduct(a).get() instanceof ReorderableInventoryItem){
 			ReorderableInventoryItem item=(ReorderableInventoryItem) inv.findByProduct(a).get();
-			item.setAmountHl(item.getAmountHl()-outForm.getAmount());
+			inventoryManager.decreaseBestand(a,Quantity.of(outForm.getAmount()),materialQuelle );//decrease amount of Gesamtbestand
 			inv.save(item);
 			//boolean changed = item.update(LocalDateTime.now());
 			//int i =item.getQuantity().getAmount().intValue();
@@ -1050,8 +1062,16 @@ public class AdministrationManager {
 		return filteredReorderableInventoryItems;
 	}
 
-	public boolean craft(CraftForm craftForm, UserAccount user) {
-		if(direktCraftbar(craftForm)){
+	public boolean craftHl(CraftForm craftForm, UserAccount user){
+		return this.craft(craftForm,user,Location.LOCATION_HL);
+	}
+
+	public boolean craftBwB(CraftForm craftForm, UserAccount user){
+		return this.craft(craftForm,user,Location.LOCATION_BWB);
+	}
+
+	private boolean craft(CraftForm craftForm, UserAccount user,Location materialQuelle) {
+		if(direktCraftbar(craftForm,materialQuelle)){
 			InForm inForm=new InForm();
 			inForm.setProductIdentifier(craftForm.getProductIdentifier());
 			inForm.setAmount(craftForm.getAmount());
@@ -1063,21 +1083,32 @@ public class AdministrationManager {
 				outForm.setProductIdentifier(p);
 				int requiredAmount =craftForm.getAmount()*map.get(p);
 				outForm.setAmount(requiredAmount);
-				this.placeOrder(outForm,user);
+				this.placeOrder(outForm,user,materialQuelle);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean  direktCraftbar(CraftForm craftForm) {
+	private boolean  direktCraftbar(CraftForm craftForm,Location lager) {
 
 		Article a= this.getArticle(craftForm.getProductIdentifier())	;
 		Map<ProductIdentifier,Integer> rezept =this.convertDatabaseMap(a.getPartIds())  ;
 		for (ProductIdentifier p :
 				rezept.keySet()) {
 			long neededAmountForOne=rezept.get(p);
-			long inStock=inventoryManager.getInventory().findByProductIdentifier(p).get().getQuantity().getAmount().longValue();
+			long inStock=0;
+			switch (lager){
+				case LOCATION_BWB:{
+					inStock=inventoryManager.getInventory().findByProductIdentifier(p).get()											.getAmountBwB();
+					break;
+				}
+				case LOCATION_HL:{
+					inStock=inventoryManager.getInventory().findByProductIdentifier(p).get()											.getAmountHl();
+					break;
+				}
+			}
+
 			if (inStock<neededAmountForOne)
 				return false;
 		}
