@@ -75,8 +75,21 @@
             </div>
 
             <div class="ui vertical segment">
+                <div th:each="category: ${categoriesPart}">
+                    <input name="radio-option-1" type="radio" th:field="*{categoriesPart}" th:value="${category}"/>
+                    <label th:text="${category}">  </label>
+                </div>
+                <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedCategorie')}" th:errors="*{selectedCategorie}">
+                    Bitte geben Sie eine Beschreibung ein.
+                </div>
+            </div>
 
+            <div class="ui vertical segment">
                 <a class="item">
                     <input type="submit" value="Artikel erstellen" class="ui button"/>
                 </a>
-
+            </div>
+    </form>
+</div>
+</div>
+</body>

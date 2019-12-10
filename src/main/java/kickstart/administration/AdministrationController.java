@@ -89,9 +89,19 @@ public class AdministrationController {
 		return new String[] { "Rohstoff","Einzelteil Gekauft", "Produkt" ,"Einzelteil Produziert","Kit"};
 	}
 
+	@ModelAttribute("categoriesComposite")
+	public String[] categoriesComposite() {
+		return new String[] {  "Produkt" ,"Einzelteil Produziert","Kit"};
+	}
+
+	@ModelAttribute("categoriesPart")
+	public String[] categoriesPart() {
+		return new String[] { "Rohstoff","Einzelteil Gekauft" };
+	}
+
 	@ModelAttribute("colours")
 	public String[] colours() {
-		return new String[] { "rocky", "veggie", "muddy","farblos" };
+		return new String[] { "rocky", "veggie", "muddy","farblos","sandy" };
 	}
 
 
