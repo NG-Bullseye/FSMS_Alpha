@@ -35,7 +35,7 @@ public class WelcomeController {
 	@RequestMapping("/start")
 	public String index(Model model) {
 		LinkedList<Article> mostBought = new LinkedList<Article>();
-		catalog.mostBought().forEach(mostBought::add);
+		//catalog.mostBought().forEach(mostBought::add);
 		for (int i = mostBought.size() - 1; i > 2; i--) {
 			mostBought.remove(i);
 		}

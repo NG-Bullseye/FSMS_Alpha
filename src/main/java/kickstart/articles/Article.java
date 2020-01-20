@@ -47,6 +47,7 @@ public abstract class Article extends Product {
 	protected MonetaryAmount priceBrutto;
 	protected String eanCode;
 	protected String herstellerUrl="Fishstone";
+	protected long criticalAmount;
 
 	// This variable states whether a article needs to get updated after,
 	// one of it's children was edited. Update means in this context that attributes
@@ -86,6 +87,7 @@ public abstract class Article extends Product {
 		if (name.equals("")) {
 			throw new IllegalArgumentException("Article.name should not be empty");
 		}
+		this.criticalAmount=0;
 		this.colour=colour;
 		setName(name+" "+colour);
 		this.priceNetto=Money.of(priceNetto,"EUR");
@@ -95,6 +97,14 @@ public abstract class Article extends Product {
 		updateStatus = true;
 		this.parents = new LinkedList<ProductIdentifier>();
 		orderedAmount = 0;
+	}
+
+	public long getCriticalAmount() {
+		return criticalAmount;
+	}
+
+	public void setCriticalAmount(long criticalAmount) {
+		this.criticalAmount = criticalAmount;
 	}
 
 	/**
@@ -220,7 +230,8 @@ public abstract class Article extends Product {
 	 * @return Returns the average rating based on all comments rounded to 2 decimal
 	 *         places
 	 */
-	public double getAverageRating() {
+	/*
+	* public double getAverageRating() {
 		int amount = comments.size();
 		if (amount == 0) {
 			return 0;
@@ -228,7 +239,7 @@ public abstract class Article extends Product {
 			double rating = 0;
 
 			for (Comment c : comments) {
-				rating += c.getRating();
+				//rating += c.getRating();
 			}
 
 			double c = (rating / amount) * 100.0;
@@ -236,8 +247,9 @@ public abstract class Article extends Product {
 			double gerundet = Math.round(c) / 100.0;
 
 			return gerundet;
-		}
-	}
+		}}
+	* */
+
 
 
 

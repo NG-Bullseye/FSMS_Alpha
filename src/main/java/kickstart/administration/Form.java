@@ -14,8 +14,18 @@ public class Form {
 	private double priceNetto;
 	@Min(value = 0)
 	private double priceBrutto;
+	@Min(value = 0)
+	private long criticalAmount;
 	private String eanCode;
 	private String herstellerUrl;
+
+	public long getCriticalAmount() {
+		return criticalAmount;
+	}
+
+	public void setCriticalAmount(long criticalAmount) {
+		this.criticalAmount = criticalAmount;
+	}
 
 	public double getPriceNetto() {
 		return priceNetto;

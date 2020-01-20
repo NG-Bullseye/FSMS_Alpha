@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.money.MonetaryAmount;
+import javax.validation.constraints.NotNull;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Catalog;
@@ -46,12 +47,13 @@ public interface WebshopCatalog extends Catalog<Article> {
 		return categories;
 	}
 
-	default Iterable<Article> findByColours(ArrayList<String> colours) {
+	default Iterable<Article> findByColours(@NotNull ArrayList<String> colours) {
 		HashSet<Article> rightColours = new HashSet<>();
 		for (Article article : this.findAll()) {
 			for (String colour : colours) {
-				if (article.getColour().contains(colour))
+				if (article.getColour()!=null && article.getColour().contains(colour))
 					rightColours.add(article);
+				else if (article.getColour()==null)throw new IllegalArgumentException(article.getName()+" was no color asigned");
 			}
 
 		}
@@ -93,11 +95,11 @@ public interface WebshopCatalog extends Catalog<Article> {
 		return articles;
 	}
 
-	default Iterable<Article> mostBought() {
+	/*default Iterable<Article> mostBought() {
 		HashSet<Article> notSorted = new HashSet<>();
 		this.findAll().forEach(notSorted::add);
 		List<Article> sorted = new ArrayList<>(notSorted);
-		sorted.sort(Comparator.comparingInt(Article::getOrderedAmount).reversed());
+		//sorted.sort(Comparator.comparingInt(Article::getOrderedAmount).reversed());
 		return sorted;
-	}
+	}*/
 }

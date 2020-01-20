@@ -474,6 +474,7 @@ public class AdministrationManager {
 				form.getPriceBrutto(),
 				form.getEanCode(),
 				form.getSelectedColour(),
+				form.getSelectedCategorie(),
 				form.getHerstellerUrl());
 		catalog.save(newArticle);
 		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));

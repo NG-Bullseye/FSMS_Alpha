@@ -51,6 +51,34 @@ public class Part extends Article {
 			@NotNull String name,
 			double priceNetto,
 			double priceBrutto,
+			@NotNull String eanCode,
+			@NotNull String colour,
+			@NotNull String categorie,
+			String herstellerUrl
+	) throws IllegalArgumentException {
+		super(name,colour, priceNetto,priceBrutto,eanCode);
+
+		this.herstellerUrl=herstellerUrl;
+
+		this.setPrice(Money.of(0, "EUR"));
+
+		this.quantity = Quantity.of(0, Metric.KILOGRAM);
+
+		this.type = ArticleType.PART;
+
+		//<editor-fold desc="Clear Categories and set it to Rohstoff">
+		for (String c :
+				this.getAllCategories()) {
+			this.removeCategory(c);
+		}
+		this.addCategory(categorie);
+		//</editor-fold>
+	}
+
+	public Part(
+			@NotNull String name,
+			double priceNetto,
+			double priceBrutto,
 			String eanCode,
 			String colour,
 			String herstellerUrl
@@ -58,7 +86,6 @@ public class Part extends Article {
 		super(name,colour, priceNetto,priceBrutto,eanCode);
 
 		this.herstellerUrl=herstellerUrl;
-		this.addCategory("Rohstoff");
 
 		this.setPrice(Money.of(0, "EUR"));
 

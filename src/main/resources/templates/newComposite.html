@@ -63,7 +63,7 @@
 
                     <div class="ui vertical segment">
                         <div th:each="category: ${categoriesComposite}">
-                            <input name="radio-option-1" type="radio" th:field="*{categoriesComposite}" th:value="${category}"/>
+                            <input name="radio-option-1" type="radio" th:field="*{selectedCategorie}" th:value="${category}"/>
                             <label th:text="${category}">  </label>
                         </div>
                         <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedCategorie')}" th:errors="*{selectedCategorie}">

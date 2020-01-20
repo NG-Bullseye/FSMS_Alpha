@@ -18,75 +18,85 @@
             <th><t3>neue Werte</t3></th>
 
         </thead>
-            <tbody>
 
-            <tr>
-                <td><t3>Bezeichnung:</t3></td>
-                <td th:text="${article.name}">Name</td>
-                <td>
-                    <input type="text" th:field="*{name}"/>
-                </td>
-            </tr>
+        <tbody>
 
-            <tr>
-                <td><t3>Preis Netto:</t3></td>
-                <td th:text="${article.priceNetto.getNumber().doubleValueExact()}+' '+${article.priceNetto.getCurrency()}">Name</td>
-                <td>
-                    <input type="number" min="0" step="0.01" th:field="*{priceNetto}" />
-                    <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceNetto')}" th:errors="*{priceNetto}"></div>
-                </td>
-            </tr>
+        <tr>
+            <td><t3>Bezeichnung:</t3></td>
+            <td th:text="${article.name}">Name</td>
+            <td>
+                <input type="text" th:field="*{name}"/>
+            </td>
+        </tr>
 
-            <tr>
-                <td><t3>Preis Brutto:</t3></td>
-                <td th:text="${article.priceBrutto.getNumber().doubleValueExact()}+' '+${article.priceBrutto.getCurrency()}">priveBrutto</td>
-                <td>
-                    <input type="number" min="0" step="0.1" th:field="*{priceBrutto}" />
-                    <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceBrutto')}" th:errors="*{priceBrutto}"></div>
-                </td>
-            </tr>
+        <tr>
+            <td><t3>Preis Netto:</t3></td>
+            <td th:text="${article.priceNetto.getNumber().doubleValueExact()}+' '+${article.priceNetto.getCurrency()}">Name</td>
+            <td>
+                <input type="number" min="0" step="0.01" th:field="*{priceNetto}" />
+                <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceNetto')}" th:errors="*{priceNetto}"></div>
+            </td>
+        </tr>
 
-            <tr>
-                <td><t3>Farben:</t3></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr th:each="colour : ${colours}">
-                <td></td>
-                <div th:switch="${article.getColour().contains(colour)}">
-                    <td th:case="true" th:text="${colour}"></td>
-                    <td th:case="*"></td>
+        <tr>
+            <td><t3>Preis Brutto:</t3></td>
+            <td th:text="${article.priceBrutto.getNumber().doubleValueExact()}+' '+${article.priceBrutto.getCurrency()}">priveBrutto</td>
+            <td>
+                <input type="number" min="0" step="0.1" th:field="*{priceBrutto}" />
+                <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('priceBrutto')}" th:errors="*{priceBrutto}"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td><t3>Kiritsche Menge:</t3></td>
+            <td th:text="${article.criticalAmount}">critiaclAmount</td>
+            <td>
+                <input type="number" min="0" step="1" th:field="*{criticalAmount}" />
+                <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('criticalAmount')}" th:errors="*{criticalAmount}"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td><t3>Farben:</t3></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr th:each="colour : ${colours}">
+            <td></td>
+            <div th:switch="${article.getColour().contains(colour)}">
+                <td th:case="true" th:text="${colour}"></td>
+                <td th:case="*"></td>
+            </div>
+            <td>
+                <div class="ui labeled input">
+                    <input class="ui checkbox" type="checkbox"
+                           th:field="*{selectedColour}"
+                           th:value="${colour}" />
+                    <label
+                            th:text="${colour}">
+                    </label>
                 </div>
-                <td>
-                    <div class="ui labeled input">
-                        <input class="ui checkbox" type="checkbox"
-                               th:field="*{selectedColour}"
-                               th:value="${colour}" />
-                        <label
-                                th:text="${colour}">
-                        </label>
-                    </div>
-                </td>
-            </tr>
+            </td>
+        </tr>
 
 
 
-            <tr>
-                <td><t3>EAN Code:</t3></td>
-                <td th:text="${article.eanCode}">EAN</td>
-                <td>
-                    <input type="text" th:field="*{eanCode}"/>
-                </td>
-            </tr>
-            <tr>
-                <td><t3>Hersteller URL:</t3></td>
-                <td th:text="${article.herstellerUrl}">URL</td>
-                <td>
-                    <input type="text" th:field="*{herstellerUrl}"/>
-                </td>
-            </tr>
+        <tr>
+            <td><t3>EAN Code:</t3></td>
+            <td th:text="${article.eanCode}">EAN</td>
+            <td>
+                <input type="text" th:field="*{eanCode}"/>
+            </td>
+        </tr>
+        <tr>
+            <td><t3>Hersteller URL:</t3></td>
+            <td th:text="${article.herstellerUrl}">URL</td>
+            <td>
+                <input type="text" th:field="*{herstellerUrl}"/>
+            </td>
+        </tr>
 
-            </tbody>
+        </tbody>
 
         <tfoot class="full width">
 

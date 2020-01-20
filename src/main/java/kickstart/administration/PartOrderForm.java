@@ -20,6 +20,7 @@ public class PartOrderForm {
 	private double priceBrutto;
 	private String eanCode;
 	private String herstellerUrl;
+	@NotEmpty private String selectedCategorie;
 
 	public double getPriceNetto() {
 		return priceNetto;
@@ -59,6 +60,15 @@ public class PartOrderForm {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	public String getSelectedCategorie() {
+		return selectedCategorie;
+	}
+
+	public void setSelectedCategorie(String selectedCategorie) {
+		this.selectedCategorie = selectedCategorie;
 	}
 
 	public String getSelectedColour() {

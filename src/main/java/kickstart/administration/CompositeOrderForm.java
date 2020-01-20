@@ -7,7 +7,7 @@ import java.util.HashSet;
 public class CompositeOrderForm {
 	@NotEmpty
 	@Size(min = 2, max = 255, message = "Der Name muss zwischen 2 und 255 Zeichen lang sein.")
-	private String name;
+	@NotEmpty private String name;
 	private double priceNetto;
 	private double priceBrutto;
 	private String eanCode;
