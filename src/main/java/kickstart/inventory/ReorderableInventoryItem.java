@@ -10,6 +10,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
+import kickstart.administration.Location;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.InventoryItem;
 import org.salespointframework.quantity.Metric;
@@ -120,6 +121,12 @@ public class ReorderableInventoryItem extends InventoryItem {
 
 			return false;
 		}
+	}
+	public boolean addTo(Location location, int amount){
+		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+amount;
+		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+amount;
+		else return false;
+		return true;
 	}
 
 	public boolean sendToHl(@NotNull int amount) {

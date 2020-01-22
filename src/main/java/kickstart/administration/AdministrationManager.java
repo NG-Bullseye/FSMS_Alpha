@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 
 
 import kickstart.accountancy.AccountancyManager;
+import kickstart.activityLog.ActivityLogManager;
+import kickstart.activityLog.Log;
 import kickstart.inventory.InventoryManager;
 import kickstart.order.CartOrderManager;
 import kickstart.order.CustomerOrder;
@@ -52,8 +54,10 @@ public class AdministrationManager {
 	private AccountancyManager accountancy;
 	@Getter
 	private final long reorderTime = 0;
+	private ActivityLogManager logManager;
 
-	public AdministrationManager(WebshopCatalog catalog, InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager) {
+	public AdministrationManager(ActivityLogManager logManager,WebshopCatalog catalog, InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager) {
+		this.logManager=logManager;
 		this.catalog = catalog;
 		this.inventory = inventory;
 		this.orderManager = orderManager;
@@ -697,13 +701,14 @@ public class AdministrationManager {
 		return amount;
 	}
 
-	public void loggedReorder(@NotNull InForm inForm,UserAccount user){
-		//Log user in
-		reorder(inForm);
+	public void loggedReorder(@NotNull InForm inForm,UserAccount user,Location location){
+		logManager.addLog(user,
+				this.getArticle(inForm.getProductIdentifier()).getName()+" in "+location.toString()+" "+ inForm.getAmount()+"x mal hinzugefügt");
+		reorder(inForm,location);
 	}
 
 	//insert Items into Hauptlager
-	public void reorder(@NotNull InForm inForm) {
+	public void reorder(@NotNull InForm inForm,Location location) {
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
 
@@ -1085,7 +1090,7 @@ public class AdministrationManager {
 			InForm inForm=new InForm();
 			inForm.setProductIdentifier(craftForm.getProductIdentifier());
 			inForm.setAmount(craftForm.getAmount());
-			this.loggedReorder(inForm,user);
+			this.loggedReorder(inForm,user,materialQuelle);
 
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(craftForm.getProductIdentifier()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
@@ -1148,7 +1153,7 @@ public class AdministrationManager {
 				inForm.setProductIdentifier(p);
 				int requiredAmount =craftForm.getAmount()*map.get(p);
 				inForm.setAmount(requiredAmount);
-				this.reorder(inForm);
+				this.reorder(inForm,materialQuelle);
 			}
 			return true;
 		}

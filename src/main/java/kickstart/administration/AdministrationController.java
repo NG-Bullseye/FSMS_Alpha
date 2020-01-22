@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import kickstart.accountancy.AccountancyManager;
+import kickstart.activityLog.ActivityLogManager;
 import kickstart.activityLog.Log;
 import kickstart.activityLog.LogRepository;
 import kickstart.inventory.InventoryManager;
@@ -61,6 +62,7 @@ public class AdministrationController {
 	private UserAccountManager userAccountManager;
 	private UndoManager undoManager;
 	private boolean undoMode;
+	private ActivityLogManager activityLogManager;
 
 
 
@@ -73,10 +75,12 @@ public class AdministrationController {
 							 CartOrderManager cartOrderManager,
 							 UserManagement userManagement,
 							 UserAccountManager userAccountManager,
-							 UndoManager undoManager
+							 UndoManager undoManager,
+							 ActivityLogManager activityLogManager
 	) {
+		this.activityLogManager=activityLogManager;
 		this.logRepository=logRepository;
-		this.administrationManager = new AdministrationManager(catalog, inventoryManager,inventory,orderManager,cartOrderManager);
+		this.administrationManager = new AdministrationManager(activityLogManager,catalog, inventoryManager,inventory,orderManager,cartOrderManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
 		this.administrationManager = administrationManager;
@@ -255,7 +259,7 @@ public class AdministrationController {
 					 @Valid @ModelAttribute("inForm") InForm inForm,
 					 Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		inForm.setProductIdentifier(id);
-		administrationManager.reorder(inForm);
+		administrationManager.reorder(inForm,Location.LOCATION_HL);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
