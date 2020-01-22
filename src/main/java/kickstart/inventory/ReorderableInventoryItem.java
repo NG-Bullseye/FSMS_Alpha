@@ -67,12 +67,36 @@ public class ReorderableInventoryItem extends InventoryItem {
 	 * @param time     The time when the reorder arrives
 	 * @param quantity The quantity that be added to the amount
 	 */
-	public void addReorder(@NotNull LocalDateTime time, @NotNull Quantity quantity) {
+	public boolean addReorder(@NotNull LocalDateTime time, @NotNull Quantity quantity,@NotNull Location location) {
 		if (quantity.isLessThan(Quantity.of(0))) {
 			throw new IllegalArgumentException();
 		}
-		this.amountHl=amountHl+quantity.getAmount().intValue();
+
+		if (location==null) {
+			throw new IllegalArgumentException();
+		}
+
+		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+quantity.getAmount().intValue();
+		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+quantity.getAmount().intValue();
+		else return false;
 		reorders.put(time, quantity);
+		return true;
+	}
+
+	public boolean addReorder(@NotNull LocalDateTime time, @NotNull int amount,@NotNull Location location) {
+		if (amount<=0) {
+			throw new IllegalArgumentException();
+		}
+
+		if (location==null) {
+			throw new IllegalArgumentException();
+		}
+
+		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+amount;
+		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+amount;
+		else return false;
+		reorders.put(time, Quantity.of(amount));
+		return true;
 	}
 
 	/**
@@ -122,12 +146,8 @@ public class ReorderableInventoryItem extends InventoryItem {
 			return false;
 		}
 	}
-	public boolean addTo(Location location, int amount){
-		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+amount;
-		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+amount;
-		else return false;
-		return true;
-	}
+
+
 
 	public boolean sendToHl(@NotNull int amount) {
 

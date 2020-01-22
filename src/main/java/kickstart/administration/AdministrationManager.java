@@ -712,11 +712,13 @@ public class AdministrationManager {
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
 
+
+
 		if (item.isPresent()) {
 			item.get().addReorder(
 					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
 					LocalDateTime.now(),
-					Quantity.of(inForm.getAmount(), Metric.UNIT));
+					Quantity.of(inForm.getAmount(), Metric.UNIT),location);
 
 				boolean changed = item.get().update(LocalDateTime.now());
 				System.out.println("Inventory Item Reordered");
@@ -737,6 +739,7 @@ public class AdministrationManager {
 	public boolean receiveFromHl(@NotNull InForm inForm) {
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(inForm.getProductIdentifier());
 		if (item.isPresent()) {
+
 
 			if (item.get().recieveFromHl(inForm.getAmount())==false) {
 				return false;
