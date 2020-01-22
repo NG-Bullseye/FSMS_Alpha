@@ -121,6 +121,14 @@
 					Filter zurücksetzen
 					</button>
 				</div>
+
+				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+					<a th:href="@{/undo}">
+						<div class="ui button" th:if="${undoManager.getNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getNameOfLastAction()}">
+						</div>
+					</a>
+				</div>
+
 				<!--
 				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<a th:href="@{/hidden}">
@@ -214,7 +222,7 @@
 					-->
 
 					<!--11--> <!--<editor-fold desc="Herstellen BwB View:E">-->
-					<th sec:authorize="hasRole('ROLE_EMPLOYEE')"  	style="text-align: center">Herstellen BwB</th>
+					<th sec:authorize="hasRole('ROLE_EMPLOYEE')"  	style="text-align: center">Hergestellen</th>
 					<!--</editor-fold>-->
 
 					<!--12--> <!--<editor-fold desc="Sell View:M">-->
@@ -246,7 +254,15 @@
 				<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="item: ${inventoryItems}">
 
 					<!--1--> <!--<editor-fold desc="Name View:P">-->
-					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" th:text="${item.getProduct().getName()}" style="font-size: 20px;font-weight: bold;text-align: center">Name</td>
+					<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
+						<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
+							<a th:href="@{/toogleAbholbereit/{id}(id=${item.getProduct().getId()})}" target="_self" style="font-size: 20px;font-weight: bold;text-align: center">
+								<div class="ui basic button">
+									<span th:text="${item.getProduct().getName()} " style="font-size: 20px;font-weight: bold;text-align: center"></span>
+								</div>
+							</a>
+						</div>
+					</td>
 
 					<td sec:authorize="hasRole('ROLE_MANAGER')">
 						<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
@@ -268,9 +284,6 @@
 
 						</div>
 					</td>
-
-
-
 					<!--</editor-fold>-->
 
 					<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">-->
@@ -278,7 +291,31 @@
 					<!--</editor-fold>-->
 
 					<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
-					<td th:text="${item.getAmountBwB()}+${item.getUnitQuant()}"sec:authorize="hasRole('ROLE_PERMITTED')" style="font-size: 20px;font-weight: bold;text-align: center" >BWBbestand</td>
+					<td sec:authorize="hasRole('ROLE_PERMITTED')">
+						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
+							<div  style="font-size: 20px;font-weight: bold;text-align: center">
+								<!--if critische menge unterschritten dann Zahl ROT-->
+								<span th:if="${ item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
+								<!--else-->
+								<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }">
+									<!--if Abholbereit dann GRÜN-->
+									<span th:if="${administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
+									<!--sonst SCHWARZ-->
+									<span th:unless="${ administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+								</span>
+								<!--
+								<span th:unless="${ item.getAmountBwB() >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center">
+								-->
+							</div>
+							<!--<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
+							<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+							<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
+						</div>-->
+						</div>
+					</td>
+
+					<!--<td th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" sec:authorize="hasRole('ROLE_PERMITTED')" style="font-size: 20px;font-weight: bold;text-align: center" >BWBbestand</td>-->
+
 					<!--</editor-fold>-->
 
 					<!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
@@ -300,8 +337,8 @@
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-								<span th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center">
-								</span>
+								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 							</div>
 						</div>
 					</td>
@@ -390,7 +427,7 @@
 							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />
-									<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Craft</button>
+									<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Ok</button>
 								</div>
 
 							</div>

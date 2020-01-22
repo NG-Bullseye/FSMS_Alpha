@@ -28,7 +28,6 @@ import kickstart.inventory.InventoryManager;
 import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
-import org.hibernate.validator.constraints.Range;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
@@ -45,9 +44,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import lombok.Getter;
 import kickstart.articles.Article;
-import kickstart.articles.Comment;
 import kickstart.inventory.ReorderableInventoryItem;
 
 @Controller
@@ -62,6 +59,9 @@ public class AdministrationController {
     private AccountancyManager accountancyManager;
 	private UserManagement userManagement;
 	private UserAccountManager userAccountManager;
+	private UndoManager undoManager;
+	private boolean undoMode;
+
 
 
 	AdministrationController(LogRepository logRepository,
@@ -72,7 +72,8 @@ public class AdministrationController {
 							 AdministrationManager administrationManager,
 							 CartOrderManager cartOrderManager,
 							 UserManagement userManagement,
-							 UserAccountManager userAccountManager
+							 UserAccountManager userAccountManager,
+							 UndoManager undoManager
 	) {
 		this.logRepository=logRepository;
 		this.administrationManager = new AdministrationManager(catalog, inventoryManager,inventory,orderManager,cartOrderManager);
@@ -81,7 +82,8 @@ public class AdministrationController {
 		this.administrationManager = administrationManager;
 		this.cartOrderManager=cartOrderManager;
 		this.userManagement=userManagement;
-
+		this.undoManager=undoManager;
+		this.undoMode =false;
 	}
 
 	@ModelAttribute("categories")
@@ -141,6 +143,7 @@ public class AdministrationController {
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
+		model.addAttribute("undoManager",undoManager);
 
 		model.addAttribute("administrationManager", administrationManager);
 		return "catalog";
@@ -191,6 +194,7 @@ public class AdministrationController {
 		if (administrationManager.receiveFromHl(inForm)==false) {//Add itemes to BwB and remove from Hauptlager
 			logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
 					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"));
+
 			return "redirect:/";
 		}
 
@@ -204,6 +208,9 @@ public class AdministrationController {
 				LocalDateTime.now(),
 				loggedInUserWeb,
 				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal vom Hauptlager Empfangen"));
+		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN,inForm.getProductIdentifier(),inForm.getAmount());
+		undoMode =false;
+
 		return "redirect:/";
 	}
 
@@ -232,10 +239,16 @@ public class AdministrationController {
 				LocalDateTime.now(),
 				loggedInUserWeb,
 				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal zum; Hauptlager gesendet"));
+		if(!undoMode) undoManager.push(ActionEnum.ACTION_SEND,inForm.getProductIdentifier(),inForm.getAmount());
+		undoMode =false;
 		return "redirect:/";
 	}
 
 
+	/**
+	 * IN DAS HAUPTLAGER UND IN DAS SYSTEM
+	 *
+	 * **/
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id,
@@ -277,6 +290,10 @@ public class AdministrationController {
 		return "redirect:/";
 	}*/
 
+	/**
+	 * AUS DEM HAUPLAGER UND AUS DEM SYSTEM
+	 * **/
+
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/out/{id}")
 	String catalogOut(@PathVariable ProductIdentifier id,
@@ -290,7 +307,7 @@ public class AdministrationController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		administrationManager.placeOrder(outForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
+		administrationManager.out(outForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
@@ -305,7 +322,7 @@ public class AdministrationController {
 
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/craftBwB/{id}")
-	String catalogCraft(@PathVariable ProductIdentifier id,
+	String catalogCraftBwB(@PathVariable ProductIdentifier id,
 						@Valid @ModelAttribute("craftForm") CraftForm craftForm,
 						@LoggedIn UserAccount loggedInUserWeb,
 						Model model) {
@@ -330,7 +347,8 @@ public class AdministrationController {
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
-
+		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT,craftForm.getProductIdentifier(),craftForm.getAmount());
+		undoMode =false;
 		return "redirect:/";
 	}
 
@@ -530,5 +548,70 @@ public class AdministrationController {
 	//</editor-fold>
 
 	//</editor-fold>
+
+	@GetMapping("/toogleAbholbereit/{identifier}")
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	public String toogleAbholbereit(@PathVariable ProductIdentifier identifier, Model model,@LoggedIn UserAccount loggedInUserWeb) {
+		administrationManager.toogleAbholbereit(identifier);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				"neue Wahre Abholbereit"));
+
+		return "redirect:/";
+	}
+
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
+	@GetMapping("/undo")
+	String catalogUndo(Model model,@LoggedIn UserAccount loggedInUserWeb) {
+		undoMode =true;
+		UndoManager.ActionObj actionObj=undoManager.getUndoAction();
+		switch (actionObj.getAction()){
+			case ACTION_SEND:{
+				InForm inForm=new InForm();
+				inForm.setAmount(actionObj.getAmount());
+				return this.catalogsendToHl(actionObj.getId(),inForm,model,loggedInUserWeb);
+			}
+			case ACTION_CRAFT:{
+				CraftForm inForm=new CraftForm();
+				inForm.setAmount(actionObj.getAmount());
+				return this.catalogCraftBwB(actionObj.getId(), inForm,loggedInUserWeb,model);
+			}
+			case ACTION_EMPFANGEN: {
+				InForm inForm=new InForm();
+				inForm.setAmount(actionObj.getAmount());
+				return this.catalogReceiveFromHl(actionObj.getId(), inForm,model,loggedInUserWeb);
+			}
+			case ACTION_ZERLEGEN:{
+				CraftForm craftForm=new CraftForm();
+				craftForm.setProductIdentifier(actionObj.getId());
+				craftForm.setAmount(actionObj.getAmount());
+				administrationManager.zerlegen(craftForm,loggedInUserWeb,Location.LOCATION_BWB);
+				undoMode =false;
+			}
+			undoManager.pop(); //removes top elem of Lifo
+			return "redirect:/";
+		}
+		System.out.println("MYERROR: UndoManager unreachable switchcase was reached");
+
+
+
+		//administrationManager.reorder(inForm); //old
+
+
+
+		//Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //old
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
+
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("catalog", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in catalog.html
+		model.addAttribute("administrationManager", administrationManager);
+		model.addAttribute("undoManager",undoManager);
+		logRepository.save(new Log(
+				LocalDateTime.now(),
+				loggedInUserWeb,
+				"Die Aktion "+actionObj.getAction().toString()+" von "+ actionObj.getAmount()+" "+administrationManager.getArticle(actionObj.getId()).getName() +" wurde Rückgängig gemacht"));
+		return "redirect:/";
+	}
 
 }

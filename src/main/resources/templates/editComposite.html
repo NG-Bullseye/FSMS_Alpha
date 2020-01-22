@@ -24,13 +24,14 @@
                     </td>
                 </tr>
 
-                <tr th:each="article : ${catalog}">
-                    <td th:text="${article.key.name}"></td>
-                    <td class="center aligned" th:text="${article.value}"></td>
-                    <td>
-                        <input type="number" min="0" th:value="${article.value}" th:name="article_+${article.key.id}" >
-                    </td>
 
+                <tr>
+                    <td><t3>Kiritsche Menge:</t3></td>
+                    <td th:text="${article.criticalAmount}">critiaclAmount</td>
+                    <td>
+                        <input type="number" min="0" step="1" th:field="*{criticalAmount}" />
+                        <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('criticalAmount')}" th:errors="*{criticalAmount}"></div>
+                    </td>
                 </tr>
 
                 <tr>
@@ -89,6 +90,16 @@
                         <input type="text" th:field="*{herstellerUrl}"/>
                     </td>
                 </tr>
+
+                <tr> </tr>
+                <tr th:each="article : ${catalog}">
+                    <td th:text="${article.key.name}"></td>
+                    <td class="center aligned" th:text="${article.value}"></td>
+                    <td>
+                        <input type="number" min="0" th:value="${article.value}" th:name="article_+${article.key.id}" >
+                    </td>
+                </tr>
+
 
             </tbody>
             <tfoot class="full width">

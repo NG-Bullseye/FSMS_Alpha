@@ -2,7 +2,6 @@ package kickstart.administration;
 
 import static org.salespointframework.core.Currencies.EURO;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -161,6 +160,9 @@ public class AdministrationManager {
 			if (l2 != 0) {
 				afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
 			}
+
+			afterEdit.setCriticalAmount(form.getCriticalAmount());
+
 			if (form.getEanCode()!=null&&!form.getEanCode().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setEanCode(form.getEanCode());
@@ -209,6 +211,9 @@ public class AdministrationManager {
 			if (l2 != 0) {
 				afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
 			}
+
+			afterEdit.setCriticalAmount(form.getCriticalAmount());
+
 			if (form.getEanCode()!=null&&!form.getEanCode().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setEanCode(form.getEanCode());
@@ -324,7 +329,7 @@ public class AdministrationManager {
 				if(c.getPartIds()==null){
 					throw new NullPointerException();
 				}
-				parts = getArticleFrom_IdIntMapping(convertDatabaseMap(c.getPartIds()) );
+				parts = getArticleFrom_IdIntMapping(convertPartStringIntegerMapToPartProductIdIntegerMap(c.getPartIds()) );
 			}
 
 			// Update was successful. Remove it from the list and save the changes
@@ -343,7 +348,11 @@ public class AdministrationManager {
 
 	}
 
-	public HashMap<ProductIdentifier,Integer> convertDatabaseMap(Map<String,Integer> stringIntegerHashMap){
+	/**
+	 * wandelt String in ProductIds um
+	 *
+	 * **/
+	public HashMap<ProductIdentifier,Integer> convertPartStringIntegerMapToPartProductIdIntegerMap(Map<String,Integer> stringIntegerHashMap){
 		HashMap<ProductIdentifier,Integer> productIdentifierIntegerHashMap=new HashMap<>();
 		if(stringIntegerHashMap==null){
 			throw new NullPointerException("this Articles PartsMap is Null ");
@@ -663,7 +672,7 @@ public class AdministrationManager {
 					.getPartIds()==null){
 				throw new NullPointerException();
 			}
-			convertDatabaseMap(catalog.findById(identifier)
+			convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(identifier)
 					.get()
 					.getPartIds())
 					.forEach((article, count) -> {
@@ -771,7 +780,7 @@ public class AdministrationManager {
 			a=catalog.findById(p).get();
 		}
 		else throw  new NullPointerException();
-		Map<ProductIdentifier,Integer> map=this.convertDatabaseMap(a.getPartIds());
+		Map<ProductIdentifier,Integer> map=this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds());
 		if (a instanceof Composite)
 			for (ProductIdentifier pSub:map.keySet()) {
 
@@ -833,7 +842,7 @@ public class AdministrationManager {
 
 	//this is Node
 		else{
-			Map<ProductIdentifier,Integer>	mapOfThisComposite =this.convertDatabaseMap(article.getPartIds());
+			Map<ProductIdentifier,Integer>	mapOfThisComposite =this.convertPartStringIntegerMapToPartProductIdIntegerMap(article.getPartIds());
 			for (ProductIdentifier componentId : mapOfThisComposite.keySet()) {
 				leafPartIds= getCollapsedProduktIntegerMap(componentId,mapOfThisComposite.get(componentId),leafPartIds);
 			}
@@ -890,7 +899,7 @@ public class AdministrationManager {
 		//</editor-fold>
 		//<editor-fold desc="Ini Konten der auf Craftbarkeit untersucht wird">
 		Article superComponent =catalog.findById(thisComponentId).get();
-		Map<ProductIdentifier,Integer> superCompositeRezept= convertDatabaseMap(superComponent.getPartIds());
+		Map<ProductIdentifier,Integer> superCompositeRezept= convertPartStringIntegerMapToPartProductIdIntegerMap(superComponent.getPartIds());
 		//System.out.println(superCompositeRezept);
 
 		//</editor-fold>
@@ -1007,7 +1016,7 @@ public class AdministrationManager {
 		return subComponentInStock;
 	}
 
-	public void placeOrder(OutForm outForm, UserAccount userAccount,Location materialQuelle) {
+	public void out(OutForm outForm, UserAccount userAccount, Location materialQuelle) {
 
 		Cart cart=new Cart();
 		Article a=this.getArticle(outForm.getProductIdentifier());
@@ -1078,13 +1087,13 @@ public class AdministrationManager {
 			inForm.setAmount(craftForm.getAmount());
 			this.loggedReorder(inForm,user);
 
-			Map<ProductIdentifier,Integer> map=convertDatabaseMap(catalog.findById(craftForm.getProductIdentifier()).get().getPartIds());
+			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(craftForm.getProductIdentifier()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
 				OutForm outForm=new OutForm();
 				outForm.setProductIdentifier(p);
 				int requiredAmount =craftForm.getAmount()*map.get(p);
 				outForm.setAmount(requiredAmount);
-				this.placeOrder(outForm,user,materialQuelle);
+				this.out(outForm,user,materialQuelle);
 			}
 			return true;
 		}
@@ -1094,7 +1103,7 @@ public class AdministrationManager {
 	private boolean  direktCraftbar(CraftForm craftForm,Location lager) {
 
 		Article a= this.getArticle(craftForm.getProductIdentifier())	;
-		Map<ProductIdentifier,Integer> rezept =this.convertDatabaseMap(a.getPartIds())  ;
+		Map<ProductIdentifier,Integer> rezept =this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds())  ;
 		for (ProductIdentifier p :
 				rezept.keySet()) {
 			long neededAmountForOne=rezept.get(p);
@@ -1115,6 +1124,35 @@ public class AdministrationManager {
 		}
 
 		return true;
+	}
+
+
+	public void toogleAbholbereit(ProductIdentifier identifier) {
+		if (catalog.findById(identifier).isPresent()) {
+			Article article = catalog.findById(identifier).get();
+			article.toogleAbholBereit();
+		}
+	}
+
+	public boolean zerlegen(CraftForm craftForm, UserAccount user,Location materialQuelle) {
+		if(inventoryManager.getInventory().findByProductIdentifier(craftForm.getProductIdentifier()).isPresent()
+				&&(inventoryManager.getInventory().findByProductIdentifier(craftForm.getProductIdentifier()).get().getAmountBwB()>=craftForm.getAmount() )){
+			OutForm outForm=new OutForm();
+			outForm.setProductIdentifier(craftForm.getProductIdentifier());
+			outForm.setAmount(craftForm.getAmount());
+			this.out(outForm,user,materialQuelle);
+
+			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(craftForm.getProductIdentifier()).get().getPartIds());
+			for (ProductIdentifier p:map.keySet()){
+				InForm inForm=new InForm();
+				inForm.setProductIdentifier(p);
+				int requiredAmount =craftForm.getAmount()*map.get(p);
+				inForm.setAmount(requiredAmount);
+				this.reorder(inForm);
+			}
+			return true;
+		}
+		return false;
 	}
 
 

@@ -1,8 +1,6 @@
 package kickstart.administration;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 
 public class CompositeForm {
 	@Size(max = 255, message = "Der Name darf maximal 255 Zeichen lang sein.")
@@ -13,9 +11,16 @@ public class CompositeForm {
 	private String herstellerUrl;
 	private String selectedColour;
 	private String selectedCategorie;
+	private long criticalAmount;
 
 
+	public long getCriticalAmount() {
+		return criticalAmount;
+	}
 
+	public void setCriticalAmount(long criticalAmount) {
+		this.criticalAmount = criticalAmount;
+	}
 
 	public String getSelectedColour() {
 		return selectedColour;

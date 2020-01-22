@@ -48,6 +48,7 @@ public abstract class Article extends Product {
 	protected String eanCode;
 	protected String herstellerUrl="Fishstone";
 	protected long criticalAmount;
+	protected boolean abholBereit;
 
 	// This variable states whether a article needs to get updated after,
 	// one of it's children was edited. Update means in this context that attributes
@@ -87,6 +88,7 @@ public abstract class Article extends Product {
 		if (name.equals("")) {
 			throw new IllegalArgumentException("Article.name should not be empty");
 		}
+		this.abholBereit=false;
 		this.criticalAmount=0;
 		this.colour=colour;
 		setName(name+" "+colour);
@@ -286,5 +288,12 @@ public abstract class Article extends Product {
 		orderedAmount += amount;
 	}
 
+	public boolean isAbholBereit() {
+		return abholBereit;
+	}
 
+	public void toogleAbholBereit() {
+		if(abholBereit)this.abholBereit=false;
+		else this.abholBereit=true;
+	}
 }
