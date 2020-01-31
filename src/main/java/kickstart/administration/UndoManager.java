@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Component
 public class UndoManager {
@@ -61,7 +62,7 @@ public class UndoManager {
 	}
 
 	public ActionObj getUndoAction(){
-		ActionObj lastAction=actionObjMap.get(actionObjMap.size()-1);
+		ActionObj lastAction = new ActionObj(actionObjMap.get(actionObjMap.size()-1).getAction(),actionObjMap.get(actionObjMap.size()-1).getId(),actionObjMap.get(actionObjMap.size()-1).getAmount());
 		lastAction.flipActionToReverseAction();
 		return lastAction;
 	}
@@ -81,10 +82,19 @@ public class UndoManager {
 		return true;
 	}
 
-	public String getNameOfLastAction(){
+	public String getProductNameOfLastAction(){
 		try{
 			return	administrationManager.getArticle(actionObjMap.get(actionObjMap.size()-1).getId()).getName();
 		}catch (NullPointerException n){
+			return null;
+		}
+
+	}
+
+	public String getNameOfLastAction(){
+		try{
+			return	actionObjMap.get(actionObjMap.size()-1).getAction().toString();
+		}catch (Exception e){
 			return null;
 		}
 

@@ -12,6 +12,8 @@
                     <div class="ui negative message" th:if="${#fields.hasErrors('*')}">
                         <p>Bitte überprüfen Sie ihre Eingabe.</p>
                     </div>
+
+                    <!--<editor-fold desc="Name">-->
                     <div class=" ui vertical segment">
                         <div class="ui labeled input">
                             <div class="ui label">Produktname</div>
@@ -21,46 +23,10 @@
                             </div>
                         </div>
                     </div>
+                    <!--</editor-fold>-->
 
-                    <div class=" ui vertical segment">
-                        <div th:each="article : ${catalog}">
-                            <div class="ui labeled input">
-                                <div class="ui label" th:text="${article.name}"></div>
-                                <input type="number" min="0" value="0" th:name="article_+${article.id}" >
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="ui vertical segment">
-                        <div class="ui labeled input">
-                            <div class="ui label">Hersteller Url</div>
-                            <input type="text" th:field="*{herstellerUrl}" />
-                            <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('herstellerUrl')}" th:errors="*{herstellerUrl}">
-                                Bitte geben Sie einen Hersteller Link ein.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="ui vertical segment">
-                        <div class="ui labeled input">
-                            <div class="ui label">EAN Code</div>
-                            <input type="text" th:field="*{eanCode}" />
-                            <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('eanCode')}" th:errors="*{eanCode}">
-                                Bitte geben Sie eine ean Code ein.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="ui vertical segment">
-                        <div th:each="colour: ${colours}">
-                            <input name="radio-option-1" type="radio" th:field="*{selectedColour}" th:value="${colour}"/>
-                            <label th:text="${colour}">  </label>
-                        </div>
-                        <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedColour')}" th:errors="*{selectedColour}">
-                            Bitte geben Sie eine Beschreibung ein.
-                        </div>
-                    </div>
-
+                   <!--<editor-fold desc="Categorie">-->
                     <div class="ui vertical segment">
                         <div th:each="category: ${categoriesComposite}">
                             <input name="radio-option-1" type="radio" th:field="*{selectedCategorie}" th:value="${category}"/>
@@ -70,6 +36,55 @@
                             Bitte geben Sie eine Beschreibung ein.
                         </div>
                     </div>
+                    <!--</editor-fold>-->
+
+                    <!--<editor-fold desc="Url">-->
+                    <div class="ui vertical segment">
+                        <div class="ui labeled input">
+                            <div class="ui label">Hersteller Url</div>
+                            <input type="text" th:field="*{herstellerUrl}" />
+                            <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('herstellerUrl')}" th:errors="*{herstellerUrl}">
+                                Bitte geben Sie einen Hersteller Link ein.
+                            </div>
+                        </div>
+                    </div>
+                    <!--</editor-fold>-->
+
+                    <!--<editor-fold desc="Ean">-->
+                    <div class="ui vertical segment">
+                        <div class="ui labeled input">
+                            <div class="ui label">EAN Code</div>
+                            <input type="text" th:field="*{eanCode}" />
+                            <div class="ui left pointing red basic label" th:if="${#fields.hasErrors('eanCode')}" th:errors="*{eanCode}">
+                                Bitte geben Sie eine ean Code ein.
+                            </div>
+                        </div>
+                    </div>
+                    <!--</editor-fold>-->
+
+                    <!--<editor-fold desc="Farbe">-->
+                    <div class="ui vertical segment">
+                        <div th:each="colour: ${colours}">
+                            <input name="radio-option-1" type="radio" th:field="*{selectedColour}" th:value="${colour}"/>
+                            <label th:text="${colour}">  </label>
+                        </div>
+                        <div class="ui left red basic label" th:if="${#fields.hasErrors('selectedColour')}" th:errors="*{selectedColour}">
+                            Bitte geben Sie eine Beschreibung ein.
+                        </div>
+                    </div>
+                    <!--</editor-fold>-->
+
+                   <!--<editor-fold desc="Parts">-->
+                    <div class=" ui vertical segment">
+                        <div th:each="article : ${catalog}">
+                            <div class="ui labeled input">
+                                <div class="ui label" th:text="${article.name}"></div>
+                                <input type="number" min="0" value="0" th:name="article_+${article.id}" >
+                            </div>
+                        </div>
+                    </div>
+                    <!--</editor-fold>-->
+
 
                     <div class="ui vertical segment">
                         <a class="item">

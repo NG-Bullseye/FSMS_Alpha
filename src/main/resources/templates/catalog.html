@@ -124,7 +124,7 @@
 
 				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<a th:href="@{/undo}">
-						<div class="ui button" th:if="${undoManager.getNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getNameOfLastAction()}">
+						<div class="ui button" th:if="${undoManager.getProductNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getProductNameOfLastAction()}+' '+${undoManager.getNameOfLastAction()}">
 						</div>
 					</a>
 				</div>
@@ -149,7 +149,7 @@
 					</a>
 				</div>
 
-				<div class="item" sec:authorize="hasRole('ROLE_ADMIN')" >
+				<div class="item" sec:authorize="hasRole('ROLE_MANAGER')" >
 					<div class="ui simple dropdown">
 								neuer Artikel
 						<i class="dropdown icon"></i>

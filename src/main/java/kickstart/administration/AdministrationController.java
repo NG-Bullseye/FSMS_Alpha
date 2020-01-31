@@ -213,6 +213,7 @@ public class AdministrationController {
 				loggedInUserWeb,
 				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal vom Hauptlager Empfangen"));
 		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN,inForm.getProductIdentifier(),inForm.getAmount());
+		if(undoMode) undoManager.pop();
 		undoMode =false;
 
 		return "redirect:/";
@@ -243,7 +244,9 @@ public class AdministrationController {
 				LocalDateTime.now(),
 				loggedInUserWeb,
 				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal zum; Hauptlager gesendet"));
-		if(!undoMode) undoManager.push(ActionEnum.ACTION_SEND,inForm.getProductIdentifier(),inForm.getAmount());
+		if(!undoMode)
+			undoManager.push(ActionEnum.ACTION_SEND,inForm.getProductIdentifier(),inForm.getAmount());
+		if(undoMode) undoManager.pop();
 		undoMode =false;
 		return "redirect:/";
 	}
@@ -352,6 +355,8 @@ public class AdministrationController {
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT,craftForm.getProductIdentifier(),craftForm.getAmount());
+		if(undoMode) undoManager.pop();
+
 		undoMode =false;
 		return "redirect:/";
 	}
@@ -454,7 +459,6 @@ public class AdministrationController {
 		}
 		model.addAttribute("compositeForm", new CompositeForm());
 
-		administrationManager.newComposite(form, partsMapping);
 
 		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 
@@ -570,6 +574,7 @@ public class AdministrationController {
 	String catalogUndo(Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		undoMode =true;
 		UndoManager.ActionObj actionObj=undoManager.getUndoAction();
+
 		switch (actionObj.getAction()){
 			case ACTION_SEND:{
 				InForm inForm=new InForm();
@@ -585,6 +590,7 @@ public class AdministrationController {
 				InForm inForm=new InForm();
 				inForm.setAmount(actionObj.getAmount());
 				return this.catalogReceiveFromHl(actionObj.getId(), inForm,model,loggedInUserWeb);
+
 			}
 			case ACTION_ZERLEGEN:{
 				CraftForm craftForm=new CraftForm();
@@ -592,9 +598,9 @@ public class AdministrationController {
 				craftForm.setAmount(actionObj.getAmount());
 				administrationManager.zerlegen(craftForm,loggedInUserWeb,Location.LOCATION_BWB);
 				undoMode =false;
+				undoManager.pop(); //removes top elem of Lifo
+				return "redirect:/";
 			}
-			undoManager.pop(); //removes top elem of Lifo
-			return "redirect:/";
 		}
 		System.out.println("MYERROR: UndoManager unreachable switchcase was reached");
 
