@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 
+import kickstart.TelegramInterface.BotManager;
 import kickstart.accountancy.AccountancyManager;
 import kickstart.activityLog.ActivityLogManager;
 import kickstart.activityLog.Log;
@@ -55,8 +56,9 @@ public class AdministrationManager {
 	@Getter
 	private final long reorderTime = 0;
 	private ActivityLogManager logManager;
+	private BotManager botManager;
 
-	public AdministrationManager(ActivityLogManager logManager,WebshopCatalog catalog, InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager) {
+	public AdministrationManager(BotManager botManager,ActivityLogManager logManager,WebshopCatalog catalog, InventoryManager inventoryManager, Inventory<ReorderableInventoryItem> inventory, OrderManager orderManager, CartOrderManager cartOrderManager) {
 		this.logManager=logManager;
 		this.catalog = catalog;
 		this.inventory = inventory;
@@ -64,6 +66,7 @@ public class AdministrationManager {
 		this.cartOrderManager = cartOrderManager;
 		this.accountancy = accountancy;
 		this.inventoryManager=inventoryManager;
+		this.botManager=botManager;
 	}
 
 	/**
@@ -490,7 +493,7 @@ public class AdministrationManager {
 				form.getSelectedCategorie(),
 				form.getHerstellerUrl());
 		catalog.save(newArticle);
-		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,newArticle, Quantity.of(0, Metric.UNIT)));
 	}
 
 	/**
@@ -523,7 +526,7 @@ public class AdministrationManager {
 				map1
 		);
 		catalog.save(newArticle);
-		inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,newArticle, Quantity.of(0, Metric.UNIT)));
 	}
 
 	/**

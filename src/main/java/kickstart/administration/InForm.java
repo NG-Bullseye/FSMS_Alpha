@@ -10,6 +10,7 @@ public class InForm {
 
 	private ProductIdentifier productIdentifier;
 
+	@Positive
 	private int amount;
 
 	public ProductIdentifier getProductIdentifier() {

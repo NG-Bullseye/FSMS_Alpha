@@ -78,13 +78,13 @@
 							<div class="item">
 								<div class="ui labeled input">
 									<div class="ui label">Mindestpreis</div>
-									<input type="number" th:value="0" th:field="*{minPriceBrutto}">
+									<input style="width: 60px" type="number" th:value="0" th:field="*{minPriceBrutto}">
 								</div>
 							</div>
 							<div class="item">
 								<div class="ui labeled input">
 									<div class="ui label">Maximalpreis</div>
-									<input style="width: 70px" type="number" th:value="50000.0" th:field="*{maxPriceBrutto}">
+									<input style="width: 60px" type="number" th:value="50000.0" th:field="*{maxPriceBrutto}">
 								</div>
 							</div>
 						</div>
@@ -139,7 +139,6 @@
 					</a>
 				</div>
 				-->
-
 				<div class="right menu" sec:authorize="hasRole('ROLE_MANAGER')">
 					<a th:href="@{/activityLog}">
 						<div class="ui button" style="margin: 10px">
@@ -149,18 +148,17 @@
 					</a>
 				</div>
 
-				<div class="item" sec:authorize="hasRole('ROLE_MANAGER')" >
-					<div class="ui simple dropdown">
-								neuer Artikel
-						<i class="dropdown icon"></i>
+				<div class="right menu" sec:authorize="hasRole('ROLE_MANAGER')">
+					<div  class="ui simple dropdown" style="padding-top: 20px">
+						<span style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">Erstellen
+							<i class="dropdown icon" ></i>
+						</span>
 						<div class="menu">
-							<a class="item" th:href="@{/part/new}">Rohstoff</a>
-							<a class="item" th:href="@{/composite/new}">Einzelteil/Produkt</a>
+							<a class="item" th:href="@{/part/new}">Atomar</a>
+							<a class="item" th:href="@{/composite/new}">Mit Bestandteilen</a>
 						</div>
 					</div>
 				</div>
-
-
 
 			</div>
 		</form>
@@ -185,11 +183,11 @@
 					<!--</editor-fold>-->
 
 					<!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
-					<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Hl Bestand</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">HL Bestand</th>
 					<!--</editor-fold>-->
 
 					<!--5--> <!--<editor-fold desc="Herstallbar Hl View:M">-->
-					<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Hestellbar Hl</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Hestellbar HL</th>
 					<!--</editor-fold>-->
 
 					<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
@@ -238,7 +236,7 @@
 					<!--</editor-fold>-->
 
 					<!--15--> <!--<editor-fold desc="Kategorie View:P">-->
-					<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Katagorie</th>
+					<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Kategorie</th>
 					<!--</editor-fold>-->
 
 					<!--16 not used--> <!--<editor-fold desc="Bearbeiten View:M">-->
@@ -256,9 +254,10 @@
 					<!--1--> <!--<editor-fold desc="Name View:P">-->
 					<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
 						<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
-							<a th:href="@{/toogleAbholbereit/{id}(id=${item.getProduct().getId()})}" target="_self" style="font-size: 20px;font-weight: bold;text-align: center">
+							<a th:href="@{/toogleAbholbereit/{id}(id=${item.getProduct().getId()})}" target="_self">
+
 								<div class="ui basic button">
-									<span th:text="${item.getProduct().getName()} " style="font-size: 20px;font-weight: bold;text-align: center"></span>
+									<span th:text="${item.getProduct().getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 								</div>
 							</a>
 						</div>
@@ -269,22 +268,38 @@
 							<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
 								   th:href="@{/edit/{id}(id=${item.getProduct().getId()})}" target="_self">
+
 									<div class="ui basic button">
-										<span sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getProduct().getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Bearbeiten</span>
+										<span sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getProduct().getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 									</div>
+
+
+									<!--
+<div class="ui basic button">
+										<span th:text="${item.getProduct().getPriceNetto+' '+item.getProduct().getPriceBrutto} " style="font-size: 20px;font-weight: bold;text-align: center"></span>
+									</div>
+									-->
 								</a>
 
 								<a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
 								   th:href="@{/edit/composite/{id}(id=${item.getProduct().getId()})}" target="_self">
 									<div class="ui basic button">
-										<span sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getProduct().getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Bearbeiten</span>
+										<span sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getProduct().getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 									</div>
-								</a>
-							</div>
 
+									<!--
+									<div class="ui basic button">
+										<span th:text="${item.getProduct().getPriceNetto+' 'item.getProduct().getPriceBrutto} " style="font-size: 20px;font-weight: bold;text-align: center"></span>
+									</div>
+									-->
+
+
+								</a>
+
+							</div>
 						</div>
 					</td>
-					<!--</editor-fold>-->
+                                                        <!--</editor-fold>-->
 
 					<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">-->
 					<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getQuantity().getAmount().intValue()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
@@ -297,7 +312,7 @@
 								<!--if critische menge unterschritten dann Zahl ROT-->
 								<span th:if="${ item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 								<!--else-->
-								<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }">
+								<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }+${item.getUnitQuant()}">
 									<!--if Abholbereit dann GRÜN-->
 									<span th:if="${administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
 									<!--sonst SCHWARZ-->
@@ -370,7 +385,7 @@
 						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/receive/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<div>
-									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
+									<input style="width: 70px;text-align: center;"  autofocus type="number" min="0" th:field="*{amount}" />
 									<button  type="submit" class="ui button"
 											 style="color: #68d4d0;
 											 margin: 0px;

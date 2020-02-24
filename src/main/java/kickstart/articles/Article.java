@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import kickstart.TelegramInterface.BotManager;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.catalog.ProductIdentifier;
@@ -71,6 +72,8 @@ public abstract class Article extends Product {
 	@Getter
 	private int orderedAmount;
 
+
+
 	/**
 	 * 
 	 * @param name: The name of the article.
@@ -78,7 +81,7 @@ public abstract class Article extends Product {
 	 * @throws IllegalArgumentException If name or description equal the empty
 	 *                                  string
 	 */
-	public Article(@NotNull String name,String colour, double priceNetto,double priceBrutto,String eanCode) throws IllegalArgumentException {
+	public Article(@NotNull String name, String colour, double priceNetto, double priceBrutto, String eanCode) throws IllegalArgumentException {
 		// Here the name is just set to test later whether name is valid. Therefore a
 		// placeholder is
 		// used and later changed. We can't check this before calling the super
@@ -99,6 +102,7 @@ public abstract class Article extends Product {
 		updateStatus = true;
 		this.parents = new LinkedList<ProductIdentifier>();
 		orderedAmount = 0;
+
 	}
 
 	public long getCriticalAmount() {

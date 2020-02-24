@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import kickstart.TelegramInterface.BotManager;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
@@ -37,6 +38,7 @@ public class InventoryController {
 	@Getter
 	private InventoryManager manager;
 
+
 	/**
 	 * This inner class is used to easier combine information from Articles and
 	 * InventoryItems
@@ -56,13 +58,15 @@ public class InventoryController {
 		}
 	}
 
+
 	/**
 	 * 
 	 * @param inventory   The inventory where the ReorderableInventoryItems are
 	 *                    saved
 	 * @param accountancy This allows to add expenses and gives the current time
 	 */
-	public InventoryController(Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy) {
+	public InventoryController( Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy) {
+
 		manager = new InventoryManager(inventory, accountancy);
 	}
 

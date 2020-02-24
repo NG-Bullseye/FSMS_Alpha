@@ -21,6 +21,7 @@ import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import kickstart.TelegramInterface.BotManager;
 import kickstart.accountancy.AccountancyManager;
 import kickstart.activityLog.ActivityLogManager;
 import kickstart.activityLog.Log;
@@ -63,6 +64,7 @@ public class AdministrationController {
 	private UndoManager undoManager;
 	private boolean undoMode;
 	private ActivityLogManager activityLogManager;
+	private BotManager botManager;
 
 
 
@@ -76,11 +78,13 @@ public class AdministrationController {
 							 UserManagement userManagement,
 							 UserAccountManager userAccountManager,
 							 UndoManager undoManager,
-							 ActivityLogManager activityLogManager
+							 ActivityLogManager activityLogManager,
+							 BotManager botManager
 	) {
+		this.botManager=botManager;
 		this.activityLogManager=activityLogManager;
 		this.logRepository=logRepository;
-		this.administrationManager = new AdministrationManager(activityLogManager,catalog, inventoryManager,inventory,orderManager,cartOrderManager);
+		this.administrationManager = new AdministrationManager(botManager,activityLogManager,catalog, inventoryManager,inventory,orderManager,cartOrderManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
 		this.administrationManager = administrationManager;
@@ -115,6 +119,9 @@ public class AdministrationController {
 	@GetMapping("/")
 	String catalog(Model model) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
+
+
 		//</editor-fold>
 		//administrationManager.getVisibleCatalog();
 		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
@@ -145,19 +152,21 @@ public class AdministrationController {
 	//	model.addAttribute("catalog", catalogList);
 		model.addAttribute("filterForm", new Filterform());
 		model.addAttribute("inForm", new InForm());
+
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
 		model.addAttribute("undoManager",undoManager);
 
 		model.addAttribute("administrationManager", administrationManager);
+		//botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
 		return "catalog";
 	}
 
 	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@PostMapping("/filter")
-	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform,
-						   @RequestParam(required = false, name = "reset") String reset,
-						   BindingResult bindingResult, Model model) {
+	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform, BindingResult bindingResult,
+						   @RequestParam(required = false, name = "reset") String reset
+						  , Model model) {
 		if (reset.equals("reset")) {
 			return "redirect:/";
 		}
@@ -175,6 +184,7 @@ public class AdministrationController {
 		model.addAttribute("craftForm", new CraftForm());
 		//model.addAttribute("catalog", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
+		model.addAttribute("undoManager",undoManager);
 		for (ReorderableInventoryItem item:list
 			 ) {
 			Article a= administrationManager.getArticle(item.getProduct().getId());
@@ -189,10 +199,13 @@ public class AdministrationController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/receive/{id}")
 	String catalogReceiveFromHl(@PathVariable ProductIdentifier id,
-					 @Valid @ModelAttribute("inForm") InForm inForm,
+					 @Valid @ModelAttribute("inForm") InForm inForm, BindingResult bindingResult,
 						     Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		inForm.setProductIdentifier(id);
 
+		if (bindingResult.hasErrors()) {
+			return"redirect:/";
+		}
 		//administrationManager.reorder(inForm); //old
 
 		if (administrationManager.receiveFromHl(inForm)==false) {//Add itemes to BwB and remove from Hauptlager
@@ -222,10 +235,12 @@ public class AdministrationController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/send/{id}")
 	String catalogsendToHl(@PathVariable ProductIdentifier id,
-								@Valid @ModelAttribute("inForm") InForm inForm,
+								@Valid @ModelAttribute("inForm") InForm inForm, BindingResult bindingResult,
 								Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		inForm.setProductIdentifier(id);
-
+		if (bindingResult.hasErrors()) {
+			return "redirect:/";
+		}
 		//administrationManager.reorder(inForm); //old
 
 		if (administrationManager.sendToHl(inForm)==false) {//Add itemes to Hl and remove from BwB
@@ -259,8 +274,11 @@ public class AdministrationController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id,
-					 @Valid @ModelAttribute("inForm") InForm inForm,
+					 @Valid @ModelAttribute("inForm") InForm inForm, BindingResult bindingResult,
 					 Model model,@LoggedIn UserAccount loggedInUserWeb) {
+		if (bindingResult.hasErrors()) {
+			return "redirect:/";
+		}
 		inForm.setProductIdentifier(id);
 		administrationManager.reorder(inForm,Location.LOCATION_HL);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
@@ -330,9 +348,12 @@ public class AdministrationController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/craftBwB/{id}")
 	String catalogCraftBwB(@PathVariable ProductIdentifier id,
-						@Valid @ModelAttribute("craftForm") CraftForm craftForm,
+						@Valid @ModelAttribute("craftForm") CraftForm craftForm,BindingResult bindingResult,
 						@LoggedIn UserAccount loggedInUserWeb,
 						Model model) {
+		if (bindingResult.hasErrors()) {
+			return "redirect:/";
+		}
 		craftForm.setProductIdentifier(id);
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
@@ -364,9 +385,12 @@ public class AdministrationController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/craftHl/{id}")
 	String catalogCraftHl(@PathVariable ProductIdentifier id,
-						@Valid @ModelAttribute("craftForm") CraftForm craftForm,
+						@Valid @ModelAttribute("craftForm") CraftForm craftForm, BindingResult bindingResult,
 						@LoggedIn UserAccount loggedInUserWeb,
 						Model model) {
+		if (bindingResult.hasErrors()) {
+			return "redirect:/";
+		}
 		craftForm.setProductIdentifier(id);
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
@@ -413,14 +437,14 @@ public class AdministrationController {
 
 	//<editor-fold desc="new Part">
 	@GetMapping("/part/new")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String showNew(Model model) {
 		model.addAttribute("form", new PartOrderForm());
 		return "newPart";
 	}
 
 	@PostMapping("/part/new")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String editNew(@Valid @ModelAttribute("form") PartOrderForm form, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("form", form);
@@ -434,7 +458,7 @@ public class AdministrationController {
 
 	//<editor-fold desc="New Composite">
 	@GetMapping("/composite/new")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String newComposite(Model model) {
 
 		CompositeOrderForm composite = new CompositeOrderForm();
@@ -444,7 +468,7 @@ public class AdministrationController {
 	}
 
 	@PostMapping("/composite/new")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String newCompositeFinished(@Valid @ModelAttribute("compositeForm") CompositeOrderForm form,
 			BindingResult bindingResult, Model model, @RequestParam Map<String, String> partsMapping)
 	{
@@ -579,17 +603,24 @@ public class AdministrationController {
 			case ACTION_SEND:{
 				InForm inForm=new InForm();
 				inForm.setAmount(actionObj.getAmount());
-				return this.catalogsendToHl(actionObj.getId(),inForm,model,loggedInUserWeb);
+				if(inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).isPresent()){
+					botManager.criticalAmountAfterUndoCheck( inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).get() ,actionObj.getAmount());
+				}else {
+					throw new IllegalArgumentException("PID noit found in Inventory");
+				}
+
+				return catalogsendToHl(actionObj.getId(),inForm,bindingResult,model,loggedInUserWeb);
+
 			}
 			case ACTION_CRAFT:{
 				CraftForm inForm=new CraftForm();
 				inForm.setAmount(actionObj.getAmount());
-				return this.catalogCraftBwB(actionObj.getId(), inForm,loggedInUserWeb,model);
+				return this.catalogCraftBwB(actionObj.getId(), inForm,bindingResult,loggedInUserWeb,model);
 			}
 			case ACTION_EMPFANGEN: {
 				InForm inForm=new InForm();
 				inForm.setAmount(actionObj.getAmount());
-				return this.catalogReceiveFromHl(actionObj.getId(), inForm,model,loggedInUserWeb);
+				return this.catalogReceiveFromHl(actionObj.getId(), inForm,bindingResult,model,loggedInUserWeb);
 
 			}
 			case ACTION_ZERLEGEN:{

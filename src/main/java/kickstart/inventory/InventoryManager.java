@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import kickstart.TelegramInterface.BotManager;
 import kickstart.administration.Location;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -38,6 +39,8 @@ public class InventoryManager {
 	@Getter
 	private AccountancyManager accountancy;
 
+
+
 	// The time difference (in days) until a reorder is completed
 	@Getter
 	private final long reorderTime = 0;
@@ -50,6 +53,7 @@ public class InventoryManager {
 	 */
 	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory,
 							@NotNull AccountancyManager accountancy) {
+
 		this.inventory = inventory;
 		this.accountancy = accountancy;
 	}
@@ -64,9 +68,9 @@ public class InventoryManager {
 	 *                   to be saved in a repository before using this method.
 	 * @throws NullPointerException If newArticle is null
 	 */
-	public void addArticle(@NotNull Article newArticle) {
+	public void addArticle(@NotNull Article newArticle,BotManager botManager) {
 		if (!inventory.findByProductIdentifier(newArticle.getId()).isPresent()) {
-			inventory.save(new ReorderableInventoryItem(newArticle, Quantity.of(0, Metric.UNIT)));
+			inventory.save(new ReorderableInventoryItem(botManager,newArticle, Quantity.of(0, Metric.UNIT)));
 		}
 	}
 
