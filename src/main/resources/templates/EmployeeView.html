@@ -1,0 +1,249 @@
+<!--
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.w3.org/1999/xhtml" >
+	<head th:include="header :: head">
+		<link rel="stylesheet" type="text/css" href="static/resources/css/ourstyle.css">
+		<link rel="shortcut icon" type="image/ico" href="C:\Users\Bullseye\IdeaProjects\Mangment Webapplikation\src\main\resources\static\resources\favicon.ico"/>
+		<title id="pageTitle">Fishstone</title>
+	</head>
+	<body style="background-color: #ECEFEF;letter-spacing: 3px;font-weight: bold">
+		<nav th:include="navbar :: navbar"></nav>
+		<form method="post" th:action="@{/filter}" th:object="${filterForm}">
+			<div  class="ui menu">
+
+				<div class="item">
+					<div class="ui simple dropdown">
+						<div class="text" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF">Farbe</div>
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="item" th:each="colour: ${colours}">
+								<input style="width: 60px" type="checkbox"
+									   th:field="*{selectedColours}"
+									   th:value="${colour}">
+								<label th:text="${colour}"></label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="item">
+					<div class="ui simple dropdown">
+						<div class="text" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF">Kategorien</div>
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="item" th:each="category: ${categories}">
+								<input  style="width: 70px" type="checkbox"
+									   th:field="*{selectedCategories}"
+									   th:value="${category}" />
+								<label th:text="${category}"></label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">MaxPrice Error</a>
+				<a th:if="${#fields.hasErrors('maxPriceNetto')}" th:errors="*{maxPriceNetto}">MaxPrice Error</a>
+				<a th:if="${#fields.hasErrors('minPriceNetto')}" th:errors="*{minPriceNetto}">MaxPrice Error</a>
+				<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
+				<div class="item">
+					<button class="ui button" type="submit" value="filter" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
+					<i class="filter icon"></i>
+					Filtern
+					</button>
+				</div>
+				<div class="item">
+					<button class="ui button" type="submit" value="reset" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
+					<i class="recycle icon"></i>
+					Filter zurücksetzen
+					</button>
+				</div>
+
+
+				<!--    RÜCKGÄNGIG BUTTON FÜR HL NICHT IMPLEMENTIER?? -> prüfen      Fehlerquelle: employee sicht in Manager?!
+				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+					<a th:href="@{/undo}">
+						<div class="ui button" th:if="${undoManager.getProductNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getProductNameOfLastAction()}+' '+${undoManager.getNameOfLastAction()}">
+						</div>
+					</a>
+				</div>
+				-->
+
+				<!--
+				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+					<a th:href="@{/hidden}">
+						<div class="ui button">
+							<i class="eye icon"></i>
+							Versteckte Artikel
+						</div>
+					</a>
+				</div>
+				-->
+
+			</div>
+		</form>
+
+		<div id="tablespace">
+			<table id="articletable" class="ui celled table" width="400" >
+
+				<!--<editor-fold desc="Tabellen Kopf">-->
+				<thead>
+				<tr>
+
+					<!--1--> <!--<editor-fold desc="Name View:P">--><th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Name</th>
+					<!--</editor-fold>-->
+
+					<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
+					<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">BwB Bestand</th>
+					<!--</editor-fold>-->
+
+					<!--9--> <!--<editor-fold desc="Empfangen View:E">-->
+					<th sec:authorize="hasRole('ROLE_EMPLOYEE')"  	style="text-align: center">Empfangen</th>
+					<!--</editor-fold>-->
+
+					<!--9.5--> <!--<editor-fold desc="Empfangen View:E">-->
+					<th sec:authorize="hasRole('ROLE_EMPLOYEE')"  	style="text-align: center">Senden</th>
+					<!--</editor-fold>-->
+
+					<!--11--> <!--<editor-fold desc="Herstellen BwB View:E">-->
+					<th sec:authorize="hasRole('ROLE_EMPLOYEE')"  	style="text-align: center">Hergestellt</th>
+					<!--</editor-fold>-->
+
+					<!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
+					<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Bestandteile</th>
+					<!--</editor-fold>-->
+
+					<!--14--> <!--<editor-fold desc="EAN Code View:P">-->
+					<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">EAN Code</th>
+					<!--</editor-fold>-->
+
+					<!--15--> <!--<editor-fold desc="Kategorie View:P">-->
+					<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Kategorie</th>
+					<!--</editor-fold>-->
+
+				</tr>
+				</thead>
+				<!--</editor-fold>-->
+
+				<!--<editor-fold desc="Tabellen Körper">-->
+				<tbody>
+				<!--/*@thymesVar id="inventoryItems" type="kickstart.administration.AdministrationController"*/-->
+				<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="item: ${inventoryItems}">
+
+					<!--1--> <!--<editor-fold desc="Name View:P">-->
+					<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
+						<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
+							<a th:href="@{/toogleAbholbereit/{id}(id=${item.getProduct().getId()})}" target="_self">
+
+								<div class="ui basic button">
+									<span th:text="${item.getProduct().getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
+								</div>
+							</a>
+						</div>
+					</td>
+                                                        <!--</editor-fold>-->
+
+					<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
+					<td sec:authorize="hasRole('ROLE_PERMITTED')">
+							<div  style="font-size: 20px;font-weight: bold;text-align: center">
+								<!--if critische menge unterschritten dann Zahl ROT-->
+								<span th:if="${ item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
+								<!--else-->
+								<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}">
+									<!--if Abholbereit dann GRÜN-->
+									<span th:if="${administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
+									<!--sonst SCHWARZ-->
+									<span th:unless="${ administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+								</span>
+
+							</div>
+
+
+					</td>
+					<!--</editor-fold>-->
+
+					<!--9--> <!--<editor-fold desc="Empfangen View:E">-->
+					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" >
+						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/receive/{id}(id=${item.getProduct().getId().getIdentifier()})}" >
+							<div class="inline field">
+								<div>
+									<input style="width: 70px;text-align: center;"  autofocus type="number" min="0" th:field="*{amount}" />
+									<button  type="submit" class="ui button"
+											 style="color: #68d4d0;
+											 margin: 0px;
+											 font-size: 20px;
+											 font-weight: bold;
+											 background-color: #FFFFFF;
+											 letter-spacing: 3px;
+									" >Ok</button>
+								</div>
+
+							</div>
+						</form>
+					</td>
+					<!--</editor-fold>-->
+
+					<!--9.5--> <!--<editor-fold desc="Senden View:E">-->
+					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" >
+						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/send/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+							<div class="inline field">
+								<div>
+									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
+									<button  type="submit" class="ui button"
+											 style="color: #68d4d0;
+											 margin: 0px;
+											 font-size: 20px;
+											 font-weight: bold;
+											 background-color: #FFFFFF;
+											 letter-spacing: 3px;
+									" >Ok</button>
+								</div>
+
+							</div>
+						</form>
+					</td>
+					<!--</editor-fold>-->
+
+					<!--11--> <!--<editor-fold desc="Herstellen BwB View:E">-->
+					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" width="100px">
+						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craftBwB/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
+								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
+									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />
+									<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Ok</button>
+								</div>
+
+							</div>
+						</form>
+					</td>
+					<!--</editor-fold>-->
+
+					<!--13--> <!--<editor-fold desc="Besteht aus View:P">-->
+					<td sec:authorize="hasRole('ROLE_PERMITTED')">
+						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
+							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(item.getProduct().getId())}">
+							</div>
+						</div>
+					</td>
+					<!--</editor-fold>-->
+
+					<!--14--> <!--<editor-fold desc="EAN Code View:P">-->
+					<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
+					<!--</editor-fold>-->
+
+					<!--15--> <!--<editor-fold desc="Kategorie View:P">-->
+					<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
+					<!--</editor-fold>-->
+
+					<!--</editor-fold>-->
+
+				</tr>
+				</tbody>
+				<!--</editor-fold>-->
+			</table>
+			<!--</editor-fold>-->
+		</div>
+	</body>
+</html>
+
