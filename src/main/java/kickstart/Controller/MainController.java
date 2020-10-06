@@ -55,6 +55,9 @@ import kickstart.Micellenious.ReorderableInventoryItem;
 @Controller
 public class MainController {
 
+	private final ArrayList<String> preselection = new ArrayList<>(Arrays.asList("Kit"));
+
+
 	private  LogRepository logRepository;
 	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
@@ -68,6 +71,7 @@ public class MainController {
 	private boolean undoMode;
 	private ActivityLogManager activityLogManager;
 	private BotManager botManager;
+
 
 
 
@@ -122,21 +126,31 @@ public class MainController {
 
 	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@GetMapping("/")
-	String refreshView(Model model,@LoggedIn Optional<UserAccount> loggedInUserWeb) {
+	String refreshView(Model model,
+					   @RequestParam(required = false, name = "reset") String reset
+			, @LoggedIn Optional<UserAccount> loggedInUserWeb) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
+
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 
 
 		//</editor-fold>
 		//administrationManager.getVisibleCatalog();
-		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
+
+		Filterform filterform=new Filterform();
+
+		filterform.setSelectedCategories(preselection);
+		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator= administrationManager.filteredReorderableInventoryItems(filterform);
+		//Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
+
+
 		LinkedList<ReorderableInventoryItem> sortedReordInvItemList=new LinkedList<>();
 		for (ReorderableInventoryItem r :
 				unsortedReordInvItemIterator) {
 			sortedReordInvItemList.add(r);
 		}
+
 		//<editor-fold desc="Standart Sortierung">
-		//System.out.println("NEW ORDER");
 		Collections.sort(sortedReordInvItemList, new Comparator<ReorderableInventoryItem>() {
 			@Override
 			public int compare(ReorderableInventoryItem o1, ReorderableInventoryItem o2) {
@@ -148,17 +162,16 @@ public class MainController {
 			}
 		});
 		//</editor-fold>
+
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
 		//	model.addAttribute("ManagerView", catalogList);
 		model.addAttribute("filterForm", new Filterform());
 		model.addAttribute("inForm", new InForm());
-
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
 		model.addAttribute("undoManager",undoManager);
-
 		model.addAttribute("administrationManager", administrationManager);
-		//botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
+		botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
 
 		if (loggedInUserWeb.isPresent()) {
 			if(loggedInUserWeb.get().hasRole(Role.of("ROLE_MANAGER")))
@@ -173,9 +186,9 @@ public class MainController {
 
 	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@PostMapping("/filter")
-	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform, BindingResult bindingResult,
+	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform,Model model, BindingResult bindingResult,
 						   @RequestParam(required = false, name = "reset") String reset
-						  , Model model,@LoggedIn Optional<UserAccount> loggedInUserWeb) {
+						  , @LoggedIn Optional<UserAccount> loggedInUserWeb) {
 		if (reset.equals("reset")) {
 			return "redirect:/";
 		}
@@ -198,7 +211,9 @@ public class MainController {
 
 			return correctView;
 		}
+
 		Iterable<ReorderableInventoryItem> list= administrationManager.filteredReorderableInventoryItems(filterform);
+
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("outForm", new OutForm());

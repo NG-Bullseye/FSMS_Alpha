@@ -1,11 +1,9 @@
 package kickstart.TelegramInterface;
 
-
-
-
 import kickstart.articles.Article;
 import kickstart.Micellenious.ReorderableInventoryItem;
 import org.salespointframework.catalog.Product;
+import org.salespointframework.inventory.Inventory;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -41,7 +39,7 @@ public class  BotManager {
 		else {
 			throw new IllegalArgumentException("Produkt not an article");
 		}
-		//</editor-fold>
+
 		if (article.getCriticalAmount()>item.getAmountBwB()){
 		//	botItemLowAmount(item);
 			return true;
@@ -207,7 +205,9 @@ public class  BotManager {
         return scan;
     }
 
-
+	public boolean checkItemsForCriticalAmount(Inventory<ReorderableInventoryItem> inventory) {
+    	
+	}
 
 
 	//</editor-fold>
