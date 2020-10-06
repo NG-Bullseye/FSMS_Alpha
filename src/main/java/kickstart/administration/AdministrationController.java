@@ -34,6 +34,7 @@ import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
+import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.salespointframework.useraccount.web.LoggedIn;
@@ -117,7 +118,7 @@ public class AdministrationController {
 
 	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@GetMapping("/")
-	String catalog(Model model) {
+	String refreshView(Model model,@LoggedIn Optional<UserAccount> loggedInUserWeb) {
 		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 
@@ -130,9 +131,6 @@ public class AdministrationController {
 				unsortedReordInvItemIterator) {
 			sortedReordInvItemList.add(r);
 		}
-
-
-
 		//<editor-fold desc="Standart Sortierung">
 		//System.out.println("NEW ORDER");
 		Collections.sort(sortedReordInvItemList, new Comparator<ReorderableInventoryItem>() {
@@ -146,10 +144,8 @@ public class AdministrationController {
 			}
 		});
 		//</editor-fold>
-
-
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
-	//	model.addAttribute("catalog", catalogList);
+		//	model.addAttribute("ManagerView", catalogList);
 		model.addAttribute("filterForm", new Filterform());
 		model.addAttribute("inForm", new InForm());
 
@@ -159,8 +155,19 @@ public class AdministrationController {
 
 		model.addAttribute("administrationManager", administrationManager);
 		//botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
-		return "catalog";
+
+		if (loggedInUserWeb.isPresent()) {
+			if(loggedInUserWeb.get().hasRole(Role.of("ROLE_MANAGER")))
+				return "ManagerView";
+			else
+				return "EmployeeView";
+		}
+		else return "redirect:/";
+
 	}
+
+
+
 
 	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@PostMapping("/filter")
@@ -172,17 +179,17 @@ public class AdministrationController {
 		}
 		if (bindingResult.hasErrors()) {
 
-			model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+			model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 			model.addAttribute("administrationManager", administrationManager);
 
-			return "catalog";
+			return "ManagerView";
 		}
 		Iterable<ReorderableInventoryItem> list= administrationManager.filteredReorderableInventoryItems(filterform);
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
-		//model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		//model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		model.addAttribute("undoManager",undoManager);
 		for (ReorderableInventoryItem item:list
@@ -190,7 +197,7 @@ public class AdministrationController {
 			Article a= administrationManager.getArticle(item.getProduct().getId());
 			String s=  a.getCategories().get().findFirst().get();
 		}
-		return "catalog";
+		return "ManagerView";
 	}
 
 
@@ -219,7 +226,7 @@ public class AdministrationController {
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
 
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in catalog.html
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
 		logRepository.save(new Log(
 				LocalDateTime.now(),
@@ -253,7 +260,7 @@ public class AdministrationController {
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
 
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in catalog.html
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
 		logRepository.save(new Log(
 				LocalDateTime.now(),
@@ -283,7 +290,7 @@ public class AdministrationController {
 		administrationManager.reorder(inForm,Location.LOCATION_HL);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		logRepository.save(new Log(
 				LocalDateTime.now(),
@@ -310,7 +317,7 @@ public class AdministrationController {
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		return "redirect:/";
 	}*/
@@ -336,7 +343,7 @@ public class AdministrationController {
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		logRepository.save(new Log(
 				LocalDateTime.now(),
@@ -373,7 +380,7 @@ public class AdministrationController {
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT,craftForm.getProductIdentifier(),craftForm.getAmount());
 		if(undoMode) undoManager.pop();
@@ -410,7 +417,7 @@ public class AdministrationController {
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 
 		return "redirect:/";
@@ -451,7 +458,7 @@ public class AdministrationController {
 			return "newPart";
 		}
 		administrationManager.newPart(form);
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		return "redirect:/";
 	}
 	//</editor-fold>
@@ -463,7 +470,7 @@ public class AdministrationController {
 
 		CompositeOrderForm composite = new CompositeOrderForm();
 		model.addAttribute("compositeForm", composite);
-		model.addAttribute("catalog", administrationManager.getAvailableForNewComposite());
+		model.addAttribute("ManagerView", administrationManager.getAvailableForNewComposite());
 		return "newComposite";
 	}
 
@@ -478,13 +485,13 @@ public class AdministrationController {
 
 		if (bindingResult.hasErrors()) {
 	//		model.addAttribute("compositeForm", form);
-	//		model.addAttribute("catalog", administrationManager.getAvailableForNewComposite());
+	//		model.addAttribute("ManagerView", administrationManager.getAvailableForNewComposite());
 			return "redirect:/composite/new";
 		}
 		model.addAttribute("compositeForm", new CompositeForm());
 
 
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 
 		return "redirect:/";
 	}
@@ -494,9 +501,9 @@ public class AdministrationController {
 	@GetMapping("/hidden")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public String completeCatalog(Model model) {
-		model.addAttribute("catalog", administrationManager.getInvisibleCatalog());
+		model.addAttribute("ManagerView", administrationManager.getInvisibleCatalog());
 		model.addAttribute("filterform", new Filterform());
-		return "catalog";
+		return "ManagerView";
 	}
 
 	@GetMapping("hide/{identifier}")
@@ -558,7 +565,7 @@ public class AdministrationController {
 	public String editComposite(@PathVariable ProductIdentifier identifier, Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		model.addAttribute("compositeForm", new CompositeForm());
-		model.addAttribute("catalog", administrationManager.getArticlesForCompositeEdit(identifier));
+		model.addAttribute("ManagerView", administrationManager.getArticlesForCompositeEdit(identifier));
 
 		return "editComposite";
 	}
@@ -645,7 +652,7 @@ public class AdministrationController {
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
 
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("catalog", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in catalog.html
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
 		model.addAttribute("undoManager",undoManager);
 		logRepository.save(new Log(
