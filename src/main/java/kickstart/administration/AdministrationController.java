@@ -609,18 +609,18 @@ public class AdministrationController {
 					throw new IllegalArgumentException("PID noit found in Inventory");
 				}
 
-				return catalogsendToHl(actionObj.getId(),inForm,bindingResult,model,loggedInUserWeb);
+				return catalogsendToHl(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject() , model, loggedInUserWeb);
 
 			}
 			case ACTION_CRAFT:{
 				CraftForm inForm=new CraftForm();
 				inForm.setAmount(actionObj.getAmount());
-				return this.catalogCraftBwB(actionObj.getId(), inForm,bindingResult,loggedInUserWeb,model);
+				return this.catalogCraftBwB(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject(),loggedInUserWeb,model);
 			}
 			case ACTION_EMPFANGEN: {
 				InForm inForm=new InForm();
 				inForm.setAmount(actionObj.getAmount());
-				return this.catalogReceiveFromHl(actionObj.getId(), inForm,bindingResult,model,loggedInUserWeb);
+				return this.catalogReceiveFromHl(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject(),model,loggedInUserWeb);
 
 			}
 			case ACTION_ZERLEGEN:{

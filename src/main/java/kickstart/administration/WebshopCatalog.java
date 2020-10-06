@@ -18,7 +18,7 @@ import org.springframework.data.domain.Sort;
 import kickstart.articles.Article;
 
 public interface WebshopCatalog extends Catalog<Article> {
-	static final Sort DEFAULT_SORT = new Sort(Sort.Direction.DESC, "productIdentifier");
+	//static final Sort DEFAULT_SORT = new Sort(Sort.Direction.DESC, "productIdentifier");
 
 	/*
 	 * Iterable<Article> findByType(Article.ArticleType type, Sort sort);

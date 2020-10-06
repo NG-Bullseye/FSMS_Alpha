@@ -307,12 +307,11 @@
 
 					<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
 					<td sec:authorize="hasRole('ROLE_PERMITTED')">
-						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div  style="font-size: 20px;font-weight: bold;text-align: center">
 								<!--if critische menge unterschritten dann Zahl ROT-->
 								<span th:if="${ item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 								<!--else-->
-								<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }+${item.getUnitQuant()}">
+								<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}">
 									<!--if Abholbereit dann GRÜN-->
 									<span th:if="${administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
 									<!--sonst SCHWARZ-->
@@ -322,11 +321,13 @@
 								<span th:unless="${ item.getAmountBwB() >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center">
 								-->
 							</div>
-							<!--<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
+							<!--
+													<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}"></div>
+							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
 							<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
 							<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 						</div>-->
-						</div>
+
 					</td>
 
 					<!--<td th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" sec:authorize="hasRole('ROLE_PERMITTED')" style="font-size: 20px;font-weight: bold;text-align: center" >BWBbestand</td>-->
@@ -341,8 +342,7 @@
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-								<span th:text="${administrationManager.craftbarHl(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center">
-								</span>
+								<span th:text="${administrationManager.craftbarHl(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center"></span>
 							</div>
 						</div>
 					</td>
@@ -382,7 +382,7 @@
 
 					<!--9--> <!--<editor-fold desc="Empfangen View:E">-->
 					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" >
-						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/receive/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/receive/{id}(id=${item.getProduct().getId().getIdentifier()})}" >
 							<div class="inline field">
 								<div>
 									<input style="width: 70px;text-align: center;"  autofocus type="number" min="0" th:field="*{amount}" />

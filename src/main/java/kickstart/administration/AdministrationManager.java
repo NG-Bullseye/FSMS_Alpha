@@ -2,6 +2,7 @@ package kickstart.administration;
 
 import static org.salespointframework.core.Currencies.EURO;
 
+import java.beans.PropertyEditor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,12 +32,17 @@ import org.salespointframework.order.OrderManager;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
+import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.stereotype.Component;
 
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 import kickstart.inventory.ReorderableInventoryItem;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
 
 import javax.validation.constraints.NotNull;
@@ -795,13 +801,28 @@ public class AdministrationManager {
 		if (a instanceof Composite)
 			for (ProductIdentifier pSub:map.keySet()) {
 
-				text=text+" "+map.get(pSub)+"x"+catalog.findById(pSub).get().getName()+" ";
+				text=text+map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName()+"           ";
 			}
-
-
-
-
 		return text;
+	}
+
+	public List<String> getTextListOfSubComponents(ProductIdentifier p){
+
+		List<String> bestandteileStrings=new ArrayList<>();
+		String text="";
+		Article a=null;
+		if (catalog.findById(p).isPresent()){
+			a=catalog.findById(p).get();
+		}
+		else throw  new NullPointerException();
+		Map<ProductIdentifier,Integer> map=this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds());
+		if (a instanceof Composite)
+			for (ProductIdentifier pSub:map.keySet()) {
+
+				text=map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName();
+				bestandteileStrings.add(text);
+			}
+		return bestandteileStrings;
 	}
 
 	/**
@@ -1166,5 +1187,193 @@ public class AdministrationManager {
 		return false;
 	}
 
+	public BindingResult getNewBindingResultsObject(){
+		return new BindingResult() {
+			@Override
+			public Object getTarget() {
+				return null;
+			}
+
+			@Override
+			public Map<String, Object> getModel() {
+				return null;
+			}
+
+			@Override
+			public Object getRawFieldValue(String s) {
+				return null;
+			}
+
+			@Override
+			public PropertyEditor findEditor(String s, Class<?> aClass) {
+				return null;
+			}
+
+			@Override
+			public PropertyEditorRegistry getPropertyEditorRegistry() {
+				return null;
+			}
+
+			@Override
+			public String[] resolveMessageCodes(String s) {
+				return new String[0];
+			}
+
+			@Override
+			public String[] resolveMessageCodes(String s, String s1) {
+				return new String[0];
+			}
+
+			@Override
+			public void addError(ObjectError objectError) {
+
+			}
+
+			@Override
+			public String getObjectName() {
+				return null;
+			}
+
+			@Override
+			public void setNestedPath(String s) {
+
+			}
+
+			@Override
+			public String getNestedPath() {
+				return null;
+			}
+
+			@Override
+			public void pushNestedPath(String s) {
+
+			}
+
+			@Override
+			public void popNestedPath() throws IllegalStateException {
+
+			}
+
+			@Override
+			public void reject(String s) {
+
+			}
+
+			@Override
+			public void reject(String s, String s1) {
+
+			}
+
+			@Override
+			public void reject(String s, Object[] objects, String s1) {
+
+			}
+
+			@Override
+			public void rejectValue(String s, String s1) {
+
+			}
+
+			@Override
+			public void rejectValue(String s, String s1, String s2) {
+
+			}
+
+			@Override
+			public void rejectValue(String s, String s1, Object[] objects, String s2) {
+
+			}
+
+			@Override
+			public void addAllErrors(Errors errors) {
+
+			}
+
+			@Override
+			public boolean hasErrors() {
+				return false;
+			}
+
+			@Override
+			public int getErrorCount() {
+				return 0;
+			}
+
+			@Override
+			public List<ObjectError> getAllErrors() {
+				return null;
+			}
+
+			@Override
+			public boolean hasGlobalErrors() {
+				return false;
+			}
+
+			@Override
+			public int getGlobalErrorCount() {
+				return 0;
+			}
+
+			@Override
+			public List<ObjectError> getGlobalErrors() {
+				return null;
+			}
+
+			@Override
+			public ObjectError getGlobalError() {
+				return null;
+			}
+
+			@Override
+			public boolean hasFieldErrors() {
+				return false;
+			}
+
+			@Override
+			public int getFieldErrorCount() {
+				return 0;
+			}
+
+			@Override
+			public List<FieldError> getFieldErrors() {
+				return null;
+			}
+
+			@Override
+			public FieldError getFieldError() {
+				return null;
+			}
+
+			@Override
+			public boolean hasFieldErrors(String s) {
+				return false;
+			}
+
+			@Override
+			public int getFieldErrorCount(String s) {
+				return 0;
+			}
+
+			@Override
+			public List<FieldError> getFieldErrors(String s) {
+				return null;
+			}
+
+			@Override
+			public FieldError getFieldError(String s) {
+				return null;
+			}
+
+			@Override
+			public Object getFieldValue(String s) {
+				return null;
+			}
+
+			@Override
+			public Class<?> getFieldType(String s) {
+				return null;
+			}
+		};
+	}
 
 }

@@ -43,7 +43,8 @@ public class ArticleInitializer implements DataInitializer {
 
 
 
-if (catalog.findAll().iterator().hasNext()) {
+
+		if (catalog.findAll().iterator().hasNext()) {
 			return;
 		}
 
@@ -118,9 +119,9 @@ if (catalog.findAll().iterator().hasNext()) {
 		inventory.save(new ReorderableInventoryItem(botManager,p10, Quantity.of(10, Metric.UNIT),"g" ));
 		print(p10);
 
-		Part p11 = new Part("Draht 1mm", 15,9 ,"G44R5", "farblos","https//:thePlaParty.com");
+		Part p11 = new Part("Draht 1mmØ", 15,9 ,"G44R5", "farblos","https//:thePlaParty.com");
 		catalog.save(p11);
-		inventory.save(new ReorderableInventoryItem(botManager,p11, Quantity.of(0, Metric.UNIT),"mm" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p11, Quantity.of(10, Metric.UNIT),"mm" ));
 		print(p11);
 
 		Part p12 = new Part("Steine 4-6cm", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");
@@ -298,12 +299,18 @@ if (catalog.findAll().iterator().hasNext()) {
 		catalog.save(p46);
 		inventory.save(new ReorderableInventoryItem(botManager,p46, Quantity.of(10, Metric.UNIT),"" ));
 
+		Part p47 = new Part("Karton Kreuz", 15,9 ,"", "farblos","");
+		catalog.save(p47);
+		inventory.save(new ReorderableInventoryItem(botManager,p47, Quantity.of(10, Metric.UNIT),"" ));
+
+
 
 		//</editor-fold>
 
 		//<editor-fold desc="Composit Karsten">
 
-		 map1= new HashMap();
+		//<editor-fold desc="Produkte">
+		map1= new HashMap();
 		map1.put(p1,100L*100L);
 		Composite c1=new Composite(
 				"FIX-Gummi L",
@@ -314,10 +321,10 @@ if (catalog.findAll().iterator().hasNext()) {
 				"muddy",
 				"Einzelteil Produziert",
 				map1
-	);
-	catalog.save(c1);
-	inventory.save(new ReorderableInventoryItem(botManager,c1, Quantity.of(0, Metric.UNIT)));
-	print(c1);
+		);
+		catalog.save(c1);
+		inventory.save(new ReorderableInventoryItem(botManager,c1, Quantity.of(0, Metric.UNIT)));
+		print(c1);
 
 		 map1= new HashMap();
 		map1.put(p2,100L*100L); Composite c2=new Composite(
@@ -544,6 +551,7 @@ if (catalog.findAll().iterator().hasNext()) {
 		catalog.save(c17);
 		inventory.save(new ReorderableInventoryItem(botManager,c17, Quantity.of(0, Metric.UNIT)));
 		print(c17);
+
 		 map1= new HashMap();
 		map1.put(p2,70L*20L); Composite c18=new Composite(
 				"SLIP-Gummi M",
@@ -1104,7 +1112,7 @@ if (catalog.findAll().iterator().hasNext()) {
 		map1= new HashMap();
 		map1.put(p11,25L);
 		Composite c53=new Composite(
-				"Draht LOOP 1mm",
+				"Draht LOOP 1mmØ",
 				20,
 				25,
 				"",
@@ -1119,7 +1127,7 @@ if (catalog.findAll().iterator().hasNext()) {
 		map1= new HashMap();
 		map1.put(p11,20L);
 		Composite c54=new Composite(
-				"Draht ZIP 1mm",
+				"Draht ZIP 1mmØ",
 				20,
 				25,
 				"",
@@ -1930,27 +1938,1554 @@ if (catalog.findAll().iterator().hasNext()) {
 		);
 		catalog.save(c107);
 		inventory.save(new ReorderableInventoryItem(botManager,c107, Quantity.of(0, Metric.UNIT)));
+		//</editor-fold>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		//<editor-fold desc="Gummies">
 
 		map1= new HashMap();
-		map1.put(c53 ,2L);
+		map1.put(c9 ,3L);
+		map1.put(p46,1L);
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
 		Composite c108=new Composite(
-				"Draht LOOP 1mm Kit DUMMY",
-				20,
-				25,
+				"Fix S",
+				0,
+				0,
 				"",
 				"",
-				"farblos",
+				"muddy",
 				"Kit",
 				map1
 		);
 		catalog.save(c108);
 		inventory.save(new ReorderableInventoryItem(botManager,c108, Quantity.of(0, Metric.UNIT)));
 
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(c10,3L);
+		Composite c109=new Composite(
+				"Fix S",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c109);
+		inventory.save(new ReorderableInventoryItem(botManager,c109, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(c11 ,3L);
+		Composite c110=new Composite(
+				"Fix S",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c110);
+		inventory.save(new ReorderableInventoryItem(botManager,c110, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(c12 ,3L);
+		Composite c111=new Composite(
+				"Fix S",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c111);
+		inventory.save(new ReorderableInventoryItem(botManager,c111, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(c5 ,3L);
+		Composite c112=new Composite(
+				"Fix M",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c112);
+		inventory.save(new ReorderableInventoryItem(botManager,c112, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(c6 ,3L);
+		Composite c113=new Composite(
+				"Fix M",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c113);
+		inventory.save(new ReorderableInventoryItem(botManager,c113, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(c7 ,3L);
+		Composite c114=new Composite(
+				"Fix M",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c114);
+		inventory.save(new ReorderableInventoryItem(botManager,c114, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(c8 ,3L);
+		Composite c115=new Composite(
+				"Fix M",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c115);
+		inventory.save(new ReorderableInventoryItem(botManager,c115, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(c1 ,3L);
+		Composite c116=new Composite(
+				"Fix L",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c116);
+		inventory.save(new ReorderableInventoryItem(botManager,c116, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(c2 ,3L);
+		Composite c117=new Composite(
+				"Fix L",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c117);
+		inventory.save(new ReorderableInventoryItem(botManager,c117, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(c3 ,3L);
+		Composite c118=new Composite(
+				"Fix L",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c118);
+		inventory.save(new ReorderableInventoryItem(botManager,c118, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p46,1L);
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(c4 ,3L);
+		Composite c119=new Composite(
+				"Fix L",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c119);
+		inventory.save(new ReorderableInventoryItem(botManager,c119, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c17 ,3L);
+		Composite c120=new Composite(
+				"Slip M",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c120);
+		inventory.save(new ReorderableInventoryItem(botManager,c120, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c18 ,3L);
+		Composite c121=new Composite(
+				"Slip M",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c121);
+		inventory.save(new ReorderableInventoryItem(botManager,c121, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c19 ,3L);
+		Composite c122=new Composite(
+				"Slip M",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c122);
+		inventory.save(new ReorderableInventoryItem(botManager,c122, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c20 ,3L);
+		Composite c123=new Composite(
+				"Slip M",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c123);
+		inventory.save(new ReorderableInventoryItem(botManager,c123, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c13 ,3L);
+		Composite c124=new Composite(
+				"Slip L",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c124);
+		inventory.save(new ReorderableInventoryItem(botManager,c124, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c14 ,3L);
+		Composite c125=new Composite(
+				"Slip L",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c125);
+		inventory.save(new ReorderableInventoryItem(botManager,c125, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c15 ,3L);
+		Composite c126=new Composite(
+				"Slip L",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c126);
+		inventory.save(new ReorderableInventoryItem(botManager,c126, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(c16 ,3L);
+		Composite c127=new Composite(
+				"Slip L",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c127);
+		inventory.save(new ReorderableInventoryItem(botManager,c127, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c128=new Composite(
+				"Slip XL",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c128);
+		inventory.save(new ReorderableInventoryItem(botManager,c128, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c129=new Composite(
+				"Slip XL",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c129);
+		inventory.save(new ReorderableInventoryItem(botManager,c129, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c130=new Composite(
+				"Slip XL",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c130);
+		inventory.save(new ReorderableInventoryItem(botManager,c130, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c131=new Composite(
+				"Slip XL",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c131);
+		inventory.save(new ReorderableInventoryItem(botManager,c131, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c132=new Composite(
+				"Slip XXL",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c132);
+		inventory.save(new ReorderableInventoryItem(botManager,c132, Quantity.of(0, Metric.UNIT)));map1= new HashMap();
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c133=new Composite(
+				"Slip XXL",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c133);
+		inventory.save(new ReorderableInventoryItem(botManager,c133, Quantity.of(0, Metric.UNIT)));map1= new HashMap();
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c134=new Composite(
+				"Slip XXL",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c134);
+		inventory.save(new ReorderableInventoryItem(botManager,c134, Quantity.of(0, Metric.UNIT)));map1= new HashMap();
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p29 ,1L);
+
+		Composite c135=new Composite(
+				"Slip XXL",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c135);
+		inventory.save(new ReorderableInventoryItem(botManager,c135, Quantity.of(0, Metric.UNIT)));
+		//</editor-fold>
+
+
+
+
+		//<editor-fold desc="Kits">
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p46,1L);
+		map1.put(p28,1L);
+		map1.put(c29,2L);
+		map1.put(c33,4L);
+		map1.put(c1,3L);
+		map1.put(c45,3L);
+		map1.put(p26,1L);
+		map1.put(p27,2L);
+		map1.put(p35,1L);
+		map1.put(p47,1L);
+		map1.put(p20,1L);
+		map1.put(c71,1L);
+
+
+
+		Composite c136=new Composite(
+				"Snäp Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c136);
+		inventory.save(new ReorderableInventoryItem(botManager,c136, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p46,1L);
+		map1.put(p28,1L);
+		map1.put(c46,3L);
+		map1.put(p26,1L);
+		map1.put(p27,2L);
+		map1.put(p35,1L);
+		map1.put(p47,1L);
+		map1.put(p20,1L);
+		map1.put(c72,1L);
+		map1.put(c30,4L);
+		map1.put(c34,2L);
+		map1.put(c2,3L);
+
+		Composite c137=new Composite(
+				"Snäp Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c137);
+		inventory.save(new ReorderableInventoryItem(botManager,c137, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p46,1L);
+		map1.put(p28,1L);
+		map1.put(c47,3L);
+		map1.put(p26,1L);
+		map1.put(p27,2L);
+		map1.put(p35,1L);
+		map1.put(p47,1L);
+		map1.put(p20,1L);
+		map1.put(c73,1L);
+		map1.put(c31,4L);
+		map1.put(c35,2L);
+		map1.put(c3,3L);
+
+
+		Composite c138=new Composite(
+				"Snäp Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c138);
+		inventory.save(new ReorderableInventoryItem(botManager,c138, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p46,1L);
+		map1.put(p28,1L);
+		map1.put(c48,3L);
+		map1.put(p26,1L);
+		map1.put(p27,2L);
+		map1.put(p35,1L);
+		map1.put(p47,1L);
+		map1.put(p20,1L);
+		map1.put(c74,1L);
+		map1.put(c32,4L);
+		map1.put(c36,2L);
+		map1.put(c4,3L);
+
+
+		Composite c139=new Composite(
+				"Snäp Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c139);
+		inventory.save(new ReorderableInventoryItem(botManager,c139, Quantity.of(0, Metric.UNIT)));
+
+		//<editor-fold desc="Snäp Body Kit">
+		/*
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p#140 ,L);
+		Composite c140=new Composite(
+				"Snäp Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"",
+				map1
+		);
+		catalog.save(c140);
+		inventory.save(new ReorderableInventoryItem(botManager,c140, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		h
+		Composite c141=new Composite(
+				"Snäp Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"",
+				map1
+		);
+		catalog.save(c141);
+		inventory.save(new ReorderableInventoryItem(botManager,c141, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p#142 ,L);
+		Composite c142=new Composite(
+				"Snäp Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"",
+				map1
+		);
+		catalog.save(c142);
+		inventory.save(new ReorderableInventoryItem(botManager,c142, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p#143 ,L);
+		Composite c143=new Composite(
+				"Snäp Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"",
+				map1
+		);
+		catalog.save(c143);
+		inventory.save(new ReorderableInventoryItem(botManager,c143, Quantity.of(0, Metric.UNIT)));
+		*/
+		//</editor-fold>
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,2L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20,2L);
+		map1.put(p28 ,1L);
+		map1.put(p21 ,2L);
+		map1.put(c21 ,2L);
+		map1.put(c9 ,1L);
+		map1.put(c5 ,1L);
+		map1.put(c1 ,1L);
+		map1.put(c17 ,1L);
+		map1.put(c13 ,2L);
+		map1.put(c37 ,1L);
+		map1.put(c41 ,1L);
+		map1.put(c45 ,1L);
+		map1.put(c53 ,2L);
+		map1.put(c55 ,1L);
+
+		Composite c144=new Composite(
+				"Loop Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c144);
+		inventory.save(new ReorderableInventoryItem(botManager,c144, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,2L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20,2L);
+		map1.put(p28 ,1L);
+		map1.put(p21 ,2L);
+			map1.put(c22 ,2L);
+			map1.put(c10 ,1L);
+			map1.put(c6 ,1L);
+			map1.put(c2 ,1L);
+			map1.put(c18 ,1L);
+			map1.put(c14 ,2L);
+			map1.put(c38 ,1L);
+			map1.put(c42 ,1L);
+			map1.put(c46 ,1L);
+		map1.put(c53 ,2L);
+		map1.put(c56 ,1L);
+		Composite c145=new Composite(
+				"Loop Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c145);
+		inventory.save(new ReorderableInventoryItem(botManager,c145, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,2L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20,2L);
+		map1.put(p28 ,1L);
+		map1.put(p21 ,2L);
+			map1.put(c23 ,2L);
+			map1.put(c11 ,1L);
+			map1.put(c7 ,1L);
+			map1.put(c3 ,1L);
+			map1.put(c19 ,1L);
+			map1.put(c15 ,2L);
+			map1.put(c39 ,1L);
+			map1.put(c43 ,1L);
+			map1.put(c47 ,1L);
+		map1.put(c53 ,2L);
+		map1.put(c57 ,1L);
+		Composite c146=new Composite(
+				"Loop Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c146);
+		inventory.save(new ReorderableInventoryItem(botManager,c146, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,2L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20,2L);
+		map1.put(p28 ,1L);
+		map1.put(p21 ,2L);
+			map1.put(c24 ,2L);
+			map1.put(c12 ,1L);
+			map1.put(c8 ,1L);
+			map1.put(c4 ,1L);
+			map1.put(c20 ,1L);
+			map1.put(c16 ,2L);
+			map1.put(c40 ,1L);
+			map1.put(c44 ,1L);
+			map1.put(c48 ,1L);
+		map1.put(c53 ,2L);
+		map1.put(c58 ,1L);
+		Composite c147=new Composite(
+				"Loop Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c147);
+		inventory.save(new ReorderableInventoryItem(botManager,c147, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p30 ,1L);
+		map1.put(p28 ,1L);
+
+
+		map1.put(c53 ,2L);
+		map1.put(c21 ,2L);
+
+
+
+		Composite c148=new Composite(
+				"Loop Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c148);
+		inventory.save(new ReorderableInventoryItem(botManager,c148, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p30 ,1L);
+		map1.put(p28 ,1L);
+
+		map1.put(c53 ,2L);
+		map1.put(c22 ,2L);
+
+
+
+		Composite c149=new Composite(
+				"Loop Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c149);
+		inventory.save(new ReorderableInventoryItem(botManager,c149, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p30 ,1L);
+		map1.put(p28 ,1L);
+
+		map1.put(c53 ,2L);
+		map1.put(c23 ,2L);
+
+		Composite c150=new Composite(
+				"Loop Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c150);
+		inventory.save(new ReorderableInventoryItem(botManager,c150, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p30 ,1L);
+		map1.put(p28 ,1L);
+
+		map1.put(c53 ,2L);
+		map1.put(c24 ,2L);
+		Composite c151=new Composite(
+				"Loop Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c151);
+		inventory.save(new ReorderableInventoryItem(botManager,c151, Quantity.of(0, Metric.UNIT)));
 
 
 
 
 
+
+
+
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,1L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p28 ,1L);
+
+		map1.put(c54 ,6L);
+
+		map1.put(c25 ,2L);
+		map1.put(c9 ,1L);
+		map1.put(c5 ,1L);
+		map1.put(c1 ,1L);
+		map1.put(c17 ,1L);
+		map1.put(c13 ,2L);
+		map1.put(c37 ,1L);
+		map1.put(c41 ,1L);
+		map1.put(c45 ,1L);
+		map1.put(c63 ,1L);
+
+
+		Composite c152=new Composite(
+				"Zip Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c152);
+		inventory.save(new ReorderableInventoryItem(botManager,c152, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,1L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p28 ,1L);
+
+		map1.put(c54 ,6L);
+
+		map1.put(c26 ,2L);
+		map1.put(c10 ,1L);
+		map1.put(c6 ,1L);
+		map1.put(c2 ,1L);
+		map1.put(c18 ,1L);
+		map1.put(c14 ,2L);
+		map1.put(c38 ,1L);
+		map1.put(c42 ,1L);
+		map1.put(c46 ,1L);
+		map1.put(c64 ,1L);
+
+		Composite c153=new Composite(
+				"Zip Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c153);
+		inventory.save(new ReorderableInventoryItem(botManager,c153, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,1L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p28 ,1L);
+
+		map1.put(c54 ,6L);
+
+		map1.put(c27 ,2L);
+		map1.put(c11 ,1L);
+		map1.put(c7 ,1L);
+		map1.put(c3 ,1L);
+		map1.put(c19 ,1L);
+		map1.put(c15 ,2L);
+		map1.put(c39 ,1L);
+		map1.put(c43 ,1L);
+		map1.put(c47 ,1L);
+		map1.put(c65 ,1L);
+		Composite c154=new Composite(
+				"Zip Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c154);
+		inventory.save(new ReorderableInventoryItem(botManager,c154, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p46 ,1L);
+		map1.put(p29 ,1L);
+		map1.put(p26 ,1L);
+		map1.put(p27 ,1L);
+		map1.put(p35 ,1L);
+		map1.put(p47 ,1L);
+		map1.put(p20 ,2L);
+		map1.put(p28 ,1L);
+
+		map1.put(c54 ,6L);
+		map1.put(c28 ,2L);
+		map1.put(c12 ,1L);
+		map1.put(c8 ,1L);
+		map1.put(c4 ,1L);
+		map1.put(c20 ,1L);
+		map1.put(c16 ,2L);
+		map1.put(c40 ,1L);
+		map1.put(c44 ,1L);
+		map1.put(c48 ,1L);
+		map1.put(c66 ,1L);
+
+		Composite c155=new Composite(
+				"Zip Komplett Kit",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c155);
+		inventory.save(new ReorderableInventoryItem(botManager,c155, Quantity.of(0, Metric.UNIT)));
+
+
+
+
+
+
+
+		map1= new HashMap();
+		map1.put(p37 ,1L);
+		map1.put(p41 ,1L);
+		map1.put(p31 ,1L);
+		map1.put(p28 ,1L);
+		map1.put(c54 ,6L);
+		map1.put(c25 ,2L);
+		Composite c156=new Composite(
+				"Zip Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"muddy",
+				"Kit",
+				map1
+		);
+		catalog.save(c156);
+		inventory.save(new ReorderableInventoryItem(botManager,c156, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p42 ,1L);
+		map1.put(p38 ,1L);
+		map1.put(p31 ,1L);
+		map1.put(p28 ,1L);
+		map1.put(c54 ,6L);
+		map1.put(c26 ,2L);
+		Composite c157=new Composite(
+				"Zip Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"rocky",
+				"Kit",
+				map1
+		);
+		catalog.save(c157);
+		inventory.save(new ReorderableInventoryItem(botManager,c157, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p43 ,1L);
+		map1.put(p39 ,1L);
+		map1.put(p31 ,1L);
+		map1.put(p28 ,1L);
+		map1.put(c54 ,6L);
+		map1.put(c27 ,2L);
+		Composite c158=new Composite(
+				"Zip Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"veggie",
+				"Kit",
+				map1
+		);
+		catalog.save(c158);
+		inventory.save(new ReorderableInventoryItem(botManager,c158, Quantity.of(0, Metric.UNIT)));
+
+		map1= new HashMap();
+		map1.put(p44 ,1L);
+		map1.put(p40 ,1L);
+		map1.put(p31 ,1L);
+		map1.put(p28 ,1L);
+		map1.put(c54 ,6L);
+		map1.put(c28 ,2L);
+		Composite c159=new Composite(
+				"Zip Body Kit",
+				0,
+				0,
+				"",
+				"",
+				"sandy",
+				"Kit",
+				map1
+		);
+		catalog.save(c159);
+		inventory.save(new ReorderableInventoryItem(botManager,c159, Quantity.of(0, Metric.UNIT)));
+
+		
+		//</editor-fold>
+
+
+
+		//<editor-fold desc="T-Shirts">
+		Part p160 = new Part(
+				"T-Shirt Logo S",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p160);
+		inventory.save(new ReorderableInventoryItem(botManager,p160, Quantity.of(10, Metric.UNIT)));
+
+		Part p161 = new Part(
+				"T-Shirt Logo M",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p161);
+		inventory.save(new ReorderableInventoryItem(botManager,p161, Quantity.of(10, Metric.UNIT)));
+
+		Part p162 = new Part(
+				"T-Shirt Logo L",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p162);
+		inventory.save(new ReorderableInventoryItem(botManager,p162, Quantity.of(10, Metric.UNIT)));
+
+		Part p163 = new Part(
+				"T-Shirt Logo XL",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p163);
+		inventory.save(new ReorderableInventoryItem(botManager,p163, Quantity.of(10, Metric.UNIT)));
+
+		Part p164 = new Part(
+				"T-Shirt Logo XXL",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p164);
+		inventory.save(new ReorderableInventoryItem(botManager,p164, Quantity.of(10, Metric.UNIT)));
+
+		Part p165 = new Part(
+				"T-Shirt Logo Slim S",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p165);
+		inventory.save(new ReorderableInventoryItem(botManager,p165, Quantity.of(10, Metric.UNIT)));
+
+		Part p166 = new Part(
+				"T-Shirt Logo Slim M",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p166);
+		inventory.save(new ReorderableInventoryItem(botManager,p166, Quantity.of(10, Metric.UNIT)));
+
+		Part p167 = new Part(
+				"T-Shirt Logo Slim L",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p167);
+		inventory.save(new ReorderableInventoryItem(botManager,p167, Quantity.of(10, Metric.UNIT)));
+
+		Part p168 = new Part(
+				"T-Shirt Logo Slim XL",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p168);
+		inventory.save(new ReorderableInventoryItem(botManager,p168, Quantity.of(10, Metric.UNIT)));
+
+		Part p169 = new Part(
+				"T-Shirt Logo Slim XXL",
+				0,
+				0	,
+				"",
+				"Grau",
+				""
+		);
+		catalog.save(p169);
+		inventory.save(new ReorderableInventoryItem(botManager,p169, Quantity.of(10, Metric.UNIT)));
+
+		Part p170 = new Part(
+				"T-Shirt Fishy S",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p170);
+		inventory.save(new ReorderableInventoryItem(botManager,p170, Quantity.of(10, Metric.UNIT)));
+
+		Part p171 = new Part(
+				"T-Shirt Fishy M",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p171);
+		inventory.save(new ReorderableInventoryItem(botManager,p171, Quantity.of(10, Metric.UNIT)));
+
+		Part p172 = new Part(
+				"T-Shirt Fishy L",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p172);
+		inventory.save(new ReorderableInventoryItem(botManager,p172, Quantity.of(10, Metric.UNIT)));
+
+		Part p173 = new Part(
+				"T-Shirt Fishy XL",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p173);
+		inventory.save(new ReorderableInventoryItem(botManager,p173, Quantity.of(10, Metric.UNIT)));
+
+		Part p174 = new Part(
+				"T-Shirt Fishy XXL",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p174);
+		inventory.save(new ReorderableInventoryItem(botManager,p174, Quantity.of(10, Metric.UNIT)));
+
+		Part p175 = new Part(
+				"T-Shirt Fishy Slim S",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p175);
+		inventory.save(new ReorderableInventoryItem(botManager,p175, Quantity.of(10, Metric.UNIT)));
+
+		Part p176 = new Part(
+				"T-Shirt Fishy Slim M",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p176);
+		inventory.save(new ReorderableInventoryItem(botManager,p176, Quantity.of(10, Metric.UNIT)));
+
+		Part p177 = new Part(
+				"T-Shirt Fishy Slim L",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p177);
+		inventory.save(new ReorderableInventoryItem(botManager,p177, Quantity.of(10, Metric.UNIT)));
+
+		Part p178 = new Part(
+				"T-Shirt Fishy Slim XL",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p178);
+		inventory.save(new ReorderableInventoryItem(botManager,p178, Quantity.of(10, Metric.UNIT)));
+
+		Part p179 = new Part(
+				"T-Shirt Fishy Slim XXL",
+				0,
+				0	,
+				"",
+				"Blau",
+				""
+		);
+		catalog.save(p179);
+		inventory.save(new ReorderableInventoryItem(botManager,p179, Quantity.of(10, Metric.UNIT)));
+
+		Part p180 = new Part(
+				"T-Shirt Fishy S",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p180);
+		inventory.save(new ReorderableInventoryItem(botManager,p180, Quantity.of(10, Metric.UNIT)));
+
+		Part p181 = new Part(
+				"T-Shirt Fishy M",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p181);
+		inventory.save(new ReorderableInventoryItem(botManager,p181, Quantity.of(10, Metric.UNIT)));
+
+		Part p182 = new Part(
+				"T-Shirt Fishy L",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p182);
+		inventory.save(new ReorderableInventoryItem(botManager,p182, Quantity.of(10, Metric.UNIT)));
+
+		Part p183 = new Part(
+				"T-Shirt Fishy XL",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p183);
+		inventory.save(new ReorderableInventoryItem(botManager,p183, Quantity.of(10, Metric.UNIT)));
+
+		Part p184 = new Part(
+				"T-Shirt Fishy XXL",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p184);
+		inventory.save(new ReorderableInventoryItem(botManager,p184, Quantity.of(10, Metric.UNIT)));
+
+		Part p185 = new Part(
+				"T-Shirt Fishy Slim S",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p185);
+		inventory.save(new ReorderableInventoryItem(botManager,p185, Quantity.of(10, Metric.UNIT)));
+
+		Part p186 = new Part(
+				"T-Shirt Fishy Slim M",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p186);
+		inventory.save(new ReorderableInventoryItem(botManager,p186, Quantity.of(10, Metric.UNIT)));
+
+		Part p187 = new Part(
+				"T-Shirt Fishy Slim L",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p187);
+		inventory.save(new ReorderableInventoryItem(botManager,p187, Quantity.of(10, Metric.UNIT)));
+
+		Part p188 = new Part(
+				"T-Shirt Fishy Slim XL",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p188);
+		inventory.save(new ReorderableInventoryItem(botManager,p188, Quantity.of(10, Metric.UNIT)));
+
+		Part p189 = new Part(
+				"T-Shirt Fishy Slim XXL",
+				0,
+				0	,
+				"",
+				"Weiß",
+				""
+		);
+		catalog.save(p189);
+		inventory.save(new ReorderableInventoryItem(botManager,p189, Quantity.of(10, Metric.UNIT)));
+
+
+		//</editor-fold>
 
 
 
