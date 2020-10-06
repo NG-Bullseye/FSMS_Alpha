@@ -1,4 +1,4 @@
-package kickstart.administration;
+package kickstart.Micellenious;
 
 public enum Location {
 	LOCATION_BWB,LOCATION_HL;

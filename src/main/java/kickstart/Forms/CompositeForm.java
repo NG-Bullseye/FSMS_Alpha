@@ -1,4 +1,4 @@
-package kickstart.administration;
+package kickstart.Forms;
 
 import javax.validation.constraints.Size;
 

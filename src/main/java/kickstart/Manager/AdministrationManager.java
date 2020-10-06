@@ -1,4 +1,4 @@
-package kickstart.administration;
+package kickstart.Manager;
 
 import static org.salespointframework.core.Currencies.EURO;
 
@@ -16,11 +16,11 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 
+import kickstart.Forms.*;
 import kickstart.TelegramInterface.BotManager;
 import kickstart.accountancy.AccountancyManager;
 import kickstart.activityLog.ActivityLogManager;
-import kickstart.activityLog.Log;
-import kickstart.inventory.InventoryManager;
+import kickstart.Micellenious.*;
 import kickstart.order.CartOrderManager;
 import kickstart.order.CustomerOrder;
 import lombok.Getter;
@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
-import kickstart.inventory.ReorderableInventoryItem;
+import kickstart.Micellenious.ReorderableInventoryItem;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -710,7 +710,7 @@ public class AdministrationManager {
 		return amount;
 	}
 
-	public void loggedReorder(@NotNull InForm inForm,UserAccount user,Location location){
+	public void loggedReorder(@NotNull InForm inForm, UserAccount user, Location location){
 		logManager.addLog(user,
 				this.getArticle(inForm.getProductIdentifier()).getName()+" in "+location.toString()+" "+ inForm.getAmount()+"x mal hinzugefügt");
 		reorder(inForm,location);

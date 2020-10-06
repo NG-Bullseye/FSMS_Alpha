@@ -1,13 +1,9 @@
-package kickstart.administration;
+package kickstart.Micellenious;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 import kickstart.TelegramInterface.BotManager;
 import kickstart.articles.Article;
-import kickstart.inventory.ReorderableInventoryItem;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;

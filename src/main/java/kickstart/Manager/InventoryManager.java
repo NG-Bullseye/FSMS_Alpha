@@ -1,19 +1,17 @@
-package kickstart.inventory;
+package kickstart.Manager;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
 import kickstart.TelegramInterface.BotManager;
-import kickstart.administration.Location;
+import kickstart.Micellenious.Location;
+import kickstart.Micellenious.ReorderableInventoryItem;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.time.BusinessTime;
-import org.salespointframework.time.Interval;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

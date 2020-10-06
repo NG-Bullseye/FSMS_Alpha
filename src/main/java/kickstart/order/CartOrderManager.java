@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.order.Cart;
-import org.salespointframework.order.ChargeLine;
 import org.salespointframework.order.OrderLine;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.order.OrderStatus;
@@ -26,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kickstart.articles.Article;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
-import kickstart.administration.WebshopCatalog;
+import kickstart.Micellenious.WebshopCatalog;
 import kickstart.user.UserManagement;
 
 @Component

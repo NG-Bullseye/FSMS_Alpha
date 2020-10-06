@@ -1,4 +1,4 @@
-package kickstart.inventory;
+package kickstart.Micellenious;
 
 import java.net.URL;
 import java.net.URLConnection;
@@ -13,11 +13,10 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 import kickstart.TelegramInterface.BotManager;
-import kickstart.administration.Location;
+import kickstart.Micellenious.Location;
 import kickstart.articles.Article;
 import org.salespointframework.catalog.Product;
 import org.salespointframework.inventory.InventoryItem;
-import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
 import lombok.Getter;

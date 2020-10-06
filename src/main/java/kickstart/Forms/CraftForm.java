@@ -1,11 +1,11 @@
-package kickstart.administration;
+package kickstart.Forms;
 
 import org.salespointframework.catalog.ProductIdentifier;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-public class OutForm {
+public class CraftForm {
 
 	private ProductIdentifier productIdentifier;
 

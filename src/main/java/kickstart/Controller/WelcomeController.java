@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package kickstart.controller;
+package kickstart.Controller;
 
 import java.util.LinkedList;
 
@@ -22,7 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import kickstart.articles.Article;
-import kickstart.administration.WebshopCatalog;
+import kickstart.Micellenious.WebshopCatalog;
 
 @Controller
 public class WelcomeController {

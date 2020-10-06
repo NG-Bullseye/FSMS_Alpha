@@ -1,12 +1,11 @@
-package kickstart.administration;
+package kickstart.Manager;
 
+import kickstart.Micellenious.ActionEnum;
 import org.salespointframework.catalog.ProductIdentifier;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Component
 public class UndoManager {

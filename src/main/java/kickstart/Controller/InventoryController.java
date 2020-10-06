@@ -1,31 +1,23 @@
-package kickstart.inventory;
+package kickstart.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import kickstart.TelegramInterface.BotManager;
-import org.salespointframework.catalog.ProductIdentifier;
+import kickstart.Manager.InventoryManager;
+import kickstart.Micellenious.ReorderableInventoryItem;
 import org.salespointframework.inventory.Inventory;
-import org.salespointframework.quantity.Metric;
-import org.salespointframework.quantity.Quantity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import kickstart.accountancy.AccountancyManager;
 import lombok.Getter;
 
 /**
- * This controller is responsible for all interactions to the inventory. For
+ * This Controller is responsible for all interactions to the inventory. For
  * example this includes showing the current amounts or reordering.
  * 
  * Note that all methods always return a String, which is the name of the shown
@@ -65,7 +57,7 @@ public class InventoryController {
 	 *                    saved
 	 * @param accountancy This allows to add expenses and gives the current time
 	 */
-	public InventoryController( Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy) {
+	public InventoryController(Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy) {
 
 		manager = new InventoryManager(inventory, accountancy);
 	}

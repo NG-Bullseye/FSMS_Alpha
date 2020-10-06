@@ -1,11 +1,9 @@
-package kickstart.administration;
+package kickstart.Micellenious;
 
 import static org.salespointframework.core.Currencies.EURO;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.money.MonetaryAmount;
@@ -13,7 +11,6 @@ import javax.validation.constraints.NotNull;
 
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.Catalog;
-import org.springframework.data.domain.Sort;
 
 import kickstart.articles.Article;
 

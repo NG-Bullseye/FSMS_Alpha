@@ -1,11 +1,9 @@
-package kickstart.inventory;
+package kickstart.Micellenious;
 
 import org.salespointframework.core.DataInitializer;
 import org.salespointframework.inventory.Inventory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import kickstart.administration.WebshopCatalog;
 
 @Component
 @Order(20)

@@ -11,9 +11,7 @@ import javax.money.MonetaryAmount;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import kickstart.administration.CompositeForm;
 import org.javamoney.moneta.Money;
-import org.salespointframework.catalog.Product;
 import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 
