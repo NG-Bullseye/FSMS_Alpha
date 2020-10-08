@@ -224,9 +224,8 @@ public class AdministrationManager {
 			if (l2 != 0) {
 				afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
 			}
-
+			System.out.println("AdministartionManager.editComosite: "+form.getCriticalAmount());
 			afterEdit.setCriticalAmount(form.getCriticalAmount());
-
 			if (form.getEanCode()!=null&&!form.getEanCode().equals("")) {
 				//afterEdit.removeColours();
 				afterEdit.setEanCode(form.getEanCode());
@@ -801,7 +800,7 @@ public class AdministrationManager {
 		if (a instanceof Composite)
 			for (ProductIdentifier pSub:map.keySet()) {
 
-				text=text+map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName()+"           ";
+				text=text+map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName()+"<br>";
 			}
 		return text;
 	}

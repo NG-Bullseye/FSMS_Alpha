@@ -55,8 +55,7 @@ import kickstart.Micellenious.ReorderableInventoryItem;
 @Controller
 public class MainController {
 
-	private final ArrayList<String> preselection = new ArrayList<>(Arrays.asList("Kit"));
-
+	private ArrayList<String> preselection = new ArrayList<>(Arrays.asList("Kit"));
 
 	private  LogRepository logRepository;
 	private AdministrationManager administrationManager;
@@ -103,7 +102,8 @@ public class MainController {
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] { "Rohstoff","Einzelteil Gekauft", "Produkt" ,"Einzelteil Produziert","Kit"};
+		return new String[] { "Rohstoff","Einzelteil Produziert","Kit"};
+		//"Einzelteil Gekauft" "Produkt"
 	}
 
 	@ModelAttribute("categoriesComposite")
@@ -164,13 +164,14 @@ public class MainController {
 		//</editor-fold>
 
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
-		//	model.addAttribute("ManagerView", catalogList);
+		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
 		model.addAttribute("undoManager",undoManager);
 		model.addAttribute("administrationManager", administrationManager);
+
 		botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
 
 		if (loggedInUserWeb.isPresent()) {
@@ -206,19 +207,20 @@ public class MainController {
 
 		if (bindingResult.hasErrors()) {
 
-			//model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
+			model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 			model.addAttribute("administrationManager", administrationManager);
 
 			return correctView;
 		}
 
 		Iterable<ReorderableInventoryItem> list= administrationManager.filteredReorderableInventoryItems(filterform);
+		preselection=filterform.getSelectedCategories();
 
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("outForm", new OutForm());
 		model.addAttribute("craftForm", new CraftForm());
-		//model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		model.addAttribute("undoManager",undoManager);
 		for (ReorderableInventoryItem item:list

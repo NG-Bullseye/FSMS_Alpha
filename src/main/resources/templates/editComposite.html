@@ -11,7 +11,11 @@
     <form method="post" th:action="@{/edit/composite/{id}(id=${article.id})}" th:object="${compositeForm}">
         <table id="editspace" class="ui definition table ">
             <thead>
-                <th></th>
+                <th>
+                    <div>
+                        <input type="submit" value="Ändern" class="ui fluid button" />
+                    </div>
+                </th>
                 <th><t3>Bisherige Werte</t3></th>
                 <th><t3>neue Werte</t3></th>
             </thead>
@@ -91,8 +95,10 @@
                     </td>
                 </tr>
 
-                <tr> </tr>
-                <tr th:each="article : ${catalog}">
+                <tr>
+                </tr>
+
+                <tr th:each="article : ${ManagerInventory}">
                     <td th:text="${article.key.name}"></td>
                     <td class="center aligned" th:text="${article.value}"></td>
                     <td>

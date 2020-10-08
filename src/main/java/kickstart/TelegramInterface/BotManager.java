@@ -12,19 +12,80 @@ import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Scanner;
 
 
 @Service
 public class  BotManager {
+
+	private Map<ReorderableInventoryItem,Boolean> allreadyInformed = new HashMap<>();
     private  final String CHAT_ID_ME = "374013262";
+	private  final String CHAT_ID_KARSTEN = "";
     private String message="Connected";
     private  final String BOT_URL_IP =
             "https://api.telegram.org/bot795371834:AAF3Pq_kTgdIxh0gpI6Ny4uWozhCvf-_PPE/";
 
-    public BotManager() {
+    public BotManager(Inventory<ReorderableInventoryItem> inventory) {
+		for (ReorderableInventoryItem item:inventory.findAll()){
+			allreadyInformed.put(item,false);
+		}
     }
 
+	public boolean checkItemsForCriticalAmount(Inventory<ReorderableInventoryItem> inventory) {
+    	String message="";
+    	for (ReorderableInventoryItem item:inventory.findAll()){
+			if (item==null){
+				System.out.println("MY ERROR: item darf nicht null sein");
+				return false;
+			}
+			Article article=null;
+			Product product =item.getProduct();
+			if (product instanceof Article){
+				article=((Article)product);
+			}
+			else {
+				throw new IllegalArgumentException("Produkt not an article");
+			}
+			int differenz=(int)item.getArticle().getCriticalAmount() -item.getAmountBwB();
+			if (article.getCriticalAmount()>item.getAmountBwB()&&allreadyInformed.containsKey(item)&&!allreadyInformed.get(item)){
+
+				//sendMessage("low");
+				message=item.getProduktName().toString()+" ist kritisch mit "+item.getAmountBwB()+item.getUnitQuant()
+						+ ", was "+differenz+item.getUnitQuant()+ " unterhalb der Kritischen Menge "+item.getArticle().getCriticalAmount()+ " liegt.";
+				sendMessage(message);
+
+				allreadyInformed.put(item,true);
+
+				continue;
+			}
+			if (article.getCriticalAmount()<item.getAmountBwB()&&allreadyInformed.containsKey(item)&&allreadyInformed.get(item)) {
+				allreadyInformed.put(item,false);
+				continue;
+			}
+
+		}
+		return false;
+	}
+
+
+	private boolean sendMessage(String	message){
+		try {
+			URL urlBot = new URL(
+					getIpBotURL()
+							+ getURL_SendMessage(getCHAT_ID_ME(), message));
+			URLConnection urlConnection = urlBot.openConnection();
+			urlConnection.getInputStream();
+			return true;
+
+		} catch (Exception e) {
+			System.out.println("Error " + e.getMessage());
+			return  false;
+		}
+
+	}
 
 	public boolean criticalAmountAfterUndoCheck(ReorderableInventoryItem item,int redoAmount){
 		if (item==null){
@@ -41,24 +102,11 @@ public class  BotManager {
 		}
 
 		if (article.getCriticalAmount()>item.getAmountBwB()){
-		//	botItemLowAmount(item);
+			//	botItemLowAmount(item);
 			return true;
 		}
 		return false;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -205,9 +253,7 @@ public class  BotManager {
         return scan;
     }
 
-	public boolean checkItemsForCriticalAmount(Inventory<ReorderableInventoryItem> inventory) {
-    	
-	}
+
 
 
 	//</editor-fold>

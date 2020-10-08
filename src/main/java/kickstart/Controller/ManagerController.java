@@ -94,7 +94,8 @@ public class ManagerController {
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] { "Rohstoff","Einzelteil Gekauft", "Produkt" ,"Einzelteil Produziert","Kit"};
+		return new String[] { "Rohstoff","Einzelteil Produziert","Kit"};
+
 	}
 
 	@ModelAttribute("categoriesComposite")
@@ -224,7 +225,7 @@ public class ManagerController {
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 
 		return "redirect:/";
@@ -250,10 +251,18 @@ public class ManagerController {
 			return "newPart";
 		}
 		administrationManager.newPart(form);
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
+		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		return "redirect:/";
 	}
 	//</editor-fold>
+
+	@GetMapping("/bot")
+	//@PreAuthorize("hasRole('ROLE_MANAGER')")
+	public String bot(Model model) {
+
+		botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
+		return "/";
+	}
 
 	//<editor-fold desc="New Composite">
 	@GetMapping("/composite/new")
@@ -297,6 +306,8 @@ public class ManagerController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	public String detailEdit(@PathVariable ProductIdentifier identifier,
 							 Model model,@LoggedIn UserAccount loggedInUserWeb) {
+		System.out.println("in AdministartionController.edit Get");
+
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
 		HashSet<String> articleColours = new HashSet<>();
@@ -312,6 +323,8 @@ public class ManagerController {
 							  @Valid @ModelAttribute("form") Form form,
 							  BindingResult bindingResult,@LoggedIn UserAccount loggedInUserWeb,
 							  Model model) {
+		//System.out.println("in AdministartionController.edit Post");
+
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();
 		administrationManager.getArticle(identifier).getCategories().forEach(articleCategories::add);
@@ -335,7 +348,7 @@ public class ManagerController {
 	public String editComposite(@PathVariable ProductIdentifier identifier, Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		model.addAttribute("compositeForm", new CompositeForm());
-		model.addAttribute("ManagerView", administrationManager.getArticlesForCompositeEdit(identifier));
+		model.addAttribute("ManagerInventory", administrationManager.getArticlesForCompositeEdit(identifier));
 
 		return "editComposite";
 	}
@@ -344,17 +357,23 @@ public class ManagerController {
 	@PostMapping("/edit/composite/{identifier}")
 	public String editCompositeFinished(@PathVariable ProductIdentifier identifier, Model model,@LoggedIn UserAccount loggedInUserWeb,
 			@NotNull @RequestParam Map<String, String> partsMapping, @ModelAttribute CompositeForm compositeForm) {
+		//System.out.println("in AdministartionController.editComositeFinished Post");
 		if (administrationManager.listOfAllArticlesChousen(partsMapping).isEmpty()) {
+			//System.out.println("in AdministartionController.editComositeFinished Post Loop");
 			return "redirect:/edit/composite/" + identifier;
 		}
+
+		//System.out.println("in AdministartionController.editComositeFinished Post afterLoop");
+
 		administrationManager.editComposite(identifier, compositeForm, partsMapping);
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
 				compositeForm.getName()+" bearbeitet"));
+		//System.out.println("in AdministartionController.editComositeFinished Post redirect");
 		return "redirect:/";
 	}
 	//</editor-fold>
 
-
+	//</editor-fold>
 }

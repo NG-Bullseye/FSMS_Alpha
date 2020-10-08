@@ -94,7 +94,7 @@ public class EmployeeController {
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] { "Rohstoff","Einzelteil Gekauft", "Produkt" ,"Einzelteil Produziert","Kit"};
+		return new String[] { "Rohstoff","Einzelteil Produziert","Kit"};
 	}
 
 	@ModelAttribute("categoriesComposite")

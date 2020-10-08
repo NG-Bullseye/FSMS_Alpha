@@ -111,6 +111,7 @@ public abstract class Article extends Product {
 
 	public void setCriticalAmount(long criticalAmount) {
 		this.criticalAmount = criticalAmount;
+		System.out.println("Article.setCriticalAMount ritical amount has been changed");
 	}
 
 	/**

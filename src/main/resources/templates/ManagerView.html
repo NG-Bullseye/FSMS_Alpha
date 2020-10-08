@@ -91,15 +91,18 @@
 				<div class="item">
 					<button class="ui button" type="submit" value="filter" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 					<i class="filter icon"></i>
-					Filtern
+					Filter anwenden
 					</button>
 				</div>
+				<!--
 				<div class="item">
 					<button class="ui button" type="submit" value="reset" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 					<i class="recycle icon"></i>
 					Filter zurücksetzen
 					</button>
 				</div>
+				-->
+
 
 				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<a th:href="@{/undo}">
@@ -365,7 +368,7 @@
 					</td>
 					<!--</editor-fold>-->
 
-					<!--13--> <!--<editor-fold desc="Besteht aus View:P">-->
+					<!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
 					<td sec:authorize="hasRole('ROLE_PERMITTED')">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(item.getProduct().getId())}">
