@@ -308,7 +308,7 @@
 					</td>
 					<!--</editor-fold>-->
 
-					<!--6--> <!--<editor-fold desc="Herstallbar BwB View:M">-->
+					<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">

@@ -191,9 +191,9 @@ public class MainController {
 	String catalogFiltered(@Valid @ModelAttribute("filterForm") Filterform filterform,Model model, BindingResult bindingResult,
 						   @RequestParam(required = false, name = "reset") String reset
 						  , @LoggedIn Optional<UserAccount> loggedInUserWeb) {
-		if (reset.equals("reset")) {
-			return "redirect:/";
-		}
+		//if (reset.equals("reset")) {
+		//	return "redirect:/";
+		//}
 
 		//<editor-fold desc="Choose HTML by Login Clearance Level">
 		String correctView;

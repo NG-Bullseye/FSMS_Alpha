@@ -57,10 +57,10 @@
 
 
 				<!--    RÜCKGÄNGIG BUTTON FÜR HL NICHT IMPLEMENTIER?? -> prüfen      Fehlerquelle: employee sicht in Manager?!-->
-				<div class="item" >
+				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 					<a th:href="@{/undo}">
-						<button class="ui button" th:if="${undoManager.getProductNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getProductNameOfLastAction()}+' '+${undoManager.getNameOfLastAction()}">
-						</button>
+						<div class="ui button" th:if="${undoManager.getProductNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getProductNameOfLastAction()}+' '+${undoManager.getNameOfLastAction()}">
+						</div>
 					</a>
 				</div>
 
@@ -91,6 +91,10 @@
 
 					<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
 					<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">BwB Bestand</th>
+					<!--</editor-fold>-->
+
+					<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
+					<th sec:authorize="hasRole('ROLE_EMPLOYEE')" 	style="text-align: center">Herstellbar BwB</th>
 					<!--</editor-fold>-->
 
 					<!--9--> <!--<editor-fold desc="Empfangen View:E">-->
@@ -155,6 +159,17 @@
 							</div>
 
 
+					</td>
+					<!--</editor-fold>-->
+
+					<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
+					<td  sec:authorize="hasRole('ROLE_EMPLOYEE') " style="font-size: 20px;font-weight: bold;text-align: center">
+						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
+							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
+								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
+							</div>
+						</div>
 					</td>
 					<!--</editor-fold>-->
 
