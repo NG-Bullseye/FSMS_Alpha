@@ -800,7 +800,7 @@ public class AdministrationManager {
 		if (a instanceof Composite)
 			for (ProductIdentifier pSub:map.keySet()) {
 
-				text=text+map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName()+"<br>";
+				text=text+map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName()+"\r\n";
 			}
 		return text;
 	}
@@ -809,7 +809,7 @@ public class AdministrationManager {
 
 		List<String> bestandteileStrings=new ArrayList<>();
 		String text="";
-		Article a=null;
+		Article a=null  ;
 		if (catalog.findById(p).isPresent()){
 			a=catalog.findById(p).get();
 		}

@@ -55,8 +55,8 @@ import kickstart.Micellenious.ReorderableInventoryItem;
 @Controller
 public class MainController {
 
-	private ArrayList<String> preselection = new ArrayList<>(Arrays.asList("Kit"));
-
+	private ArrayList<String> preselectionKategorie = new ArrayList<>(Arrays.asList("Kit"));
+	private ArrayList<String> preselectionFarbe = new ArrayList<>(Arrays.asList("farblos","veggie","muddy","sandy","rocky"));
 	private  LogRepository logRepository;
 	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
@@ -139,7 +139,8 @@ public class MainController {
 
 		Filterform filterform=new Filterform();
 
-		filterform.setSelectedCategories(preselection);
+		filterform.setSelectedCategories(preselectionKategorie);
+		filterform.setSelectedColours(preselectionFarbe);
 		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator= administrationManager.filteredReorderableInventoryItems(filterform);
 		//Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
 
@@ -205,17 +206,18 @@ public class MainController {
 		else return "redirect:/";
 		//</editor-fold>
 
+		//<editor-fold desc="Check for binding Errors">
 		if (bindingResult.hasErrors()) {
-
 			model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 			model.addAttribute("administrationManager", administrationManager);
-
 			return correctView;
 		}
+		//</editor-fold>
+
 
 		Iterable<ReorderableInventoryItem> list= administrationManager.filteredReorderableInventoryItems(filterform);
-		preselection=filterform.getSelectedCategories();
-
+		preselectionKategorie =filterform.getSelectedCategories();
+		preselectionFarbe=filterform.getSelectedColours();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("inForm", new InForm());
 		model.addAttribute("outForm", new OutForm());
