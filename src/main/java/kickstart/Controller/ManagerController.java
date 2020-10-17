@@ -323,7 +323,7 @@ public class ManagerController {
 							  @Valid @ModelAttribute("form") Form form,
 							  BindingResult bindingResult,@LoggedIn UserAccount loggedInUserWeb,
 							  Model model) {
-		//System.out.println("in AdministartionController.edit Post");
+		//	System.out.println("in AdministartionController.edit Post");
 
 		model.addAttribute("article", administrationManager.getArticle(identifier));
 		HashSet<String> articleCategories = new HashSet<>();

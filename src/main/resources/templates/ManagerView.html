@@ -2,8 +2,8 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.w3.org/1999/xhtml" >
+xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.w3.org/1999/xhtml" >
 	<head th:include="header :: head">
 		<link rel="stylesheet" type="text/css" href="static/resources/css/ourstyle.css">
 		<link rel="shortcut icon" type="image/ico" href="C:\Users\Bullseye\IdeaProjects\Mangment Webapplikation\src\main\resources\static\resources\favicon.ico"/>
@@ -295,14 +295,31 @@
 					<!--</editor-fold>-->
 
 					<!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
-					<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >HlBestand</td>
+					<td sec:authorize="hasRole('ROLE_MANAGER')">
+						<span th:if="${ item.getAmountHl() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+							  th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red ">HlBestand>
+						</span>
+						<span th:unless="${ item.getAmountHl() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+							  th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center;">HlBestand
+						</span>
+
+					</td>
 					<!--</editor-fold>-->
 
 					<!--5--> <!--<editor-fold desc="Herstallbar Hl View:M">-->
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
-							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-								<span th:text="${administrationManager.craftbarHl(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
+								<span 	th:if="${
+											administrationManager.craftbarHl(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount()
+										}"
+									  	th:text="${administrationManager.craftbarHl(item.getProduct().getId())}?:''"
+									  	style="font-size: 20px;font-weight: bold;text-align: center; color: red ">Herstellbar Hl Rot
+								</span>
+								<span 	th:unless="${ administrationManager.craftbarHl(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+									  	th:text="${administrationManager.craftbarHl(item.getProduct().getId())}"
+									  	style="font-size: 20px;font-weight: bold;text-align: center;">Herstellbar Hl Schwarz
+								</span>
 							</div>
 						</div>
 					</td>
@@ -312,8 +329,12 @@
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center"></span>
-								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
+								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+									  th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''"
+									  style="font-size: 20px;font-weight: bold;text-align: center"></span>
+								<span th:unless="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+									  th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''"
+									  style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 							</div>
 						</div>
 					</td>
