@@ -2,7 +2,7 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:th="http://www.thymeleaf.org"
+xmlns:th="http://thymeleaf.org"
 xmlns:sec="http://www.w3.org/1999/xhtml" >
 	<head th:include="header :: head">
 		<link rel="stylesheet" type="text/css" href="static/resources/css/ourstyle.css">
@@ -329,10 +329,10 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 					<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 						<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 							<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-								<span th:if="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+								<span th:if="${administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
 									  th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''"
 									  style="font-size: 20px;font-weight: bold;text-align: center"></span>
-								<span th:unless="${ item.getAmountBwB()+administrationManager.craftbarBwB(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+								<span th:unless="${administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
 									  th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''"
 									  style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 							</div>
