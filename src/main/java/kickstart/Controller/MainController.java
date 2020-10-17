@@ -70,6 +70,8 @@ public class MainController {
 	private boolean undoMode;
 	private ActivityLogManager activityLogManager;
 	private BotManager botManager;
+	private Colors colors;
+	private CategoriesPart
 
 
 
