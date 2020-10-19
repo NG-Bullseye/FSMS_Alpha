@@ -66,7 +66,7 @@ public class Part extends Article {
 
 		this.type = ArticleType.PART;
 
-		//<editor-fold desc="Clear Categories and set it to Rohstoff">
+		//<editor-fold desc="Clear CategoriesComposites and set it to Rohstoff">
 		for (String c :
 				this.getAllCategories()) {
 			this.removeCategory(c);
@@ -93,7 +93,7 @@ public class Part extends Article {
 
 		this.type = ArticleType.PART;
 
-		//<editor-fold desc="Clear Categories and set it to Rohstoff">
+		//<editor-fold desc="Clear CategoriesComposites and set it to Rohstoff">
 		for (String c :
 				this.getAllCategories()) {
 			this.removeCategory(c);

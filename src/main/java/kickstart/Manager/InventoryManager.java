@@ -37,6 +37,21 @@ public class InventoryManager {
 	@Getter
 	private AccountancyManager accountancy;
 
+	public String[] getColours() {
+		return Colours.getColorsArray();
+	}
+
+	public String[] getCategoriesParts() {
+		return CategoriesParts.getCategoriesPartsArray();
+	}
+
+	public String[] getCategoriesComposites() {
+		return CategoriesComposites.getCategoriesCompositesArray();
+	}
+
+	public String[] getCategoriesAll() {
+		return CategoriesAll.getCategoriesArray();
+	}
 
 
 	// The time difference (in days) until a reorder is completed
@@ -162,7 +177,7 @@ public class InventoryManager {
 	 * @param quantity The desired quantity
 	 * @throws IllegalArgumentException If Quantity hasn't the Metric
 	 *                                  {@literal Metric.UNIT} the article exists
-	 *                                  and if not add it with {@link addArticle}
+	 *                                  and if not add it with {@link}
 	 */
 	public void decreaseQuantity(@NotNull Article article, @NotNull Quantity quantity) throws IllegalArgumentException {
 		if (inventory.findByProduct(article).isPresent() == false) {

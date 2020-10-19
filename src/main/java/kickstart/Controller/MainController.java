@@ -24,14 +24,12 @@ import kickstart.Forms.CraftForm;
 import kickstart.Forms.Filterform;
 import kickstart.Forms.InForm;
 import kickstart.Forms.OutForm;
-import kickstart.Manager.AdministrationManager;
-import kickstart.Manager.UndoManager;
+import kickstart.Manager.*;
 import kickstart.TelegramInterface.BotManager;
 import kickstart.accountancy.AccountancyManager;
 import kickstart.activityLog.ActivityLogManager;
 import kickstart.activityLog.LogRepository;
 import kickstart.Micellenious.*;
-import kickstart.Manager.InventoryManager;
 import kickstart.order.CartOrderManager;
 import kickstart.user.UserManagement;
 import org.salespointframework.inventory.Inventory;
@@ -55,8 +53,11 @@ import kickstart.Micellenious.ReorderableInventoryItem;
 @Controller
 public class MainController {
 
-	private ArrayList<String> preselectionKategorie = new ArrayList<>(Arrays.asList("Kit"));
-	private ArrayList<String> preselectionFarbe = new ArrayList<>(Arrays.asList("farblos","veggie","muddy","sandy","rocky"));
+	ArrayList<String> METHA_STANDARDFILTER_FARBE=Arrays.asList();
+	ArrayList<String> METHA_STANDARDFILTER_CATEGORIE=Arrays.asList("Kit");
+
+	private ArrayList<String> preselectionKategorie;
+	private ArrayList<String> preselectionFarbe;
 	private  LogRepository logRepository;
 	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
@@ -70,8 +71,12 @@ public class MainController {
 	private boolean undoMode;
 	private ActivityLogManager activityLogManager;
 	private BotManager botManager;
-	private Colors colors;
-	private CategoriesPart
+	private String[] colours;
+	private String[] categoriesParts;
+	private String[] categoriesComposites;
+	private String[] categoriesAll;
+	//private Colors colors;
+	//private CategoriesPart
 
 
 
@@ -100,27 +105,18 @@ public class MainController {
 		this.userManagement=userManagement;
 		this.undoManager=undoManager;
 		this.undoMode =false;
+		this.colours=inventoryManager.getColours();
+		this.categoriesComposites=inventoryManager.getCategoriesComposites();
+		this.categoriesParts= inventoryManager.getCategoriesParts();
+		this.categoriesAll=inventoryManager.getCategoriesAll();
+
+		this.preselectionFarbe= new ArrayList<>(Arrays.asList(METHA_STANDARDFILTER_FARBE));
+		this.preselectionKategorie=new ArrayList<>(Arrays.asList(METHA_STANDARDFILTER_CATEGORIE));
 	}
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return new String[] { "Rohstoff","Einzelteil Produziert","Kit"};
-		//"Einzelteil Gekauft" "Produkt"
-	}
-
-	@ModelAttribute("categoriesComposite")
-	public String[] categoriesComposite() {
-		return new String[] {  "Produkt" ,"Einzelteil Produziert","Kit"};
-	}
-
-	@ModelAttribute("categoriesPart")
-	public String[] categoriesPart() {
-		return new String[] { "Rohstoff","Einzelteil Gekauft" };
-	}
-
-	@ModelAttribute("colours")
-	public String[] colours() {
-		return new String[] { "rocky", "veggie", "muddy","farblos","sandy" };
+		return inventoryManager.getCategoriesAllArray();
 	}
 
 

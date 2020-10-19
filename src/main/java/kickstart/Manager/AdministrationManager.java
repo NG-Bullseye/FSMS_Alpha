@@ -451,7 +451,7 @@ public class AdministrationManager {
 		if(categories!=null && categories.size()>0)
 			catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 		else {
-			System.out.println("No Categories choosen");
+			System.out.println("No CategoriesComposites choosen");
 			catalog.findAll().forEach(rightCategories::add);
 		}
 

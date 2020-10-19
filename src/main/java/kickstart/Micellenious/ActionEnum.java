@@ -1,6 +1,6 @@
 package kickstart.Micellenious;
 
- public enum ActionEnum {
+ public enum  ActionEnum {
 	ACTION_SEND,ACTION_EMPFANGEN,ACTION_CRAFT,ACTION_ZERLEGEN;
 
 	public ActionEnum getUndoAction(ActionEnum action){
