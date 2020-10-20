@@ -11,6 +11,13 @@ body {
   margin: 5em 0em 4em 0em;
 }
 
+th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
 @font-face{
     font-family: 'Raleway';
     font-style: normal;

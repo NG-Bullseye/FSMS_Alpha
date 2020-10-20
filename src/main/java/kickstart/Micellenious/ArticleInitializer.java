@@ -16,6 +16,14 @@ import org.springframework.util.Assert;
 import kickstart.articles.Composite;
 import kickstart.articles.Part;
 
+/*
+* 
+* ACHTUNG NAMENSGEBUNGS VORSCHRIFT
+* alle Categorien müssen mit Grosem Buchstaben beginnen und der rest klein
+* es dürfen keine unterstriche enthalten sein
+* 
+* */
+
 @Component
 @Order(20)
 public class ArticleInitializer implements DataInitializer {
@@ -315,14 +323,13 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c1);
 		inventory.save(new ReorderableInventoryItem(botManager,c1, Quantity.of(0, Metric.UNIT)));
 		print(c1);
-
-		 map1= new HashMap();
+		map1= new HashMap();
 		map1.put(p2,100L*100L); Composite c2=new Composite(
 				"FIX-Gummi L",
 				20,
@@ -330,13 +337,13 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c2);
 		inventory.save(new ReorderableInventoryItem(botManager,c2, Quantity.of(0, Metric.UNIT)));
 		print(c2);
-		 map1= new HashMap();
+		map1= new HashMap();
 		map1.put(p3,100L*100L); Composite c3=new Composite(
 				"FIX-Gummi L",
 				20,
@@ -344,7 +351,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c3);
@@ -359,7 +366,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c4);
@@ -373,7 +380,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c5);
@@ -387,13 +394,13 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c6);
 		inventory.save(new ReorderableInventoryItem(botManager,c6, Quantity.of(0, Metric.UNIT)));
 		print(c6);
-		 map1= new HashMap();
+		map1= new HashMap();
 		map1.put(p3,70L*60L); Composite c7=new Composite(
 				"FIX-Gummi M",
 				20,
@@ -401,13 +408,13 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c7);
 		inventory.save(new ReorderableInventoryItem(botManager,c7, Quantity.of(0, Metric.UNIT)));
 		print(c7);
-		 map1= new HashMap();
+		map1= new HashMap();
 		map1.put(p4,70L*60L); Composite c8=new Composite(
 				"FIX-Gummi M",
 				20,
@@ -415,13 +422,13 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c8);
 		inventory.save(new ReorderableInventoryItem(botManager,c8, Quantity.of(0, Metric.UNIT)));
 		print(c8);
-		 map1= new HashMap();
+		map1= new HashMap();
 		map1.put(p1,40L*30L); Composite c9=new Composite(
 				"FIX-Gummi S",
 				20,
@@ -429,13 +436,13 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c9);
 		inventory.save(new ReorderableInventoryItem(botManager,c9, Quantity.of(0, Metric.UNIT)));
 		print(c9);
-		 map1= new HashMap();
+		map1= new HashMap();
 		map1.put(p2,40L*30L); Composite c10=new Composite(
 				"FIX-Gummi S",
 				20,
@@ -443,13 +450,13 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c10);
 		inventory.save(new ReorderableInventoryItem(botManager,c10, Quantity.of(0, Metric.UNIT)));
 		print(c10);
-		 map1= new HashMap();
+		map1= new HashMap();
 		map1.put(p3,40L*30L); Composite c11=new Composite(
 				"FIX-Gummi S",
 				20,
@@ -457,7 +464,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c11);
@@ -471,7 +478,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c12);
@@ -485,7 +492,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c13);
@@ -499,7 +506,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c14);
@@ -513,7 +520,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c15);
@@ -527,7 +534,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c16);
@@ -541,7 +548,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c17);
@@ -556,7 +563,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c18);
@@ -570,7 +577,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c19);
@@ -585,7 +592,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c20);
@@ -602,7 +609,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c21);
@@ -619,7 +626,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c22);
@@ -636,7 +643,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c23);
@@ -653,7 +660,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c24);
@@ -670,7 +677,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c25);
@@ -687,7 +694,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c26);
@@ -704,7 +711,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c27);
@@ -721,7 +728,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c28);
@@ -737,7 +744,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c29);
@@ -754,7 +761,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c30);
@@ -771,7 +778,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c31);
@@ -788,7 +795,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c32);
@@ -806,7 +813,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c33);
@@ -823,7 +830,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c34);
@@ -840,7 +847,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c35);
@@ -857,7 +864,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c36);
@@ -872,7 +879,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c37);
@@ -887,7 +894,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c38);
@@ -902,7 +909,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c39);
@@ -917,7 +924,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c40);
@@ -933,7 +940,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c41);
@@ -948,7 +955,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c42);
@@ -963,7 +970,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c43);
@@ -978,7 +985,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c44);
@@ -994,7 +1001,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c45);
@@ -1009,7 +1016,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c46);
@@ -1024,7 +1031,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c47);
@@ -1039,7 +1046,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c48);
@@ -1054,7 +1061,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c49);
@@ -1069,7 +1076,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c50);
@@ -1084,7 +1091,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c51);
@@ -1099,7 +1106,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c52);
@@ -1114,7 +1121,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"farblos",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c53);
@@ -1129,7 +1136,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"farblos",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c54);
@@ -1149,7 +1156,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c55);
@@ -1164,7 +1171,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c56);
@@ -1179,7 +1186,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c57);
@@ -1194,7 +1201,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c58);
@@ -1209,7 +1216,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c59);
@@ -1224,7 +1231,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c60);
@@ -1239,7 +1246,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c61);
@@ -1254,7 +1261,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c62);
@@ -1269,7 +1276,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c63);
@@ -1284,7 +1291,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c64);
@@ -1299,7 +1306,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c65);
@@ -1314,7 +1321,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c66);
@@ -1329,7 +1336,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c67);
@@ -1344,7 +1351,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c68);
@@ -1359,7 +1366,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c69);
@@ -1374,7 +1381,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c70);
@@ -1389,7 +1396,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c71);
@@ -1404,7 +1411,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c72);
@@ -1419,7 +1426,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c73);
@@ -1434,7 +1441,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c74);
@@ -1449,7 +1456,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c75);
@@ -1464,7 +1471,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c76);
@@ -1479,7 +1486,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c77);
@@ -1494,7 +1501,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c78);
@@ -1509,7 +1516,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c79);
@@ -1524,7 +1531,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c80);
@@ -1539,7 +1546,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c81);
@@ -1554,7 +1561,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c82);
@@ -1569,7 +1576,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c83);
@@ -1584,7 +1591,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c84);
@@ -1599,7 +1606,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c85);
@@ -1614,7 +1621,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c86);
@@ -1629,7 +1636,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c87);
@@ -1644,7 +1651,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c88);
@@ -1659,7 +1666,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c89);
@@ -1674,7 +1681,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c90);
@@ -1689,7 +1696,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c91);
@@ -1704,7 +1711,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c92);
@@ -1719,7 +1726,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c93);
@@ -1734,7 +1741,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c94);
@@ -1749,7 +1756,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c95);
@@ -1764,7 +1771,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c96);
@@ -1779,7 +1786,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c97);
@@ -1794,7 +1801,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c98);
@@ -1809,7 +1816,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c99);
@@ -1824,7 +1831,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c100);
@@ -1839,7 +1846,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c101);
@@ -1854,7 +1861,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c102);
@@ -1869,7 +1876,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"muddy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c103);
@@ -1884,7 +1891,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"rocky",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c104);
@@ -1899,7 +1906,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"veggie",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c105);
@@ -1914,7 +1921,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"sandy",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c106);
@@ -1929,7 +1936,7 @@ public class ArticleInitializer implements DataInitializer {
 				"",
 				"",
 				"farblos",
-				"Einzelteil Produziert",
+				"Einzelteil produziert",
 				map1
 		);
 		catalog.save(c107);

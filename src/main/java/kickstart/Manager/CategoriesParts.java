@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Citizin on 19.10.2020.
  */
 public enum CategoriesParts {
-	ROHSTOFFE, EINZELTEILE_GEKAUFT;
+	ROHSTOFF, EINZELTEIL_GEKAUFT;
 
 	static String[] getCategoriesPartsArray() {
 		ArrayList<String> a = new ArrayList<>();

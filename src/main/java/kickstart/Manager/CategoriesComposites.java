@@ -3,7 +3,7 @@ package kickstart.Manager;
 import java.util.ArrayList;
 
 public enum CategoriesComposites {
-	 EINZELTEILE_PRODUZIERT, KITS;
+	 EINZELTEIL_PRODUZIERT, KIT;
 
 	static String[] getCategoriesCompositesArray() {
 		ArrayList<String> a = new ArrayList<>();

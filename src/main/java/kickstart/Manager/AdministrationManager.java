@@ -415,12 +415,12 @@ public class AdministrationManager {
 	 */
 	public Iterable<Article> filteredCatalog(Filterform filterform) {
 
-		HashSet<Article> rightColours = new HashSet<>();
+		HashSet<Article> articlesWithCorrectColour = new HashSet<>();
 		if (filterform.getSelectedColours()!=null){
-			catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
+			catalog.findByColours(filterform.getSelectedColours()).forEach(articlesWithCorrectColour::add);
 		}
 		else{
-			catalog.findAll().forEach(rightColours::add);
+			catalog.findAll().forEach(articlesWithCorrectColour::add);
 		}
 
 		HashSet<Article> rightNettoPrice = new HashSet<>();
@@ -462,7 +462,7 @@ public class AdministrationManager {
 		result.addAll(visible);
 
 		if (filterform.getSelectedColours()!=null && filterform.getSelectedColours().size()>0) {
-			result.retainAll(rightColours);
+			result.retainAll(articlesWithCorrectColour);
 		}
 
 		if (filterform.getMaxPriceNetto()!=0 || filterform.getMinPriceNetto()!=0) {
