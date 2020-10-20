@@ -20,11 +20,12 @@ th {
 
 .container-notiz{
     position: fixed;
-    width:65vw;
-    box-shadow: 0 15px 35px rgba(50,50,93,.1,0 5px 15px rgba(0,0,0,.07);
-    padding:2em;
-    background-color:#fff;
-    border-radius:5px
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+    color: #54c8ff;
+    text-align: center;
 }
 
 @font-face{
