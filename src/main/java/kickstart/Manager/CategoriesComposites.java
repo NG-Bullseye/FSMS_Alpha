@@ -3,14 +3,17 @@ package kickstart.Manager;
 import java.util.ArrayList;
 
 public enum CategoriesComposites {
-	 EINZELTEIL_PRODUZIERT, KIT;
+	 EINZELTEILE_PRODUZIERT, KITS;
 
 	static String[] getCategoriesCompositesArray() {
 		ArrayList<String> a = new ArrayList<>();
 		for(CategoriesComposites c: CategoriesComposites.values()){
 			String s=c.toString();
-			s.replace("_"," ");
-			a.add(s.toLowerCase());
+			s=s.replace("_"," ");
+			s=s.toLowerCase();
+			String str=s;
+			s = str.substring(0, 1).toUpperCase() + str.substring(1);
+			a.add(s);
 		}
 		String[] s = new String[a.size()];
 		int i=0;

@@ -53,8 +53,8 @@ import kickstart.Micellenious.ReorderableInventoryItem;
 @Controller
 public class MainController {
 
-	ArrayList<String> METHA_STANDARDFILTER_FARBE=Arrays.asList();
-	ArrayList<String> METHA_STANDARDFILTER_CATEGORIE=Arrays.asList("Kit");
+	final private ArrayList<String> METHA_STANDARDFILTER_FARBE=null;
+	final private ArrayList<String> METHA_STANDARDFILTER_CATEGORIE=new ArrayList<>(Arrays.asList("Kit")) ;
 
 	private ArrayList<String> preselectionKategorie;
 	private ArrayList<String> preselectionFarbe;
@@ -110,16 +110,19 @@ public class MainController {
 		this.categoriesParts= inventoryManager.getCategoriesParts();
 		this.categoriesAll=inventoryManager.getCategoriesAll();
 
-		this.preselectionFarbe= new ArrayList<>(Arrays.asList(METHA_STANDARDFILTER_FARBE));
-		this.preselectionKategorie=new ArrayList<>(Arrays.asList(METHA_STANDARDFILTER_CATEGORIE));
+		this.preselectionFarbe= METHA_STANDARDFILTER_FARBE;
+		this.preselectionKategorie=METHA_STANDARDFILTER_CATEGORIE;
 	}
 
 	@ModelAttribute("categories")
 	public String[] categories() {
-		return inventoryManager.getCategoriesAllArray();
+		return inventoryManager.getCategoriesAll();
 	}
 
-
+	@ModelAttribute("colours")
+	public String[] colours() {
+		return inventoryManager.getColours();
+	}
 
 
 	@PreAuthorize("hasRole('ROLE_PERMITTED')")
@@ -136,9 +139,13 @@ public class MainController {
 		//administrationManager.getVisibleCatalog();
 
 		Filterform filterform=new Filterform();
-
 		filterform.setSelectedCategories(preselectionKategorie);
-		filterform.setSelectedColours(preselectionFarbe);
+
+		if(preselectionFarbe==null){
+			preselectionFarbe=new ArrayList<>(Arrays.asList(inventoryManager.getColours()));
+		}
+		else filterform.setSelectedColours(preselectionFarbe);
+
 		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator= administrationManager.filteredReorderableInventoryItems(filterform);
 		//Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
 

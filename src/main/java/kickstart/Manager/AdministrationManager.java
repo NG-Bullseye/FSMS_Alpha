@@ -420,7 +420,6 @@ public class AdministrationManager {
 			catalog.findByColours(filterform.getSelectedColours()).forEach(rightColours::add);
 		}
 		else{
-			System.out.println("filtered Colors are null");
 			catalog.findAll().forEach(rightColours::add);
 		}
 
