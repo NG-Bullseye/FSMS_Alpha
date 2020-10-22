@@ -170,9 +170,7 @@ public class MainController {
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());
-		model.addAttribute("inForm", new UniversalForm());
-		model.addAttribute("outForm", new UniversalForm());
-		model.addAttribute("craftForm", new UniversalForm());
+		model.addAttribute("universalForm", new UniversalForm());
 		model.addAttribute("undoManager",undoManager);
 		model.addAttribute("administrationManager", administrationManager);
 
