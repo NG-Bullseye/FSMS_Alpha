@@ -349,7 +349,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 					<!--8--> <!--<editor-fold desc="Buy View:M">-->
 					<td sec:authorize="hasRole('ROLE_MANAGER')" >
-						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/in/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<div>
 									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
@@ -363,7 +363,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 					<!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
 					<td sec:authorize="hasRole('ROLE_MANAGER')" width="100px">
-						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craftHl/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/craftHl/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />
@@ -377,7 +377,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 					<!--12--> <!--<editor-fold desc="Sell View:M">-->
 					<td sec:authorize="hasRole('ROLE_MANAGER')" >
-						<form method="post" role="form" name="f2" th:object="${outForm}" th:action="@{/out/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f2" th:object="${universalForm}" th:action="@{/out/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<div>
 									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />

@@ -124,14 +124,14 @@ public class ManagerController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/in/{id}")
 	String catalogIn(@PathVariable ProductIdentifier id,
-					 @Valid @ModelAttribute("inForm") InForm inForm, BindingResult bindingResult,
+					 @Valid @ModelAttribute("inForm") UniversalForm universalForm, BindingResult bindingResult,
 					 Model model, @LoggedIn UserAccount loggedInUserWeb) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
 		}
 		//System.out.println("Binding Results: "+bindingResult.toString());
-		inForm.setProductIdentifier(id);
-		administrationManager.reorder(inForm, Location.LOCATION_HL);
+		universalForm.setProductIdentifier(id);
+		administrationManager.reorder(universalForm, Location.LOCATION_HL);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
@@ -139,14 +139,14 @@ public class ManagerController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal gekauft",notiz));
+				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal gekauft",notiz));
 		return "redirect:/";
 	}
 
 	/*@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/craftbar/{id}")
 	String catalogCraftbar(@PathVariable ProductIdentifier id,
-					 @Valid @ModelAttribute("craftForm") CraftForm craftForm,
+					 @Valid @ModelAttribute("craftForm") UniversalForm craftForm,
 					  @LoggedIn UserAccount loggedInUserWeb,
 					 Model model) {
 		craftForm.setProductIdentifier(id);
@@ -173,17 +173,17 @@ public class ManagerController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/out/{id}")
 	String catalogOut(@PathVariable ProductIdentifier id,
-					  @Valid @ModelAttribute("outForm") OutForm outForm,
+					  @Valid @ModelAttribute("outForm") UniversalForm universalForm,
 					  @LoggedIn UserAccount loggedInUserWeb,
 					  Model model) {
-		outForm.setProductIdentifier(id);
+		universalForm.setProductIdentifier(id);
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
 		}
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		administrationManager.out(outForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
+		administrationManager.out(universalForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
@@ -192,7 +192,7 @@ public class ManagerController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(outForm.getProductIdentifier()).getName()+" "+ outForm.getAmount()+"x mal verkauft",notiz));
+				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal verkauft",notiz));
 		return "redirect:/";
 	}
 
@@ -201,24 +201,24 @@ public class ManagerController {
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/craftHl/{id}")
 	String catalogCraftHl(@PathVariable ProductIdentifier id,
-						  @Valid @ModelAttribute("craftForm") CraftForm craftForm, BindingResult bindingResult,
+						  @Valid @ModelAttribute("craftForm") UniversalForm universalForm, BindingResult bindingResult,
 						  @LoggedIn UserAccount loggedInUserWeb,
 						  Model model) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
 		}
-		craftForm.setProductIdentifier(id);
+		universalForm.setProductIdentifier(id);
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
 		}
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 		//craft HL
-		if(administrationManager.craftHl(craftForm, cartOrderManager.getAccount(),notiz)){
+		if(administrationManager.craftHl(universalForm, cartOrderManager.getAccount(),notiz)){
 			logRepository.save(new Log(
 					LocalDateTime.now(),
 					loggedInUserWeb,
-					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt in Hauptlager",notiz));
+					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal hergestellt in Hauptlager",notiz));
 		}
 		else System.out.println("Nicht Direkt Herstellbar");
 

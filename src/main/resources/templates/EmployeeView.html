@@ -175,7 +175,7 @@
 
 					<!--9--> <!--<editor-fold desc="Empfangen View:E">-->
 					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" >
-						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/receive/{id}(id=${item.getProduct().getId().getIdentifier()})}" >
+						<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/receive/{id}(id=${item.getProduct().getId().getIdentifier()})}" >
 							<div class="inline field">
 								<div>
 									<input style="width: 70px;text-align: center;"  autofocus type="number" min="0" th:field="*{amount}" />
@@ -196,7 +196,7 @@
 
 					<!--9.5--> <!--<editor-fold desc="Senden View:E">-->
 					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" >
-						<form method="post" role="form" name="f" th:object="${inForm}" th:action="@{/send/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/send/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field">
 								<div>
 									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
@@ -217,7 +217,7 @@
 
 					<!--11--> <!--<editor-fold desc="Herstellen BwB View:E">-->
 					<td sec:authorize="hasRole('ROLE_EMPLOYEE')" width="100px">
-						<form method="post" role="form" name="f" th:object="${craftForm}" th:action="@{/craftBwB/{id}(id=${item.getProduct().getId().getIdentifier()})}">
+						<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/craftBwB/{id}(id=${item.getProduct().getId().getIdentifier()})}">
 							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />

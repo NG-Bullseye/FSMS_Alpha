@@ -111,7 +111,7 @@ public class UndoManager {
 	}
 
 	private boolean execRecieveFromHl(int amount, ProductIdentifier id) {
-		InForm inForm =new InForm();
+		UniversalForm inForm =new UniversalForm();
 		inForm.setProductIdentifier(id);
 		inForm.setAmount(amount);
 		administrationController.catalogReceiveFromHl(id,inForm,administrationController.)

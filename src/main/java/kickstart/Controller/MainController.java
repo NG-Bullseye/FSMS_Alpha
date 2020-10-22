@@ -20,10 +20,8 @@ import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import kickstart.Forms.CraftForm;
+import kickstart.Forms.UniversalForm;
 import kickstart.Forms.Filterform;
-import kickstart.Forms.InForm;
-import kickstart.Forms.OutForm;
 import kickstart.Manager.*;
 import kickstart.TelegramInterface.BotManager;
 import kickstart.accountancy.AccountancyManager;
@@ -172,9 +170,9 @@ public class MainController {
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());
-		model.addAttribute("inForm", new InForm());
-		model.addAttribute("outForm", new OutForm());
-		model.addAttribute("craftForm", new CraftForm());
+		model.addAttribute("inForm", new UniversalForm());
+		model.addAttribute("outForm", new UniversalForm());
+		model.addAttribute("craftForm", new UniversalForm());
 		model.addAttribute("undoManager",undoManager);
 		model.addAttribute("administrationManager", administrationManager);
 
@@ -224,9 +222,9 @@ public class MainController {
 		preselectionKategorie =filterform.getSelectedCategories();
 		preselectionFarbe=filterform.getSelectedColours();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("inForm", new InForm());
-		model.addAttribute("outForm", new OutForm());
-		model.addAttribute("craftForm", new CraftForm());
+		model.addAttribute("inForm", new UniversalForm());
+		model.addAttribute("outForm", new UniversalForm());
+		model.addAttribute("craftForm", new UniversalForm());
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		model.addAttribute("undoManager",undoManager);

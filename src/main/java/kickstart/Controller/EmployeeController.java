@@ -15,8 +15,7 @@
  */
 package kickstart.Controller;
 
-import kickstart.Forms.CraftForm;
-import kickstart.Forms.InForm;
+import kickstart.Forms.UniversalForm;
 import kickstart.Manager.AdministrationManager;
 import kickstart.Manager.UndoManager;
 import kickstart.TelegramInterface.BotManager;
@@ -121,20 +120,20 @@ public class EmployeeController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/receive/{id}")
 	String catalogReceiveFromHl(@PathVariable ProductIdentifier id,
-								@Valid @ModelAttribute("inForm") InForm inForm, BindingResult bindingResult,
+								@Valid @ModelAttribute("inForm") UniversalForm universalForm, BindingResult bindingResult,
 								Model model, @LoggedIn UserAccount loggedInUserWeb) {
-		inForm.setProductIdentifier(id);
+		universalForm.setProductIdentifier(id);
 
 		if (bindingResult.hasErrors()) {
 			return"redirect:/";
 		}
-		//administrationManager.reorder(inForm); //old
+		//administrationManager.reorder(universalForm); //old
 
-		if (administrationManager.receiveFromHl(inForm)==false) {//Add itemes to BwB and remove from Hauptlager
+		if (administrationManager.receiveFromHl(universalForm)==false) {//Add itemes to BwB and remove from Hauptlager
 
 			logRepository.save(new Log(LocalDateTime.now()
 					, loggedInUserWeb,
-					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
+					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
 			,notiz));
 
 			return "redirect:/";
@@ -149,8 +148,8 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal vom Hauptlager Empfangen",notiz));
-		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN,inForm.getProductIdentifier(),inForm.getAmount());
+				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal vom Hauptlager Empfangen",notiz));
+		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN, universalForm.getProductIdentifier(), universalForm.getAmount());
 		if(undoMode) undoManager.pop();
 		undoMode =false;
 
@@ -160,17 +159,17 @@ public class EmployeeController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/send/{id}")
 	String catalogsendToHl(@PathVariable ProductIdentifier id,
-								@Valid @ModelAttribute("inForm") InForm inForm, BindingResult bindingResult,
-								Model model,@LoggedIn UserAccount loggedInUserWeb) {
-		inForm.setProductIdentifier(id);
+						   @Valid @ModelAttribute("inForm") UniversalForm universalForm, BindingResult bindingResult,
+						   Model model, @LoggedIn UserAccount loggedInUserWeb) {
+		universalForm.setProductIdentifier(id);
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
 		}
-		//administrationManager.reorder(inForm); //old
+		//administrationManager.reorder(universalForm); //old
 
-		if (administrationManager.sendToHl(inForm)==false) {//Add itemes to Hl and remove from BwB
+		if (administrationManager.sendToHl(universalForm)==false) {//Add itemes to Hl and remove from BwB
 			logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
-					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
+					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
 			return "redirect:/";
 		}
 
@@ -183,9 +182,9 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal zum; Hauptlager gesendet",notiz));
+				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal zum; Hauptlager gesendet",notiz));
 		if(!undoMode)
-			undoManager.push(ActionEnum.ACTION_SEND,inForm.getProductIdentifier(),inForm.getAmount());
+			undoManager.push(ActionEnum.ACTION_SEND, universalForm.getProductIdentifier(), universalForm.getAmount());
 		if(undoMode) undoManager.pop();
 		undoMode =false;
 		return "redirect:/";
@@ -196,24 +195,24 @@ public class EmployeeController {
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/craftBwB/{id}")
 	String catalogCraftBwB(@PathVariable ProductIdentifier id,
-						   @Valid @ModelAttribute("craftForm") CraftForm craftForm, BindingResult bindingResult,
+						   @Valid @ModelAttribute("craftForm") UniversalForm universalForm, BindingResult bindingResult,
 						   @LoggedIn UserAccount loggedInUserWeb,
 						   Model model) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
 		}
-		craftForm.setProductIdentifier(id);
+		universalForm.setProductIdentifier(id);
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
 		}
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		if(administrationManager.craftBwB(craftForm, cartOrderManager.getAccount(),notiz)){
+		if(administrationManager.craftBwB(universalForm, cartOrderManager.getAccount(),notiz)){
 			logRepository.save(new Log(
 					LocalDateTime.now(),
 					loggedInUserWeb,
-					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt",notiz));
+					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal hergestellt",notiz));
 		}
 		else System.out.println("Nicht Direkt Herstellbar");
 
@@ -221,7 +220,7 @@ public class EmployeeController {
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
-		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT,craftForm.getProductIdentifier(),craftForm.getAmount());
+		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT, universalForm.getProductIdentifier(), universalForm.getAmount());
 		if(undoMode) undoManager.pop();
 
 		undoMode =false;
@@ -249,33 +248,33 @@ public class EmployeeController {
 
 		switch (actionObj.getAction()){
 			case ACTION_SEND:{
-				InForm inForm=new InForm();
-				inForm.setAmount(actionObj.getAmount());
+				UniversalForm universalForm =new UniversalForm();
+				universalForm.setAmount(actionObj.getAmount());
 				if(inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).isPresent()){
 					botManager.criticalAmountAfterUndoCheck( inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).get() ,actionObj.getAmount());
 				}else {
 					throw new IllegalArgumentException("PID noit found in Inventory");
 				}
 
-				return catalogsendToHl(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject() , model, loggedInUserWeb);
+				return catalogsendToHl(actionObj.getId(), universalForm,administrationManager.getNewBindingResultsObject() , model, loggedInUserWeb);
 
 			}
 			case ACTION_CRAFT:{
-				CraftForm inForm=new CraftForm();
+				UniversalForm inForm=new UniversalForm();
 				inForm.setAmount(actionObj.getAmount());
 				return this.catalogCraftBwB(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject(),loggedInUserWeb,model);
 			}
 			case ACTION_EMPFANGEN: {
-				InForm inForm=new InForm();
-				inForm.setAmount(actionObj.getAmount());
-				return this.catalogReceiveFromHl(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject(),model,loggedInUserWeb);
+				UniversalForm universalForm =new UniversalForm();
+				universalForm.setAmount(actionObj.getAmount());
+				return this.catalogReceiveFromHl(actionObj.getId(), universalForm,administrationManager.getNewBindingResultsObject(),model,loggedInUserWeb);
 
 			}
 			case ACTION_ZERLEGEN:{
-				CraftForm craftForm=new CraftForm();
-				craftForm.setProductIdentifier(actionObj.getId());
-				craftForm.setAmount(actionObj.getAmount());
-				administrationManager.zerlegen(craftForm,loggedInUserWeb,Location.LOCATION_BWB);
+				UniversalForm universalForm =new UniversalForm();
+				universalForm.setProductIdentifier(actionObj.getId());
+				universalForm.setAmount(actionObj.getAmount());
+				administrationManager.zerlegen(universalForm,loggedInUserWeb,Location.LOCATION_BWB);
 				undoMode =false;
 				undoManager.pop(); //removes top elem of Lifo
 				return "redirect:/";
