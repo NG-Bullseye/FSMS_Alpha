@@ -725,7 +725,7 @@ public class AdministrationManager {
 			item.get().addReorder(
 					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
 					LocalDateTime.now(),
-					Quantity.of(universalForm.getAmount(), Metric.UNIT),location);
+					Quantity.of(universalForm.getAmountBuy(), Metric.UNIT),location);
 
 				boolean changed = item.get().update(LocalDateTime.now());
 				System.out.println("Inventory Item Reordered");
@@ -748,7 +748,7 @@ public class AdministrationManager {
 		if (item.isPresent()) {
 
 
-			if (item.get().recieveFromHl(universalForm.getAmount())==false) {
+			if (item.get().recieveFromHl(universalForm.getAmountBuy())==false) {
 				return false;
 			}
 
@@ -764,7 +764,7 @@ public class AdministrationManager {
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(universalForm.getProductIdentifier());
 		if (item.isPresent()) {
 
-			if (item.get().sendToHl(universalForm.getAmount())==false) {
+			if (item.get().sendToHl(universalForm.getAmountSell())==false) {
 				return false;
 			}
 
@@ -1053,10 +1053,10 @@ public class AdministrationManager {
 		//int amount= inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().getQuantity().getAmount().intValue();
 		CustomerOrder customerOrder= cartOrderManager.newOrder(cart);
 		if(a instanceof Part){
-			cartOrderManager.addPart((Part)a, universalForm.getAmount(),cart);
+			cartOrderManager.addPart((Part)a, universalForm.getAmountSell(),cart);
 		}
 		if(a instanceof Composite){
-			cartOrderManager.addComposite((Composite) a, universalForm.getAmount(),cart);
+			cartOrderManager.addComposite((Composite) a, universalForm.getAmountSell(),cart);
 		}
 
 		cartOrderManager.addCostumer(userAccount);
@@ -1070,7 +1070,7 @@ public class AdministrationManager {
 		Inventory inv= inventoryManager.getInventory();
 		if (inv.findByProduct(a).get() instanceof ReorderableInventoryItem){
 			ReorderableInventoryItem item=(ReorderableInventoryItem) inv.findByProduct(a).get();
-			inventoryManager.decreaseBestand(a,Quantity.of(universalForm.getAmount()),materialQuelle );//decrease amount of Gesamtbestand
+			inventoryManager.decreaseBestand(a,Quantity.of(universalForm.getAmountSell()),materialQuelle );//decrease amount of Gesamtbestand
 			inv.save(item);
 			//boolean changed = item.update(LocalDateTime.now());
 			//int i =item.getQuantity().getAmount().intValue();
@@ -1114,15 +1114,15 @@ public class AdministrationManager {
 		if(direktCraftbar(universalForm,materialQuelle)){
 			UniversalForm inForm=new UniversalForm();
 			inForm.setProductIdentifier(universalForm.getProductIdentifier());
-			inForm.setAmount(universalForm.getAmount());
+			inForm.setAmountCraft(universalForm.getAmountCraft());
 			this.loggedReorder(inForm,user,materialQuelle,notiz);
 
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(universalForm.getProductIdentifier()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
 				UniversalForm outForm=new UniversalForm();
 				outForm.setProductIdentifier(p);
-				int requiredAmount = universalForm.getAmount()*map.get(p);
-				outForm.setAmount(requiredAmount);
+				int requiredAmount = universalForm.getAmountCraft()*map.get(p);
+				outForm.setAmountCraft(requiredAmount);
 				this.out(outForm,user,materialQuelle);
 			}
 			return true;
@@ -1166,18 +1166,18 @@ public class AdministrationManager {
 
 	public boolean zerlegen(UniversalForm universalForm, UserAccount user, Location materialQuelle) {
 		if(inventoryManager.getInventory().findByProductIdentifier(universalForm.getProductIdentifier()).isPresent()
-				&&(inventoryManager.getInventory().findByProductIdentifier(universalForm.getProductIdentifier()).get().getAmountBwB()>= universalForm.getAmount() )){
+				&&(inventoryManager.getInventory().findByProductIdentifier(universalForm.getProductIdentifier()).get().getAmountBwB()>= universalForm.getAmountCraft() )){
 			UniversalForm outForm=new UniversalForm();
 			outForm.setProductIdentifier(universalForm.getProductIdentifier());
-			outForm.setAmount(universalForm.getAmount());
+			outForm.setAmountCraft(universalForm.getAmountCraft());
 			this.out(outForm,user,materialQuelle);
 
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(universalForm.getProductIdentifier()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
 				UniversalForm inForm=new UniversalForm();
 				inForm.setProductIdentifier(p);
-				int requiredAmount = universalForm.getAmount()*map.get(p);
-				inForm.setAmount(requiredAmount);
+				int requiredAmount = universalForm.getAmountCraft()*map.get(p);
+				inForm.setAmountCraft(requiredAmount);
 				this.reorder(inForm,materialQuelle);
 			}
 			return true;
