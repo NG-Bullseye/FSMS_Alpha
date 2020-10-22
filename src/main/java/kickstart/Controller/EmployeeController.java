@@ -64,6 +64,7 @@ public class EmployeeController {
 	private ActivityLogManager activityLogManager;
 	private BotManager botManager;
 
+	private String notiz="";
 
 
 	EmployeeController(LogRepository logRepository,
@@ -130,8 +131,11 @@ public class EmployeeController {
 		//administrationManager.reorder(inForm); //old
 
 		if (administrationManager.receiveFromHl(inForm)==false) {//Add itemes to BwB and remove from Hauptlager
-			logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
-					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"));
+
+			logRepository.save(new Log(LocalDateTime.now()
+					, loggedInUserWeb,
+					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
+			,notiz));
 
 			return "redirect:/";
 		}
@@ -145,7 +149,7 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal vom Hauptlager Empfangen"));
+				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal vom Hauptlager Empfangen",notiz));
 		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN,inForm.getProductIdentifier(),inForm.getAmount());
 		if(undoMode) undoManager.pop();
 		undoMode =false;
@@ -166,7 +170,7 @@ public class EmployeeController {
 
 		if (administrationManager.sendToHl(inForm)==false) {//Add itemes to Hl and remove from BwB
 			logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
-					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen"));
+					administrationManager.getArticle(inForm.getProductIdentifier()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
 			return "redirect:/";
 		}
 
@@ -179,7 +183,7 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal zum; Hauptlager gesendet"));
+				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal zum; Hauptlager gesendet",notiz));
 		if(!undoMode)
 			undoManager.push(ActionEnum.ACTION_SEND,inForm.getProductIdentifier(),inForm.getAmount());
 		if(undoMode) undoManager.pop();
@@ -205,11 +209,11 @@ public class EmployeeController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		if(administrationManager.craftBwB(craftForm, cartOrderManager.getAccount())){
+		if(administrationManager.craftBwB(craftForm, cartOrderManager.getAccount(),notiz)){
 			logRepository.save(new Log(
 					LocalDateTime.now(),
 					loggedInUserWeb,
-					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt"));
+					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt",notiz));
 		}
 		else System.out.println("Nicht Direkt Herstellbar");
 
@@ -232,7 +236,7 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				"neue Wahre Abholbereit"));
+				"neue Wahre Abholbereit",notiz));
 
 		return "redirect:/";
 	}
@@ -295,7 +299,7 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				"Die Aktion "+actionObj.getAction().toString()+" von "+ actionObj.getAmount()+" "+administrationManager.getArticle(actionObj.getId()).getName() +" wurde Rückgängig gemacht"));
+				"Die Aktion "+actionObj.getAction().toString()+" von "+ actionObj.getAmount()+" "+administrationManager.getArticle(actionObj.getId()).getName() +" wurde Rückgängig gemacht",notiz));
 		return "redirect:/";
 	}
 

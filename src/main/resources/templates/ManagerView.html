@@ -151,7 +151,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 				<thead>
 				<tr>
-					<!--1--> <!--<editor-fold desc="Name View:P">--><th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Nameess</th>
+					<!--1--> <!--<editor-fold desc="Name View:P">--><th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Name</th>
 					<!--</editor-fold>-->
 
 					<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">--><th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Gesamtbestand</th>
@@ -178,7 +178,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 					<!--</editor-fold>-->
 
 					<!--8--> <!--<editor-fold desc="Buy View:M">-->
-					<th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">Buy</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">In</th>
 					<!--</editor-fold>-->
 
 					<!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
@@ -186,7 +186,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 					<!--</editor-fold>-->
 
 					<!--12--> <!--<editor-fold desc="Sell View:M">-->
-					<th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">Sell</th>
+					<th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">Out</th>
 					<!--</editor-fold>-->
 
 					<!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
@@ -353,7 +353,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<div class="inline field">
 								<div>
 									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
-									<button  type="submit" class="ui button" style="color: #68d4d0;margin: 0px;font-size: 20px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;" >In</button>
+									<button  type="submit" class="ui button" style="color: #68d4d0;margin: 0px;font-size: 20px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;" >Ok</button>
 								</div>
 
 							</div>
@@ -367,7 +367,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 								<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 									<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amount}" />
-									<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Craft</button>
+									<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Ok</button>
 								</div>
 
 							</div>
@@ -381,7 +381,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<div class="inline field">
 								<div>
 									<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amount}" />
-									<button  type="submit" class="ui button" style="color: #68d4d0;background-color: #FFFFFF;font-size: 20px;margin: 0px;letter-spacing: 3px;" >Out</button>
+									<button  type="submit" class="ui button" style="color: #68d4d0;background-color: #FFFFFF;font-size: 20px;margin: 0px;letter-spacing: 3px;" >Ok</button>
 								</div>
 
 							</div>
@@ -412,12 +412,20 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 		</div>
 
 		<div class="container-notiz">
-			<form action="" method="POST" class="form">
+			<form action="" method="POST"  >
 				<div class="form-group-notiz">
-					<input type="text" class="form-control-notiz"
-					placeholder="Notiz" id="name" name="name"
-					tabindex="1 required">
-					<label for="name" class="form-label-notiz">Deine Notiz</label>
+
+						<label type="text" >Deine Notiz</label>
+						<input type="text"  id="notiz" name="notiz">
+					
+
+					<!-- name="notiz"
+					tabindex="1 required"-->
+					<!--th:action="@{/notiz}"
+											<input type="submit"  value="commit" placeholder="Notiz"  >
+
+					-->
+
 				</div>
 			</form>
 

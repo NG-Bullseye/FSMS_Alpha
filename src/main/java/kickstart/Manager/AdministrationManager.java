@@ -708,9 +708,9 @@ public class AdministrationManager {
 		return amount;
 	}
 
-	public void loggedReorder(@NotNull InForm inForm, UserAccount user, Location location){
+	public void loggedReorder(@NotNull InForm inForm, UserAccount user, Location location,String notiz){
 		logManager.addLog(user,
-				this.getArticle(inForm.getProductIdentifier()).getName()+" in "+location.toString()+" "+ inForm.getAmount()+"x mal hinzugefügt");
+				this.getArticle(inForm.getProductIdentifier()).getName()+" in "+location.toString()+" "+ inForm.getAmount()+"x mal hinzugefügt",notiz);
 		reorder(inForm,location);
 	}
 
@@ -1102,20 +1102,20 @@ public class AdministrationManager {
 		return filteredReorderableInventoryItems;
 	}
 
-	public boolean craftHl(CraftForm craftForm, UserAccount user){
-		return this.craft(craftForm,user,Location.LOCATION_HL);
+	public boolean craftHl(CraftForm craftForm, UserAccount user,String notiz){
+		return this.craft(craftForm,user,Location.LOCATION_HL,notiz);
 	}
 
-	public boolean craftBwB(CraftForm craftForm, UserAccount user){
-		return this.craft(craftForm,user,Location.LOCATION_BWB);
+	public boolean craftBwB(CraftForm craftForm, UserAccount user,String notiz){
+		return this.craft(craftForm,user,Location.LOCATION_BWB,notiz);
 	}
 
-	private boolean craft(CraftForm craftForm, UserAccount user,Location materialQuelle) {
+	private boolean craft(CraftForm craftForm, UserAccount user,Location materialQuelle,String notiz) {
 		if(direktCraftbar(craftForm,materialQuelle)){
 			InForm inForm=new InForm();
 			inForm.setProductIdentifier(craftForm.getProductIdentifier());
 			inForm.setAmount(craftForm.getAmount());
-			this.loggedReorder(inForm,user,materialQuelle);
+			this.loggedReorder(inForm,user,materialQuelle,notiz);
 
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(craftForm.getProductIdentifier()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){

@@ -9,6 +9,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 
@@ -23,11 +24,13 @@ public class Log extends AbstractEntity<SalespointIdentifier> {
 	private @NonNull @Getter @Setter LocalDateTime date;
 	private @NonNull @Getter @Setter String userName;
 	private @NonNull @Getter @Setter String activity;
+	private @Getter @Setter String notiz;
 
-	public Log(LocalDateTime date, UserAccount user, String activity) {
+	public Log(LocalDateTime date, UserAccount user, String activity,String notiz) {
 		this.date = date;
 		this.userName = user.getUsername();
 		this.activity = activity;
+		this.notiz=notiz;
 	}
 
 

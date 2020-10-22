@@ -13,11 +13,11 @@ public class ActivityLogManager {
 		this.logRepository=logRepository;
 	}
 
-	public void addLog( UserAccount loggedInUserWeb,String text){
+	public void addLog( UserAccount loggedInUserWeb,String text,String notiz){
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				text)
+				text,notiz)
 		);
 	}
 

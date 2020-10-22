@@ -15,6 +15,7 @@ import java.util.LinkedList;
 public class ActivityLogController {
 
 	private LogRepository logRepository;
+	private String notiz="";
 
 	public ActivityLogController(LogRepository logRepository) {
 		this.logRepository=logRepository;
@@ -25,7 +26,7 @@ public class ActivityLogController {
 
 	String activityLog(Model model, @LoggedIn UserAccount loggedInUserWeb) {
 
-		logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb,"Loggs besucht"));
+		logRepository.save(new Log(LocalDateTime.now(),loggedInUserWeb,"Loggs besucht",notiz));
 
 		LinkedList<Log> sortedList=new LinkedList<>();
 		for (Log l :

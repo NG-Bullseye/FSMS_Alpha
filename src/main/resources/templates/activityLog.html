@@ -28,6 +28,7 @@
                 <th>Datum</th>
                 <th>User</th>
                 <th>Activity</th>
+                <th>Notiz</th>
             </tr>
         </thead>
         <tbody>
@@ -42,6 +43,9 @@
 
                 <td th:text="${log.getActivity()}"
                     style="font-size: 20px;font-weight: bold;text-align: center" >Activity</td>
+
+                <td th:text="${log.getNotiz()}"
+                    style="font-size: 20px;font-weight: bold;text-align: center" >Notiz</td>
 
 
             </tr>

@@ -64,7 +64,7 @@ public class ManagerController {
 	private ActivityLogManager activityLogManager;
 	private BotManager botManager;
 
-
+	private String notiz="";
 
 	ManagerController(LogRepository logRepository,
 					  WebshopCatalog catalog,
@@ -129,6 +129,7 @@ public class ManagerController {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
 		}
+		//System.out.println("Binding Results: "+bindingResult.toString());
 		inForm.setProductIdentifier(id);
 		administrationManager.reorder(inForm, Location.LOCATION_HL);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
@@ -138,7 +139,7 @@ public class ManagerController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal gekauft"));
+				administrationManager.getArticle(inForm.getProductIdentifier()).getName()+" "+ inForm.getAmount()+"x mal gekauft",notiz));
 		return "redirect:/";
 	}
 
@@ -191,7 +192,7 @@ public class ManagerController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(outForm.getProductIdentifier()).getName()+" "+ outForm.getAmount()+"x mal verkauft"));
+				administrationManager.getArticle(outForm.getProductIdentifier()).getName()+" "+ outForm.getAmount()+"x mal verkauft",notiz));
 		return "redirect:/";
 	}
 
@@ -213,11 +214,11 @@ public class ManagerController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 		//craft HL
-		if(administrationManager.craftHl(craftForm, cartOrderManager.getAccount())){
+		if(administrationManager.craftHl(craftForm, cartOrderManager.getAccount(),notiz)){
 			logRepository.save(new Log(
 					LocalDateTime.now(),
 					loggedInUserWeb,
-					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt in Hauptlager"));
+					administrationManager.getArticle(craftForm.getProductIdentifier()).getName()+" "+ craftForm.getAmount()+"x mal hergestellt in Hauptlager",notiz));
 		}
 		else System.out.println("Nicht Direkt Herstellbar");
 
@@ -337,7 +338,7 @@ public class ManagerController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				form.getName()+" bearbeitet"));
+				form.getName()+" bearbeitet",notiz));
 		return "redirect:/";
 	}
 	//</editor-fold>
@@ -369,7 +370,7 @@ public class ManagerController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				compositeForm.getName()+" bearbeitet"));
+				compositeForm.getName()+" bearbeitet",notiz));
 		//System.out.println("in AdministartionController.editComositeFinished Post redirect");
 		return "redirect:/";
 	}
