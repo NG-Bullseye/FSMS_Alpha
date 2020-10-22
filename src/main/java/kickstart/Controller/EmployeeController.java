@@ -148,8 +148,8 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal vom Hauptlager Empfangen",notiz));
-		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN, universalForm.getProductIdentifier(), universalForm.getAmount());
+				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountBuy()+"x mal vom Hauptlager Empfangen",notiz));
+		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN, universalForm.getProductIdentifier(), universalForm.getAmountBuy());
 		if(undoMode) undoManager.pop();
 		undoMode =false;
 
@@ -182,9 +182,9 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal zum; Hauptlager gesendet",notiz));
+				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountSell()+"x mal zum; Hauptlager gesendet",notiz));
 		if(!undoMode)
-			undoManager.push(ActionEnum.ACTION_SEND, universalForm.getProductIdentifier(), universalForm.getAmount());
+			undoManager.push(ActionEnum.ACTION_SEND, universalForm.getProductIdentifier(), universalForm.getAmountSell());
 		if(undoMode) undoManager.pop();
 		undoMode =false;
 		return "redirect:/";
@@ -212,7 +212,7 @@ public class EmployeeController {
 			logRepository.save(new Log(
 					LocalDateTime.now(),
 					loggedInUserWeb,
-					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal hergestellt",notiz));
+					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountCraft()+"x mal hergestellt",notiz));
 		}
 		else System.out.println("Nicht Direkt Herstellbar");
 
@@ -220,7 +220,7 @@ public class EmployeeController {
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
-		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT, universalForm.getProductIdentifier(), universalForm.getAmount());
+		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT, universalForm.getProductIdentifier(), universalForm.getAmountCraft());
 		if(undoMode) undoManager.pop();
 
 		undoMode =false;
@@ -249,7 +249,7 @@ public class EmployeeController {
 		switch (actionObj.getAction()){
 			case ACTION_SEND:{
 				UniversalForm universalForm =new UniversalForm();
-				universalForm.setAmount(actionObj.getAmount());
+				universalForm.setAmountSell(actionObj.getAmount());
 				if(inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).isPresent()){
 					botManager.criticalAmountAfterUndoCheck( inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).get() ,actionObj.getAmount());
 				}else {
@@ -261,19 +261,19 @@ public class EmployeeController {
 			}
 			case ACTION_CRAFT:{
 				UniversalForm inForm=new UniversalForm();
-				inForm.setAmount(actionObj.getAmount());
+				inForm.setAmountCraft(actionObj.getAmount());
 				return this.catalogCraftBwB(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject(),loggedInUserWeb,model);
 			}
 			case ACTION_EMPFANGEN: {
 				UniversalForm universalForm =new UniversalForm();
-				universalForm.setAmount(actionObj.getAmount());
+				universalForm.setAmountBuy(actionObj.getAmount());
 				return this.catalogReceiveFromHl(actionObj.getId(), universalForm,administrationManager.getNewBindingResultsObject(),model,loggedInUserWeb);
 
 			}
 			case ACTION_ZERLEGEN:{
 				UniversalForm universalForm =new UniversalForm();
 				universalForm.setProductIdentifier(actionObj.getId());
-				universalForm.setAmount(actionObj.getAmount());
+				universalForm.setAmountCraft(actionObj.getAmount());
 				administrationManager.zerlegen(universalForm,loggedInUserWeb,Location.LOCATION_BWB);
 				undoMode =false;
 				undoManager.pop(); //removes top elem of Lifo

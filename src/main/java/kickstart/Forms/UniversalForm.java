@@ -15,7 +15,17 @@ public class UniversalForm {
 	@Getter
 	@Setter
 	@Positive
-	private int amount;
+	private int amountBuy;
+
+	@Getter
+	@Setter
+	@Positive
+	private int amountSell;
+
+	@Getter
+	@Setter
+	@Positive
+	private int amountCraft;
 
 
 }

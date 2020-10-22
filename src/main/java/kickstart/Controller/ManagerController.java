@@ -117,121 +117,59 @@ public class ManagerController {
 	//<editor-fold desc="In Out">
 
 
-	/**
-	 * IN DAS HAUPTLAGER UND IN DAS SYSTEM
-	 *
-	 * **/
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
-	@PostMapping("/in/{id}")
-	String catalogIn(@PathVariable ProductIdentifier id,
-					 @Valid @ModelAttribute("inForm") UniversalForm universalForm, BindingResult bindingResult,
-					 Model model, @LoggedIn UserAccount loggedInUserWeb) {
-		if (bindingResult.hasErrors()) {
-			return "redirect:/";
-		}
-		//System.out.println("Binding Results: "+bindingResult.toString());
-		universalForm.setProductIdentifier(id);
-		administrationManager.reorder(universalForm, Location.LOCATION_HL);
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-		logRepository.save(new Log(
-				LocalDateTime.now(),
-				loggedInUserWeb,
-				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal gekauft",notiz));
-		return "redirect:/";
-	}
-
-	/*@PreAuthorize("hasRole('ROLE_MANAGER')")
-	@PostMapping("/craftbar/{id}")
-	String catalogCraftbar(@PathVariable ProductIdentifier id,
-					 @Valid @ModelAttribute("craftForm") UniversalForm craftForm,
-					  @LoggedIn UserAccount loggedInUserWeb,
-					 Model model) {
-		craftForm.setProductIdentifier(id);
-		if(userManagement.findUser(loggedInUserWeb)==null){
-			return "redirect:/login";
-		}
-		User loggedInUser = userManagement.findUser(loggedInUserWeb);
-		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-
-		//siehe html
-		administrationManager.craftbarGesamt(craftForm);
-
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-		return "redirect:/";
-	}*/
-
-	/**
-	 * AUS DEM HAUPLAGER UND AUS DEM SYSTEM
-	 * **/
-
-	@PreAuthorize("hasRole('ROLE_MANAGER')")
-	@PostMapping("/out/{id}")
-	String catalogOut(@PathVariable ProductIdentifier id,
-					  @Valid @ModelAttribute("outForm") UniversalForm universalForm,
-					  @LoggedIn UserAccount loggedInUserWeb,
-					  Model model) {
-		universalForm.setProductIdentifier(id);
-		if(userManagement.findUser(loggedInUserWeb)==null){
-			return "redirect:/login";
-		}
-		User loggedInUser = userManagement.findUser(loggedInUserWeb);
-		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-
-		administrationManager.out(universalForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
-
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-		logRepository.save(new Log(
-				LocalDateTime.now(),
-				loggedInUserWeb,
-				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal verkauft",notiz));
-		return "redirect:/";
-	}
-
-
-
-	@PreAuthorize("hasRole('ROLE_MANAGER')")
-	@PostMapping("/craftHl/{id}")
-	String catalogCraftHl(@PathVariable ProductIdentifier id,
-						  @Valid @ModelAttribute("craftForm") UniversalForm universalForm, BindingResult bindingResult,
+	@PostMapping("/commit/{id}")
+	String commit(@PathVariable ProductIdentifier id,
+						  @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult,
 						  @LoggedIn UserAccount loggedInUserWeb,
 						  Model model) {
+
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
 		}
 		universalForm.setProductIdentifier(id);
-		if(userManagement.findUser(loggedInUserWeb)==null){
-			return "redirect:/login";
-		}
+		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-		//craft HL
-		if(administrationManager.craftHl(universalForm, cartOrderManager.getAccount(),notiz)){
+
+		/*buy*/
+		if (universalForm.getAmountBuy()<0) {
+			administrationManager.reorder(universalForm, Location.LOCATION_HL);
 			logRepository.save(new Log(
 					LocalDateTime.now(),
 					loggedInUserWeb,
-					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmount()+"x mal hergestellt in Hauptlager",notiz));
+					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountBuy()+"x mal gekauft",notiz));
 		}
-		else System.out.println("Nicht Direkt Herstellbar");
 
+		/*sell*/
+		if (universalForm.getAmountSell()<0) {
+			if(userManagement.findUser(loggedInUserWeb)==null){
+				return "redirect:/login";
+			}
+			administrationManager.out(universalForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
+			logRepository.save(new Log(
+					LocalDateTime.now(),
+					loggedInUserWeb,
+					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountSell()+"x mal verkauft",notiz));
+		}
 
-
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-
+		/*craft*/
+		if (universalForm.getAmountCraft()<0) {
+			cartOrderManager.addCostumer(loggedInUser.getUserAccount());
+			//craft HL
+			if(administrationManager.craftHl(universalForm, cartOrderManager.getAccount(),notiz)){
+				logRepository.save(new Log(
+						LocalDateTime.now(),
+						loggedInUserWeb,
+						administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountCraft()+"x mal hergestellt in Hauptlager",notiz));
+			}
+			else System.out.println("Nicht Direkt Herstellbar");
+		}
 		return "redirect:/";
 	}
-
 
 
 	//</editor-fold>
