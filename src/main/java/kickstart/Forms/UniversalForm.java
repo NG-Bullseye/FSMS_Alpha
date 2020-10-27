@@ -7,25 +7,48 @@ import org.salespointframework.catalog.ProductIdentifier;
 import javax.validation.constraints.Positive;
 
 public class UniversalForm {
-	@Getter
-	@Setter
-	@Positive
-	private ProductIdentifier productIdentifier;
+
+	public static enum Action{
+		IN,OUT,CRAFT;
+	}
+
+	public UniversalForm(int amountOfArticles) {
+
+		this.idValueMap = new Object[amountOfArticles][4];
+	}
 
 	@Getter
 	@Setter
-	@Positive
-	private int amountBuy;
+	private Object[][] idValueMap;
 
-	@Getter
-	@Setter
-	@Positive
-	private int amountSell;
 
-	@Getter
-	@Setter
-	@Positive
-	private int amountCraft;
-
+	public void addValue(ProductIdentifier pid ,Action action, int amount){
+		int i;
+		int k;
+		 //füge in 1d an die letzte stelle an
+				//finde die letzte stelle wo was drin steht i
+		i=idValueMap.length;
+		i=i++;
+		idValueMap[i][0]=pid;
+		//füge in 2d an die richtige stelle für amount
+		switch(action){
+			//(k=0 )ist pid
+			case IN :{
+				k=1;
+				idValueMap[i][k]=amount;
+				return;
+			}
+			case CRAFT :{
+				k=2;
+				idValueMap[i][k]=amount;
+				return;
+			}
+			case OUT :{
+				k=3;
+				idValueMap[i][k]=amount;
+				return;
+			}
+		}
+	}
 
 }

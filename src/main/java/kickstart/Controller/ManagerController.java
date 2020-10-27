@@ -26,6 +26,7 @@ import kickstart.activityLog.LogRepository;
 import kickstart.Micellenious.*;
 import kickstart.Manager.InventoryManager;
 import kickstart.Micellenious.ReorderableInventoryItem;
+import kickstart.articles.Article;
 import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
@@ -118,16 +119,12 @@ public class ManagerController {
 
 
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
-	@PostMapping("/commit/{id}")
-	String commit(@PathVariable ProductIdentifier id,
-						  @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult,
-						  @LoggedIn UserAccount loggedInUserWeb,
-						  Model model) {
+	@PostMapping("/commit")
+	String commit( @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
 
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
 		}
-		universalForm.setProductIdentifier(id);
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
@@ -135,39 +132,49 @@ public class ManagerController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		/*buy*/
-		if (universalForm.getAmountBuy()<0) {
-			administrationManager.reorder(universalForm, Location.LOCATION_HL);
-			logRepository.save(new Log(
-					LocalDateTime.now(),
-					loggedInUserWeb,
-					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountBuy()+"x mal gekauft",notiz));
-		}
 
-		/*sell*/
-		if (universalForm.getAmountSell()<0) {
-			if(userManagement.findUser(loggedInUserWeb)==null){
-				return "redirect:/login";
-			}
-			administrationManager.out(universalForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
-			logRepository.save(new Log(
-					LocalDateTime.now(),
-					loggedInUserWeb,
-					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountSell()+"x mal verkauft",notiz));
-		}
+		for(universalForm.getIdValueMap();int i=0;i++)
+		{
 
-		/*craft*/
-		if (universalForm.getAmountCraft()<0) {
-			cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-			//craft HL
-			if(administrationManager.craftHl(universalForm, cartOrderManager.getAccount(),notiz)){
+			ProductIdentifier pid=AdministrationManager.getProductIdentifierFromInteger(universalForm.getIdValueMap().getValue(i,0));
+			Article article = administrationManager.getArticle(pid);
+
+
+			if (universalForm.getIdValueMap().getValue(i,1)>0) {
+				administrationManager.reorder(universalForm, Location.LOCATION_HL);
 				logRepository.save(new Log(
 						LocalDateTime.now(),
 						loggedInUserWeb,
-						administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountCraft()+"x mal hergestellt in Hauptlager",notiz));
+						article.getName()+" "+universalForm.getIdValueMap().getValue(i,1)+"x mal gekauft",notiz));
 			}
-			else System.out.println("Nicht Direkt Herstellbar");
+
+			/*sell*/
+			if (universalForm.getIdValueMap().getValue(i,2)>0) {
+				if(userManagement.findUser(loggedInUserWeb)==null){
+					return "redirect:/login";
+				}
+				administrationManager.out(universalForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
+				logRepository.save(new Log(
+						LocalDateTime.now(),
+						loggedInUserWeb,
+						article.getName()+" "+ universalForm.getIdValueMap().getValue(i,2)+"x mal verkauft",notiz));
+			}
+
+			/*craft*/
+			if (universalForm.getIdValueMap().getValue(i,3)>0) {
+				cartOrderManager.addCostumer(loggedInUser.getUserAccount());
+				//craft HL
+				if(administrationManager.craftHl(universalForm, cartOrderManager.getAccount(),notiz)){
+					logRepository.save(new Log(
+							LocalDateTime.now(),
+							loggedInUserWeb,
+							article.getName()+" "+ universalForm.getIdValueMap().getValue(i,3)+"x mal hergestellt in Hauptlager",notiz));
+				}
+				else System.out.println("Nicht Direkt Herstellbar");
+			}
 		}
+		/*buy*/
+
 		return "redirect:/";
 	}
 

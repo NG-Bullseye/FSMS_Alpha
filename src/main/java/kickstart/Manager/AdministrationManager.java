@@ -710,7 +710,7 @@ public class AdministrationManager {
 
 	public void loggedReorder(@NotNull UniversalForm universalForm, UserAccount user, Location location, String notiz){
 		logManager.addLog(user,
-				this.getArticle(universalForm.getProductIdentifier()).getName()+" in "+location.toString()+" "+ universalForm.getAmount()+"x mal hinzugefügt",notiz);
+				this.getArticle(universalForm.getProductIdentifier()).getName()+" in "+location.toString()+" "+ universalForm.getAmountBuy()+"x mal hinzugefügt",notiz);
 		reorder(universalForm,location);
 	}
 
