@@ -307,6 +307,8 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							</td>
 
 							<!--7--> <!--<editor-fold desc="Hersteller URL View:M">-->
+
+							<!--Link zur neuen syntax https://www.baeldung.com/thymeleaf-list -->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 								<a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}" th:text="Link" target="_blank" />
 							</td>
