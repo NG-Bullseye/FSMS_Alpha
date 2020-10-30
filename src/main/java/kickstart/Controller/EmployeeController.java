@@ -149,7 +149,7 @@ public class EmployeeController {
 				LocalDateTime.now(),
 				loggedInUserWeb,
 				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountBuy()+"x mal vom Hauptlager Empfangen",notiz));
-		if(!undoMode) undoManager.push(ActionEnum.ACTION_EMPFANGEN, universalForm.getProductIdentifier(), universalForm.getAmountBuy());
+		if(!undoMode) undoManager.push(AdministrationManager.ActionEnum.ACTION_EMPFANGEN, universalForm.getProductIdentifier(), universalForm.getAmountBuy());
 		if(undoMode) undoManager.pop();
 		undoMode =false;
 
@@ -184,7 +184,7 @@ public class EmployeeController {
 				loggedInUserWeb,
 				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountSell()+"x mal zum; Hauptlager gesendet",notiz));
 		if(!undoMode)
-			undoManager.push(ActionEnum.ACTION_SEND, universalForm.getProductIdentifier(), universalForm.getAmountSell());
+			undoManager.push(AdministrationManager.ActionEnum.ACTION_SEND, universalForm.getProductIdentifier(), universalForm.getAmountSell());
 		if(undoMode) undoManager.pop();
 		undoMode =false;
 		return "redirect:/";
@@ -220,7 +220,7 @@ public class EmployeeController {
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
-		if(!undoMode) undoManager.push(ActionEnum.ACTION_CRAFT, universalForm.getProductIdentifier(), universalForm.getAmountCraft());
+		if(!undoMode) undoManager.push(AdministrationManager.ActionEnum.ACTION_CRAFT, universalForm.getProductIdentifier(), universalForm.getAmountCraft());
 		if(undoMode) undoManager.pop();
 
 		undoMode =false;

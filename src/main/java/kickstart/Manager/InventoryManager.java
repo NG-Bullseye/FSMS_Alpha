@@ -262,6 +262,15 @@ public class InventoryManager {
 		}
 	}
 
+	public int getAmountOfReorderableInventoryItems(){
+		int i=0;
+		for (ReorderableInventoryItem item:
+		this.inventory.findAll()) {
+			i++;
+		}
+		return i;
+	}
+
 	public void decreaseBestand(Article a, Quantity of, Location lager) {
 		switch(lager){
 			case LOCATION_HL:decreaseAmountInHL(a,of);break;

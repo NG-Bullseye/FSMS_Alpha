@@ -132,11 +132,11 @@ public class ManagerController {
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-
-		for(universalForm.getIdValueMap();int i=0;i++)
+		//für jede gesamtelte action in der map die entsprechende action ausführen
+		for(int i=0;i<universalForm.getInventoryItemActions().length;i++)
 		{
 
-			ProductIdentifier pid=AdministrationManager.getProductIdentifierFromInteger(universalForm.getIdValueMap().getValue(i,0));
+			ProductIdentifier pid=AdministrationManager.getProductIdentifierFromInteger(universalForm.getInventoryItemActions()[]);
 			Article article = administrationManager.getArticle(pid);
 
 

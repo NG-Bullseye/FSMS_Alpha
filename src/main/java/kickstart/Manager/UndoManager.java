@@ -1,6 +1,5 @@
 package kickstart.Manager;
 
-import kickstart.Micellenious.ActionEnum;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Component;
 
@@ -10,11 +9,11 @@ import java.util.Map;
 @Component
 public class UndoManager {
 	public class ActionObj {
-		private ActionEnum action;
+		private AdministrationManager.ActionEnum action;
 		private ProductIdentifier id;
 		private int amount;
 
-		public ActionObj(ActionEnum action, ProductIdentifier id, int amount) {
+		public ActionObj(AdministrationManager.ActionEnum action, ProductIdentifier id, int amount) {
 			this.action = action;
 			this.id = id;
 			this.amount = amount;
@@ -24,7 +23,7 @@ public class UndoManager {
 		 	this.action=action.getUndoAction(action);
 		}
 
-		public ActionEnum getAction() {
+		public AdministrationManager.ActionEnum getAction() {
 			return action;
 		}
 
@@ -47,7 +46,7 @@ public class UndoManager {
 		this.administrationManager=administrationManager;
 	}
 
-	public boolean push(ActionEnum action, ProductIdentifier articleId , int amount){
+	public boolean push(AdministrationManager.ActionEnum action, ProductIdentifier articleId , int amount){
 		try{
 			actionObjMap.put(actionObjMap.size(),new ActionObj(action,articleId,amount));
 

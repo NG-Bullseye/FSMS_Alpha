@@ -122,7 +122,6 @@ public class MainController {
 		return inventoryManager.getColours();
 	}
 
-
 	@PreAuthorize("hasRole('ROLE_PERMITTED')")
 	@GetMapping("/")
 	String refreshView(Model model,
@@ -170,7 +169,8 @@ public class MainController {
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());
-		model.addAttribute("universalForm", new UniversalForm());
+		UniversalForm universalForm=new UniversalForm();
+		model.addAttribute("universalForm", administrationManager.initializeNewUniversalForm(universalForm,list));
 		model.addAttribute("undoManager",undoManager);
 		model.addAttribute("administrationManager", administrationManager);
 
@@ -220,9 +220,8 @@ public class MainController {
 		preselectionKategorie =filterform.getSelectedCategories();
 		preselectionFarbe=filterform.getSelectedColours();
 		model.addAttribute("inventoryItems",list );
-		model.addAttribute("inForm", new UniversalForm());
-		model.addAttribute("outForm", new UniversalForm());
-		model.addAttribute("craftForm", new UniversalForm());
+		UniversalForm universalForm=new UniversalForm();
+		model.addAttribute("universalForm", administrationManager.initializeNewUniversalForm(universalForm,list));
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("administrationManager", administrationManager);
 		model.addAttribute("undoManager",undoManager);

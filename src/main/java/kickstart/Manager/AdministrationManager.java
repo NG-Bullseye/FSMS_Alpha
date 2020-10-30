@@ -1374,4 +1374,96 @@ public class AdministrationManager {
 		};
 	}
 
+	public enum  ActionEnum {
+	   ACTION_SEND,ACTION_EMPFANGEN,ACTION_CRAFT,ACTION_ZERLEGEN;
+
+	   public ActionEnum getUndoAction(ActionEnum action){
+		   switch (action){
+			   case ACTION_SEND: return ACTION_EMPFANGEN;
+			   case ACTION_CRAFT: return ACTION_ZERLEGEN;
+			   case ACTION_EMPFANGEN: return ACTION_SEND;
+			   case ACTION_ZERLEGEN: return ACTION_CRAFT;
+		   }
+		   throw new IllegalStateException();
+	   }
+	   public String toString(){
+		   switch (this){
+			   case ACTION_SEND: return "Senden";
+			   case ACTION_CRAFT: return "Zerlegen";
+			   case ACTION_EMPFANGEN: return "Empfangen";
+			   case ACTION_ZERLEGEN: return "Herstellen";
+		   }
+		   return "ERROR IN ACTIONENUM";
+	   }
+   }
+
+   public UniversalForm initializeNewUniversalForm(UniversalForm form,Iterable<ReorderableInventoryItem> items){
+		ArrayList<InventoryItemAction> inventoryItemActions = new ArrayList<>();
+
+		for (ReorderableInventoryItem item:
+			inventoryManager.getInventory().findAll()) {
+		inventoryItemActions.add(new InventoryItemAction(item.getId(),0,0,0)) ;
+		}
+		form.setInventoryItemActions(inventoryItemActions);
+		return form;
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
+int i;
+int k;
+
+* //füge in 1d an die letzte stelle an
+		//finde die letzte stelle wo was drin steht i
+		i=idValueMap.length;
+		i=i++;
+		idValueMap[i][0]=pid;
+		//füge in 2d an die richtige stelle für amount
+		switch(action){
+			//(k=0 )ist pid
+			case ACTION_EMPFANGEN:{
+				k=1;
+				idValueMap[i][k]=amount;
+				return;
+			}
+			case ACTION_CRAFT:{
+				k=2;
+				idValueMap[i][k]=amount;
+				return;
+			}
+			case ACTION_SEND:{
+				k=3;
+				idValueMap[i][k]=amount;
+				return;
+			}
+		}
+*
+*
+*
+*
+*
+* */
 }

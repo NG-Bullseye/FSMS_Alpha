@@ -146,70 +146,73 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 		</form>
 
 		<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/commit}">
+
 			<div id="tablespace">
-				<table id="articletable" class="ui celled table" width="400" >
-					<thead>
-                        <tr>
-                            <!--1--> <!--<editor-fold desc="Name View:P">--><th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Name</th>
-                            <!--</editor-fold>-->
+				<fieldset>
+					<input type="submit" id="submitButton" th:value="Save">
+					<table id="articletable" class="ui celled table" width="400" >
+						<thead>
+						<tr>
+							<!--1--> <!--<editor-fold desc="Name View:P">--><th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Name</th>
+							<!--</editor-fold>-->
 
-                            <!--2--> <!--<editor-fold desc="Gesamtbestand View:M">--><th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Gesamtbestand</th>
-                            <!--</editor-fold>-->
+							<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">--><th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Gesamtbestand</th>
+							<!--</editor-fold>-->
 
-                            <!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
-                            <th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">BwB Bestand</th>
-                            <!--</editor-fold>-->
+							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
+							<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">BwB Bestand</th>
+							<!--</editor-fold>-->
 
-                            <!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
-                            <th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">HL Bestand</th>
-                            <!--</editor-fold>-->
+							<!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">HL Bestand</th>
+							<!--</editor-fold>-->
 
-                            <!--5--> <!--<editor-fold desc="Herstallbar Hl View:M">-->
-                            <th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Hestellbar HL</th>
-                            <!--</editor-fold>-->
+							<!--5--> <!--<editor-fold desc="Herstallbar Hl View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Hestellbar HL</th>
+							<!--</editor-fold>-->
 
-                            <!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
-                            <th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Herstellbar BwB</th>
-                            <!--</editor-fold>-->
+							<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Herstellbar BwB</th>
+							<!--</editor-fold>-->
 
-                            <!--7--> <!--<editor-fold desc="Hersteller URL View:M">-->
-                            <th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Hersteller URL</th>
-                            <!--</editor-fold>-->
+							<!--7--> <!--<editor-fold desc="Hersteller URL View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Hersteller URL</th>
+							<!--</editor-fold>-->
 
-                            <!--8--> <!--<editor-fold desc="Buy View:M">-->
-                            <th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">In</th>
-                            <!--</editor-fold>-->
+							<!--8--> <!--<editor-fold desc="Buy View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">In</th>
+							<!--</editor-fold>-->
 
-                            <!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
-                            <th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">Hergestellt</th>
-                            <!--</editor-fold>-->
+							<!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">Hergestellt</th>
+							<!--</editor-fold>-->
 
-                            <!--12--> <!--<editor-fold desc="Sell View:M">-->
-                            <th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">Out</th>
-                            <!--</editor-fold>-->
+							<!--12--> <!--<editor-fold desc="Sell View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')"  	style="text-align: center">Out</th>
+							<!--</editor-fold>-->
 
-                            <!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
-                            <th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Bestandteile</th>
-                            <!--</editor-fold>-->
+							<!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
+							<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Bestandteile</th>
+							<!--</editor-fold>-->
 
-                            <!--14--> <!--<editor-fold desc="EAN Code View:P">-->
-                            <th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">EAN Code</th>
-                            <!--</editor-fold>-->
+							<!--14--> <!--<editor-fold desc="EAN Code View:P">-->
+							<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">EAN Code</th>
+							<!--</editor-fold>-->
 
-                            <!--15--> <!--<editor-fold desc="Kategorie View:P">-->
-                            <th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Kategorie</th>
-                            <!--</editor-fold>-->
+							<!--15--> <!--<editor-fold desc="Kategorie View:P">-->
+							<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Kategorie</th>
+							<!--</editor-fold>-->
 
-                            <!--16 not used--> <!--<editor-fold desc="Bearbeiten View:M">-->
-                            <!--<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Bearbeiten</th>-->
-                            <!--</editor-fold>-->
+							<!--16 not used--> <!--<editor-fold desc="Bearbeiten View:M">-->
+							<!--<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Bearbeiten</th>-->
+							<!--</editor-fold>-->
 
-                        </tr>
-					</thead>
+						</tr>
+						</thead>
 
-					<tbody>
-                        <tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="item: ${inventoryItems}">
-                            <!--1--> <!--<editor-fold desc="Name View:P">-->
+						<tbody>
+						<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="item, itemStat: ${inventoryItems}">
+							<!--1--> <!--<editor-fold desc="Name View:P">-->
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
 								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
 									<a th:href="@{/toogleAbholbereit/{id}(id=${item.getProduct().getId()})}" target="_self">
@@ -240,113 +243,101 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 									</div>
 								</div>
 							</td>
-							<!--</editor-fold>-->
 
 							<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getQuantity().getAmount().intValue()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
-							<!--</editor-fold>-->
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
-									<div  style="font-size: 20px;font-weight: bold;text-align: center">
-										<!--if critische menge unterschritten dann Zahl ROT-->
-										<span th:if="${ item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
-										<!--else-->
-										<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}">
-											<!--if Abholbereit dann GRÜN-->
-											<span th:if="${administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
-											<!--sonst SCHWARZ-->
-											<span th:unless="${ administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
-										</span>
-									</div>
+								<div  style="font-size: 20px;font-weight: bold;text-align: center">
+									<!--if critische menge unterschritten dann Zahl ROT-->
+									<span th:if="${ item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
+									<!--else-->
+									<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}">
+												<!--if Abholbereit dann GRÜN-->
+												<span th:if="${administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
+										<!--sonst SCHWARZ-->
+												<span th:unless="${ administrationManager.getArticle(item.getProduct().getId()).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+											</span>
+								</div>
 
 
 							</td>
-							<!--</editor-fold>-->
 
 							<!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')">
-								<span th:if="${ item.getAmountHl() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
-									  th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red ">HlBestand>
-								</span>
+									<span th:if="${ item.getAmountHl() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+										  th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red ">HlBestand>
+									</span>
 								<span th:unless="${ item.getAmountHl() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
 									  th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center;">HlBestand
-								</span>
+									</span>
 							</td>
-							<!--</editor-fold>-->
 
 							<!--5--> <!--<editor-fold desc="Herstallbar Hl View:M">-->
 							<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 								<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-										<span 	th:if="${
-													administrationManager.craftbarHl(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount()
-												}"
-												th:text="${administrationManager.craftbarHl(item.getProduct().getId())}?:''"
-												style="font-size: 20px;font-weight: bold;text-align: center; color: red ">Herstellbar Hl Rot
-										</span>
+											<span 	th:if="${
+														administrationManager.craftbarHl(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount()
+													}"
+													 th:text="${administrationManager.craftbarHl(item.getProduct().getId())}?:''"
+													 style="font-size: 20px;font-weight: bold;text-align: center; color: red ">Herstellbar Hl Rot
+											</span>
 										<span 	th:unless="${ administrationManager.craftbarHl(item.getProduct().getId()) < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
-												th:text="${administrationManager.craftbarHl(item.getProduct().getId())}"
-												style="font-size: 20px;font-weight: bold;text-align: center;">Herstellbar Hl Schwarz
-										</span>
+												 th:text="${administrationManager.craftbarHl(item.getProduct().getId())}"
+												 style="font-size: 20px;font-weight: bold;text-align: center;">Herstellbar Hl Schwarz
+											</span>
 									</div>
 								</div>
 							</td>
-							<!--</editor-fold>-->
 
 							<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
 							<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
 								<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
 									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-										<span th:if="${administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
-											  th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''"
-											  style="font-size: 20px;font-weight: bold;text-align: center"></span>
+											<span th:if="${administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
+												  th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''"
+												  style="font-size: 20px;font-weight: bold;text-align: center"></span>
 										<span th:unless="${administrationManager.craftbarBwB(item.getProduct().getId()) >= administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }"
 											  th:text="${administrationManager.craftbarBwB(item.getProduct().getId())}?:''"
 											  style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 									</div>
 								</div>
 							</td>
-							<!--</editor-fold>-->
 
 							<!--7--> <!--<editor-fold desc="Hersteller URL View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
-                                <a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}" th:text="Link" target="_blank" />
+								<a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(item.getProduct().getId()).getHerstellerUrl()}" th:text="Link" target="_blank" />
 							</td>
-							<!--</editor-fold>-->
 
 							<!--8--> <!--<editor-fold desc="Buy View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
-									<div class="inline field">
-										<div>
-											<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{idValuemap}" />
-											<button  type="submit" class="ui button" style="color: #68d4d0;margin: 0px;font-size: 20px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;" >Ok</button>
-										</div>
+								<div class="inline field">
+									<div>
+										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItems[__${itemStat.index}__].amountForIn" />
 									</div>
+								</div>
 							</td>
-							<!--</editor-fold>-->
 
 							<!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" width="100px">
-									<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
-										<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-											<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{amountCraft}" />
-											<button  type="submit" class="ui button"  style="color: #68d4d0;font-size: 20px;text-align: center;margin: 0px;font-weight: bold;background-color: #FFFFFF;letter-spacing: 3px;">Ok</button>
-										</div>
+								<div class="inline field" th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
+									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
+										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{inventoryItems[__${itemStat.index}__].amountForCraft}" />
 									</div>
+								</div>
 							</td>
-							<!--</editor-fold>-->
+
 
 							<!--12--> <!--<editor-fold desc="Sell View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
-									<div class="inline field">
-										<div>
-											<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{amountSell}" />
-											<button  type="submit" class="ui button" style="color: #68d4d0;background-color: #FFFFFF;font-size: 20px;margin: 0px;letter-spacing: 3px;" >Ok</button>
-										</div>
+								<div class="inline field">
+									<div>
+										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItems[__${itemStat.index}__].amountForOut}" />
 									</div>
+								</div>
 							</td>
-							<!--</editor-fold>-->
 
 							<!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
@@ -355,7 +346,6 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 									</div>
 								</div>
 							</td>
-							<!--</editor-fold>-->
 
 							<!--14--> <!--<editor-fold desc="EAN Code View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
@@ -365,9 +355,11 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
 							<!--</editor-fold>-->
 
-                        </tr>
-					</tbody>
-				</table>
+						</tr>
+						</tbody>
+					</table>
+				</fieldset>
+
 			</div>
 
 			<div class="container-notiz">
