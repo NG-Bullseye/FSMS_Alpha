@@ -32,6 +32,7 @@ import kickstart.user.User;
 import kickstart.user.UserManagement;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
+import org.salespointframework.inventory.InventoryItemIdentifier;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccount;
@@ -119,8 +120,8 @@ public class ManagerController {
 
 
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
-	@PostMapping("/commit")
-	String commit( @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
+	@PostMapping("/commitManager")
+	String commitManager( @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
 
 		if (bindingResult.hasErrors()) {
 			return "redirect:/";
@@ -133,42 +134,39 @@ public class ManagerController {
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
 		//für jede gesamtelte action in der map die entsprechende action ausführen
-		for(int i=0;i<universalForm.getInventoryItemActions().length;i++)
+		for(InventoryItemAction i: universalForm.getInventoryItemActions())
 		{
-
-			ProductIdentifier pid=AdministrationManager.getProductIdentifierFromInteger(universalForm.getInventoryItemActions()[]);
-			Article article = administrationManager.getArticle(pid);
-
-
-			if (universalForm.getIdValueMap().getValue(i,1)>0) {
-				administrationManager.reorder(universalForm, Location.LOCATION_HL);
+			Article article = administrationManager.getArticle(i.getPid());
+			/*In*/
+			if (i.getAmountForIn()>0) {
+				administrationManager.reorder(i, Location.LOCATION_HL);
 				logRepository.save(new Log(
 						LocalDateTime.now(),
 						loggedInUserWeb,
-						article.getName()+" "+universalForm.getIdValueMap().getValue(i,1)+"x mal gekauft",notiz));
+						article.getName()+" "+i.getAmountForIn()+"x mal gekauft",universalForm.getNotiz()));
 			}
 
-			/*sell*/
-			if (universalForm.getIdValueMap().getValue(i,2)>0) {
+			/*Craft*/
+			if (i.getAmountForCraft()>0) {
 				if(userManagement.findUser(loggedInUserWeb)==null){
 					return "redirect:/login";
 				}
-				administrationManager.out(universalForm, cartOrderManager.getAccount(),Location.LOCATION_HL);
+				administrationManager.out(i, cartOrderManager.getAccount(),Location.LOCATION_HL);
 				logRepository.save(new Log(
 						LocalDateTime.now(),
 						loggedInUserWeb,
-						article.getName()+" "+ universalForm.getIdValueMap().getValue(i,2)+"x mal verkauft",notiz));
+						article.getName()+" "+ i.getAmountForCraft()+"x mal verkauft",universalForm.getNotiz()));
 			}
 
-			/*craft*/
-			if (universalForm.getIdValueMap().getValue(i,3)>0) {
+			/*Out*/
+			if (i.getAmountForOut()>0) {
 				cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 				//craft HL
-				if(administrationManager.craftHl(universalForm, cartOrderManager.getAccount(),notiz)){
+				if(administrationManager.craftHl(i, cartOrderManager.getAccount(),universalForm.getNotiz())){
 					logRepository.save(new Log(
 							LocalDateTime.now(),
 							loggedInUserWeb,
-							article.getName()+" "+ universalForm.getIdValueMap().getValue(i,3)+"x mal hergestellt in Hauptlager",notiz));
+							article.getName()+" "+ i.getAmountForOut()+"x mal hergestellt in Hauptlager",notiz));
 				}
 				else System.out.println("Nicht Direkt Herstellbar");
 			}

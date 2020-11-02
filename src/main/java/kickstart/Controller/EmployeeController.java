@@ -26,6 +26,7 @@ import kickstart.activityLog.LogRepository;
 import kickstart.Micellenious.*;
 import kickstart.Manager.InventoryManager;
 import kickstart.Micellenious.ReorderableInventoryItem;
+import kickstart.articles.Article;
 import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
@@ -45,6 +46,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Controller
 public class EmployeeController {
@@ -113,120 +115,103 @@ public class EmployeeController {
 	}
 
 
-
-
-
-	//<editor-fold desc="In Out">
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	@PostMapping("/receive/{id}")
-	String catalogReceiveFromHl(@PathVariable ProductIdentifier id,
-								@Valid @ModelAttribute("inForm") UniversalForm universalForm, BindingResult bindingResult,
-								Model model, @LoggedIn UserAccount loggedInUserWeb) {
-		universalForm.setProductIdentifier(id);
-
+	@PostMapping("/commitEmployee")
+	String commitEmployee( @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
 		if (bindingResult.hasErrors()) {
 			return"redirect:/";
 		}
-		//administrationManager.reorder(universalForm); //old
-
-		if (administrationManager.receiveFromHl(universalForm)==false) {//Add itemes to BwB and remove from Hauptlager
-
-			logRepository.save(new Log(LocalDateTime.now()
-					, loggedInUserWeb,
-					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
-			,notiz));
-
-			return "redirect:/";
-		}
-
-		//Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //old
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
-
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
-		logRepository.save(new Log(
-				LocalDateTime.now(),
-				loggedInUserWeb,
-				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountBuy()+"x mal vom Hauptlager Empfangen",notiz));
-		if(!undoMode) undoManager.push(AdministrationManager.ActionEnum.ACTION_EMPFANGEN, universalForm.getProductIdentifier(), universalForm.getAmountBuy());
-		if(undoMode) undoManager.pop();
-		undoMode =false;
-
-		return "redirect:/";
-	}
-
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	@PostMapping("/send/{id}")
-	String catalogsendToHl(@PathVariable ProductIdentifier id,
-						   @Valid @ModelAttribute("inForm") UniversalForm universalForm, BindingResult bindingResult,
-						   Model model, @LoggedIn UserAccount loggedInUserWeb) {
-		universalForm.setProductIdentifier(id);
-		if (bindingResult.hasErrors()) {
-			return "redirect:/";
-		}
-		//administrationManager.reorder(universalForm); //old
-
-		if (administrationManager.sendToHl(universalForm)==false) {//Add itemes to Hl and remove from BwB
-			logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
-					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
-			return "redirect:/";
-		}
-
-		//Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //old
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
-
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
-		model.addAttribute("administrationManager", administrationManager);
-		logRepository.save(new Log(
-				LocalDateTime.now(),
-				loggedInUserWeb,
-				administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountSell()+"x mal zum; Hauptlager gesendet",notiz));
-		if(!undoMode)
-			undoManager.push(AdministrationManager.ActionEnum.ACTION_SEND, universalForm.getProductIdentifier(), universalForm.getAmountSell());
-		if(undoMode) undoManager.pop();
-		undoMode =false;
-		return "redirect:/";
-	}
-
-
-
-	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
-	@PostMapping("/craftBwB/{id}")
-	String catalogCraftBwB(@PathVariable ProductIdentifier id,
-						   @Valid @ModelAttribute("craftForm") UniversalForm universalForm, BindingResult bindingResult,
-						   @LoggedIn UserAccount loggedInUserWeb,
-						   Model model) {
-		if (bindingResult.hasErrors()) {
-			return "redirect:/";
-		}
-		universalForm.setProductIdentifier(id);
+		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
 		}
-		User loggedInUser = userManagement.findUser(loggedInUserWeb);
-		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
-		if(administrationManager.craftBwB(universalForm, cartOrderManager.getAccount(),notiz)){
-			logRepository.save(new Log(
-					LocalDateTime.now(),
-					loggedInUserWeb,
-					administrationManager.getArticle(universalForm.getProductIdentifier()).getName()+" "+ universalForm.getAmountCraft()+"x mal hergestellt",notiz));
+		for (InventoryItemAction i: universalForm.getInventoryItemActions()) {
+			Article article = administrationManager.getArticle(i.getPid());
+
+			/*resieve*/
+			if (i.getAmountForIn()>0) {
+				if (administrationManager.receiveFromHl(i)) {//Add itemes to BwB and remove from Hauptlager
+					if (undoMode) {//wenn hier eine action bearbeitet wird die eigendlich eine Invertiere Action ist
+						logRepository.save(new Log(
+								LocalDateTime.now(),
+								loggedInUserWeb,
+								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Empfangen rückgängig gemacht",notiz));
+					} else {logRepository.save(new Log( //bei ganz normalem vorwärtsbetrieb ohne rückgängig
+							LocalDateTime.now(),
+							loggedInUserWeb,
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForIn()+"x mal vom Hauptlager Empfangen",notiz));
+					}
+				}
+				logRepository.save(new Log(LocalDateTime.now() //wenn die action nicht durchgeführt werden konnte
+						, loggedInUserWeb,
+						administrationManager.getArticle(i.getPid()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
+						,notiz));
+			}
+
+			/*send*/
+			if (i.getAmountForOut()>0) {
+				if (administrationManager.sendToHl(i)) {//Add itemes to Hl and remove from BwB
+					if (undoMode) {
+						logRepository.save(new Log(
+								LocalDateTime.now(),
+								loggedInUserWeb,
+								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Senden rückgängig gemacht",notiz));
+					} else {logRepository.save(new Log(
+							LocalDateTime.now(),
+							loggedInUserWeb,
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForOut()+"x mal zum; Hauptlager gesendet",notiz));
+					}
+				}
+				logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
+						administrationManager.getArticle(i.getPid()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
+				return "redirect:/";
+			}
+
+
+			/*craft*/
+			if (i.getAmountForCraft()>0) {
+				if(administrationManager.craftBwB(i, cartOrderManager.getAccount(),notiz)){ //wenn geklappt dann mache LOG entry
+					if (undoMode) {
+						logRepository.save(new Log(
+								LocalDateTime.now(),
+								loggedInUserWeb,
+								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"wurde zerlegen rückgängig gemacht ERROR sollte nicht auftreten",notiz));
+						System.out.println("ERROR: zerlegen wurde rückgägig gemacht -> LOGIK FEHLER in EmployeeController Commit");
+					} else {logRepository.save(new Log(
+							LocalDateTime.now(),
+							loggedInUserWeb,
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x mal hergestellt",notiz));
+
+					}
+
+				}
+				else System.out.println("Nicht Direkt Herstellbar"); //wenn action fehlgeschlagen notiere das im LOG
+			}
+
+			/*zerlegen*/
+			if (i.getAmountForZerlegen()>0) {
+				if (administrationManager.zerlegen(i,loggedInUserWeb,Location.LOCATION_BWB)) {
+					logRepository.save(new Log(
+							LocalDateTime.now(),
+							loggedInUserWeb,
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x maliges herstellen rückgängig gemacht",notiz));
+				}
+			}
 		}
-		else System.out.println("Nicht Direkt Herstellbar");
 
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-		if(!undoMode) undoManager.push(AdministrationManager.ActionEnum.ACTION_CRAFT, universalForm.getProductIdentifier(), universalForm.getAmountCraft());
-		if(undoMode) undoManager.pop();
-
+		if(!undoMode) undoManager.push(universalForm.getInventoryItemActions());
+		if(undoMode) undoManager.pop();//removes top elem of Lifo damit nicht hin und her rückgängig gemacht wird
 		undoMode =false;
-		return "redirect:/";
-	}
 
+		return "redirect:/";
+
+	}
 
 	@GetMapping("/toogleAbholbereit/{identifier}")
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
@@ -244,53 +229,13 @@ public class EmployeeController {
 	@GetMapping("/undo")
 	String catalogUndo(Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		undoMode =true;
-		UndoManager.ActionObj actionObj=undoManager.getUndoAction();
+		ArrayList<InventoryItemAction> invertedAction=undoManager.getUndoActions();
+		UniversalForm universalForm =new UniversalForm();
+		universalForm.getInventoryItemActions();
 
-		switch (actionObj.getAction()){
-			case ACTION_SEND:{
-				UniversalForm universalForm =new UniversalForm();
-				universalForm.setAmountSell(actionObj.getAmount());
-				if(inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).isPresent()){
-					botManager.criticalAmountAfterUndoCheck( inventoryManager.getInventory().findByProductIdentifier(actionObj.getId()).get() ,actionObj.getAmount());
-				}else {
-					throw new IllegalArgumentException("PID noit found in Inventory");
-				}
+		commitEmployee(universalForm,administrationManager.getNewBindingResultsObject() ,loggedInUserWeb ,model);
 
-				return catalogsendToHl(actionObj.getId(), universalForm,administrationManager.getNewBindingResultsObject() , model, loggedInUserWeb);
-
-			}
-			case ACTION_CRAFT:{
-				UniversalForm inForm=new UniversalForm();
-				inForm.setAmountCraft(actionObj.getAmount());
-				return this.catalogCraftBwB(actionObj.getId(), inForm,administrationManager.getNewBindingResultsObject(),loggedInUserWeb,model);
-			}
-			case ACTION_EMPFANGEN: {
-				UniversalForm universalForm =new UniversalForm();
-				universalForm.setAmountBuy(actionObj.getAmount());
-				return this.catalogReceiveFromHl(actionObj.getId(), universalForm,administrationManager.getNewBindingResultsObject(),model,loggedInUserWeb);
-
-			}
-			case ACTION_ZERLEGEN:{
-				UniversalForm universalForm =new UniversalForm();
-				universalForm.setProductIdentifier(actionObj.getId());
-				universalForm.setAmountCraft(actionObj.getAmount());
-				administrationManager.zerlegen(universalForm,loggedInUserWeb,Location.LOCATION_BWB);
-				undoMode =false;
-				undoManager.pop(); //removes top elem of Lifo
-				return "redirect:/";
-			}
-		}
-		System.out.println("MYERROR: UndoManager unreachable switchcase was reached");
-
-
-
-		//administrationManager.reorder(inForm); //old
-
-
-
-		//Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //old
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
-
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
@@ -298,7 +243,7 @@ public class EmployeeController {
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
-				"Die Aktion "+actionObj.getAction().toString()+" von "+ actionObj.getAmount()+" "+administrationManager.getArticle(actionObj.getId()).getName() +" wurde Rückgängig gemacht",notiz));
+				"Rückgängig",notiz));
 		return "redirect:/";
 	}
 

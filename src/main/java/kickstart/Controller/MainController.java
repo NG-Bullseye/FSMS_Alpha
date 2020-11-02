@@ -170,11 +170,21 @@ public class MainController {
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());
 		UniversalForm universalForm=new UniversalForm();
-		model.addAttribute("universalForm", administrationManager.initializeNewUniversalForm(universalForm,list));
+		universalForm=administrationManager.initializeNewUniversalForm(universalForm,list);
+		for (InventoryItemAction i:universalForm.getInventoryItemActions()) {
+			System.out.println(i.getPid());
+		}
+		model.addAttribute("inventoryItemActions",universalForm.getInventoryItemActions());
+		model.addAttribute("universalForm",universalForm);
 		model.addAttribute("undoManager",undoManager);
 		model.addAttribute("administrationManager", administrationManager);
 
 		botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
+
+		//just foihtml debug
+		for (InventoryItemAction i:universalForm.getInventoryItemActions()) {
+			 administrationManager.getReordInventoryItemFromPid(i.getPid());
+		}
 
 		if (loggedInUserWeb.isPresent()) {
 			if(loggedInUserWeb.get().hasRole(Role.of("ROLE_MANAGER")))

@@ -1,73 +1,87 @@
 package kickstart.Manager;
 
+import kickstart.Micellenious.InventoryItemAction;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class UndoManager {
-	public class ActionObj {
-		private AdministrationManager.ActionEnum action;
-		private ProductIdentifier id;
-		private int amount;
 
-		public ActionObj(AdministrationManager.ActionEnum action, ProductIdentifier id, int amount) {
-			this.action = action;
-			this.id = id;
-			this.amount = amount;
-		}
+	AdministrationManager administrationManager;
+	//private InventoryItemAction action;
+	private ArrayList<InventoryItemAction> invertedInventoryItemActions;
 
-		public void flipActionToReverseAction(){
-		 	this.action=action.getUndoAction(action);
-		}
+	public ArrayList<InventoryItemAction> invert(ArrayList<InventoryItemAction> itemActions){
+		ArrayList<InventoryItemAction> invertedInventoryItemActions= new ArrayList<>();
 
-		public AdministrationManager.ActionEnum getAction() {
-			return action;
-		}
+		for (InventoryItemAction itemAction: itemActions) {
+			InventoryItemAction invertedInventoryItemAction=new InventoryItemAction(itemAction.getPid(),0,0,0);
+			if (itemAction.getAmountForIn()>0) {
+				int i=itemAction.getAmountForIn();
+				invertedInventoryItemAction.setAmountForOut(i);
+			}
 
-		public ProductIdentifier getId() {
-			return id;
-		}
+			if (itemAction.getAmountForCraft()>0) {
+				int i=itemAction.getAmountForCraft();
+				invertedInventoryItemAction.setAmountForZerlegen(i);
+			}
 
-		public int getAmount() {
-			return amount;
+			if (itemAction.getAmountForOut()>0) {
+				int i=itemAction.getAmountForOut();
+				invertedInventoryItemAction.setAmountForIn(i);
+			}
+			invertedInventoryItemActions.add(invertedInventoryItemAction);
 		}
+		return invertedInventoryItemActions;
 	}
 
 
-
-	AdministrationManager administrationManager;
-	Map<Integer, ActionObj> actionObjMap;
+Map<Integer, ArrayList<InventoryItemAction>> actionObjMap;
 
 	public UndoManager(AdministrationManager administrationManager) {
-		this.actionObjMap =new HashMap<>();
+		this.actionObjMap =new HashMap<Integer, ArrayList<InventoryItemAction>>();
 		this.administrationManager=administrationManager;
 	}
 
-	public boolean push(AdministrationManager.ActionEnum action, ProductIdentifier articleId , int amount){
+	/**
+	 *
+	 * @param actions
+	 * @return
+	 */
+	public boolean push(ArrayList<InventoryItemAction> actions){
 		try{
-			actionObjMap.put(actionObjMap.size(),new ActionObj(action,articleId,amount));
+			actionObjMap.put(actionObjMap.size(),actions);
 
 		}catch (Exception r){
-			System.out.println(administrationManager.getArticle(articleId).getName()+"konnte nicht gepusht werden");
-
+			System.out.println("Es konnte nicht gepusht werden");
 			return false;
 		}
-		System.out.println(administrationManager.getArticle(articleId).getName()+" gepusht");
+		System.out.println("gepusht");
 		return true;
 	}
 
-	public ActionObj getUndoAction(){
-		ActionObj lastAction = new ActionObj(actionObjMap.get(actionObjMap.size()-1).getAction(),actionObjMap.get(actionObjMap.size()-1).getId(),actionObjMap.get(actionObjMap.size()-1).getAmount());
-		lastAction.flipActionToReverseAction();
-		return lastAction;
+	/**
+	 *
+	 * @return liste von gegenteiligen Actionen die beim letzten commit ausgeführt wurden
+	 * diese werden wieder an den controller gegeben und ausgeführt um LifoActions rückgängig zu machen
+	 */
+	public ArrayList<InventoryItemAction> getUndoActions(){
+		ArrayList<InventoryItemAction> lifoActions= null;
+		lifoActions=actionObjMap.get(actionObjMap.size()-1);
+		return this.invert(lifoActions);
 	}
 
-	public ActionObj getLastAction(){
-		ActionObj lastAction=actionObjMap.get(actionObjMap.size()-1);
-		return lastAction;
+	/**
+	 *
+	 * @return Liste der Actionen die beim letzten commit button ausgeführt wurden
+	 */
+	public ArrayList<InventoryItemAction> getLifoFromKellerAction(){
+		ArrayList<InventoryItemAction> lifoActions=actionObjMap.get(actionObjMap.size()-1);
+		return lifoActions;
 	}
 
 
@@ -82,20 +96,14 @@ public class UndoManager {
 
 	public String getProductNameOfLastAction(){
 		try{
-			return	administrationManager.getArticle(actionObjMap.get(actionObjMap.size()-1).getId()).getName();
+			return	"platzhalter#222";//administrationManager.getArticle(actionObjMap.get(actionObjMap.size()-1).getPid()).getName();
 		}catch (NullPointerException n){
 			return null;
 		}
-
 	}
 
 	public String getNameOfLastAction(){
-		try{
-			return	actionObjMap.get(actionObjMap.size()-1).getAction().toString();
-		}catch (Exception e){
-			return null;
-		}
-
+		return	"Platzhalter#111";
 	}
 
 /*

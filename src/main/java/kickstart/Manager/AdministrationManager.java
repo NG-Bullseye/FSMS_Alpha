@@ -45,6 +45,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotNull;
 
 @Component
@@ -708,16 +709,16 @@ public class AdministrationManager {
 		return amount;
 	}
 
-	public void loggedReorder(@NotNull UniversalForm universalForm, UserAccount user, Location location, String notiz){
+	public void loggedReorder(@NotNull InventoryItemAction action, UserAccount user, Location location, String notiz){
 		logManager.addLog(user,
-				this.getArticle(universalForm.getProductIdentifier()).getName()+" in "+location.toString()+" "+ universalForm.getAmountBuy()+"x mal hinzugefügt",notiz);
-		reorder(universalForm,location);
+				this.getArticle(action.getPid()).getName()+" in "+location.toString()+" "+ action.getAmountForIn()+"x mal hinzugefügt",notiz);
+		reorder(action,location);
 	}
 
 	//insert Items into Hauptlager
-	public void reorder(@NotNull UniversalForm universalForm, Location location) {
+	public void reorder(@NotNull InventoryItemAction action, Location location) {
 
-		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(universalForm.getProductIdentifier());
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
 
 
 
@@ -725,7 +726,7 @@ public class AdministrationManager {
 			item.get().addReorder(
 					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
 					LocalDateTime.now(),
-					Quantity.of(universalForm.getAmountBuy(), Metric.UNIT),location);
+					Quantity.of(action.getAmountForIn(), Metric.UNIT),location);
 
 				boolean changed = item.get().update(LocalDateTime.now());
 				System.out.println("Inventory Item Reordered");
@@ -743,12 +744,12 @@ public class AdministrationManager {
 	}
 
 
-	public boolean receiveFromHl(@NotNull UniversalForm universalForm) {
-		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(universalForm.getProductIdentifier());
+	public boolean receiveFromHl(@NotNull InventoryItemAction action) {
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
 		if (item.isPresent()) {
 
 
-			if (item.get().recieveFromHl(universalForm.getAmountBuy())==false) {
+			if (item.get().recieveFromHl(action.getAmountForIn())==false) {
 				return false;
 			}
 
@@ -760,11 +761,11 @@ public class AdministrationManager {
 		}return true;
 	}
 
-	public boolean sendToHl(@NotNull UniversalForm universalForm) {
-		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(universalForm.getProductIdentifier());
+	public boolean sendToHl(@NotNull InventoryItemAction action) {
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
 		if (item.isPresent()) {
 
-			if (item.get().sendToHl(universalForm.getAmountSell())==false) {
+			if (item.get().sendToHl(action.getAmountForOut())==false) {
 				return false;
 			}
 
@@ -1046,23 +1047,20 @@ public class AdministrationManager {
 		return subComponentInStock;
 	}
 
-	public void out(UniversalForm universalForm, UserAccount userAccount, Location materialQuelle) {
-
+	public void out(InventoryItemAction action, UserAccount userAccount, Location materialQuelle) {
 		Cart cart=new Cart();
-		Article a=this.getArticle(universalForm.getProductIdentifier());
+		Article a=this.getArticle(action.getPid());
 		//int amount= inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().getQuantity().getAmount().intValue();
 		CustomerOrder customerOrder= cartOrderManager.newOrder(cart);
 		if(a instanceof Part){
-			cartOrderManager.addPart((Part)a, universalForm.getAmountSell(),cart);
+			cartOrderManager.addPart((Part)a, action.getAmountForOut(),cart);
 		}
 		if(a instanceof Composite){
-			cartOrderManager.addComposite((Composite) a, universalForm.getAmountSell(),cart);
+			cartOrderManager.addComposite((Composite) a, action.getAmountForOut(),cart);
 		}
 
 		cartOrderManager.addCostumer(userAccount);
 		cartOrderManager.cancelorpayOrder(customerOrder,"bezahlen");
-
-
 
 		cartOrderManager.getOrderManager().completeOrder(customerOrder);
 		orderManager.save(customerOrder);
@@ -1070,7 +1068,7 @@ public class AdministrationManager {
 		Inventory inv= inventoryManager.getInventory();
 		if (inv.findByProduct(a).get() instanceof ReorderableInventoryItem){
 			ReorderableInventoryItem item=(ReorderableInventoryItem) inv.findByProduct(a).get();
-			inventoryManager.decreaseBestand(a,Quantity.of(universalForm.getAmountSell()),materialQuelle );//decrease amount of Gesamtbestand
+			inventoryManager.decreaseBestand(a,Quantity.of(action.getAmountForOut()),materialQuelle );//decrease amount of Gesamtbestand
 			inv.save(item);
 			//boolean changed = item.update(LocalDateTime.now());
 			//int i =item.getQuantity().getAmount().intValue();
@@ -1102,37 +1100,32 @@ public class AdministrationManager {
 		return filteredReorderableInventoryItems;
 	}
 
-	public boolean craftHl(UniversalForm universalForm, UserAccount user, String notiz){
-		return this.craft(universalForm,user,Location.LOCATION_HL,notiz);
+	public boolean craftHl(InventoryItemAction action, UserAccount user, String notiz){
+		return this.craft(action,user,Location.LOCATION_HL,notiz);
 	}
 
-	public boolean craftBwB(UniversalForm universalForm, UserAccount user, String notiz){
-		return this.craft(universalForm,user,Location.LOCATION_BWB,notiz);
+	public boolean craftBwB(InventoryItemAction action, UserAccount user, String notiz){
+		return this.craft(action,user,Location.LOCATION_BWB,notiz);
 	}
 
-	private boolean craft(UniversalForm universalForm, UserAccount user, Location materialQuelle, String notiz) {
-		if(direktCraftbar(universalForm,materialQuelle)){
-			UniversalForm inForm=new UniversalForm();
-			inForm.setProductIdentifier(universalForm.getProductIdentifier());
-			inForm.setAmountCraft(universalForm.getAmountCraft());
-			this.loggedReorder(inForm,user,materialQuelle,notiz);
+	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {
+		if(direktCraftbar(action,materialQuelle)){
+			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+			this.loggedReorder(inAction,user,materialQuelle,notiz);
 
-			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(universalForm.getProductIdentifier()).get().getPartIds());
+			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
-				UniversalForm outForm=new UniversalForm();
-				outForm.setProductIdentifier(p);
-				int requiredAmount = universalForm.getAmountCraft()*map.get(p);
-				outForm.setAmountCraft(requiredAmount);
-				this.out(outForm,user,materialQuelle);
+				int requiredAmount = action.getAmountForCraft()*map.get(p);
+				InventoryItemAction outAction=new InventoryItemAction(p,0,requiredAmount,0);
+				this.out(outAction,user,materialQuelle);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean  direktCraftbar(UniversalForm universalForm, Location lager) {
-
-		Article a= this.getArticle(universalForm.getProductIdentifier())	;
+	private boolean  direktCraftbar(InventoryItemAction action, Location lager) {
+		Article a= this.getArticle(action.getPid())	;
 		Map<ProductIdentifier,Integer> rezept =this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds())  ;
 		for (ProductIdentifier p :
 				rezept.keySet()) {
@@ -1148,7 +1141,6 @@ public class AdministrationManager {
 					break;
 				}
 			}
-
 			if (inStock<neededAmountForOne)
 				return false;
 		}
@@ -1164,21 +1156,18 @@ public class AdministrationManager {
 		}
 	}
 
-	public boolean zerlegen(UniversalForm universalForm, UserAccount user, Location materialQuelle) {
-		if(inventoryManager.getInventory().findByProductIdentifier(universalForm.getProductIdentifier()).isPresent()
-				&&(inventoryManager.getInventory().findByProductIdentifier(universalForm.getProductIdentifier()).get().getAmountBwB()>= universalForm.getAmountCraft() )){
-			UniversalForm outForm=new UniversalForm();
-			outForm.setProductIdentifier(universalForm.getProductIdentifier());
-			outForm.setAmountCraft(universalForm.getAmountCraft());
-			this.out(outForm,user,materialQuelle);
-
-			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(universalForm.getProductIdentifier()).get().getPartIds());
+	public boolean zerlegen(InventoryItemAction action, UserAccount user, Location materialQuelle) {
+		if(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).isPresent()
+				&&(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get().getAmountBwB()>= action.getAmountForCraft())){
+			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+			this.out(outAction,user,materialQuelle);
+			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
-				UniversalForm inForm=new UniversalForm();
-				inForm.setProductIdentifier(p);
-				int requiredAmount = universalForm.getAmountCraft()*map.get(p);
-				inForm.setAmountCraft(requiredAmount);
-				this.reorder(inForm,materialQuelle);
+				InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+				inAction.setPid(p);
+				int requiredAmount = action.getAmountForCraft()*map.get(p);
+				inAction.setAmountForCraft(requiredAmount);
+				this.reorder(inAction,materialQuelle);
 			}
 			return true;
 		}
@@ -1374,42 +1363,24 @@ public class AdministrationManager {
 		};
 	}
 
-	public enum  ActionEnum {
-	   ACTION_SEND,ACTION_EMPFANGEN,ACTION_CRAFT,ACTION_ZERLEGEN;
-
-	   public ActionEnum getUndoAction(ActionEnum action){
-		   switch (action){
-			   case ACTION_SEND: return ACTION_EMPFANGEN;
-			   case ACTION_CRAFT: return ACTION_ZERLEGEN;
-			   case ACTION_EMPFANGEN: return ACTION_SEND;
-			   case ACTION_ZERLEGEN: return ACTION_CRAFT;
-		   }
-		   throw new IllegalStateException();
-	   }
-	   public String toString(){
-		   switch (this){
-			   case ACTION_SEND: return "Senden";
-			   case ACTION_CRAFT: return "Zerlegen";
-			   case ACTION_EMPFANGEN: return "Empfangen";
-			   case ACTION_ZERLEGEN: return "Herstellen";
-		   }
-		   return "ERROR IN ACTIONENUM";
-	   }
-   }
-
    public UniversalForm initializeNewUniversalForm(UniversalForm form,Iterable<ReorderableInventoryItem> items){
 		ArrayList<InventoryItemAction> inventoryItemActions = new ArrayList<>();
 
 		for (ReorderableInventoryItem item:
 			inventoryManager.getInventory().findAll()) {
-		inventoryItemActions.add(new InventoryItemAction(item.getId(),0,0,0)) ;
+		inventoryItemActions.add(new InventoryItemAction(item.getProduct().getId(), 0,0,0)) ;
 		}
 		form.setInventoryItemActions(inventoryItemActions);
 		return form;
    }
 
 
-
+	public ReorderableInventoryItem getReordInventoryItemFromPid(ProductIdentifier pid){
+		if (inventoryManager.getInventory().findByProductIdentifier(pid).isPresent()) {
+			return inventoryManager.getInventory().findByProductIdentifier(pid).get();
+		}
+		else throw new RuntimeException();
+	}
 
 
 
