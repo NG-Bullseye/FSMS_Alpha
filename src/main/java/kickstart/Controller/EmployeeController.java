@@ -126,7 +126,7 @@ public class EmployeeController {
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
-		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
+		cartOrderManager.addCostumer(loggedInUser.getUserAccount())
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
 		}
