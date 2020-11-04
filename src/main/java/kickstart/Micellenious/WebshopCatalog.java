@@ -70,6 +70,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 		return rightPrice;
 	}
 
+
 	default Iterable<Article> findByCategories(ArrayList<String> categories) {
 		HashSet<Article> rightCategories = new HashSet<>();
 		this.findAll().forEach(article -> {

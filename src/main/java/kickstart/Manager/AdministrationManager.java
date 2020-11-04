@@ -136,7 +136,6 @@ public class AdministrationManager {
 	 */
 	public List<Article> getWholeCatalog() {
 		List<Article> articles = new ArrayList<Article>();
-
 		catalog.findAll().forEach(article -> {
 			articles.add(article);
 		});
@@ -315,8 +314,6 @@ public class AdministrationManager {
 		return result.stream();
 	}
 
-
-
 	public void editAffectedArticles(Article afterEdit) {
 		List<Article> affectedArticles = new ArrayList<>();
 		affectedArticles.add(afterEdit);
@@ -465,7 +462,17 @@ public class AdministrationManager {
 		HashSet<Article> rightCategories = new HashSet<>();
 		ArrayList<String> categories = filterform.getSelectedCategories();
 		if(categories!=null && categories.size()>0)
-			catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
+			//	mergeconflict? oldversion		catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
+			for(String categorie:categories){
+
+				//System.out.println("Searching for "+categorie);
+				for(Article a:catalog.findByCategory(categorie)){
+					rightCategories.add(a);
+					//System.out.println("Item found "+a.getName());
+				}
+				//System.out.println("Search done");
+			}
+		//catalog.findByCategories(filterform.getSelectedCategories()).forEach(rightCategories::add);
 		else {
 			System.out.println("No CategoriesComposites choosen");
 			catalog.findAll().forEach(rightCategories::add);
@@ -499,8 +506,6 @@ public class AdministrationManager {
 		}
 		result.sort(Comparator.comparing(Article::getName));
 		return result;
-
-
 	}
 
 	/**
@@ -911,37 +916,6 @@ public class AdministrationManager {
 		throw new NullPointerException("no Produkt found with that given id");
 	}
 
-	public int craftbarBwB(ProductIdentifier p){
-		int craftbar=0;
-		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
-			int inStock = inventory.findByProductIdentifier(p).get().getAmountBwB();
-			if(1<=inStock)
-				craftbar= inStock;
-		}
-		else{
-			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_BWB);
-		}
-		return craftbar;
-	}
-
-	public int craftbarHl(ProductIdentifier p){
-		int craftbar=0;
-		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
-			int inStock = inventory.findByProductIdentifier(p).get().getAmountHl();
-			if(1<=inStock)
-				craftbar= inStock;
-		}
-		else{
-			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_HL);
-		}
-		return craftbar;
-	}
-
-
-
-
-
-
 	public int maxCraft_Layer(ProductIdentifier thisComponentId, int amountOfSuperKomponent, int maximalCraftNumberForPreviousLayer, Location bestandLocation){
 		//<editor-fold desc="NullChecks">
 		if(thisComponentId==null)new NullPointerException();
@@ -1121,12 +1095,49 @@ public class AdministrationManager {
 		return filteredReorderableInventoryItems;
 	}
 
+
+	public int craftbarBwB(ProductIdentifier p){
+		int craftbar=0;
+		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
+			int inStock = inventory.findByProductIdentifier(p).get().getAmountBwB();
+			if(1<=inStock)
+				craftbar= inStock;
+		}
+		else{
+			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_BWB);
+		}
+		return craftbar;
+	}
+
+	public int craftbarHl(ProductIdentifier p){
+		int craftbar=0;
+		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
+			int inStock = inventory.findByProductIdentifier(p).get().getAmountHl();
+			if(1<=inStock)
+				craftbar= inStock;
+		}
+		else{
+			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_HL);
+		}
+		return craftbar;
+	}
+
 	public boolean craftHl(InventoryItemAction action, UserAccount user, String notiz){
-		return this.craft(action,user,Location.LOCATION_HL,notiz);
+		if (craftbarHl(action.getPid())>=action.getAmountForCraft()) {
+			return this.craft(action,user,Location.LOCATION_HL,notiz);
+		} else {
+			return false;
+		}
+
 	}
 
 	public boolean craftBwB(InventoryItemAction action, UserAccount user, String notiz){
-		return this.craft(action,user,Location.LOCATION_BWB,notiz);
+		if (craftbarHl(action.getPid())>=action.getAmountForCraft()) {
+			return this.craft(action,user,Location.LOCATION_BWB,notiz);
+		} else {
+			return false;
+		}
+
 	}
 
 	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {

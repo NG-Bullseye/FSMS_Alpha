@@ -90,7 +90,7 @@ public class ArticleInitializer implements DataInitializer {
 				"sandy",
 				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p4);
-		inventory.save(new ReorderableInventoryItem(botManager,p4, Quantity.of(8,Metric.UNIT),"mm²"));
+		inventory.save(new ReorderableInventoryItem(botManager,p4, Quantity.of(8,Metric.UNIT),"bahn"));
 		print(p4);
 
 		Part p5 = new Part("PLA", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");

@@ -205,6 +205,9 @@ public class ReorderableInventoryItem extends InventoryItem {
 
 	}
 
+	public int getGesamtbestand(){
+		return this.getAmountBwB()+this.getAmountHl();
+	}
 
 	public int getAmountBwB() {
 		return amountBwB;

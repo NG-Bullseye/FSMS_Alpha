@@ -99,9 +99,9 @@ public class InventoryManager {
 	 */
 	public boolean hasSufficientQuantity(@NotNull Article article, @NotNull Quantity quantity)
 			throws IllegalArgumentException {
-		if (quantity.getMetric() != Metric.UNIT) {
-			throw new IllegalArgumentException();
-		}
+		//if (quantity.getMetric() != Metric.UNIT) {
+		//	throw new IllegalArgumentException();
+		//}
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProduct(article);
 

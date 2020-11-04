@@ -21,6 +21,7 @@ public enum CategoriesComposites {
 			s[i]=st;
 			i++;
 		}
+
 		return s;
 	}
 
