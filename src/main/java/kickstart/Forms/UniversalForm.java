@@ -1,10 +1,15 @@
 package kickstart.Forms;
 
+import kickstart.Manager.AdministrationManager;
+import kickstart.Manager.InventoryManager;
 import kickstart.Micellenious.InventoryItemAction;
+import kickstart.Micellenious.ReorderableInventoryItem;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+
 
 public class UniversalForm {
 	@Getter
@@ -13,6 +18,14 @@ public class UniversalForm {
 	@Getter
 	@Setter
 	private String notiz;
+
+	public UniversalForm() {
+		this.inventoryItemActions=new ArrayList<InventoryItemAction>();
+		/*
+		*
+		* */
+	}
+
 	public void addInventoryItemAction(InventoryItemAction itemAction){
 		this.inventoryItemActions.add(itemAction);
 	}

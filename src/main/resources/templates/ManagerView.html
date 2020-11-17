@@ -28,48 +28,6 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 					</div>
 				</div>
 
-				<div class="item" sec:authorize="hasRole('ROLE_MANAGER')">
-					<div class="ui simple dropdown">
-						<div class="text" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF">Preis Netto</div>
-						<i class="dropdown icon"></i>
-						<div class="menu">
-							<div class="item">
-								<div class="ui labeled input">
-									<div class="ui label">Mindestpreis</div>
-									<input style="width: 60px" type="number" th:value="0" th:field="*{minPriceNetto}">
-								</div>
-							</div>
-							<div class="item">
-								<div class="ui labeled input">
-									<div class="ui label">Maximalpreis</div>
-									<input style="width: 60px" type="number" th:value="50000.0" th:field="*{maxPriceNetto}">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item" sec:authorize="hasRole('ROLE_MANAGER')">
-					<div class="ui simple dropdown">
-						<div class="text" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF">Preis Brutto</div>
-						<i class="dropdown icon"></i>
-						<div class="menu">
-							<div class="item">
-								<div class="ui labeled input">
-									<div class="ui label">Mindestpreis</div>
-									<input style="width: 60px" type="number" th:value="0" th:field="*{minPriceBrutto}">
-								</div>
-							</div>
-							<div class="item">
-								<div class="ui labeled input">
-									<div class="ui label">Maximalpreis</div>
-									<input style="width: 60px" type="number" th:value="50000.0" th:field="*{maxPriceBrutto}">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
 				<div class="item">
 					<div class="ui simple dropdown">
 						<div class="text" style="color: #68d4d0;font-size: 20px;position: center;font-weight: bold;background-color: #FFFFFF">Kategorien</div>
@@ -85,8 +43,6 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 					</div>
 				</div>
 				<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">MaxPrice Error</a>
-				<a th:if="${#fields.hasErrors('maxPriceNetto')}" th:errors="*{maxPriceNetto}">MaxPrice Error</a>
-				<a th:if="${#fields.hasErrors('minPriceNetto')}" th:errors="*{minPriceNetto}">MaxPrice Error</a>
 				<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
 				<div class="item">
 					<button class="ui button" type="submit" value="filter" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
@@ -211,13 +167,13 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 						</thead>
 
 						<tbody>
-						<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="item, itemStat: ${inventoryItemActions}">
+						<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="itemAction, itemStat: ${inventoryItemActions}">
 							<!--1--> <!--<editor-fold desc="Name View:P">-->
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
 								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
-									<a th:href="@{/toogleAbholbereit/{id}(id=${item.getPid())})}" target="_self">
+									<a th:href="@{/toogleAbholbereit/{id}(id=${itemAction.getPid()})}" target="_self">
 										<div class="ui basic button">
-											<span th:text="${item.getProduct().getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
+											<span th:text="${itemAction.getProduct().getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 										</div>
 									</a>
 								</div>
@@ -225,18 +181,18 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 							<td sec:authorize="hasRole('ROLE_MANAGER')">
 								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
-									<div th:switch="${administrationManager.getArticle(item.getPid())).getType()}">
+									<div th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
 										<a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
-										   th:href="@{/edit/{id}(id=${item.getPid())})}" target="_self">
+										   th:href="@{/edit/{id}(id=${itemAction.getPid()})}" target="_self">
 											<div class="ui basic button">
-												<span th:text="${item.getProduct().getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
+												<span th:text="${administrationManager.getArticle(itemAction.getPid()).getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 											</div>
 										</a>
 
 										<a th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
-										   th:href="@{/edit/composite/{id}(id=${item.getPid())})}" target="_self">
+										   th:href="@{/edit/composite/{id}(id=${itemAction.getPid()})}" target="_self">
 											<div class="ui basic button">
-												<span th:text="${item.getProduct().getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
+												<span th:text="${administrationManager.getArticle(itemAction.getPid()).getName()}" style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 											</div>
 										</a>
 
@@ -245,19 +201,19 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							</td>
 
 							<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">-->
-							<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${administrationManager.getReordInventoryItemFromPid(item.getPid()).getQuantity().getAmount().intValue()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
+						<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getQuantity().getAmount().intValue()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
 								<div  style="font-size: 20px;font-weight: bold;text-align: center">
 									<!--if critische menge unterschritten dann Zahl ROT-->
-									<span th:if="${ item.getAmountBwB() < administrationManager.getArticle(item.getPid())).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
+									<span th:if="${ administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB() < administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 									<!--else-->
-									<span th:unless="${item.getAmountBwB() < administrationManager.getArticle(item.getProduct().getId()).getCriticalAmount() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}">
+									<span th:unless="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB() < administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}">
 												<!--if Abholbereit dann GRÜN-->
-												<span th:if="${administrationManager.getArticle(item.getPid())).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
+												<span th:if="${administrationManager.getArticle(itemAction.getPid()).isAbholBereit() }" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: green "></span>
 										<!--sonst SCHWARZ-->
-												<span th:unless="${ administrationManager.getArticle(item.getPid())).isAbholBereit() }" th:text="${item.getAmountBwB()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
+												<span th:unless="${administrationManager.getArticle(itemAction.getPid()).isAbholBereit() }" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center"></span>
 											</span>
 								</div>
 
@@ -266,26 +222,26 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 							<!--4--> <!--<editor-fold desc="Hl Bestand View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')">
-									<span th:if="${ item.getAmountHl() < administrationManager.getArticle(item.getPid())).getCriticalAmount() }"
-										  th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red ">HlBestand>
+									<span th:if="${ administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountHl() < administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }"
+										  th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountHl()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red ">HlBestand>
 									</span>
-								<span th:unless="${ item.getAmountHl() < administrationManager.getArticle(item.getPid())).getCriticalAmount() }"
-									  th:text="${item.getAmountHl()}+${item.getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center;">HlBestand
+								<span th:unless="${ administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountHl() < administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }"
+									  th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountHl()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center;">HlBestand
 									</span>
 							</td>
 
 							<!--5--> <!--<editor-fold desc="Herstallbar Hl View:M">-->
 							<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
-								<div th:switch="${administrationManager.getArticle(item.getPid())).getType()}">
+								<div th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
 									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
 											<span 	th:if="${
-														administrationManager.craftbarHl(item.getPid())) < administrationManager.getArticle(item.getPid())).getCriticalAmount()
+														administrationManager.craftbarHl(itemAction.getPid()) < administrationManager.getArticle(itemAction.getPid()).getCriticalAmount()
 													}"
-													 th:text="${administrationManager.craftbarHl(item.getPid()))}?:''"
+													 th:text="${administrationManager.craftbarHl(itemAction.getPid())}?:''"
 													 style="font-size: 20px;font-weight: bold;text-align: center; color: red ">Herstellbar Hl Rot
 											</span>
-										<span 	th:unless="${ administrationManager.craftbarHl(item.getPid())) < administrationManager.getArticle(item.getPid())).getCriticalAmount() }"
-												 th:text="${administrationManager.craftbarHl(item.getPid()))}"
+										<span 	th:unless="${ administrationManager.craftbarHl(itemAction.getPid()) < administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }"
+												 th:text="${administrationManager.craftbarHl(itemAction.getPid())}"
 												 style="font-size: 20px;font-weight: bold;text-align: center;">Herstellbar Hl Schwarz
 											</span>
 									</div>
@@ -294,13 +250,13 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 							<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
 							<td  sec:authorize="hasRole('ROLE_MANAGER') " style="font-size: 20px;font-weight: bold;text-align: center">
-								<div th:switch="${administrationManager.getArticle(item.getPid())).getType()}">
+								<div th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
 									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
-											<span th:if="${administrationManager.craftbarBwB(item.getPid())) >= administrationManager.getArticle(item.getPid())).getCriticalAmount() }"
-												  th:text="${administrationManager.craftbarBwB(item.getPid()))}?:''"
+											<span th:if="${administrationManager.craftbarBwB(itemAction.getPid()) >= administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }"
+												  th:text="${administrationManager.craftbarBwB(itemAction.getPid())}?:''"
 												  style="font-size: 20px;font-weight: bold;text-align: center"></span>
-										<span th:unless="${administrationManager.craftbarBwB(item.getPid())) >= administrationManager.getArticle(item.getPid())).getCriticalAmount() }"
-											  th:text="${administrationManager.craftbarBwB(item.getPid()))}?:''"
+										<span th:unless="${administrationManager.craftbarBwB(itemAction.getPid()) >= administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }"
+											  th:text="${administrationManager.craftbarBwB(itemAction.getPid())}?:''"
 											  style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
 									</div>
 								</div>
@@ -310,23 +266,26 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 
 							<!--Link zur neuen syntax https://www.baeldung.com/thymeleaf-list -->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
-								<a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(item.getPid())).getHerstellerUrl()}" th:text="Link" target="_blank" />
+								<a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(itemAction.getPid()).getHerstellerUrl()}" th:text="Link" target="_blank" />
 							</td>
 
 							<!--8--> <!--<editor-fold desc="Buy View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
 								<div class="inline field">
 									<div>
-										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItems[__${itemStat.index}__].amountForIn}" />
+										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItemActions[__${itemStat.index}__].amountForIn}" />
 									</div>
 								</div>
 							</td>
 
+
+
+
 							<!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" width="100px">
-								<div class="inline field" th:switch="${administrationManager.getArticle(item.getPid())).getType()}">
+								<div class="inline field" th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
 									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{inventoryItems[__${itemStat.index}__].amountForCraft}" />
+										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{inventoryItemActions[__${itemStat.index}__].amountForCraft}" />
 									</div>
 								</div>
 							</td>
@@ -336,25 +295,25 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
 								<div class="inline field">
 									<div>
-										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItems[__${itemStat.index}__].amountForOut}" />
+										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItemActions[__${itemStat.index}__].amountForOut}" />
 									</div>
 								</div>
 							</td>
 
 							<!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
-								<div th:switch="${administrationManager.getArticle(item.getPid())).getType()}">
-									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(item.getPid()))}">
+								<div th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
+									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(itemAction.getPid())}">
 									</div>
 								</div>
 							</td>
 
 							<!--14--> <!--<editor-fold desc="EAN Code View:P">-->
-							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getPid())).getEanCode()}">Ean</td>
+							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(itemAction.getPid()).getEanCode()}">Ean</td>
 							<!--</editor-fold>-->
 
 							<!--15--> <!--<editor-fold desc="Kategorie View:P">-->
-							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getPid())).getCategories().get().findFirst().get()}">Categorie</td>
+							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(itemAction.getPid()).getCategories().get().findFirst().get()}">Categorie</td>
 							<!--</editor-fold>-->
 
 						</tr>

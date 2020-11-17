@@ -4,15 +4,7 @@ import static org.salespointframework.core.Currencies.EURO;
 
 import java.beans.PropertyEditor;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 
@@ -24,6 +16,7 @@ import kickstart.Micellenious.*;
 import kickstart.order.CartOrderManager;
 import kickstart.order.CustomerOrder;
 import lombok.Getter;
+import lombok.Setter;
 import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
@@ -50,6 +43,26 @@ import javax.validation.constraints.NotNull;
 
 @Component
 public class AdministrationManager {
+
+	@Getter
+	final private ArrayList<String> METHA_STANDARDFILTER_FARBE=null;
+	@Getter
+	final private ArrayList<String> METHA_STANDARDFILTER_CATEGORIE=new ArrayList<>(Arrays.asList("Kit")) ;
+	@Setter
+	@Getter
+	private ArrayList<String> cookieFilterManagerKategorie=METHA_STANDARDFILTER_CATEGORIE;
+	@Setter
+	@Getter
+	private ArrayList<String> cookieFilterManagerFarbe=METHA_STANDARDFILTER_FARBE;
+	@Setter
+	@Getter
+	private ArrayList<String> cookieFilterEmployeeKategorie=METHA_STANDARDFILTER_CATEGORIE;
+	@Setter
+	@Getter
+	private ArrayList<String> cookieFilterEmployeeFarbe=METHA_STANDARDFILTER_FARBE;
+
+
+
 	private final WebshopCatalog catalog;
 	private Set<Article> hiddenArticles;
 	private final Inventory<ReorderableInventoryItem> inventory;
@@ -168,11 +181,11 @@ public class AdministrationManager {
 			}
 			long l1 = Math.round(form.getPriceNetto());
 			if (l1 != 0) {
-				afterEdit.setPriceNetto(Money.of(form.getPriceNetto(), EURO));
+				//afterEdit.setPriceNetto(Money.of(form.getPriceNetto(), EURO));
 			}
 			long l2 = Math.round(form.getPriceBrutto());
 			if (l2 != 0) {
-				afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
+				//afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
 			}
 
 			afterEdit.setCriticalAmount(form.getCriticalAmount());
@@ -219,11 +232,11 @@ public class AdministrationManager {
 			}
 			long l1 = Math.round(form.getPriceNetto());
 			if (l1 != 0) {
-				afterEdit.setPriceNetto(Money.of(form.getPriceNetto(), EURO));
+				//afterEdit.setPriceNetto(Money.of(form.getPriceNetto(), EURO));
 			}
 			long l2 = Math.round(form.getPriceBrutto());
 			if (l2 != 0) {
-				afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
+				//afterEdit.setPriceBrutto(Money.of(form.getPriceBrutto(), EURO));
 			}
 			System.out.println("AdministartionManager.editComosite: "+form.getCriticalAmount());
 			afterEdit.setCriticalAmount(form.getCriticalAmount());
@@ -423,8 +436,8 @@ public class AdministrationManager {
 		else{
 			catalog.findAll().forEach(articlesWithCorrectColour::add);
 		}
-
-		HashSet<Article> rightNettoPrice = new HashSet<>();
+		/*
+		* HashSet<Article> rightNettoPrice = new HashSet<>();
 		if (filterform.getMaxPriceNetto() >= filterform.getMinPriceNetto()) {
 			catalog.findByPrice(Money.of(filterform.getMinPriceNetto(), EURO),
 								Money.of(filterform.getMaxPriceNetto(), EURO))
@@ -446,6 +459,9 @@ public class AdministrationManager {
 									.forEach(rightBruttoPrice::add);
 		}
 
+		*
+		* */
+
 		HashSet<Article> rightCategories = new HashSet<>();
 		ArrayList<String> categories = filterform.getSelectedCategories();
 		if(categories!=null && categories.size()>0)
@@ -466,7 +482,10 @@ public class AdministrationManager {
 			result.retainAll(articlesWithCorrectColour);
 		}
 
-		if (filterform.getMaxPriceNetto()!=0 || filterform.getMinPriceNetto()!=0) {
+
+		/*
+		*
+		* if (filterform.getMaxPriceNetto()!=0 || filterform.getMinPriceNetto()!=0) {
 			result.retainAll(rightNettoPrice);
 		}
 
@@ -474,12 +493,14 @@ public class AdministrationManager {
 			result.retainAll(rightBruttoPrice);
 		}
 
+		* */
 		if (filterform.getSelectedCategories()!=null && filterform.getSelectedCategories().size()>0) {
 			result.retainAll(rightCategories);
 		}
-
 		result.sort(Comparator.comparing(Article::getName));
 		return result;
+
+
 	}
 
 	/**
@@ -1363,18 +1384,6 @@ public class AdministrationManager {
 		};
 	}
 
-   public UniversalForm initializeNewUniversalForm(UniversalForm form,Iterable<ReorderableInventoryItem> items){
-		ArrayList<InventoryItemAction> inventoryItemActions = new ArrayList<>();
-
-		for (ReorderableInventoryItem item:
-			inventoryManager.getInventory().findAll()) {
-		inventoryItemActions.add(new InventoryItemAction(item.getProduct().getId(), 0,0,0)) ;
-		}
-		form.setInventoryItemActions(inventoryItemActions);
-		return form;
-   }
-
-
 	public ReorderableInventoryItem getReordInventoryItemFromPid(ProductIdentifier pid){
 		if (inventoryManager.getInventory().findByProductIdentifier(pid).isPresent()) {
 			return inventoryManager.getInventory().findByProductIdentifier(pid).get();
@@ -1382,6 +1391,58 @@ public class AdministrationManager {
 		else throw new RuntimeException();
 	}
 
+	public LinkedList<ReorderableInventoryItem> sortAndFilterMainControllerItems(Location location){
+		ArrayList<String> preselectionKategorie;
+		ArrayList<String> preselectionFarbe;
+		if (location.equals(Location.LOCATION_HL)){
+			preselectionKategorie=this.getCookieFilterManagerKategorie();
+			preselectionFarbe=this.getCookieFilterManagerFarbe();
+		}
+		else {
+			if (location.equals(Location.LOCATION_BWB)){
+				preselectionKategorie=this.getCookieFilterEmployeeKategorie();
+				preselectionFarbe=this.getCookieFilterEmployeeFarbe();
+			}
+			else{
+				throw new IllegalStateException();
+			}
+
+		}
+
+
+
+		Filterform filterform=new Filterform();
+		filterform.setSelectedCategories(preselectionKategorie);
+
+		if(preselectionFarbe==null){
+			preselectionFarbe=new ArrayList<>(Arrays.asList(inventoryManager.getColours()));
+		}
+		else filterform.setSelectedColours(preselectionFarbe);
+
+		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator= this.filteredReorderableInventoryItems(filterform);
+		//Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
+
+
+		LinkedList<ReorderableInventoryItem> sortedReordInvItemList=new LinkedList<>();
+		for (ReorderableInventoryItem r :
+				unsortedReordInvItemIterator) {
+			sortedReordInvItemList.add(r);
+		}
+
+		//<editor-fold desc="Standart Sortierung">
+		Collections.sort(sortedReordInvItemList, new Comparator<ReorderableInventoryItem>() {
+			@Override
+			public int compare(ReorderableInventoryItem o1, ReorderableInventoryItem o2) {
+				int res = String.CASE_INSENSITIVE_ORDER.compare(o1.getProduct().getName(), o2.getProduct().getName());
+				if (res == 0) {
+					res = o1.getProduct().getName().compareTo(o2.getProduct().getName());
+				}
+				return res;
+			}
+		});
+
+		return sortedReordInvItemList;
+	}
 
 
 

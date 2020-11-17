@@ -28,6 +28,7 @@ import kickstart.accountancy.AccountancyManager;
 import kickstart.activityLog.ActivityLogManager;
 import kickstart.activityLog.LogRepository;
 import kickstart.Micellenious.*;
+import kickstart.articles.Part;
 import kickstart.order.CartOrderManager;
 import kickstart.user.UserManagement;
 import org.salespointframework.inventory.Inventory;
@@ -51,11 +52,9 @@ import kickstart.Micellenious.ReorderableInventoryItem;
 @Controller
 public class MainController {
 
-	final private ArrayList<String> METHA_STANDARDFILTER_FARBE=null;
-	final private ArrayList<String> METHA_STANDARDFILTER_CATEGORIE=new ArrayList<>(Arrays.asList("Kit")) ;
 
-	private ArrayList<String> preselectionKategorie;
-	private ArrayList<String> preselectionFarbe;
+
+
 	private  LogRepository logRepository;
 	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
@@ -107,9 +106,6 @@ public class MainController {
 		this.categoriesComposites=inventoryManager.getCategoriesComposites();
 		this.categoriesParts= inventoryManager.getCategoriesParts();
 		this.categoriesAll=inventoryManager.getCategoriesAll();
-
-		this.preselectionFarbe= METHA_STANDARDFILTER_FARBE;
-		this.preselectionKategorie=METHA_STANDARDFILTER_CATEGORIE;
 	}
 
 	@ModelAttribute("categories")
@@ -127,72 +123,52 @@ public class MainController {
 	String refreshView(Model model,
 					   @RequestParam(required = false, name = "reset") String reset
 			, @LoggedIn Optional<UserAccount> loggedInUserWeb) {
-		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
-
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-
-
-		//</editor-fold>
 		//administrationManager.getVisibleCatalog();
 
-		Filterform filterform=new Filterform();
-		filterform.setSelectedCategories(preselectionKategorie);
+		//<editor-fold desc="Wende standard Filter an und sortiere">
 
-		if(preselectionFarbe==null){
-			preselectionFarbe=new ArrayList<>(Arrays.asList(inventoryManager.getColours()));
-		}
-		else filterform.setSelectedColours(preselectionFarbe);
-
-		Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator= administrationManager.filteredReorderableInventoryItems(filterform);
-		//Iterable<ReorderableInventoryItem> unsortedReordInvItemIterator=inventoryManager.getInventory().findAll();
-
-
-		LinkedList<ReorderableInventoryItem> sortedReordInvItemList=new LinkedList<>();
-		for (ReorderableInventoryItem r :
-				unsortedReordInvItemIterator) {
-			sortedReordInvItemList.add(r);
-		}
-
-		//<editor-fold desc="Standart Sortierung">
-		Collections.sort(sortedReordInvItemList, new Comparator<ReorderableInventoryItem>() {
-			@Override
-			public int compare(ReorderableInventoryItem o1, ReorderableInventoryItem o2) {
-				int res = String.CASE_INSENSITIVE_ORDER.compare(o1.getProduct().getName(), o2.getProduct().getName());
-				if (res == 0) {
-					res = o1.getProduct().getName().compareTo(o2.getProduct().getName());
-				}
-				return res;
-			}
-		});
 		//</editor-fold>
-
+		//</editor-fold>
+		//<editor-fold desc="Nur zum test da in der html der articel nicht auf vorschläge geprüft werden kann">
+		/*
+		* for (InventoryItemAction itemAction :universalForm.getInventoryItemActions()) {
+			Article a= administrationManager.getArticle(itemAction.getPid());
+			System.out.println(a.getName()+" Items have been initialised in Universal form");
+		}
+		* */
+		//</editor-fold>
+		Location location;
+		if (loggedInUserWeb.isPresent()) {
+			if(loggedInUserWeb.get().hasRole(Role.of("ROLE_MANAGER")))
+				location=Location.LOCATION_HL;
+			else
+				location=Location.LOCATION_BWB;
+		}
+		else return "redirect:/";
+		LinkedList<ReorderableInventoryItem> sortedReordInvItemList = administrationManager.sortAndFilterMainControllerItems(location);
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());
-		UniversalForm universalForm=new UniversalForm();
-		universalForm=administrationManager.initializeNewUniversalForm(universalForm,list);
-		for (InventoryItemAction i:universalForm.getInventoryItemActions()) {
-			System.out.println(i.getPid());
+
+		ArrayList<InventoryItemAction> inventoryItemActions = new ArrayList<>();
+		for (ReorderableInventoryItem item:
+				sortedReordInvItemList) {
+			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), 0,0,0);
+			inventoryItemActions.add(a) ;
 		}
-		model.addAttribute("inventoryItemActions",universalForm.getInventoryItemActions());
-		model.addAttribute("universalForm",universalForm);
+		model.addAttribute("inventoryItemActions",inventoryItemActions);
+		model.addAttribute("universalForm",new UniversalForm());
 		model.addAttribute("undoManager",undoManager);
 		model.addAttribute("administrationManager", administrationManager);
 
 		botManager.checkItemsForCriticalAmount(inventoryManager.getInventory());
 
-		//just foihtml debug
-		for (InventoryItemAction i:universalForm.getInventoryItemActions()) {
-			 administrationManager.getReordInventoryItemFromPid(i.getPid());
-		}
-
-		if (loggedInUserWeb.isPresent()) {
-			if(loggedInUserWeb.get().hasRole(Role.of("ROLE_MANAGER")))
-				return "ManagerView";
-			else
+		if(location.equals(Location.LOCATION_HL))
+			return "ManagerView";
+		else
+			if(location.equals(Location.LOCATION_BWB))
 				return "EmployeeView";
-		}
-		else return "redirect:/";
+			else return "redirect:/";
 	}
 
 
@@ -209,37 +185,18 @@ public class MainController {
 		//<editor-fold desc="Choose HTML by Login Clearance Level">
 		String correctView;
 		if (loggedInUserWeb.isPresent()) {
-			if(loggedInUserWeb.get().hasRole(Role.of("ROLE_MANAGER")))
-				correctView= "ManagerView";
-			else
-				correctView="EmployeeView";
+			if(loggedInUserWeb.get().hasRole(Role.of("ROLE_MANAGER"))){
+				administrationManager.setCookieFilterManagerKategorie(filterform.getSelectedCategories());
+				administrationManager.setCookieFilterManagerFarbe(filterform.getSelectedColours());
+			}
+			else{
+				administrationManager.setCookieFilterEmployeeKategorie(filterform.getSelectedCategories());
+				administrationManager.setCookieFilterEmployeeFarbe(filterform.getSelectedColours());
+			}
+
 		}
-		else return "redirect:/";
+		return "redirect:/";
 		//</editor-fold>
 
-		//<editor-fold desc="Check for binding Errors">
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
-			model.addAttribute("administrationManager", administrationManager);
-			return correctView;
-		}
-		//</editor-fold>
-
-
-		Iterable<ReorderableInventoryItem> list= administrationManager.filteredReorderableInventoryItems(filterform);
-		preselectionKategorie =filterform.getSelectedCategories();
-		preselectionFarbe=filterform.getSelectedColours();
-		model.addAttribute("inventoryItems",list );
-		UniversalForm universalForm=new UniversalForm();
-		model.addAttribute("universalForm", administrationManager.initializeNewUniversalForm(universalForm,list));
-		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-		model.addAttribute("undoManager",undoManager);
-		for (ReorderableInventoryItem item:list
-			 ) {
-			Article a= administrationManager.getArticle(item.getProduct().getId());
-			String s=  a.getCategories().get().findFirst().get();
-		}
-		return correctView;
 	}
 }

@@ -36,6 +36,9 @@ import lombok.Getter;
 @Entity
 public abstract class Article extends Product {
 
+	public Article() {
+	}
+
 	/**
 	 * This enum is used to differentiate between Furniture and Part, if type
 	 * casting for special functions might be necessary.
@@ -44,8 +47,8 @@ public abstract class Article extends Product {
 		COMPOSITE, PART
 	}
 	protected ArticleType type;
-	protected MonetaryAmount priceNetto;
-	protected MonetaryAmount priceBrutto;
+	//protected MonetaryAmount priceNetto;
+	//protected MonetaryAmount priceBrutto;
 	protected String eanCode;
 	protected String herstellerUrl="Fishstone";
 	protected long criticalAmount;
@@ -95,8 +98,8 @@ public abstract class Article extends Product {
 		this.criticalAmount=0;
 		this.colour=colour;
 		setName(name+" "+colour);
-		this.priceNetto=Money.of(priceNetto,"EUR");
-		this.priceBrutto=Money.of(priceBrutto,"EUR");
+		//this.priceNetto=Money.of(priceNetto,"EUR");
+		//this.priceBrutto=Money.of(priceBrutto,"EUR");
 		this.eanCode=eanCode;
 		hidden = false;
 		updateStatus = true;
@@ -122,9 +125,9 @@ public abstract class Article extends Product {
 	 */
 	public abstract boolean update(@NotNull List<Article> parts);
 
-	public MonetaryAmount getPriceNetto() {
-		return priceNetto;
-	}
+	//public MonetaryAmount getPriceNetto() {
+	//	return priceNetto;
+	//}
 
 	public String getEanCode() {
 		return eanCode;
@@ -134,17 +137,17 @@ public abstract class Article extends Product {
 		this.eanCode = eanCode;
 	}
 
-	public void setPriceNetto(MonetaryAmount priceNetto) {
-		this.priceNetto = priceNetto;
-	}
+	//public void setPriceNetto(MonetaryAmount priceNetto) {
+	//	this.priceNetto = priceNetto;
+	//}
 
-	public MonetaryAmount getPriceBrutto() {
-		return priceBrutto;
-	}
+	//public MonetaryAmount getPriceBrutto() {
+	//	return priceBrutto;
+	//}
 
-	public void setPriceBrutto(MonetaryAmount priceBrutto) {
-		this.priceBrutto = priceBrutto;
-	}
+	//public void setPriceBrutto(MonetaryAmount priceBrutto) {
+		//this.priceBrutto = priceBrutto;
+	//}
 
 	/**
 	 * 

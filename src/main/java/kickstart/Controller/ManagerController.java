@@ -127,14 +127,10 @@ public class ManagerController {
 			return "redirect:/";
 		}
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-		User loggedInUser = userManagement.findUser(loggedInUserWeb);
-		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
+		ArrayList<InventoryItemAction> I=universalForm.getInventoryItemActions();
 
 		//für jede gesamtelte action in der map die entsprechende action ausführen
-		for(InventoryItemAction i: universalForm.getInventoryItemActions())
+		for(InventoryItemAction i: I)
 		{
 			Article article = administrationManager.getArticle(i.getPid());
 			/*In*/
@@ -160,6 +156,7 @@ public class ManagerController {
 
 			/*Out*/
 			if (i.getAmountForOut()>0) {
+				User loggedInUser = userManagement.findUser(loggedInUserWeb);
 				cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 				//craft HL
 				if(administrationManager.craftHl(i, cartOrderManager.getAccount(),universalForm.getNotiz())){
@@ -171,7 +168,10 @@ public class ManagerController {
 				else System.out.println("Nicht Direkt Herstellbar");
 			}
 		}
-		/*buy*/
+		model.addAttribute("inventoryItems",list );
+		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
+		model.addAttribute("administrationManager", administrationManager);
+
 
 		return "redirect:/";
 	}

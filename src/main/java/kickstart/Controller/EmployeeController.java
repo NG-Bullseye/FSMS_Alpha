@@ -51,7 +51,7 @@ import java.util.ArrayList;
 @Controller
 public class EmployeeController {
 
-	private  LogRepository logRepository;
+	private final LogRepository logRepository;
 	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
 	private InventoryManager inventoryManager;
@@ -126,7 +126,7 @@ public class EmployeeController {
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
 		User loggedInUser = userManagement.findUser(loggedInUserWeb);
-		cartOrderManager.addCostumer(loggedInUser.getUserAccount())
+		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 		if(userManagement.findUser(loggedInUserWeb)==null){
 			return "redirect:/login";
 		}

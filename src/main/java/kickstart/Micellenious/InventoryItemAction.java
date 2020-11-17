@@ -23,6 +23,9 @@ public class InventoryItemAction {
 	@Getter
 	private int amountForZerlegen;
 
+	public InventoryItemAction() {
+	}
+
 	public InventoryItemAction(ProductIdentifier pid, int amountForIn, int amountForCraft, int amountForOut ) {
 		this.pid = pid;
 		this.amountForCraft = amountForCraft;
