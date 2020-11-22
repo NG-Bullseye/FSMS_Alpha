@@ -19,12 +19,7 @@ public class UniversalForm {
 	@Setter
 	private String notiz;
 
-	public UniversalForm() {
-		this.inventoryItemActions=new ArrayList<InventoryItemAction>();
-		/*
-		*
-		* */
-	}
+	public UniversalForm() {}
 
 	public void addInventoryItemAction(InventoryItemAction itemAction){
 		this.inventoryItemActions.add(itemAction);

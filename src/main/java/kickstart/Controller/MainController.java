@@ -156,7 +156,10 @@ public class MainController {
 			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), 0,0,0);
 			inventoryItemActions.add(a) ;
 		}
+		//über dieses Array wird in der HTML iteriert und die Artikel angezeigt und ihren PIDs zugeordnet
 		model.addAttribute("inventoryItemActions",inventoryItemActions);
+		//diese Form wird ausgefüllt und als POST zurückgegeben. Es müssen die PIDs ausm Modelattribute inventoryItemActions übertragen werden.
+		//allerdings ist das Problematisch
 		model.addAttribute("universalForm",new UniversalForm());
 		model.addAttribute("undoManager",undoManager);
 		model.addAttribute("administrationManager", administrationManager);

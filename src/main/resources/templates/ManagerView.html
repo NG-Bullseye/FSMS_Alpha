@@ -42,8 +42,8 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 						</div>
 					</div>
 				</div>
-				<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">MaxPrice Error</a>
-				<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">MaxPrice Error</a>
+				<a th:if="${#fields.hasErrors('selectedCategories')}" th:errors="*{selectedCategories}">categorie</a>
+				<a th:if="${#fields.hasErrors('selectedColours')}" th:errors="*{selectedColours}">color</a>
 				<div class="item">
 					<button class="ui button" type="submit" value="filter" name="reset" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 					<i class="filter icon"></i>
@@ -201,7 +201,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							</td>
 
 							<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">-->
-						<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getQuantity().getAmount().intValue()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
+							<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getQuantity().getAmount().intValue()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
@@ -274,12 +274,10 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 								<div class="inline field">
 									<div>
 										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItemActions[__${itemStat.index}__].amountForIn}" />
+										<!--<div th:with="inventoryItemActions[__${itemStat.index}__].pid"></div>-->
 									</div>
 								</div>
 							</td>
-
-
-
 
 							<!--10--> <!--<editor-fold desc="Herstellen Hl View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" width="100px">
@@ -289,7 +287,6 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 									</div>
 								</div>
 							</td>
-
 
 							<!--12--> <!--<editor-fold desc="Sell View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
@@ -326,7 +323,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 			<div class="container-notiz">
 				<div class="form-group-notiz">
 					<label type="text" >Deine Notiz</label>
-					<input type="text"  id="notiz" name="notiz">
+
 				</div>
 			</div>
 		</form>
