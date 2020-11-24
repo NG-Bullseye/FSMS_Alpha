@@ -1170,6 +1170,10 @@ public class AdministrationManager {
 	}
 
 
+	public String getPidString(ProductIdentifier pid){
+		return pid.getIdentifier();
+	}
+
 	public void toogleAbholbereit(ProductIdentifier identifier) {
 		if (catalog.findById(identifier).isPresent()) {
 			Article article = catalog.findById(identifier).get();

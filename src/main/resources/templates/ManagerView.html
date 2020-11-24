@@ -267,7 +267,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<td sec:authorize="hasRole('ROLE_MANAGER')" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 								<a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(itemAction.getPid()).getHerstellerUrl()}" th:text="Link" target="_blank" />
 							</td>
-							<input type="hidden" th:attr="name='postInventoryItemActions[__${itemStat.index}__].pidString'"  th:value="${pid}">
+							<input type="hidden" th:attr="name='postInventoryItemActions[__${itemStat.index}__].pidString'"  th:value="${itemAction.getPid().getIdentifier()}">
 							<!--<input type="hidden"   th:attr="name='itemAction['+${itemStat.index}+'].pid'"   th:value="${pid}" />-->
 							<!--<input type="hidden" th:attr="name=postInventoryItemActions[' + ${itemStat.index} + '].pidString" th:value="${pid.getIdentifier()}"/>
 						-->	<!--8--> <!--<editor-fold desc="Buy View:M">-->
