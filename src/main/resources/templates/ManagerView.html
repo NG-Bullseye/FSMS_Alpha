@@ -102,7 +102,6 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 		</form>
 
 		<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/commitManager}">
-
 			<div id="tablespace">
 				<fieldset>
 					<input type="submit" id="submitButton" th:value="Save">
@@ -167,7 +166,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 						</thead>
 
 						<tbody>
-						<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="itemAction, itemStat: ${inventoryItemActions}">
+						<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="itemAction, itemStat: ${universalForm.inventoryItemActions}">
 							<!--1--> <!--<editor-fold desc="Name View:P">-->
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
 								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
@@ -268,6 +267,8 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<td sec:authorize="hasRole('ROLE_MANAGER')" style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center">
 								<a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(itemAction.getPid()).getHerstellerUrl()}" th:text="Link" target="_blank" />
 							</td>
+
+							<input type="hidden"   th:attr="name='itemAction['+${itemStat.index}+'].pid'"   th:value="${pid}" />
 
 							<!--8--> <!--<editor-fold desc="Buy View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
