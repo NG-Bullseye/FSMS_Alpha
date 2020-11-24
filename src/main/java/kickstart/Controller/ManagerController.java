@@ -121,25 +121,25 @@ public class ManagerController {
 
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/commitManager")
-	String commitManager( @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
-
-		if (bindingResult.hasErrors()) {
-			return "redirect:/";
-		}
+	String commitManager( @Valid @ModelAttribute("PostUniForm") PostUniForm postUniForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
+		System.out.println("HIER BIN ICH");
+		//if (bindingResult.hasErrors()) {
+		//	return "redirect:/";
+		//}
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		ArrayList<InventoryItemAction> I=universalForm.getInventoryItemActions();
+		ArrayList<InventoryItemActionStringPid> I=postUniForm.getPostInventoryItemActions();
 
 		//für jede gesamtelte action in der map die entsprechende action ausführen
-		for(InventoryItemAction i: I)
+		for(InventoryItemActionStringPid i: I)
 		{
-			Article article = administrationManager.getArticle(i.getPid());
+			Article article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()) );
 			/*In*/
 			if (i.getAmountForIn()>0) {
-				administrationManager.reorder(i, Location.LOCATION_HL);
+				administrationManager.reorder(new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()), Location.LOCATION_HL);
 				logRepository.save(new Log(
 						LocalDateTime.now(),
 						loggedInUserWeb,
-						article.getName()+" "+i.getAmountForIn()+"x mal gekauft",universalForm.getNotiz()));
+						article.getName()+" "+i.getAmountForIn()+"x mal gekauft",postUniForm.getNotiz()));
 			}
 
 			/*Craft*/
@@ -147,11 +147,11 @@ public class ManagerController {
 				if(userManagement.findUser(loggedInUserWeb)==null){
 					return "redirect:/login";
 				}
-				administrationManager.out(i, cartOrderManager.getAccount(),Location.LOCATION_HL);
+				administrationManager.out(new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()), cartOrderManager.getAccount(),Location.LOCATION_HL);
 				logRepository.save(new Log(
 						LocalDateTime.now(),
 						loggedInUserWeb,
-						article.getName()+" "+ i.getAmountForCraft()+"x mal verkauft",universalForm.getNotiz()));
+						article.getName()+" "+ i.getAmountForCraft()+"x mal verkauft",postUniForm.getNotiz()));
 			}
 
 			/*Out*/
@@ -159,7 +159,7 @@ public class ManagerController {
 				User loggedInUser = userManagement.findUser(loggedInUserWeb);
 				cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 				//craft HL
-				if(administrationManager.craftHl(i, cartOrderManager.getAccount(),universalForm.getNotiz())){
+				if(administrationManager.craftHl(new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()), cartOrderManager.getAccount(),postUniForm.getNotiz())){
 					logRepository.save(new Log(
 							LocalDateTime.now(),
 							loggedInUserWeb,

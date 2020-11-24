@@ -20,6 +20,7 @@ import java.util.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import kickstart.Forms.PostUniForm;
 import kickstart.Forms.UniversalForm;
 import kickstart.Forms.Filterform;
 import kickstart.Manager.*;
@@ -146,6 +147,7 @@ public class MainController {
 		}
 		else return "redirect:/";
 		LinkedList<ReorderableInventoryItem> sortedReordInvItemList = administrationManager.sortAndFilterMainControllerItems(location);
+		model.addAttribute("PostUniForm",new PostUniForm());
 		model.addAttribute("inventoryItems",sortedReordInvItemList );
 		model.addAttribute("ManagerInventory", administrationManager.getVisibleCatalog());
 		model.addAttribute("filterForm", new Filterform());

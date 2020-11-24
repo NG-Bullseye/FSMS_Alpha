@@ -101,7 +101,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 			</div>
 		</form>
 
-		<form method="post" role="form" name="f" th:object="${universalForm}" th:action="@{/commitManager}">
+		<form method="post" role="form" name="f" th:object="${PostUniForm}" th:action="@{/commitManager}">
 			<div id="tablespace">
 				<fieldset>
 					<input type="submit" id="submitButton" th:value="Save">
@@ -268,13 +268,13 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 								<a style="color: #68d4d0;font-size: 20px;font-weight: bold;background-color: #FFFFFF;text-align: center" th:href="${administrationManager.getArticle(itemAction.getPid()).getHerstellerUrl()}" th:text="Link" target="_blank" />
 							</td>
 
-							<input type="hidden"   th:attr="name='itemAction['+${itemStat.index}+'].pid'"   th:value="${pid}" />
-
+							<!--<input type="hidden"   th:attr="name='itemAction['+${itemStat.index}+'].pid'"   th:value="${pid}" />-->
+							<input type="hidden" th:attr="name=postInventoryItemActions[' + ${itemStat.index} + '].pidString" th:value="${pid.getIdentifier()}"/>
 							<!--8--> <!--<editor-fold desc="Buy View:M">-->
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
 								<div class="inline field">
 									<div>
-										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItemActions[__${itemStat.index}__].amountForIn}" />
+										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForIn}" />
 										<!--<div th:with="inventoryItemActions[__${itemStat.index}__].pid"></div>-->
 									</div>
 								</div>
@@ -284,7 +284,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<td sec:authorize="hasRole('ROLE_MANAGER')" width="100px">
 								<div class="inline field" th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
 									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
-										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{inventoryItemActions[__${itemStat.index}__].amountForCraft}" />
+										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForCraft}" />
 									</div>
 								</div>
 							</td>
@@ -293,7 +293,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							<td sec:authorize="hasRole('ROLE_MANAGER')" >
 								<div class="inline field">
 									<div>
-										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItemActions[__${itemStat.index}__].amountForOut}" />
+										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForOut}" />
 									</div>
 								</div>
 							</td>
