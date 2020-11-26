@@ -143,10 +143,12 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 					<table id="articletable" class="ui celled table" width="400" >
 						<thead>
 						<tr>
-							<!--1--> <!--<editor-fold desc="Name View:P">--><th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Name</th>
+							<!--1--> <!--<editor-fold desc="Name View:P">-->
+							<th sec:authorize="hasRole('ROLE_PERMITTED')" 	style="text-align: center">Name</th>
 							<!--</editor-fold>-->
 
-							<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">--><th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Gesamtbestand</th>
+							<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">-->
+							<th sec:authorize="hasRole('ROLE_MANAGER')" 	style="text-align: center">Gesamtbestand</th>
 							<!--</editor-fold>-->
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
@@ -235,12 +237,14 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 							</td>
 
 					<!--2--> <!--<editor-fold desc="Gesamtbestand View:M">-->
-							<!-- From Merge CommitFix
+							<!-- From Merge Meeting
 
-														<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getQuantity().getAmount().intValue()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
+<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getGesamtbestand()}" style="font-size: 20px;font-weight: bold;text-align: center" >
+							Gesamtbestand</td>
 
 							-->
-					<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${item.getGesamtbestand()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
+							<td sec:authorize="hasRole('ROLE_MANAGER')" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getQuantity().getAmount().intValue()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center" >Gesamtbestand</td>
+
 					<!--</editor-fold>-->
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
