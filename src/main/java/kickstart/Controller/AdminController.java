@@ -15,6 +15,8 @@
  */
 package kickstart.Controller;
 
+import kickstart.Micellenious.InventoryItemAction;
+import kickstart.Micellenious.Location;
 import kickstart.TelegramInterface.BotManager;
 import kickstart.accountancy.AccountancyManager;
 import kickstart.activityLog.ActivityLogManager;
@@ -39,6 +41,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 @Controller
 public class AdminController {
@@ -106,7 +109,19 @@ public class AdminController {
 	}
 
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping("/cheatCode1/{amount}")
+	String cheatCode1(@PathVariable Integer amount){
 
+		for (ReorderableInventoryItem item:
+				inventoryManager.getInventory().findAll()) {
+			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), amount,0,0);
+			administrationManager.reorder(a,Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+		}
+
+		return"redirect:/";
+	}
 
 	//<editor-fold desc="Article">
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

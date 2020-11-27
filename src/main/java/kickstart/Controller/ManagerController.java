@@ -162,7 +162,7 @@ public class ManagerController {
 					new Log(
 						LocalDateTime.now(),
 						account,
-						article.getName()+" "+ i.getAmountForOut()+"x mal hergestellt in Hauptlager",notiz));
+						article.getName()+" "+ i.getAmountForCraft()+"x mal hergestellt in Hauptlager",postUniForm.getNotiz()));
 				}
 				else System.out.println("Nicht Direkt Herstellbar");
 			}
@@ -181,7 +181,7 @@ public class ManagerController {
 					new Log(
 						LocalDateTime.now(),
 						account,
-						article.getName()+" "+ i.getAmountForCraft()+"x mal verkauft",postUniForm.getNotiz()));
+						article.getName()+" "+ i.getAmountForOut()+"x mal verkauft",postUniForm.getNotiz()));
 			}
 		}
 		model.addAttribute("inventoryItems",list );
