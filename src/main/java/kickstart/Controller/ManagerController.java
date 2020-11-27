@@ -121,8 +121,8 @@ public class ManagerController {
 
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	@PostMapping("/commitManager")
-	String commitManager( @Valid @ModelAttribute("PostUniForm") PostUniForm postUniForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
-		System.out.println("HIER BIN ICH");
+	String commitManager( @Valid @ModelAttribute("PostUniForm") PostUniForm postUniForm, BindingResult bindingResult, @LoggedIn UserAccount account, Model model) {
+
 		//if (bindingResult.hasErrors()) {
 		//	return "redirect:/";
 		//}
@@ -133,39 +133,55 @@ public class ManagerController {
 		for(InventoryItemActionStringPid i: I)
 		{
 			Article article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()) );
+			User loggedInUser = userManagement.findUser(account);
+
+			cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 			/*In*/
 			if (i.getAmountForIn()>0) {
 				administrationManager.reorder(new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()), Location.LOCATION_HL);
-				logRepository.save(new Log(
+				logRepository.save(
+					new Log(
 						LocalDateTime.now(),
-						loggedInUserWeb,
+						account,
 						article.getName()+" "+i.getAmountForIn()+"x mal gekauft",postUniForm.getNotiz()));
 			}
 
 			/*Craft*/
 			if (i.getAmountForCraft()>0) {
-				if(userManagement.findUser(loggedInUserWeb)==null){
-					return "redirect:/login";
-				}
-				administrationManager.out(new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()), cartOrderManager.getAccount(),Location.LOCATION_HL);
-				logRepository.save(new Log(
+				//craft HL
+				if(administrationManager.craftHl(
+					new InventoryItemAction(
+							administrationManager.getProduktIdFromString(i.getPidString()),
+							i.getAmountForIn(),i.getAmountForCraft(),
+							i.getAmountForOut()
+					),
+					account,
+					postUniForm.getNotiz()))
+				{
+				logRepository.save(
+					new Log(
 						LocalDateTime.now(),
-						loggedInUserWeb,
-						article.getName()+" "+ i.getAmountForCraft()+"x mal verkauft",postUniForm.getNotiz()));
+						account,
+						article.getName()+" "+ i.getAmountForOut()+"x mal hergestellt in Hauptlager",notiz));
+				}
+				else System.out.println("Nicht Direkt Herstellbar");
 			}
 
 			/*Out*/
 			if (i.getAmountForOut()>0) {
-				User loggedInUser = userManagement.findUser(loggedInUserWeb);
-				cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-				//craft HL
-				if(administrationManager.craftHl(new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()), cartOrderManager.getAccount(),postUniForm.getNotiz())){
-					logRepository.save(new Log(
-							LocalDateTime.now(),
-							loggedInUserWeb,
-							article.getName()+" "+ i.getAmountForOut()+"x mal hergestellt in Hauptlager",notiz));
-				}
-				else System.out.println("Nicht Direkt Herstellbar");
+				if(userManagement.findUser(account)==null){
+					return "redirect:/login"; }
+				administrationManager.out(
+					new InventoryItemAction(
+						administrationManager.getProduktIdFromString(i.getPidString()),
+						i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()),
+					account,
+					Location.LOCATION_HL);
+				logRepository.save(
+					new Log(
+						LocalDateTime.now(),
+						account,
+						article.getName()+" "+ i.getAmountForCraft()+"x mal verkauft",postUniForm.getNotiz()));
 			}
 		}
 		model.addAttribute("inventoryItems",list );
