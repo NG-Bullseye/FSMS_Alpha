@@ -755,7 +755,7 @@ public class AdministrationManager {
 					Quantity.of(action.getAmountForIn(), Metric.UNIT),location);
 
 				boolean changed = item.get().update(LocalDateTime.now());
-				System.out.println("Inventory Item Reordered");
+
 			inventory.save(item.get());
 
 			/*
@@ -780,7 +780,6 @@ public class AdministrationManager {
 			}
 
 			boolean changed = item.get().update(LocalDateTime.now());
-			System.out.println("Inventory Item Reordered");
 			inventory.save(item.get());
 
 
@@ -796,7 +795,6 @@ public class AdministrationManager {
 			}
 
 			boolean changed = item.get().update(LocalDateTime.now());
-			System.out.println("Inventory Item Reordered");
 			inventory.save(item.get());
 
 		}return true;
@@ -815,7 +813,6 @@ public class AdministrationManager {
 	}
 
 	public String getTextOfSubComponents(ProductIdentifier p){
-
 		String text="";
 		Article a=null;
 		if (catalog.findById(p).isPresent()){
@@ -825,8 +822,7 @@ public class AdministrationManager {
 		Map<ProductIdentifier,Integer> map=this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds());
 		if (a instanceof Composite)
 			for (ProductIdentifier pSub:map.keySet()) {
-
-				text=text+map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName()+"\r\n";
+				text=text+map.get(pSub)+this.inventory.findByProductIdentifier(pSub).get().getUnitQuant()+" "+catalog.findById(pSub).get().getName()+" | ";  //"\r\n";
 			}
 		return text;
 	}
@@ -907,6 +903,35 @@ public class AdministrationManager {
 		return  leafPartIds;
 	}
 
+	public String getPidString(ProductIdentifier pid){
+		return pid.getIdentifier();
+	}
+
+	public void toogleAbholbereit(ProductIdentifier identifier) {
+		if (catalog.findById(identifier).isPresent()) {
+			Article article = catalog.findById(identifier).get();
+			article.toogleAbholBereit();
+		}
+	}
+
+	public boolean zerlegen(InventoryItemAction action, UserAccount user, Location materialQuelle) {
+		if(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).isPresent()
+				&&(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get().getAmountBwB()>= action.getAmountForCraft())){
+			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+			this.out(outAction,user,materialQuelle);
+			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
+			for (ProductIdentifier p:map.keySet()){
+				InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+				inAction.setPid(p);
+				int requiredAmount = action.getAmountForCraft()*map.get(p);
+				inAction.setAmountForCraft(requiredAmount);
+				this.reorder(inAction,materialQuelle);
+			}
+			return true;
+		}
+		return false;
+	}
+
 
 	public ProductIdentifier getProduktIdFromString(String idString){
 		for (Article a :catalog.findAll()) {
@@ -916,114 +941,7 @@ public class AdministrationManager {
 		throw new NullPointerException("no Produkt found with that given id");
 	}
 
-	public int maxCraft_Layer(ProductIdentifier thisComponentId, int amountOfSuperKomponent, int maximalCraftNumberForPreviousLayer, Location bestandLocation){
-		//<editor-fold desc="NullChecks">
-		if(thisComponentId==null)new NullPointerException();
-		//</editor-fold>
-		//<editor-fold desc="Update maximale Craft Zahl">
-		int xMalCraftbarInThisLayer=maximalCraftNumberForPreviousLayer;
-		//</editor-fold>
-		//<editor-fold desc="Ini Konten der auf Craftbarkeit untersucht wird">
-		Article superComponent =catalog.findById(thisComponentId).get();
-		Map<ProductIdentifier,Integer> superCompositeRezept= convertPartStringIntegerMapToPartProductIdIntegerMap(superComponent.getPartIds());
-		//System.out.println(superCompositeRezept);
 
-		//</editor-fold>
-		//<editor-fold desc="Für jede Komponente">
-		for (ProductIdentifier subKomponentenId : superCompositeRezept.keySet())
-		//</editor-fold>
-			{
-				//<editor-fold desc="Init SubKomponente">
-				Article subKomponente=	catalog.findById(subKomponentenId).get();
-				int requiretForOneSuperComposite=superCompositeRezept.get(subKomponentenId);
-
-				int subComponentInStock = getSubComponentInStock(bestandLocation, subKomponentenId);
-				//</editor-fold>
-
-				//<editor-fold desc="Wenn genügend von der Komponente vorhanden, regarding mehrmals als im rezept benötig">
-
-				if(requiretForOneSuperComposite * amountOfSuperKomponent <= subComponentInStock)
-				//</editor-fold>
-				{
-					//<editor-fold desc="Errechne wie oft SuperKomponente damit craftbar wäre.">
-					//Benötigte Anzahlt für EINE Super Komponente dividiert durch vorhandene anzahl dieser SubKomponente
-					int superKomponenteFuerSubKomponenteCraftbar=0;
-					if (requiretForOneSuperComposite*amountOfSuperKomponent!=0)
-					{
-							int menge= superCompositeRezept.get(subKomponentenId);
-							//<editor-fold desc="Wenn subKomponente ein subLeaf">
-							if (subKomponente instanceof Part){
-								int maximalOverAllCraftbarOfSubComposite =subComponentInStock;
-								int requiredForSuperCompositeRezept=requiretForOneSuperComposite*amountOfSuperKomponent;
-								superKomponenteFuerSubKomponenteCraftbar=Math.floorDiv(
-										maximalOverAllCraftbarOfSubComposite,requiredForSuperCompositeRezept)	;
-
-							}
-							//</editor-fold>
-							//<editor-fold desc="Wenn subKomponente ein subComposite schaue weiter im Baum wieviele maximal herstellbar sind">
-							else{
-								int subCompositeCraftbar=maxCraft_Layer(subKomponentenId,1,99999999,bestandLocation);
-								int maximalOverAllCraftbarOfSubComposite =subComponentInStock+subCompositeCraftbar  ;
-								int requiredForSuperCompositeRezept=requiretForOneSuperComposite*amountOfSuperKomponent;
-
-								superKomponenteFuerSubKomponenteCraftbar=Math.floorDiv(
-										maximalOverAllCraftbarOfSubComposite,requiredForSuperCompositeRezept)	;
-
-							}
-						//</editor-fold>
-					}
-
-					//</editor-fold>
-
-					//<editor-fold desc="Update minimale Craftbarkeit auf diesem Layer">
-					if(xMalCraftbarInThisLayer>superKomponenteFuerSubKomponenteCraftbar)
-						xMalCraftbarInThisLayer=superKomponenteFuerSubKomponenteCraftbar;
-					//</editor-fold>
-
-					//<editor-fold desc="gehe zur nächsten SubKomponente über">
-					continue;
-					//</editor-fold>
-				}
-
-				//<editor-fold desc="Wenn nicht genügend von der Komponente im Lager ist">
-				else
-				//</editor-fold>
-				{
-
-					//<editor-fold desc="Wenn SubPart">
-					if (subKomponente instanceof Part)
-					//</editor-fold>
-					{
-						//<editor-fold desc="Dann nicht craftbar">
-						return 0;
-						//</editor-fold>
-					}
-
-					//<editor-fold desc="Wenn SubComposite">
-					if (subKomponente instanceof Composite)
-					//</editor-fold>
-					{
-						//<editor-fold desc="finde herraus wie viele für das rezept für SuperC von SubC fehlen (MengeAnSuperComposite * rezeptMengeAnSubComposite - SubCompositStock) ">
-						int subComposite_inStock=0;
-						subComposite_inStock = getSubComponentInStock(bestandLocation, subKomponentenId);
-
-						int rezeptMengeFürSubComposite=superCompositeRezept.get(subKomponente.getId());
-						int fehlendeSubComposites=rezeptMengeFürSubComposite*amountOfSuperKomponent-subComposite_inStock;
-						if (fehlendeSubComposites<=0)
-							System.out.println("ERROR: Fehler in der Rechnung von craftbar. Fehlende Menge Darf nicht kleiner gleich null sein");
-						//</editor-fold>
-
-						//<editor-fold desc="nimmt recursiv über alle Layer das Minimum von MaxCraftbar_Layer und gibt es zurück">
-						return Math.min(
-								xMalCraftbarInThisLayer
-								, maxCraft_Layer(subKomponentenId,fehlendeSubComposites,xMalCraftbarInThisLayer,bestandLocation))  ;
-						//</editor-fold>
-					}
-
-				}
-			}
-			return xMalCraftbarInThisLayer;
-	}
 
 	private int getSubComponentInStock(Location bestandLocation, ProductIdentifier subKomponentenId) {
 		int subComponentInStock=0;
@@ -1096,19 +1014,31 @@ public class AdministrationManager {
 	}
 
 
-	public int craftbarBwB(ProductIdentifier p){
-		int craftbar=0;
-		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
-			int inStock = inventory.findByProductIdentifier(p).get().getAmountBwB();
-			if(1<=inStock)
-				craftbar= inStock;
+
+	/**
+	 * Wird im ManagerController aufgerufen
+	 * gibt direkte Herstellen der unmittelbaren Bestandteile im Hauptlager in Auftrag
+	 * @param action beinhaltet die Information der Herstell Menge
+	 * @param user wichtig für den Log
+	 * @param notiz wird im Log hinzugefügt
+	 * @return false wenn die Action aufgrund von Mangel an Rohstoffen nicht durchgeführt werden kann
+	 */
+	public boolean craftHl(InventoryItemAction action, UserAccount user, String notiz){
+		if (craftbarHl(action.getPid())>=action.getAmountForCraft()) {
+			return this.craft(action,user,Location.LOCATION_HL,notiz);
+		} else {
+			System.out.println("nicht mit Zwischenschritten herstellbar");
+			return false;
 		}
-		else{
-			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_BWB);
-		}
-		return craftbar;
+
 	}
 
+	/**
+	 * wird in craftHl und in HTML genutzt
+	 * gibt zurück wie oft das Produkt mit der Pid im Hauptlager hergestellt werden kann
+	 * @param p ProduktID welche untersucht wird
+	 * @return
+	 */
 	public int craftbarHl(ProductIdentifier p){
 		int craftbar=0;
 		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
@@ -1122,40 +1052,204 @@ public class AdministrationManager {
 		return craftbar;
 	}
 
-	public boolean craftHl(InventoryItemAction action, UserAccount user, String notiz){
-		if (craftbarHl(action.getPid())>=action.getAmountForCraft()) {
-			return this.craft(action,user,Location.LOCATION_HL,notiz);
-		} else {
-			return false;
-		}
-
-	}
-
+	/**
+	 * Wird im EmployeeController aufgerufen
+	 * gibt das Herstellen der definierten Aktion im Hauptlager in Auftrag
+	 * @param action
+	 * @param user
+	 * @param notiz
+	 * @return
+	 */
 	public boolean craftBwB(InventoryItemAction action, UserAccount user, String notiz){
-		if (craftbarHl(action.getPid())>=action.getAmountForCraft()) {
+		if (craftbarBwB(action.getPid())>=action.getAmountForCraft()) {
 			return this.craft(action,user,Location.LOCATION_BWB,notiz);
 		} else {
+			System.out.println("nicht mit Zwischenschritten herstellbar");
 			return false;
 		}
-
 	}
 
+	/**
+	 *	Wird in craftBwB und in HTML genutzt
+	 * findet herraus ob der Gegenstand Herstellbar ist in der BwB mit und ohne Zwischenschritte
+	 * @param p
+	 * @return
+	 */
+	public int craftbarBwB(ProductIdentifier p){
+		int craftbar=0;
+		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
+			int inStock = inventory.findByProductIdentifier(p).get().getAmountBwB();
+			if(1<=inStock)
+				craftbar= inStock;
+		}
+		else{
+			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_BWB);
+		}
+		return craftbar;
+	}
+
+	/**
+	 * DER HOCH KOMPLEXE ALGORITHMUS ZUM ITERIEREN DES BAUMES
+	 * um herrauszufinden ob eine herstellung mit zwischen Arbeitsschritten möglich ist
+	 *
+	 * @param thisComponentId
+	 * @param amountOfSuperKomponent
+	 * @param maximalCraftNumberForPreviousLayer
+	 * @param bestandLocation
+	 * @return
+	 */
+	private int maxCraft_Layer(ProductIdentifier thisComponentId, int amountOfSuperKomponent, int maximalCraftNumberForPreviousLayer, Location bestandLocation){
+		//<editor-fold desc="NullChecks">
+		if(thisComponentId==null)new NullPointerException();
+		//</editor-fold>
+		//<editor-fold desc="Update maximale Craft Zahl">
+		int xMalCraftbarInThisLayer=maximalCraftNumberForPreviousLayer;
+		//</editor-fold>
+		//<editor-fold desc="Ini Konten der auf Craftbarkeit untersucht wird">
+		Article superComponent =catalog.findById(thisComponentId).get();
+		Map<ProductIdentifier,Integer> superCompositeRezept= convertPartStringIntegerMapToPartProductIdIntegerMap(superComponent.getPartIds());
+		//System.out.println(superCompositeRezept);
+
+		//</editor-fold>
+		//<editor-fold desc="Für jede Komponente">
+		for (ProductIdentifier subKomponentenId : superCompositeRezept.keySet())
+		//</editor-fold>
+		{
+			//<editor-fold desc="Init SubKomponente">
+			Article subKomponente=	catalog.findById(subKomponentenId).get();
+			int requiretForOneSuperComposite=superCompositeRezept.get(subKomponentenId);
+
+			int subComponentInStock = getSubComponentInStock(bestandLocation, subKomponentenId);
+			//</editor-fold>
+
+			//<editor-fold desc="Wenn genügend von der Komponente vorhanden, regarding mehrmals als im rezept benötig">
+
+			if(requiretForOneSuperComposite * amountOfSuperKomponent <= subComponentInStock)
+			//</editor-fold>
+			{
+				//<editor-fold desc="Errechne wie oft SuperKomponente damit craftbar wäre.">
+				//Benötigte Anzahlt für EINE Super Komponente dividiert durch vorhandene anzahl dieser SubKomponente
+				int superKomponenteFuerSubKomponenteCraftbar=0;
+				if (requiretForOneSuperComposite*amountOfSuperKomponent!=0)
+				{
+					int menge= superCompositeRezept.get(subKomponentenId);
+					//<editor-fold desc="Wenn subKomponente ein subLeaf">
+					if (subKomponente instanceof Part){
+						int maximalOverAllCraftbarOfSubComposite =subComponentInStock;
+						int requiredForSuperCompositeRezept=requiretForOneSuperComposite*amountOfSuperKomponent;
+						superKomponenteFuerSubKomponenteCraftbar=Math.floorDiv(
+								maximalOverAllCraftbarOfSubComposite,requiredForSuperCompositeRezept)	;
+
+					}
+					//</editor-fold>
+					//<editor-fold desc="Wenn subKomponente ein subComposite schaue weiter im Baum wieviele maximal herstellbar sind">
+					else{
+						int subCompositeCraftbar=maxCraft_Layer(subKomponentenId,1,99999999,bestandLocation);
+						int maximalOverAllCraftbarOfSubComposite =subComponentInStock+subCompositeCraftbar  ;
+						int requiredForSuperCompositeRezept=requiretForOneSuperComposite*amountOfSuperKomponent;
+
+						superKomponenteFuerSubKomponenteCraftbar=Math.floorDiv(
+								maximalOverAllCraftbarOfSubComposite,requiredForSuperCompositeRezept)	;
+
+					}
+					//</editor-fold>
+				}
+
+				//</editor-fold>
+
+				//<editor-fold desc="Update minimale Craftbarkeit auf diesem Layer">
+				if(xMalCraftbarInThisLayer>superKomponenteFuerSubKomponenteCraftbar)
+					xMalCraftbarInThisLayer=superKomponenteFuerSubKomponenteCraftbar;
+				//</editor-fold>
+
+				//<editor-fold desc="gehe zur nächsten SubKomponente über">
+				continue;
+				//</editor-fold>
+			}
+
+			//<editor-fold desc="Wenn nicht genügend von der Komponente im Lager ist">
+			else
+			//</editor-fold>
+			{
+
+				//<editor-fold desc="Wenn SubPart">
+				if (subKomponente instanceof Part)
+				//</editor-fold>
+				{
+					//<editor-fold desc="Dann nicht craftbar">
+					return 0;
+					//</editor-fold>
+				}
+
+				//<editor-fold desc="Wenn SubComposite">
+				if (subKomponente instanceof Composite)
+				//</editor-fold>
+				{
+					//<editor-fold desc="finde herraus wie viele für das rezept für SuperC von SubC fehlen (MengeAnSuperComposite * rezeptMengeAnSubComposite - SubCompositStock) ">
+					int subComposite_inStock=0;
+					subComposite_inStock = getSubComponentInStock(bestandLocation, subKomponentenId);
+
+					int rezeptMengeFürSubComposite=superCompositeRezept.get(subKomponente.getId());
+					int fehlendeSubComposites=rezeptMengeFürSubComposite*amountOfSuperKomponent-subComposite_inStock;
+					if (fehlendeSubComposites<=0)
+						System.out.println("ERROR: Fehler in der Rechnung von craftbar. Fehlende Menge Darf nicht kleiner gleich null sein");
+					//</editor-fold>
+
+					//<editor-fold desc="nimmt recursiv über alle Layer das Minimum von MaxCraftbar_Layer und gibt es zurück">
+					return Math.min(
+							xMalCraftbarInThisLayer
+							, maxCraft_Layer(subKomponentenId,fehlendeSubComposites,xMalCraftbarInThisLayer,bestandLocation))  ;
+					//</editor-fold>
+				}
+
+			}
+		}
+		return xMalCraftbarInThisLayer;
+	}
+
+	/**
+	 * gibt das Ausführen der Aktion Herstellen in Auftag
+	 *
+	 * @param action welches Produkt und wie viel davon
+	 * @param user wer
+	 * @param materialQuelle in welchem Lager
+	 * @param notiz notiz für das Log
+	 * @return true wenn es direkt aus den aufgelisteten Bestandteilen hergestellt werden kann
+	 */
 	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {
 		if(direktCraftbar(action,materialQuelle)){
-			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
-			this.loggedReorder(inAction,user,materialQuelle,notiz);
+			//erstellt Log Eintrag
+			InventoryItemAction onlyCraftAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+			this.loggedReorder(onlyCraftAction,user,materialQuelle,notiz);
 
+			//fügt Produkt hinzu
+			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),action.getAmountForCraft(),0,0);
+			this.reorder(inAction,materialQuelle);
+
+			//zieht Material ab
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
 				int requiredAmount = action.getAmountForCraft()*map.get(p);
-				InventoryItemAction outAction=new InventoryItemAction(p,0,requiredAmount,0);
+				InventoryItemAction outAction=new InventoryItemAction(p,0,0,requiredAmount);
 				this.out(outAction,user,materialQuelle);
 			}
+
 			return true;
 		}
+		System.out.println("nicht unmittelbar aus Bestandteilen herstellbar");
 		return false;
+		//return false;
 	}
 
+
+	/**
+	 * wird zum Konkreten craften benutzt als Sicherheitscheck for dem Craften
+	 * prüft ob der Gegenstand ohne zwischen Arbeitsschritte durchgeführt werden kann
+	 *
+	 * @param action welches Produkt und wie viel davon
+	 * @param lager wo
+	 * @return true wenn es geht , false wenn nicht
+	 */
 	private boolean  direktCraftbar(InventoryItemAction action, Location lager) {
 		Article a= this.getArticle(action.getPid())	;
 		Map<ProductIdentifier,Integer> rezept =this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds())  ;
@@ -1181,34 +1275,10 @@ public class AdministrationManager {
 	}
 
 
-	public String getPidString(ProductIdentifier pid){
-		return pid.getIdentifier();
-	}
 
-	public void toogleAbholbereit(ProductIdentifier identifier) {
-		if (catalog.findById(identifier).isPresent()) {
-			Article article = catalog.findById(identifier).get();
-			article.toogleAbholBereit();
-		}
-	}
 
-	public boolean zerlegen(InventoryItemAction action, UserAccount user, Location materialQuelle) {
-		if(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).isPresent()
-				&&(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get().getAmountBwB()>= action.getAmountForCraft())){
-			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
-			this.out(outAction,user,materialQuelle);
-			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
-			for (ProductIdentifier p:map.keySet()){
-				InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
-				inAction.setPid(p);
-				int requiredAmount = action.getAmountForCraft()*map.get(p);
-				inAction.setAmountForCraft(requiredAmount);
-				this.reorder(inAction,materialQuelle);
-			}
-			return true;
-		}
-		return false;
-	}
+
+
 
 	public BindingResult getNewBindingResultsObject(){
 		return new BindingResult() {

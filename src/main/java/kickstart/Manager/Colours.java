@@ -36,7 +36,7 @@ public enum Colours {
 		String[] s = new String[a.size()];
 		int i=0;
 		for(String st: a){
-			System.out.println("Colorfilter elements in Colours: "+st);
+			//System.out.println("Colorfilter elements in Colours: "+st);
 			s[i]=st;
 			i++;
 		}

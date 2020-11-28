@@ -134,7 +134,7 @@ public class EmployeeController {
 		for (InventoryItemAction i: universalForm.getInventoryItemActions()) {
 			Article article = administrationManager.getArticle(i.getPid());
 
-			/*resieve*/
+			/*resive*/
 			if (i.getAmountForIn()>0) {
 				if (administrationManager.receiveFromHl(i)) {//Add itemes to BwB and remove from Hauptlager
 					if (undoMode) {//wenn hier eine action bearbeitet wird die eigendlich eine Invertiere Action ist

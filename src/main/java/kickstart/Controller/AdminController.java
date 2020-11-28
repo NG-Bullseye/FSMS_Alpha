@@ -110,7 +110,7 @@ public class AdminController {
 
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/cheatCode1/{amount}")
+	@GetMapping("/cheat/{amount}")
 	String cheatCode1(@PathVariable Integer amount){
 
 		for (ReorderableInventoryItem item:

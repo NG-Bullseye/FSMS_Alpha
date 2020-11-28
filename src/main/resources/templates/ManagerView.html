@@ -94,24 +94,24 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 				</div>
 				-->
 
-
-				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-					<a th:href="@{/undo}">
-						<div class="ui button" th:if="${undoManager.getProductNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getProductNameOfLastAction()}+' '+${undoManager.getNameOfLastAction()}">
-						</div>
-					</a>
-				</div>
-
 				<!--
-				<div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
-					<a th:href="@{/hidden}">
-						<div class="ui button">
-							<i class="eye icon"></i>
-							Versteckte Artikel
-						</div>
-					</a>
-				</div>
-				-->
+                                <div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+                                    <a th:href="@{/undo}">
+                                        <div class="ui button" th:if="${undoManager.getProductNameOfLastAction()!=null}" th:text="'Rückgängig: '+${undoManager.getProductNameOfLastAction()}+' '+${undoManager.getNameOfLastAction()}">
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                                <div class="item" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+                                    <a th:href="@{/hidden}">
+                                        <div class="ui button">
+                                            <i class="eye icon"></i>
+                                            Versteckte Artikel
+                                        </div>
+                                    </a>
+                                </div>
+                                -->
 				<div class="right menu" sec:authorize="hasRole('ROLE_MANAGER')">
 					<a th:href="@{/activityLog}">
 						<div class="ui button" style="margin: 10px">
@@ -205,15 +205,6 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 						<tbody>
 						<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="itemAction, itemStat: ${universalForm.inventoryItemActions}">
 							<!--1--> <!--<editor-fold desc="Name View:P">-->
-							<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
-								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
-									<a th:href="@{/toogleAbholbereit/{id}(id=${itemAction.getPid()})}" target="_self">
-										<div class="ui basic button">
-											<span th:text="${itemAction.getProduct().getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
-										</div>
-									</a>
-								</div>
-							</td>
 
 							<td sec:authorize="hasRole('ROLE_MANAGER')">
 								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
@@ -248,7 +239,7 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 					<!--</editor-fold>-->
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
-							<td sec:authorize="hasRole('ROLE_PERMITTED')">
+							<td sec:authorize="hasRole('ROLE_MANAGER')">
 								<div  style="font-size: 20px;font-weight: bold;text-align: center">
 									<!--if critische menge unterschritten dann Zahl ROT-->
 									<span th:if="${ administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB() < administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }" th:text="${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getAmountBwB()}+${administrationManager.getReordInventoryItemFromPid(itemAction.getPid()).getUnitQuant()}" style="font-size: 20px;font-weight: bold;text-align: center; color: red "></span>
@@ -320,7 +311,6 @@ xmlns:sec="http://www.w3.org/1999/xhtml" >
 								<div class="inline field">
 									<div>
 										<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForIn}" />
-										<!--<div th:with="inventoryItemActions[__${itemStat.index}__].pid"></div>-->
 									</div>
 								</div>
 							</td>
