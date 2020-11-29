@@ -119,7 +119,7 @@
 							<!--</editor-fold>-->
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
-							<th sec:authorize="hasRole('ROLE_EMPLOYEED')" 	style="text-align: center">BwB Bestand</th>
+							<th sec:authorize="hasRole('ROLE_EMPLOYEE')" 	style="text-align: center">BwB Bestand</th>
 							<!--</editor-fold>-->
 
 							<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
@@ -162,10 +162,10 @@
 						<!--1--> <!--<editor-fold desc="Name View:P">-->
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
 								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
-									<a th:href="@{/toogleAbholbereit/{id}(id=${item.getProduct().getId()})}" target="_self">
+									<a th:href="@{/toogleAbholbereit/{id}(id=${itemAction.getPid()})}" target="_self">
 
 										<div class="ui basic button">
-											<span th:text="${item.getProduct().getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
+											<span th:text="${administrationManager.getArticle(itemAction.getPid()).getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 										</div>
 									</a>
 								</div>
@@ -218,7 +218,7 @@
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')" >
 									<div class="inline field">
 										<div>
-											<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{inventoryItems[__${itemStat.index}__].amountForOut}" />
+											<input style="width: 70px;text-align: center;"  autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForOut}" />
 										</div>
 									</div>
 							</td>
@@ -236,19 +236,19 @@
 
 							<!--13--> <!--<editor-fold desc="Besteht aus View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
-								<div th:switch="${administrationManager.getArticle(item.getProduct().getId()).getType()}">
-									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(item.getProduct().getId())}">
+								<div th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
+									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(itemAction.getPid())}">
 									</div>
 								</div>
 							</td>
 							<!--</editor-fold>-->
 
 							<!--14--> <!--<editor-fold desc="EAN Code View:P">-->
-							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getProduct().getId()).getEanCode()}">Ean</td>
+							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(itemAction.getPid()).getEanCode()}">Ean</td>
 							<!--</editor-fold>-->
 
 							<!--15--> <!--<editor-fold desc="Kategorie View:P">-->
-							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(item.getProduct().getId()).getCategories().get().findFirst().get()}">Categorie</td>
+							<td sec:authorize="hasRole('ROLE_PERMITTED')" th:text="${administrationManager.getArticle(itemAction.getPid()).getCategories().get().findFirst().get()}">Categorie</td>
 							<!--</editor-fold>-->
 
 							<!--</editor-fold>-->
