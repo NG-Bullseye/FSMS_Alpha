@@ -126,19 +126,20 @@ public class ManagerController {
 		//if (bindingResult.hasErrors()) {
 		//	return "redirect:/";
 		//}
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll();
-		ArrayList<InventoryItemActionStringPid> I=postUniForm.getPostInventoryItemActions();
-
+		;
+		User loggedInUser = userManagement.findUser(account);
 		//für jede gesamtelte action in der map die entsprechende action ausführen
-		for(InventoryItemActionStringPid i: I)
+		Article article;
+		InventoryItemAction action;
+		for(InventoryItemActionStringPid i:postUniForm.getPostInventoryItemActions())
 		{
-			Article article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()) );
-			User loggedInUser = userManagement.findUser(account);
-
+			article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
+			action = new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut());
 			cartOrderManager.addCostumer(loggedInUser.getUserAccount());
+
 			/*In*/
 			if (i.getAmountForIn()>0) {
-				administrationManager.reorder(new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()), Location.LOCATION_HL);
+				administrationManager.reorder(action, Location.LOCATION_HL);
 				logRepository.save(
 					new Log(
 						LocalDateTime.now(),
@@ -150,11 +151,7 @@ public class ManagerController {
 			if (i.getAmountForCraft()>0) {
 				//craft HL
 				if(administrationManager.craftHl(
-					new InventoryItemAction(
-							administrationManager.getProduktIdFromString(i.getPidString()),
-							i.getAmountForIn(),i.getAmountForCraft(),
-							i.getAmountForOut()
-					),
+					action,
 					account,
 					postUniForm.getNotiz()))
 				{
@@ -172,9 +169,7 @@ public class ManagerController {
 				if(userManagement.findUser(account)==null){
 					return "redirect:/login"; }
 				administrationManager.out(
-					new InventoryItemAction(
-						administrationManager.getProduktIdFromString(i.getPidString()),
-						i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut()),
+					action,
 					account,
 					Location.LOCATION_HL);
 				logRepository.save(
@@ -184,11 +179,6 @@ public class ManagerController {
 						article.getName()+" "+ i.getAmountForOut()+"x mal verkauft",postUniForm.getNotiz()));
 			}
 		}
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog());
-		model.addAttribute("administrationManager", administrationManager);
-
-
 		return "redirect:/";
 	}
 

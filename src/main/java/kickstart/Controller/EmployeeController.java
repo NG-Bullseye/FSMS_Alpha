@@ -15,6 +15,7 @@
  */
 package kickstart.Controller;
 
+import kickstart.Forms.PostUniForm;
 import kickstart.Forms.UniversalForm;
 import kickstart.Manager.AdministrationManager;
 import kickstart.Manager.UndoManager;
@@ -30,6 +31,7 @@ import kickstart.articles.Article;
 import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
+import org.checkerframework.checker.units.qual.A;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
@@ -117,76 +119,83 @@ public class EmployeeController {
 
 	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@PostMapping("/commitEmployee")
-	String commitEmployee( @Valid @ModelAttribute("universalForm") UniversalForm universalForm, BindingResult bindingResult, @LoggedIn UserAccount loggedInUserWeb, Model model) {
+	String commitEmployee(@Valid @ModelAttribute("postUniForm") PostUniForm postUniForm, BindingResult bindingResult, @LoggedIn UserAccount account, Model model) {
 		if (bindingResult.hasErrors()) {
 			return"redirect:/";
 		}
-		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
-		model.addAttribute("inventoryItems",list );
-		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
-		model.addAttribute("administrationManager", administrationManager);
-		User loggedInUser = userManagement.findUser(loggedInUserWeb);
+		User loggedInUser = userManagement.findUser(account);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-		if(userManagement.findUser(loggedInUserWeb)==null){
+		ArrayList<InventoryItemAction> inventoryItemActions=new ArrayList<>(); //genutzt um die liste aus Postuniform mit String Pid zu Pids umgewandelt
+
+		if(userManagement.findUser(account)==null){
 			return "redirect:/login";
 		}
+		Article article;
+		InventoryItemAction action;
+		for (InventoryItemActionStringPid i: postUniForm.getPostInventoryItemActions()) {
+			article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
+			action= new InventoryItemAction(
+					administrationManager.getProduktIdFromString(
+							i.getPidString()),
+					i.getAmountForIn(),
+					i.getAmountForCraft(),
+					i.getAmountForOut()
+			);
 
-		for (InventoryItemAction i: universalForm.getInventoryItemActions()) {
-			Article article = administrationManager.getArticle(i.getPid());
 
 			/*resive*/
 			if (i.getAmountForIn()>0) {
-				if (administrationManager.receiveFromHl(i)) {//Add itemes to BwB and remove from Hauptlager
+				if (administrationManager.receiveFromHl(action)) {//Add itemes to BwB and remove from Hauptlager
 					if (undoMode) {//wenn hier eine action bearbeitet wird die eigendlich eine Invertiere Action ist
 						logRepository.save(new Log(
 								LocalDateTime.now(),
-								loggedInUserWeb,
-								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Empfangen rückgängig gemacht",notiz));
+								account,
+								administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Empfangen rückgängig gemacht",notiz));
 					} else {logRepository.save(new Log( //bei ganz normalem vorwärtsbetrieb ohne rückgängig
 							LocalDateTime.now(),
-							loggedInUserWeb,
-							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForIn()+"x mal vom Hauptlager Empfangen",notiz));
+							account,
+							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForIn()+"x mal vom Hauptlager Empfangen",notiz));
 					}
 				}
 				logRepository.save(new Log(LocalDateTime.now() //wenn die action nicht durchgeführt werden konnte
-						, loggedInUserWeb,
-						administrationManager.getArticle(i.getPid()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
+						, account,
+						administrationManager.getArticle(action.getPid()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
 						,notiz));
 			}
 
 			/*send*/
 			if (i.getAmountForOut()>0) {
-				if (administrationManager.sendToHl(i)) {//Add itemes to Hl and remove from BwB
+				if (administrationManager.sendToHl(action)) {//Add itemes to Hl and remove from BwB
 					if (undoMode) {
 						logRepository.save(new Log(
 								LocalDateTime.now(),
-								loggedInUserWeb,
-								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Senden rückgängig gemacht",notiz));
+								account,
+								administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Senden rückgängig gemacht",notiz));
 					} else {logRepository.save(new Log(
 							LocalDateTime.now(),
-							loggedInUserWeb,
-							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForOut()+"x mal zum; Hauptlager gesendet",notiz));
+							account,
+							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForOut()+"x mal zum; Hauptlager gesendet",notiz));
 					}
 				}
-				logRepository.save(new Log(LocalDateTime.now(), loggedInUserWeb,
-						administrationManager.getArticle(i.getPid()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
+				logRepository.save(new Log(LocalDateTime.now(), account,
+						administrationManager.getArticle(action.getPid()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
 				return "redirect:/";
 			}
 
 
 			/*craft*/
 			if (i.getAmountForCraft()>0) {
-				if(administrationManager.craftBwB(i, cartOrderManager.getAccount(),notiz)){ //wenn geklappt dann mache LOG entry
+				if(administrationManager.craftBwB(action, cartOrderManager.getAccount(),notiz)){ //wenn geklappt dann mache LOG entry
 					if (undoMode) {
 						logRepository.save(new Log(
 								LocalDateTime.now(),
-								loggedInUserWeb,
-								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"wurde zerlegen rückgängig gemacht ERROR sollte nicht auftreten",notiz));
+								account,
+								administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+"wurde zerlegen rückgängig gemacht ERROR sollte nicht auftreten",notiz));
 						System.out.println("ERROR: zerlegen wurde rückgägig gemacht -> LOGIK FEHLER in EmployeeController Commit");
 					} else {logRepository.save(new Log(
 							LocalDateTime.now(),
-							loggedInUserWeb,
-							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x mal hergestellt",notiz));
+							account,
+							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+"x mal hergestellt",notiz));
 
 					}
 
@@ -196,16 +205,17 @@ public class EmployeeController {
 
 			/*zerlegen*/
 			if (i.getAmountForZerlegen()>0) {
-				if (administrationManager.zerlegen(i,loggedInUserWeb,Location.LOCATION_BWB)) {
+				if (administrationManager.zerlegen(action,account,Location.LOCATION_BWB)) {
 					logRepository.save(new Log(
 							LocalDateTime.now(),
-							loggedInUserWeb,
-							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x maliges herstellen rückgängig gemacht",notiz));
+							account,
+							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+"x maliges herstellen rückgängig gemacht",notiz));
 				}
 			}
+			inventoryItemActions.add(action);
 		}
 
-		if(!undoMode) undoManager.push(universalForm.getInventoryItemActions());
+		if(!undoMode) undoManager.push(inventoryItemActions);
 		if(undoMode) undoManager.pop();//removes top elem of Lifo damit nicht hin und her rückgängig gemacht wird
 		undoMode =false;
 
@@ -229,11 +239,23 @@ public class EmployeeController {
 	@GetMapping("/undo")
 	String catalogUndo(Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		undoMode =true;
-		ArrayList<InventoryItemAction> invertedAction=undoManager.getUndoActions();
-		UniversalForm universalForm =new UniversalForm();
-		universalForm.getInventoryItemActions();
+		ArrayList<InventoryItemAction> invertedActions=undoManager.getUndoActions();
+		ArrayList<InventoryItemActionStringPid> invertedStringPidActions=new ArrayList<>();
 
-		commitEmployee(universalForm,administrationManager.getNewBindingResultsObject() ,loggedInUserWeb ,model);
+		PostUniForm postUniForm =new PostUniForm();
+		for(InventoryItemAction i:invertedActions){
+			InventoryItemActionStringPid s= new InventoryItemActionStringPid(
+					i.getPid().toString(),
+					i.getAmountForIn(),
+					i.getAmountForCraft(),
+					i.getAmountForOut()
+				);
+			invertedStringPidActions.add(s);
+		}
+
+		postUniForm.setPostInventoryItemActions(invertedStringPidActions);
+
+		commitEmployee(postUniForm,administrationManager.getNewBindingResultsObject() ,loggedInUserWeb ,model);
 
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
 		model.addAttribute("inventoryItems",list );
