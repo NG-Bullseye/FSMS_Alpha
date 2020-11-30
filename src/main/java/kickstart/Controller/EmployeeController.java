@@ -133,6 +133,7 @@ public class EmployeeController {
 		Article article;
 		InventoryItemAction action;
 		for (InventoryItemActionStringPid i: postUniForm.getPostInventoryItemActions()) {
+			System.out.println("This Id wasnt found: "+i.getPidString());
 			article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
 			action= new InventoryItemAction(
 					administrationManager.getProduktIdFromString(
@@ -196,9 +197,7 @@ public class EmployeeController {
 							LocalDateTime.now(),
 							account,
 							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+"x mal hergestellt",notiz));
-
 					}
-
 				}
 				else System.out.println("Nicht Direkt Herstellbar"); //wenn action fehlgeschlagen notiere das im LOG
 			}

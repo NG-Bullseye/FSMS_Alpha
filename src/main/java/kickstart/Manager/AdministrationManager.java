@@ -1033,24 +1033,7 @@ public class AdministrationManager {
 
 	}
 
-	/**
-	 * wird in craftHl und in HTML genutzt
-	 * gibt zurück wie oft das Produkt mit der Pid im Hauptlager hergestellt werden kann
-	 * @param p ProduktID welche untersucht wird
-	 * @return
-	 */
-	public int craftbarHl(ProductIdentifier p){
-		int craftbar=0;
-		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
-			int inStock = inventory.findByProductIdentifier(p).get().getAmountHl();
-			if(1<=inStock)
-				craftbar= inStock;
-		}
-		else{
-			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_HL);
-		}
-		return craftbar;
-	}
+
 
 	/**
 	 * Wird im EmployeeController aufgerufen
@@ -1089,6 +1072,92 @@ public class AdministrationManager {
 	}
 
 	/**
+	 * wird in craftHl und in HTML genutzt
+	 * gibt zurück wie oft das Produkt mit der Pid im Hauptlager hergestellt werden kann
+	 * @param p ProduktID welche untersucht wird
+	 * @return
+	 */
+	public int craftbarHl(ProductIdentifier p){
+		int craftbar=0;
+		if (catalog.findById(p).isPresent()&& catalog.findById(p).get() instanceof Part ){
+			int inStock = inventory.findByProductIdentifier(p).get().getAmountHl();
+			if(1<=inStock)
+				craftbar= inStock;
+		}
+		else{
+			craftbar=maxCraft_Layer(p,1,999999999,Location.LOCATION_HL);
+		}
+		return craftbar;
+	}
+
+	/**
+	 * gibt das Ausführen der Aktion Herstellen in Auftag
+	 *
+	 * @param action welches Produkt und wie viel davon
+	 * @param user wer
+	 * @param materialQuelle in welchem Lager
+	 * @param notiz notiz für das Log
+	 * @return true wenn es direkt aus den aufgelisteten Bestandteilen hergestellt werden kann
+	 */
+	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {
+		if(direktCraftbar(action,materialQuelle)){
+			//erstellt Log Eintrag
+			InventoryItemAction onlyCraftAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+			this.loggedReorder(onlyCraftAction,user,materialQuelle,notiz);
+
+			//fügt Produkt hinzu
+			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),action.getAmountForCraft(),0,0);
+			this.reorder(inAction,materialQuelle);
+
+			//zieht Material ab
+			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
+			for (ProductIdentifier p:map.keySet()){
+				int requiredAmount = action.getAmountForCraft()*map.get(p);
+				InventoryItemAction outAction=new InventoryItemAction(p,0,0,requiredAmount);
+				this.out(outAction,user,materialQuelle);
+			}
+
+			return true;
+		}
+		System.out.println("nicht unmittelbar aus Bestandteilen herstellbar");
+		return false;
+		//return false;
+	}
+
+	/**
+	 * wird zum Konkreten craften benutzt als Sicherheitscheck for dem Craften
+	 * prüft ob der Gegenstand ohne zwischen Arbeitsschritte durchgeführt werden kann
+	 *
+	 * @param action welches Produkt und wie viel davon
+	 * @param lager wo
+	 * @return true wenn es geht , false wenn nicht
+	 */
+	private boolean  direktCraftbar(InventoryItemAction action, Location lager) {
+		Article a= this.getArticle(action.getPid())	;
+		Map<ProductIdentifier,Integer> rezept =this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds())  ;
+		for (ProductIdentifier p :
+				rezept.keySet()) {
+			long neededAmountForOne=rezept.get(p);
+			long inStock=0;
+			switch (lager){
+				case LOCATION_BWB:{
+					inStock=inventoryManager.getInventory().findByProductIdentifier(p).get()											.getAmountBwB();
+					break;
+				}
+				case LOCATION_HL:{
+					inStock=inventoryManager.getInventory().findByProductIdentifier(p).get()											.getAmountHl();
+					break;
+				}
+			}
+			if (inStock<neededAmountForOne)
+				return false;
+		}
+
+		return true;
+	}
+
+
+	/**
 	 * DER HOCH KOMPLEXE ALGORITHMUS ZUM ITERIEREN DES BAUMES
 	 * um herrauszufinden ob eine herstellung mit zwischen Arbeitsschritten möglich ist
 	 *
@@ -1105,7 +1174,7 @@ public class AdministrationManager {
 		//<editor-fold desc="Update maximale Craft Zahl">
 		int xMalCraftbarInThisLayer=maximalCraftNumberForPreviousLayer;
 		//</editor-fold>
-		//<editor-fold desc="Ini Konten der auf Craftbarkeit untersucht wird">
+		//<editor-fold desc="Ini Knoten der auf Craftbarkeit untersucht wird">
 		Article superComponent =catalog.findById(thisComponentId).get();
 		Map<ProductIdentifier,Integer> superCompositeRezept= convertPartStringIntegerMapToPartProductIdIntegerMap(superComponent.getPartIds());
 		//System.out.println(superCompositeRezept);
@@ -1205,73 +1274,6 @@ public class AdministrationManager {
 			}
 		}
 		return xMalCraftbarInThisLayer;
-	}
-
-	/**
-	 * gibt das Ausführen der Aktion Herstellen in Auftag
-	 *
-	 * @param action welches Produkt und wie viel davon
-	 * @param user wer
-	 * @param materialQuelle in welchem Lager
-	 * @param notiz notiz für das Log
-	 * @return true wenn es direkt aus den aufgelisteten Bestandteilen hergestellt werden kann
-	 */
-	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {
-		if(direktCraftbar(action,materialQuelle)){
-			//erstellt Log Eintrag
-			InventoryItemAction onlyCraftAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
-			this.loggedReorder(onlyCraftAction,user,materialQuelle,notiz);
-
-			//fügt Produkt hinzu
-			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),action.getAmountForCraft(),0,0);
-			this.reorder(inAction,materialQuelle);
-
-			//zieht Material ab
-			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
-			for (ProductIdentifier p:map.keySet()){
-				int requiredAmount = action.getAmountForCraft()*map.get(p);
-				InventoryItemAction outAction=new InventoryItemAction(p,0,0,requiredAmount);
-				this.out(outAction,user,materialQuelle);
-			}
-
-			return true;
-		}
-		System.out.println("nicht unmittelbar aus Bestandteilen herstellbar");
-		return false;
-		//return false;
-	}
-
-
-	/**
-	 * wird zum Konkreten craften benutzt als Sicherheitscheck for dem Craften
-	 * prüft ob der Gegenstand ohne zwischen Arbeitsschritte durchgeführt werden kann
-	 *
-	 * @param action welches Produkt und wie viel davon
-	 * @param lager wo
-	 * @return true wenn es geht , false wenn nicht
-	 */
-	private boolean  direktCraftbar(InventoryItemAction action, Location lager) {
-		Article a= this.getArticle(action.getPid())	;
-		Map<ProductIdentifier,Integer> rezept =this.convertPartStringIntegerMapToPartProductIdIntegerMap(a.getPartIds())  ;
-		for (ProductIdentifier p :
-				rezept.keySet()) {
-			long neededAmountForOne=rezept.get(p);
-			long inStock=0;
-			switch (lager){
-				case LOCATION_BWB:{
-					inStock=inventoryManager.getInventory().findByProductIdentifier(p).get()											.getAmountBwB();
-					break;
-				}
-				case LOCATION_HL:{
-					inStock=inventoryManager.getInventory().findByProductIdentifier(p).get()											.getAmountHl();
-					break;
-				}
-			}
-			if (inStock<neededAmountForOne)
-				return false;
-		}
-
-		return true;
 	}
 
 

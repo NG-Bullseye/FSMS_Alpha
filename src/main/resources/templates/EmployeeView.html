@@ -163,14 +163,13 @@
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')">
 								<div class="ui two buttons" style="color: #68d4d0;background-color: #FFFFFF">
 									<a th:href="@{/toogleAbholbereit/{id}(id=${itemAction.getPid()})}" target="_self">
-
 										<div class="ui basic button">
 											<span th:text="${administrationManager.getArticle(itemAction.getPid()).getName()} " style="font-size: 15px;font-weight: bold;text-align: center">Name nicht gefunden</span>
 										</div>
 									</a>
 								</div>
 							</td>
-																<!--</editor-fold>-->
+							<!--</editor-fold>-->
 
 							<!--3--> <!--<editor-fold desc="BwB Bestand View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
@@ -202,7 +201,7 @@
 								</div>
 							</td>
 							<!--</editor-fold>-->
-
+							<input type="hidden" th:attr="name='postInventoryItemActions[__${itemStat.index}__].pidString'"  th:value="${itemAction.getPid().getIdentifier()}">
 							<!--9--> <!--<editor-fold desc="Empfangen View:E">-->
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')" >
 									<div class="inline field">
