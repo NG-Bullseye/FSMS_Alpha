@@ -241,7 +241,7 @@ public class EmployeeController {
 			System.out.println("Keine UndoAction Gefunden");
 			return "redirect:/";
 		}
-		else System.out.println("Rückgängig von "+invertedActions.)
+		//else System.out.println("Rückgängig von "+invertedActions.)
 		ArrayList<InventoryItemActionStringPid> invertedStringPidActions=new ArrayList<>();
 
 		PostUniForm postUniForm =new PostUniForm();
