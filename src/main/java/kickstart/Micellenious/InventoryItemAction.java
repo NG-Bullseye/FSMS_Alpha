@@ -4,7 +4,6 @@ import kickstart.Manager.AdministrationManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.salespointframework.catalog.ProductIdentifier;
-import org.salespointframework.inventory.InventoryItemIdentifier;
 
 public class InventoryItemAction {
 	@Setter
@@ -22,15 +21,23 @@ public class InventoryItemAction {
 	@Setter
 	@Getter
 	private int amountForZerlegen;
+	private AdministrationManager administrationManager;
 
 	public InventoryItemAction() {
 	}
 
-	public InventoryItemAction(ProductIdentifier pid, int amountForIn, int amountForCraft, int amountForOut ) {
+	public InventoryItemAction(ProductIdentifier pid, int amountForIn, int amountForCraft, int amountForOut, AdministrationManager administrationManager) {
 		this.pid = pid;
 		this.amountForCraft = amountForCraft;
 		this.amountForOut = amountForOut;
 		this.amountForIn = amountForIn;
+		this.administrationManager = administrationManager;
 		this.amountForZerlegen=0;
 	}
+
+	public String toString() {
+		return administrationManager.getArticle(pid).getName();
+	}
+
+
 }

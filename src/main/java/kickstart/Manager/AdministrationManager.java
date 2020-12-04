@@ -1,7 +1,5 @@
 package kickstart.Manager;
 
-import static org.salespointframework.core.Currencies.EURO;
-
 import java.beans.PropertyEditor;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -17,7 +15,6 @@ import kickstart.order.CartOrderManager;
 import kickstart.order.CustomerOrder;
 import lombok.Getter;
 import lombok.Setter;
-import org.javamoney.moneta.Money;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.Cart;
@@ -38,7 +35,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotNull;
 
 @Component
@@ -61,6 +57,7 @@ public class AdministrationManager {
 	@Getter
 	private ArrayList<String> cookieFilterEmployeeFarbe=METHA_STANDARDFILTER_FARBE;
 
+	private AdministrationManager administrationManager=this;
 
 
 	private final WebshopCatalog catalog;
@@ -917,11 +914,11 @@ public class AdministrationManager {
 	public boolean zerlegen(InventoryItemAction action, UserAccount user, Location materialQuelle) {
 		if(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).isPresent()
 				&&(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get().getAmountBwB()>= action.getAmountForCraft())){
-			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0, administrationManager);
 			this.out(outAction,user,materialQuelle);
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
-				InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+				InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0, administrationManager);
 				inAction.setPid(p);
 				int requiredAmount = action.getAmountForCraft()*map.get(p);
 				inAction.setAmountForCraft(requiredAmount);
@@ -1102,18 +1099,18 @@ public class AdministrationManager {
 	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {
 		if(direktCraftbar(action,materialQuelle)){
 			//erstellt Log Eintrag
-			InventoryItemAction onlyCraftAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0);
+			InventoryItemAction onlyCraftAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0, administrationManager);
 			this.loggedReorder(onlyCraftAction,user,materialQuelle,notiz);
 
 			//fügt Produkt hinzu
-			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),action.getAmountForCraft(),0,0);
+			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),action.getAmountForCraft(),0,0, administrationManager);
 			this.reorder(inAction,materialQuelle);
 
 			//zieht Material ab
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
 				int requiredAmount = action.getAmountForCraft()*map.get(p);
-				InventoryItemAction outAction=new InventoryItemAction(p,0,0,requiredAmount);
+				InventoryItemAction outAction=new InventoryItemAction(p,0,0,requiredAmount, administrationManager);
 				this.out(outAction,user,materialQuelle);
 			}
 

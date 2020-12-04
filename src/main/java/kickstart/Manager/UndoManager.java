@@ -1,7 +1,6 @@
 package kickstart.Manager;
 
 import kickstart.Micellenious.InventoryItemAction;
-import org.salespointframework.catalog.ProductIdentifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,9 +16,12 @@ public class UndoManager {
 
 	public ArrayList<InventoryItemAction> invert(ArrayList<InventoryItemAction> itemActions){
 		ArrayList<InventoryItemAction> invertedInventoryItemActions= new ArrayList<>();
+		if(itemActions==null){
+			return null;
+		}
 
 		for (InventoryItemAction itemAction: itemActions) {
-			InventoryItemAction invertedInventoryItemAction=new InventoryItemAction(itemAction.getPid(),0,0,0);
+			InventoryItemAction invertedInventoryItemAction=new InventoryItemAction(itemAction.getPid(),0,0,0, administrationManager);
 			if (itemAction.getAmountForIn()>0) {
 				int i=itemAction.getAmountForIn();
 				invertedInventoryItemAction.setAmountForOut(i);
@@ -71,6 +73,10 @@ Map<Integer, ArrayList<InventoryItemAction>> actionObjMap;
 	 */
 	public ArrayList<InventoryItemAction> getUndoActions(){
 		ArrayList<InventoryItemAction> lifoActions= null;
+		if(actionObjMap==null||actionObjMap.size()==0){
+			System.out.println("keine Aktion auf dem Stack");
+			return null;
+		}
 		lifoActions=actionObjMap.get(actionObjMap.size()-1);
 		return this.invert(lifoActions);
 	}

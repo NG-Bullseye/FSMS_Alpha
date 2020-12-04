@@ -29,7 +29,6 @@ import kickstart.accountancy.AccountancyManager;
 import kickstart.activityLog.ActivityLogManager;
 import kickstart.activityLog.LogRepository;
 import kickstart.Micellenious.*;
-import kickstart.articles.Part;
 import kickstart.order.CartOrderManager;
 import kickstart.user.UserManagement;
 import org.salespointframework.inventory.Inventory;
@@ -47,7 +46,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import kickstart.articles.Article;
 import kickstart.Micellenious.ReorderableInventoryItem;
 
 @Controller
@@ -155,7 +153,7 @@ public class MainController {
 		ArrayList<InventoryItemAction> inventoryItemActions = new ArrayList<>();
 		for (ReorderableInventoryItem item:
 				sortedReordInvItemList) {
-			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), 0,0,0);
+			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), 0,0,0, administrationManager);
 			inventoryItemActions.add(a) ;
 		}
 		//über dieses Array wird in der HTML iteriert und die Artikel angezeigt und ihren PIDs zugeordnet

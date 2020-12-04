@@ -16,7 +16,6 @@
 package kickstart.Controller;
 
 import kickstart.Forms.PostUniForm;
-import kickstart.Forms.UniversalForm;
 import kickstart.Manager.AdministrationManager;
 import kickstart.Manager.UndoManager;
 import kickstart.TelegramInterface.BotManager;
@@ -31,7 +30,6 @@ import kickstart.articles.Article;
 import kickstart.order.CartOrderManager;
 import kickstart.user.User;
 import kickstart.user.UserManagement;
-import org.checkerframework.checker.units.qual.A;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
@@ -133,15 +131,15 @@ public class EmployeeController {
 		Article article;
 		InventoryItemAction action;
 		for (InventoryItemActionStringPid i: postUniForm.getPostInventoryItemActions()) {
-			System.out.println("This Id wasnt found: "+i.getPidString());
+			System.out.println("This Id wasnt found: "+ administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString())).getName()  );
 			article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
 			action= new InventoryItemAction(
 					administrationManager.getProduktIdFromString(
 							i.getPidString()),
 					i.getAmountForIn(),
 					i.getAmountForCraft(),
-					i.getAmountForOut()
-			);
+					i.getAmountForOut(),
+					administrationManager);
 
 
 			/*resive*/
@@ -239,6 +237,11 @@ public class EmployeeController {
 	String catalogUndo(Model model,@LoggedIn UserAccount loggedInUserWeb) {
 		undoMode =true;
 		ArrayList<InventoryItemAction> invertedActions=undoManager.getUndoActions();
+		if(invertedActions==null){
+			System.out.println("Keine UndoAction Gefunden");
+			return "redirect:/";
+		}
+		else System.out.println("Rückgängig von "+invertedActions.)
 		ArrayList<InventoryItemActionStringPid> invertedStringPidActions=new ArrayList<>();
 
 		PostUniForm postUniForm =new PostUniForm();
@@ -247,7 +250,8 @@ public class EmployeeController {
 					i.getPid().toString(),
 					i.getAmountForIn(),
 					i.getAmountForCraft(),
-					i.getAmountForOut()
+					i.getAmountForOut(),
+					administrationManager
 				);
 			invertedStringPidActions.add(s);
 		}
@@ -255,16 +259,18 @@ public class EmployeeController {
 		postUniForm.setPostInventoryItemActions(invertedStringPidActions);
 
 		commitEmployee(postUniForm,administrationManager.getNewBindingResultsObject() ,loggedInUserWeb ,model);
-
+		/*
 		Iterable<ReorderableInventoryItem> list=inventoryManager.getInventory().findAll(); //display BwB inventory Items
 		model.addAttribute("inventoryItems",list );
 		model.addAttribute("ManagerView", administrationManager.getVisibleCatalog()); //fragwürdig!! wegnehmen? nicht genutzt in ManagerView.html
 		model.addAttribute("administrationManager", administrationManager);
 		model.addAttribute("undoManager",undoManager);
+		* */
 		logRepository.save(new Log(
 				LocalDateTime.now(),
 				loggedInUserWeb,
 				"Rückgängig",notiz));
+
 		return "redirect:/";
 	}
 

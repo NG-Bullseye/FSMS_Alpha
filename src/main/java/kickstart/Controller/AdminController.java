@@ -41,7 +41,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 
 @Controller
 public class AdminController {
@@ -115,7 +114,7 @@ public class AdminController {
 
 		for (ReorderableInventoryItem item:
 				inventoryManager.getInventory().findAll()) {
-			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), amount,0,0);
+			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), amount,0,0, administrationManager);
 			administrationManager.reorder(a,Location.LOCATION_BWB);
 			administrationManager.reorder(a,Location.LOCATION_HL);
 		}

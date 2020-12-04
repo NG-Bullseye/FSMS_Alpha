@@ -32,7 +32,6 @@ import kickstart.user.User;
 import kickstart.user.UserManagement;
 import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
-import org.salespointframework.inventory.InventoryItemIdentifier;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccount;
@@ -134,7 +133,7 @@ public class ManagerController {
 		for(InventoryItemActionStringPid i:postUniForm.getPostInventoryItemActions())
 		{
 			article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
-			action = new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut());
+			action = new InventoryItemAction(administrationManager.getProduktIdFromString(i.getPidString()),i.getAmountForIn(),i.getAmountForCraft(),i.getAmountForOut(), administrationManager);
 			cartOrderManager.addCostumer(loggedInUser.getUserAccount());
 
 			/*In*/
