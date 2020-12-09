@@ -1,9 +1,11 @@
 package kickstart.Manager;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import kickstart.Micellenious.InventoryItemAction;
 import kickstart.TelegramInterface.BotManager;
 import kickstart.Micellenious.Location;
 import kickstart.Micellenious.ReorderableInventoryItem;
@@ -35,7 +37,7 @@ public class InventoryManager {
 	private final Inventory<ReorderableInventoryItem> inventory;
 
 	@Getter
-	private AccountancyManager accountancy;
+	private AdministrationManager administrationManager;
 
 	public String[] getColours() {
 		return Colours.getColorsArray();
@@ -61,19 +63,17 @@ public class InventoryManager {
 	/**
 	 * 
 	 * @param inventory   The repository where InventoryItems are saved
-	 * @param accountancy This class gives the class the current time and is used to
-	 *                    add expenses
 	 */
 	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory,
-							@NotNull AccountancyManager accountancy) {
+							@NotNull AdministrationManager administrationManager) {
 
 		this.inventory = inventory;
-		this.accountancy = accountancy;
+		this.administrationManager=administrationManager;
 	}
 
-	public BusinessTime getTime() {
-		return accountancy.getBusinessTime();
-	}
+	//public BusinessTime getTime() {
+	//	return accountancy.getBusinessTime();
+	//}
 
 	/**
 	 * 
@@ -194,6 +194,7 @@ public class InventoryManager {
 		item.decreaseQuantity(quantity);
 		inventory.save(item);
 	}
+
 	public void decreaseAmountInHL(@NotNull Article article, @NotNull Quantity quantity)throws IllegalArgumentException{
 		if (inventory.findByProduct(article).isPresent() == false) {
 			return;
@@ -251,7 +252,8 @@ public class InventoryManager {
 	 * {@link ReorderableInventoryItem} for all currently stored reorders. If update
 	 * on a reorders returns true, the reorder is deleted from the repository.
 	 */
-	@Scheduled(fixedRate = 5000)
+	/*
+	* @Scheduled(fixedRate = 5000)
 	public void update() {
 		Iterable<ReorderableInventoryItem> items = inventory.findAll();
 
@@ -270,6 +272,8 @@ public class InventoryManager {
 		}
 		return i;
 	}
+	* */
+
 
 	public void decreaseBestand(Article a, Quantity of, Location lager) {
 		switch(lager){
@@ -277,4 +281,11 @@ public class InventoryManager {
 			case LOCATION_BWB:decreaseAmountInBwB(a,of);break;
 		}
 	}
+
+	public void decreaseBestand(InventoryItemAction action, Location lager) {
+		Article a=administrationManager.getArticle(action.getPid());
+		decreaseBestand(action,lager);
+
+	}
+
 }

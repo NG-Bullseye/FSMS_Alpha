@@ -59,7 +59,7 @@ public class InventoryController {
 	 */
 	public InventoryController(Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy) {
 
-		manager = new InventoryManager(inventory, accountancy);
+		manager = new InventoryManager(inventory, getManager().getAdministrationManager());
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class InventoryController {
 	@PreAuthorize("hasRole('ROLE_BOSS')")
 	public String updateInventory() {
 
-		manager.update();
+		//manager.update();
 
 		return "redirect:/inventory";
 	}

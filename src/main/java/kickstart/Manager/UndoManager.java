@@ -57,12 +57,11 @@ Map<Integer, ArrayList<InventoryItemAction>> actionObjMap;
 	public boolean push(ArrayList<InventoryItemAction> actions){
 		try{
 			actionObjMap.put(actionObjMap.size(),actions);
-
+			System.out.println("gepusht");
 		}catch (Exception r){
 			System.out.println("Es konnte nicht gepusht werden");
 			return false;
 		}
-		System.out.println("gepusht");
 		return true;
 	}
 

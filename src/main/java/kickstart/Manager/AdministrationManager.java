@@ -913,15 +913,15 @@ public class AdministrationManager {
 
 	public boolean zerlegen(InventoryItemAction action, UserAccount user, Location materialQuelle) {
 		if(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).isPresent()
-				&&(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get().getAmountBwB()>= action.getAmountForCraft())){
-			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0, administrationManager);
-			this.out(outAction,user,materialQuelle);
+				&&(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get().getAmountBwB()>= action.getAmountForZerlegen())){
+			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,0,action.getAmountForZerlegen(), administrationManager);
+			inventoryManager.decreaseBestand(action,materialQuelle );//decrease amount of Gesamtbestand
+
+			//this.out(outAction,user,materialQuelle);
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
 			for (ProductIdentifier p:map.keySet()){
-				InventoryItemAction inAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0, administrationManager);
-				inAction.setPid(p);
-				int requiredAmount = action.getAmountForCraft()*map.get(p);
-				inAction.setAmountForCraft(requiredAmount);
+				int requiredAmount = action.getAmountForZerlegen()*map.get(p);
+				InventoryItemAction inAction=new InventoryItemAction(p,requiredAmount,0,0, administrationManager);
 				this.reorder(inAction,materialQuelle);
 			}
 			return true;

@@ -28,7 +28,7 @@ public class InventoryItemActionStringPid {
 	}
 
 
-	public InventoryItemActionStringPid(String pidString, int amountForIn, int amountForCraft, int amountForOut , AdministrationManager administrationManager) {
+	public InventoryItemActionStringPid(String pidString, int amountForIn, int amountForCraft, int amountForOut, AdministrationManager administrationManager) {
 		this.pidString = pidString;
 		this.amountForCraft = amountForCraft;
 		this.amountForOut = amountForOut;

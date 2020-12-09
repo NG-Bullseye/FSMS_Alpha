@@ -47,6 +47,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Random;
 
 @Controller
 public class EmployeeController {
@@ -123,78 +124,81 @@ public class EmployeeController {
 		}
 		User loggedInUser = userManagement.findUser(account);
 		cartOrderManager.addCostumer(loggedInUser.getUserAccount());
-		ArrayList<InventoryItemAction> inventoryItemActions=new ArrayList<>(); //genutzt um die liste aus Postuniform mit String Pid zu Pids umgewandelt
+		; //genutzt um die liste aus Postuniform mit String Pid zu Pids umgewandelt
 
 		if(userManagement.findUser(account)==null){
 			return "redirect:/login";
 		}
-		Article article;
 		InventoryItemAction action;
+		ArrayList<InventoryItemAction> inventoryItemActions=new ArrayList<>();
 		for (InventoryItemActionStringPid i: postUniForm.getPostInventoryItemActions()) {
-			System.out.println("This Id wasnt found: "+ administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString())).getName()  );
-			article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
-			action= new InventoryItemAction(
+			if (i.getAmountForCraft() == 0 && i.getAmountForIn() == 0 && i.getAmountForOut() == 0 && i.getAmountForZerlegen() == 0)
+				continue;
+			System.out.println("This Id wasnt found: " + administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString())).getName());
+			//article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
+			action = new InventoryItemAction(
 					administrationManager.getProduktIdFromString(
 							i.getPidString()),
 					i.getAmountForIn(),
 					i.getAmountForCraft(),
 					i.getAmountForOut(),
 					administrationManager);
-
-
+			action.setAmountForZerlegen(i.getAmountForZerlegen());
+			inventoryItemActions.add(action);
+		}
+		for(InventoryItemAction i:inventoryItemActions)	{
 			/*resive*/
 			if (i.getAmountForIn()>0) {
-				if (administrationManager.receiveFromHl(action)) {//Add itemes to BwB and remove from Hauptlager
+				if (administrationManager.receiveFromHl(i)) {//Add itemes to BwB and remove from Hauptlager
 					if (undoMode) {//wenn hier eine action bearbeitet wird die eigendlich eine Invertiere Action ist
 						logRepository.save(new Log(
 								LocalDateTime.now(),
 								account,
-								administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Empfangen rückgängig gemacht",notiz));
+								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Empfangen rückgängig gemacht",notiz));
 					} else {logRepository.save(new Log( //bei ganz normalem vorwärtsbetrieb ohne rückgängig
 							LocalDateTime.now(),
 							account,
-							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForIn()+"x mal vom Hauptlager Empfangen",notiz));
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForIn()+"x mal vom Hauptlager Empfangen",notiz));
 					}
 				}
 				logRepository.save(new Log(LocalDateTime.now() //wenn die action nicht durchgeführt werden konnte
 						, account,
-						administrationManager.getArticle(action.getPid()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
+						administrationManager.getArticle(i.getPid()).getName()+"SOFT ERROR: Kann nicht empfangen werden da nicht genug im Hauptlager vorhanden sind. Falsch gezählt entweder im Hauptlager oder In der BwB"
 						,notiz));
 			}
 
 			/*send*/
 			if (i.getAmountForOut()>0) {
-				if (administrationManager.sendToHl(action)) {//Add itemes to Hl and remove from BwB
+				if (administrationManager.sendToHl(i)) {//Add itemes to Hl and remove from BwB
 					if (undoMode) {
 						logRepository.save(new Log(
 								LocalDateTime.now(),
 								account,
-								administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Senden rückgängig gemacht",notiz));
+								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+" maliges Senden rückgängig gemacht",notiz));
 					} else {logRepository.save(new Log(
 							LocalDateTime.now(),
 							account,
-							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForOut()+"x mal zum; Hauptlager gesendet",notiz));
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForOut()+"x mal zum; Hauptlager gesendet",notiz));
 					}
 				}
 				logRepository.save(new Log(LocalDateTime.now(), account,
-						administrationManager.getArticle(action.getPid()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
-				return "redirect:/";
+						administrationManager.getArticle(i.getPid()).getName()+"SOFT ERROR: Nicht genügend Produkte um die Aktion durch zu führen",notiz));
 			}
 
 
 			/*craft*/
 			if (i.getAmountForCraft()>0) {
-				if(administrationManager.craftBwB(action, cartOrderManager.getAccount(),notiz)){ //wenn geklappt dann mache LOG entry
+				if(administrationManager.craftBwB(i, cartOrderManager.getAccount(),notiz)){ //wenn geklappt dann mache LOG entry
 					if (undoMode) {
 						logRepository.save(new Log(
 								LocalDateTime.now(),
 								account,
-								administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+"wurde zerlegen rückgängig gemacht ERROR sollte nicht auftreten",notiz));
+								administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"wurde zerlegen rückgängig gemacht ERROR sollte nicht auftreten",notiz));
 						System.out.println("ERROR: zerlegen wurde rückgägig gemacht -> LOGIK FEHLER in EmployeeController Commit");
 					} else {logRepository.save(new Log(
 							LocalDateTime.now(),
 							account,
-							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+"x mal hergestellt",notiz));
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x mal hergestellt",notiz));
 					}
 				}
 				else System.out.println("Nicht Direkt Herstellbar"); //wenn action fehlgeschlagen notiere das im LOG
@@ -202,22 +206,21 @@ public class EmployeeController {
 
 			/*zerlegen*/
 			if (i.getAmountForZerlegen()>0) {
-				if (administrationManager.zerlegen(action,account,Location.LOCATION_BWB)) {
+				if (administrationManager.zerlegen(i,account,Location.LOCATION_BWB)) {
 					logRepository.save(new Log(
 							LocalDateTime.now(),
 							account,
-							administrationManager.getArticle(action.getPid()).getName()+" "+ i.getAmountForCraft()+"x maliges herstellen rückgängig gemacht",notiz));
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x maliges herstellen rückgängig gemacht",notiz));
 				}
 			}
-			inventoryItemActions.add(action);
+
 		}
-
-		if(!undoMode) undoManager.push(inventoryItemActions);
-		if(undoMode) undoManager.pop();//removes top elem of Lifo damit nicht hin und her rückgängig gemacht wird
+		if(!undoMode&&inventoryItemActions.size()!=0) undoManager.push(inventoryItemActions);
+		if(undoMode){
+			undoManager.pop();//removes top elem of Lifo damit nicht hin und her rückgängig gemacht wird
+		}
 		undoMode =false;
-
 		return "redirect:/";
-
 	}
 
 	@GetMapping("/toogleAbholbereit/{identifier}")
@@ -253,6 +256,7 @@ public class EmployeeController {
 					i.getAmountForOut(),
 					administrationManager
 				);
+			s.setAmountForZerlegen(i.getAmountForZerlegen());
 			invertedStringPidActions.add(s);
 		}
 
