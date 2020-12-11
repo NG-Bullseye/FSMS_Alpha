@@ -31,19 +31,19 @@
 				<span th:each="color : ${article.colour}" th:text="${color}+' '">schwarz</span>
 				<div th:switch="${article.type}">
 					<br>
-					<t th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+					<t th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}"
 					   th:text="'Dieser Artikel besteht aus den folgenden Teilen: '+${parts}">Teile</t>
 				</div>
 			</div>
 			<div class="ui buttons" sec:authorize="hasRole('ROLE_EMPLOYEE')">
 				<div th:switch="${article.type}">
-					<a th:case="${T(kickstart.articles.Article.ArticleType).PART}"
+					<a th:case="${T(Wawi.articles.Article.ArticleType).PART}"
 						th:href="@{/edit/{id}(id=${article.getId()})}" target="_self">
 						<div class="ui red basic button">
 							<i class="edit icon"></i>Bearbeiten
 						</div>
 					</a> <a
-						th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+						th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}"
 						th:href="@{/edit/composite/{id}(id=${article.getId()})}"
 						target="_self">
 						<div class="ui red basic button">
@@ -74,7 +74,7 @@
 	<div th:switch="${article.type}"
 		sec:authorize="hasRole('ROLE_EMPLOYEE')">
 		<form class="ui form"
-			th:case="${T(kickstart.articles.Article.ArticleType).PART}"
+			th:case="${T(Wawi.articles.Article.ArticleType).PART}"
 			th:action="@{/cart_part}" method="post">
 			<div class="ui labeled input">
 				<div class="ui label">Anzahl:</div>
@@ -84,7 +84,7 @@
 			</div>
 		</form>
 		<form class="ui form"
-			th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}"
+			th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}"
 			th:action="@{/cart_composite}" method="post">
 			<div class="ui labeled input">
 				<div class="ui label">Anzahl:</div>

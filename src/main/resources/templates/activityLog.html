@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-        <!--/*@thymesVar id="logList" type="kickstart.Controller.MainController"*/-->
+        <!--/*@thymesVar id="logList" type="Wawi.Controller.MainController"*/-->
             <tr th:each="log: ${logList}">
 
                 <td th:text="${#temporals.format(log.getDate(), 'dd-MM-yyyy HH:mm')}"

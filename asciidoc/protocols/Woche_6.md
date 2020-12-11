@@ -23,7 +23,7 @@ Gruppe 34, Schriftführer: Daniel Körsten
 - alles homogen machen (gleiche Rechtschreibung für gleiche Begriffe hauptsählich um den Begriff Management)
 - Katalog ist nicht fertig?!
 - common used salespoint frameworks - frameworks ist zuviel
-- Aufteilung Manager Controller homogen
+- Aufteilung Manager Wawi.Controller homogen
 - Customer deaktivieren
 - Mitarbeiter, Admins fehlen
 - Car management - Auto abholen

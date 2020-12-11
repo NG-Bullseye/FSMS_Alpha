@@ -156,7 +156,7 @@
 
 						<!--<editor-fold desc="Tabellen Körper">-->
 						<tbody>
-						<!--/*@thymesVar id="inventoryItems" type="kickstart.Controller.MainController"*/-->
+						<!--/*@thymesVar id="inventoryItems" type="Wawi.Controller.MainController"*/-->
 						<tr sec:authorize="hasRole('ROLE_PERMITTED')" th:each="itemAction, itemStat: ${universalForm.inventoryItemActions}">
 
 						<!--1--> <!--<editor-fold desc="Name View:P">-->
@@ -190,7 +190,7 @@
 							<!--6--> <!--<editor-fold desc="Herstellbar BwB View:M">-->
 							<td  sec:authorize="hasRole('ROLE_EMPLOYEE') " style="font-size: 20px;font-weight: bold;text-align: center">
 								<div th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
-									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
+									<div th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}" style="font-size: 20px;font-weight: bold;text-align: center">
 											<span th:if="${administrationManager.craftbarBwB(itemAction.getPid()) >= administrationManager.getArticle(itemAction.getPid()).getCriticalAmount() }"
 												  th:text="${administrationManager.craftbarBwB(itemAction.getPid())}?:''"
 												  style="font-size: 20px;font-weight: bold;text-align: center"></span>
@@ -226,7 +226,7 @@
 							<!--11--> <!--<editor-fold desc="Herstellen BwB View:E">-->
 							<td sec:authorize="hasRole('ROLE_EMPLOYEE')" width="100px">
 								<div class="inline field" th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
-									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}">
+									<div th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}">
 										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForCraft}" />
 									</div>
 								</div>
@@ -236,7 +236,7 @@
 							<!--13--> <!--<editor-fold desc="Besteht aus View:P">-->
 							<td sec:authorize="hasRole('ROLE_PERMITTED')">
 								<div th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
-									<div th:case="${T(kickstart.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(itemAction.getPid())}">
+									<div th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}" th:text="${administrationManager.getTextOfSubComponents(itemAction.getPid())}">
 									</div>
 								</div>
 							</td>

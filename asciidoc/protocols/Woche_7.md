@@ -8,5 +8,5 @@ Gruppe 34, Schriftführer: Daniel Körsten
 - keine get und set Tests
 - externe Schnittstelle und Lösungsstrategie UND ARCHITEKTUR in Entwicklerdoku
 - Stichpunkte aus Protokoll letzter Woche durchsuchen
-- CarPool mehr in Controller bspw. rent
+- CarPool mehr in Wawi.Controller bspw. rent
 - Javadoc erstellen (Zukunft) Was macht die Funktion? Was ist die Magie dahinter?

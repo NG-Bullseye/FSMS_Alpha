@@ -130,7 +130,7 @@ entsprechenden Aufgabenbereiche des Programms bereitstellen:
 | Inventory Management | Dies ist die lagerverwaltung. Artikel können hier beispielsweise Nachbestellt werden.                                                                            |
 | Catalog Management   | Die Katalogverwaltung. Der Kunde kann auf unsere Webseite den Katalog einsehen und ihn filtern. Außerdem ist es möglich, Artikel vor dem Kunden zu "verstecken". |
 
-Die einzelnen Packages interagieren über ihre jeweiligen Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben. Somit ist die Trennung des Controllers vom Model gewährleistet.
+Die einzelnen Packages interagieren über ihre jeweiligen Wawi.Controller Klassen (siehe MVC Pattern). Komplexere Aufgaben/Berechnungen werden an die Manager weitergegeben. Somit ist die Trennung des Controllers vom Model gewährleistet.
 
 Ein sehr entscheidener Schwerpunkt des Projekts war die Implementierung des Composite-Musters für die Artikel. Da Datenbanken es nur schwer zulassen eine baumstrukturierte Datenstruktur zu realisieren, haben wir unser Composite dementsprechend angepasst. Eine ausführliche Erklärung dazu kann man unter dem Punkt Entwurfsmuster nachlesen.
 
@@ -174,10 +174,10 @@ Für die Webansicht wurde das CSS-Framework Semantic-UI benutzt.
 ## Verwendete Muster
 Entwurfsmuster
 
-Model-View-Controller(MVC)
+Model-View-Wawi.Controller(MVC)
 
-Wir verwenden das MVC-Muster (Model-View-Controller) mit einer Umsetzung durch Spring und Thymeleaf. 
-Die Controller und Manager bilden das Java-basierte Backend des Programms und sind für die Verwaltung und Verarbeitung der Daten verantwortlich. Der Controller dient als Verbindung zwischen View und Model, da er die Eingaben des Views verarbeitet und auf Fehler prüft und anschließend das Model dementsprechend modifiziert. 
+Wir verwenden das MVC-Muster (Model-View-Wawi.Controller) mit einer Umsetzung durch Spring und Thymeleaf. 
+Die Wawi.Controller und Manager bilden das Java-basierte Backend des Programms und sind für die Verwaltung und Verarbeitung der Daten verantwortlich. Der Wawi.Controller dient als Verbindung zwischen View und Model, da er die Eingaben des Views verarbeitet und auf Fehler prüft und anschließend das Model dementsprechend modifiziert. 
 Im View werden mittels Thymeleaftemplates die Daten des Models angezeigt. Ebenso werden darüber die Eingaben der Benutzer getätigt. Dabei bleibt die View aber vom Model unabhängig.
 
 Composite
