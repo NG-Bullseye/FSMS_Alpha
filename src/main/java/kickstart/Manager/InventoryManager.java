@@ -64,11 +64,13 @@ public class InventoryManager {
 	 * 
 	 * @param inventory   The repository where InventoryItems are saved
 	 */
-	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory,
-							@NotNull AdministrationManager administrationManager) {
+	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory) {
 
 		this.inventory = inventory;
-		this.administrationManager=administrationManager;
+	}
+
+	public void setAdministrationManager(AdministrationManager administrationManager) {
+		this.administrationManager = administrationManager;
 	}
 
 	//public BusinessTime getTime() {

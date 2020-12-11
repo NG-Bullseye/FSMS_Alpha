@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import kickstart.Manager.AdministrationManager;
 import kickstart.Manager.InventoryManager;
 import kickstart.Micellenious.ReorderableInventoryItem;
 import org.salespointframework.inventory.Inventory;
@@ -28,8 +29,8 @@ import lombok.Getter;
 public class InventoryController {
 
 	@Getter
-	private InventoryManager manager;
-
+	private InventoryManager inventoryManager;
+	private AdministrationManager administrationManager;
 
 	/**
 	 * This inner class is used to easier combine information from Articles and
@@ -57,9 +58,10 @@ public class InventoryController {
 	 *                    saved
 	 * @param accountancy This allows to add expenses and gives the current time
 	 */
-	public InventoryController(Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy) {
-
-		manager = new InventoryManager(inventory, getManager().getAdministrationManager());
+	public InventoryController(Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy, AdministrationManager administrationManager) {
+		this.administrationManager=administrationManager;
+		this.inventoryManager = new InventoryManager(inventory);
+		inventoryManager.setAdministrationManager(administrationManager);
 	}
 
 	/**
@@ -74,7 +76,7 @@ public class InventoryController {
 	public String inventoryView(Model model) {
 		List<TableElement> tableElements = new ArrayList<TableElement>();
 
-		for (ReorderableInventoryItem item : manager.getInventory().findAll()) {
+		for (ReorderableInventoryItem item : inventoryManager.getInventory().findAll()) {
 			tableElements
 					.add(new TableElement(item.getProduct().getName(), item.getQuantity().getAmount().toString(), " "));
 		}
