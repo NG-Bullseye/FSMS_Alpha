@@ -915,7 +915,7 @@ public class AdministrationManager {
 		if(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).isPresent()
 				&&(inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get().getAmountBwB()>= action.getAmountForZerlegen())){
 			InventoryItemAction outAction=new InventoryItemAction(action.getPid(),0,0,action.getAmountForZerlegen(), administrationManager);
-			inventoryManager.decreaseBestand(action,materialQuelle );//decrease amount of Gesamtbestand
+			inventoryManager.decreaseBestand(outAction,materialQuelle );//decrease amount of Gesamtbestand
 
 			//this.out(outAction,user,materialQuelle);
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());

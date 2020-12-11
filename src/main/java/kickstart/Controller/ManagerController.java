@@ -86,6 +86,7 @@ public class ManagerController {
 		this.administrationManager = new AdministrationManager(botManager,activityLogManager,catalog, inventoryManager,inventory,orderManager,cartOrderManager);
 		this.businessTime = businessTime;
 		this.inventoryManager=inventoryManager;
+		this.inventoryManager.setAdministrationManager(administrationManager);
 		this.administrationManager = administrationManager;
 		this.cartOrderManager=cartOrderManager;
 		this.userManagement=userManagement;

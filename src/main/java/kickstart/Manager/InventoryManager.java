@@ -65,7 +65,6 @@ public class InventoryManager {
 	 * @param inventory   The repository where InventoryItems are saved
 	 */
 	public InventoryManager(@NotNull Inventory<ReorderableInventoryItem> inventory) {
-
 		this.inventory = inventory;
 	}
 
@@ -288,8 +287,12 @@ public class InventoryManager {
 	}
 
 	public void decreaseBestand(InventoryItemAction action, Location lager) {
+		if(action==null)throw new IllegalArgumentException();
+		if(administrationManager==null)throw new IllegalArgumentException();
+		if(lager==null)throw new IllegalArgumentException();
+
 		Article a=administrationManager.getArticle(action.getPid());
-		decreaseBestand(action,lager);
+		decreaseBestand(a,Quantity.of(action.getAmountForOut()),lager);
 
 	}
 

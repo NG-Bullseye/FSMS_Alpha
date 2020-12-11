@@ -9,6 +9,7 @@ import kickstart.Manager.AdministrationManager;
 import kickstart.Manager.InventoryManager;
 import kickstart.Micellenious.ReorderableInventoryItem;
 import org.salespointframework.inventory.Inventory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,6 +60,7 @@ public class InventoryController {
 	 * @param accountancy This allows to add expenses and gives the current time
 	 */
 	public InventoryController(Inventory<ReorderableInventoryItem> inventory, AccountancyManager accountancy, AdministrationManager administrationManager) {
+
 		this.administrationManager=administrationManager;
 		this.inventoryManager = new InventoryManager(inventory);
 		inventoryManager.setAdministrationManager(administrationManager);
