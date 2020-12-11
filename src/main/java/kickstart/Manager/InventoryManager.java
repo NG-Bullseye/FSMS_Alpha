@@ -70,6 +70,9 @@ public class InventoryManager {
 	}
 
 	public void setAdministrationManager(AdministrationManager administrationManager) {
+		if(administrationManager==null){
+			throw new IllegalArgumentException();
+		}
 		this.administrationManager = administrationManager;
 	}
 
