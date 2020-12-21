@@ -1166,7 +1166,7 @@ public class AdministrationManager {
 	 */
 	private int maxCraft_Layer(ProductIdentifier thisComponentId, int amountOfSuperKomponent, int maximalCraftNumberForPreviousLayer, Location bestandLocation){
 		//<editor-fold desc="NullChecks">
-		if(thisComponentId==null)new NullPointerException();
+		if(thisComponentId==null) throw new NullPointerException();
 		//</editor-fold>
 		//<editor-fold desc="Update maximale Craft Zahl">
 		int xMalCraftbarInThisLayer=maximalCraftNumberForPreviousLayer;

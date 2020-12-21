@@ -224,10 +224,6 @@ public class ReorderableInventoryItem extends InventoryItem {
 		this.amountHl = amountHl;
 	}
 
-	public Map<LocalDateTime, Quantity> getReorders() {
-		return reorders;
-	}
-
 	public void setReorders(Map<LocalDateTime, Quantity> reorders) {
 		this.reorders = reorders;
 	}

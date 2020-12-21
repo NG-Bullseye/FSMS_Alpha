@@ -33,19 +33,19 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @SpringBootTest
 public abstract class AbstractWebIntegrationTests {
 
-	@Autowired WebApplicationContext context;
-	@Autowired FilterChainProxy securityFilterChain;
+	//@Autowired WebApplicationContext context;
+	//@Autowired FilterChainProxy securityFilterChain;
 
 	protected MockMvc mvc;
 
 	@BeforeAll
 	public void setUp() {
 
-		context.getServletContext().setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, context);
+		//context.getServletContext().setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, context);
 
-		mvc = MockMvcBuilders.webAppContextSetup(context)//
-				.apply(springSecurity())
-				.addFilters(securityFilterChain).//
-				build();
+		//mvc = MockMvcBuilders.webAppContextSetup(context)//
+		//		.apply(springSecurity())
+		//		.addFilters(securityFilterChain).//
+		//		build();
 	}
 }

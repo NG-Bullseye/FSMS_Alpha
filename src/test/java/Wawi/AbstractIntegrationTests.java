@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Oliver Gierke
  * @author Andreas Zaschka
  */
-@TestInstance(Lifecycle.PER_CLASS)
-@SpringBootTest
-@Transactional
+//@TestInstance(Lifecycle.PER_CLASS)
+//@SpringBootTest
+//@Transactional
 public abstract class AbstractIntegrationTests {}
