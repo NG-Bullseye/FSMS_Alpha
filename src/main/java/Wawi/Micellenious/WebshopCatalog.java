@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.salespointframework.catalog.Catalog;
 
 import Wawi.articles.Article;
+import org.springframework.data.util.Streamable;
 
 public interface WebshopCatalog extends Catalog<Article> {
 	//static final Sort DEFAULT_SORT = new Sort(Sort.Direction.DESC, "productIdentifier");
@@ -20,6 +21,7 @@ public interface WebshopCatalog extends Catalog<Article> {
 	 * default Iterable<Article> findByType(Article.ArticleType type) { return
 	 * findByType(type, DEFAULT_SORT); }
 	 */
+
 
 	default Iterable<Article> findComposite() {
 		Iterable<Article> allCategories = this.findAll();
@@ -41,6 +43,8 @@ public interface WebshopCatalog extends Catalog<Article> {
 		return categories;
 	}
 
+
+
 	default Iterable<Article> findByColours(@NotNull ArrayList<String> colours) {
 		HashSet<Article> rightColours = new HashSet<>();
 		for (Article article : this.findAll()) {
@@ -53,6 +57,9 @@ public interface WebshopCatalog extends Catalog<Article> {
 		}
 		return rightColours;
 	}
+
+
+
 
 	/*
 

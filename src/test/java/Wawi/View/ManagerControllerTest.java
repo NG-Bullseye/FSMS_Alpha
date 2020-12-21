@@ -3,7 +3,7 @@ package Wawi.View;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-
+import Wawi.articles.Article;
 import Wawi.AbstractWebIntegrationTests;
 import Wawi.Application;
 import Wawi.Controller.MainController;
@@ -26,12 +26,14 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.junit.runner.RunWith;
+import org.salespointframework.catalog.ProductIdentifier;
 import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.util.Streamable;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.test.context.ContextConfiguration;
@@ -120,9 +122,27 @@ class ManagerControllerTest {
 	@Test
 	void testCommitManager() {
 
-		for(ReorderableInventoryItem r:inventoryIt){
-			System.out.println(r.getArticle().getName());
-		}/**/
+		final String ARTICLE_TO_TEST="Loop Body Kit muddy";
+
+		ProductIdentifier pid=null;
+		Streamable<Article> as2= catalog.findByName(ARTICLE_TO_TEST);
+		System.out.println(as2.get().count());
+		for (Article a:as2) {
+			pid=a.getId();
+		}
+		assertThat(administrationManager.craftbarHl(pid)).isEqualTo(0);
+
+
+
+
+
+
+
+
+
+
+
+		/**/
 
 		//fail("Maul");
 		/*UserAccount userAccount= new UserAccount();
