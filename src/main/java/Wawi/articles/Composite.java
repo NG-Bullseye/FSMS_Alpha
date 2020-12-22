@@ -58,7 +58,8 @@ public class Order {
     private Map<String, Double> itemPriceMap;
 
  */
-	@ElementCollection
+
+	@ElementCollection(fetch = FetchType.EAGER)
 	private Map<String, Integer> partIds;
 
 	// private List<ProductIdentifier> partIds;

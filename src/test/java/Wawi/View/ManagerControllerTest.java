@@ -3,8 +3,10 @@ package Wawi.View;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+
+import Wawi.AbstractIntegrationTest;
 import Wawi.articles.Article;
-import Wawi.AbstractWebIntegrationTests;
+
 import Wawi.Application;
 import Wawi.Controller.MainController;
 import Wawi.Controller.ManagerController;
@@ -34,27 +36,10 @@ import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.Streamable;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.stereotype.Controller;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.ExtendedModelMap;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.WebApplicationContext;
 
-import javax.validation.constraints.NotNull;
-import java.util.Optional;
-@ContextConfiguration(classes = {Application.class, WebSecurityConfiguration.class}) // With necessary imports
-@SpringBootTest()
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@RunWith( SpringRunner.class )
-class ManagerControllerTest {
+
+class ManagerControllerTest extends AbstractIntegrationTest {
+	//<editor-fold desc="Locals">
 	@Autowired
 	private LogRepository logRepository;
 	@Autowired
@@ -95,6 +80,7 @@ class ManagerControllerTest {
 	private String[] categoriesAll;
 
 	private Iterable<ReorderableInventoryItem> inventoryIt;
+	//</editor-fold>
 
 	@BeforeAll
 	public void setUp() {
@@ -116,14 +102,13 @@ class ManagerControllerTest {
 		this.categoriesAll=inventoryManager.getCategoriesAll();
 		this.inventoryIt=inventoryManager.getInventory().findAll();
 	}
-	/**/
+
 
 
 	@Test
 	void testCommitManager() {
 
 		final String ARTICLE_TO_TEST="Loop Body Kit muddy";
-
 		ProductIdentifier pid=null;
 		Streamable<Article> as2= catalog.findByName(ARTICLE_TO_TEST);
 		System.out.println(as2.get().count());
@@ -132,7 +117,7 @@ class ManagerControllerTest {
 		}
 		assertThat(administrationManager.craftbarHl(pid)).isEqualTo(0);
 
-
+	}
 
 
 
@@ -162,6 +147,6 @@ class ManagerControllerTest {
 		//Iterable<Object> object = (Iterable<Object>) model.asMap().get("ManagerView");
 
 		//assertThat(object).hasSize(9);]*/
-	}
+
 
 }
