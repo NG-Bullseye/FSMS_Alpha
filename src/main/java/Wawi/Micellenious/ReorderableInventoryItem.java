@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.validation.constraints.NotNull;
 
 import Wawi.TelegramInterface.BotManager;
@@ -30,7 +31,7 @@ import lombok.Getter;
 public class ReorderableInventoryItem extends InventoryItem {
 
 	@Getter
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	private Map<LocalDateTime, Quantity> reorders;
 	private String unitQuant;
 	private Integer amountBwB;
