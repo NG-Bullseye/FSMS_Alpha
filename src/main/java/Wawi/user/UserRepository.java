@@ -9,7 +9,7 @@ import lombok.NonNull;
  * @author Daniel Koersten
  *
  */
-interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
 	/**
 	 * Search for {@link User} in database for given {@link UserAccount}.

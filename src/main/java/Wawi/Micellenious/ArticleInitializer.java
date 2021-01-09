@@ -60,7 +60,7 @@ public class ArticleInitializer implements DataInitializer {
 				"muddy",
 				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p1);
-		inventory.save(new ReorderableInventoryItem(botManager,p1, Quantity.of(8,Metric.UNIT),"mm²"));
+		inventory.save(new ReorderableInventoryItem(botManager,p1,  Quantity.of(0,Metric.UNIT),"mm²"));
 		print(p1);
 
 		Part p2 = new Part("Latex",
@@ -70,7 +70,7 @@ public class ArticleInitializer implements DataInitializer {
 				"rocky",
 				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p2);
-		inventory.save(new ReorderableInventoryItem(botManager,p2, Quantity.of(8,Metric.UNIT),"mm²"));
+		inventory.save(new ReorderableInventoryItem(botManager,p2,  Quantity.of(0,Metric.UNIT),"mm²"));
 		print(p2);
 
 		Part p3 = new Part("Latex",
@@ -80,7 +80,7 @@ public class ArticleInitializer implements DataInitializer {
 				"veggie",
 				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p3);
-		inventory.save(new ReorderableInventoryItem(botManager,p3, Quantity.of(8,Metric.UNIT),"mm²"));
+		inventory.save(new ReorderableInventoryItem(botManager,p3,  Quantity.of(0,Metric.UNIT),"mm²"));
 		print(p3);
 
 		Part p4 = new Part("Latex",
@@ -90,222 +90,222 @@ public class ArticleInitializer implements DataInitializer {
 				"sandy",
 				"https://stackoverflow.com/questions/53635609/thymeleaf-click-able-url-web-link-in-table");
 		catalog.save(p4);
-		inventory.save(new ReorderableInventoryItem(botManager,p4, Quantity.of(8,Metric.UNIT),"bahn"));
+		inventory.save(new ReorderableInventoryItem(botManager,p4,  Quantity.of(0,Metric.UNIT),"bahn"));
 		print(p4);
 
 		Part p5 = new Part("PLA", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");
 		catalog.save(p5);
-		inventory.save(new ReorderableInventoryItem(botManager,p5, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p5,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p5);
 
 		Part p6 = new Part("PLA", 15,9 ,"G44R5", "rocky","https//:thePlaParty.com");
 		catalog.save(p6);
-		inventory.save(new ReorderableInventoryItem(botManager,p6, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p6,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p6);
 
 		Part p7 = new Part("PLA", 15,9 ,"G44R5", "veggie","https//:thePlaParty.com");
 		catalog.save(p7);
-		inventory.save(new ReorderableInventoryItem(botManager,p7, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p7,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p7);
 
 		Part p8 = new Part("PLA", 15,9 ,"G44R5", "sandy","https//:thePlaParty.com");
 		catalog.save(p8);
-		inventory.save(new ReorderableInventoryItem(botManager,p8, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p8,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p8);
 
 		Part p9 = new Part("PVA Transparent", 15,9 ,"G44R5", "farblos","https//:thePlaParty.com");
 		catalog.save(p9);
-		inventory.save(new ReorderableInventoryItem(botManager,p9, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p9,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p9);
 
 		Part p10 = new Part("PVA Milchig", 15,9 ,"G44R5", "farblos","https//:thePlaParty.com");
 		catalog.save(p10);
-		inventory.save(new ReorderableInventoryItem(botManager,p10, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p10,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p10);
 
 		Part p11 = new Part("Draht 1mmØ", 15,9 ,"G44R5", "farblos","https//:thePlaParty.com");
 		catalog.save(p11);
-		inventory.save(new ReorderableInventoryItem(botManager,p11, Quantity.of(10, Metric.UNIT),"mm" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p11,  Quantity.of(0, Metric.UNIT),"mm" ));
 		print(p11);
 
 		Part p12 = new Part("Steine 4-6cm", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");
 		catalog.save(p12);
-		inventory.save(new ReorderableInventoryItem(botManager,p12, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p12,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p12);
 
 		Part p13 = new Part("Steine 4-6cm", 15,9 ,"G44R5", "rocky","https//:thePlaParty.com");
 		catalog.save(p13);
-		inventory.save(new ReorderableInventoryItem(botManager,p13, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p13,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p13);
 
 		Part p14 = new Part("Steine 4-6cm", 15,9 ,"G44R5", "veggie","https//:thePlaParty.com");
 		catalog.save(p14);
-		inventory.save(new ReorderableInventoryItem(botManager,p14, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p14,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p14);
 
 		Part p15 = new Part("Steine 4-6cm", 15,9 ,"G44R5", "sandy","https//:thePlaParty.com");
 		catalog.save(p15);
-		inventory.save(new ReorderableInventoryItem(botManager,p15, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p15,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p15);
 
 
 		Part p16 = new Part("Steine <4cm", 15,9 ,"G44R5", "muddy","https//:thePlaParty.com");
 		catalog.save(p16);
-		inventory.save(new ReorderableInventoryItem(botManager,p16, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p16,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p16);
 
 		Part p17 = new Part("Steine <4cm", 15,9 ,"G44R5", "rocky","https//:thePlaParty.com");
 		catalog.save(p17);
-		inventory.save(new ReorderableInventoryItem(botManager,p17, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p17,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p17);
 
 		Part p18 = new Part("Steine <4cm", 15,9 ,"G44R5", "veggie","https//:thePlaParty.com");
 		catalog.save(p18);
-		inventory.save(new ReorderableInventoryItem(botManager,p18, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p18,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p18);
 
 		Part p19 = new Part("Steine <4cm", 15,9 ,"G44R5", "sandy","https//:thePlaParty.com");
 		catalog.save(p19);
-		inventory.save(new ReorderableInventoryItem(botManager,p19, Quantity.of(10, Metric.UNIT),"g" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p19,  Quantity.of(0, Metric.UNIT),"g" ));
 		print(p19);
 
 		Part p20 = new Part("Wirbel", 15,9 ,"", "farblos","https//:thePlaParty.com");
 		catalog.save(p20);
-		inventory.save(new ReorderableInventoryItem(botManager,p20, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p20,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p20);
 
 		Part p21 = new Part("Karabiner", 15,9 ,"", "farblos","https//:thePlaParty.com");
 		catalog.save(p21);
-		inventory.save(new ReorderableInventoryItem(botManager,p21, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p21,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p21);
 
 		Part p22 = new Part("Perle", 15,9 ,"", "muddy","https//:thePlaParty.com");
 		catalog.save(p22);
-		inventory.save(new ReorderableInventoryItem(botManager,p22, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p22,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p22);
 
 		Part p23 = new Part("Perle", 15,9 ,"", "rocky","https//:thePlaParty.com");
 		catalog.save(p23);
-		inventory.save(new ReorderableInventoryItem(botManager,p23, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p23,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p23);
 
 		Part p24 = new Part("Perle", 15,9 ,"", "veggie","https//:thePlaParty.com");
 		catalog.save(p24);
-		inventory.save(new ReorderableInventoryItem(botManager,p24, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p24,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p24);
 
 		Part p25 = new Part("Perle", 15,9 ,"", "sandy","https//:thePlaParty.com");
 		catalog.save(p25);
-		inventory.save(new ReorderableInventoryItem(botManager,p25, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p25,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p25);
 
 		Part p26 = new Part("Papier Gebrauchsanweisung", 15,9 ,"", "farblos","https//:thePlaParty.com");
 		catalog.save(p26);
-		inventory.save(new ReorderableInventoryItem(botManager,p26, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p26,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p26);
 
 		Part p27 = new Part("Sticker #musteanhaun", 15,9 ,"", "farblos","https//:thePlaParty.com");
 		catalog.save(p27);
-		inventory.save(new ReorderableInventoryItem(botManager,p27, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p27,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p27);
 
 		Part p28 = new Part("Tütchen klein",15,9 ,"", "farblos","https//:thePlaParty.com");
 		catalog.save(p28);
-		inventory.save(new ReorderableInventoryItem(botManager,p28, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p28,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p28);
 
 		Part p29 = new Part("Tütchen SLIP", 15,9 ,"", "farblos","https//:thePlaParty.com");
 		catalog.save(p29);
-		inventory.save(new ReorderableInventoryItem(botManager,p29, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p29,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p29);
 
 		Part p30 = new Part("Tütchen LOOP", 15,9 ,"", "farblos","");
 		catalog.save(p30);
-		inventory.save(new ReorderableInventoryItem(botManager,p30, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p30,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p30);
 
 		Part p31 = new Part("Tütchen ZIP", 15,9 ,"", "farblos","");
 		catalog.save(p31);
-		inventory.save(new ReorderableInventoryItem(botManager,p31, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p31,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p31);
 
 		Part p32 = new Part("Tütchen SNÄP", 15,9 ,"", "farblos","");
 		catalog.save(p32);
-		inventory.save(new ReorderableInventoryItem(botManager,p32, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p32,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p32);
 
 		Part p33 = new Part("Karton LOOP", 15,9 ,"", "farblos","");
 		catalog.save(p33);
-		inventory.save(new ReorderableInventoryItem(botManager,p33, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p33,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p33);
 
 		Part p34 = new Part("Karton ZIP", 15,9 ,"", "farblos","");
 		catalog.save(p34);
-		inventory.save(new ReorderableInventoryItem(botManager,p34, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p34,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p34);
 
 		Part p35 = new Part("Karton SNÄP", 15,9 ,"", "farblos","");
 		catalog.save(p35);
-		inventory.save(new ReorderableInventoryItem(botManager,p35, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p35,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p35);
 
 		Part p36 = new Part("Karton FISHSTONES", 15,9 ,"", "farblos","");
 		catalog.save(p36);
-		inventory.save(new ReorderableInventoryItem(botManager,p36, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p36,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p36);
 
 		Part p37 = new Part("Sticker Markierung", 15,9 ,"", "muddy","");
 		catalog.save(p37);
-		inventory.save(new ReorderableInventoryItem(botManager,p37, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p37,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p37);
 
 		Part p38 = new Part("Sticker Markierung", 15,9 ,"", "rocky","");
 		catalog.save(p38);
-		inventory.save(new ReorderableInventoryItem(botManager,p38, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p38,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p38);
 
 		Part p39 = new Part("Sticker Markierung", 15,9 ,"", "veggie","");
 		catalog.save(p39);
-		inventory.save(new ReorderableInventoryItem(botManager,p39, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p39,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p39);
 
 		Part p40 = new Part("Sticker Markierung", 15,9 ,"", "sandy","");
 		catalog.save(p40);
-		inventory.save(new ReorderableInventoryItem(botManager,p40, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p40,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p40);
 
 		Part p41 = new Part("Sticker Verschluss", 15,9 ,"", "muddy","");
 		catalog.save(p41);
-		inventory.save(new ReorderableInventoryItem(botManager,p41, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p41,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p41);
 
 		Part p42 = new Part("Sticker Verschluss", 15,9 ,"", "rocky","");
 		catalog.save(p42);
-		inventory.save(new ReorderableInventoryItem(botManager,p42, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p42,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p42);
 
 		Part p43 = new Part("Sticker Verschluss", 15,9 ,"", "veggie","");
 		catalog.save(p43);
-		inventory.save(new ReorderableInventoryItem(botManager,p43, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p43,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p43);
 
 		Part p44 = new Part("Sticker Verschluss", 15,9 ,"", "sandy","");
 		catalog.save(p44);
-		inventory.save(new ReorderableInventoryItem(botManager,p44, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p44,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p44);
 
 		Part p45 = new Part("Sticker EAN", 15,9 ,"", "farblos","");
 		catalog.save(p45);
-		inventory.save(new ReorderableInventoryItem(botManager,p45, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p45,  Quantity.of(0, Metric.UNIT),"" ));
 		print(p45);
 
 		Part p46 = new Part("Tütchen FIX", 15,9 ,"", "farblos","");
 		catalog.save(p46);
-		inventory.save(new ReorderableInventoryItem(botManager,p46, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p46,  Quantity.of(0, Metric.UNIT),"" ));
 
 		Part p47 = new Part("Karton Kreuz", 15,9 ,"", "farblos","");
 		catalog.save(p47);
-		inventory.save(new ReorderableInventoryItem(botManager,p47, Quantity.of(10, Metric.UNIT),"" ));
+		inventory.save(new ReorderableInventoryItem(botManager,p47,  Quantity.of(0, Metric.UNIT),"" ));
 
 
 
@@ -3166,7 +3166,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p160);
-		inventory.save(new ReorderableInventoryItem(botManager,p160, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p160,  Quantity.of(0, Metric.UNIT)));
 
 		Part p161 = new Part(
 				"T-Shirt Logo M",
@@ -3177,7 +3177,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p161);
-		inventory.save(new ReorderableInventoryItem(botManager,p161, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p161,  Quantity.of(0, Metric.UNIT)));
 
 		Part p162 = new Part(
 				"T-Shirt Logo L",
@@ -3188,7 +3188,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p162);
-		inventory.save(new ReorderableInventoryItem(botManager,p162, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p162,  Quantity.of(0, Metric.UNIT)));
 
 		Part p163 = new Part(
 				"T-Shirt Logo XL",
@@ -3199,7 +3199,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p163);
-		inventory.save(new ReorderableInventoryItem(botManager,p163, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p163,  Quantity.of(0, Metric.UNIT)));
 
 		Part p164 = new Part(
 				"T-Shirt Logo XXL",
@@ -3210,7 +3210,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p164);
-		inventory.save(new ReorderableInventoryItem(botManager,p164, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p164,  Quantity.of(0, Metric.UNIT)));
 
 		Part p165 = new Part(
 				"T-Shirt Logo Slim S",
@@ -3221,7 +3221,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p165);
-		inventory.save(new ReorderableInventoryItem(botManager,p165, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p165,  Quantity.of(0, Metric.UNIT)));
 
 		Part p166 = new Part(
 				"T-Shirt Logo Slim M",
@@ -3232,7 +3232,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p166);
-		inventory.save(new ReorderableInventoryItem(botManager,p166, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p166,  Quantity.of(0, Metric.UNIT)));
 
 		Part p167 = new Part(
 				"T-Shirt Logo Slim L",
@@ -3243,7 +3243,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p167);
-		inventory.save(new ReorderableInventoryItem(botManager,p167, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p167,  Quantity.of(0, Metric.UNIT)));
 
 		Part p168 = new Part(
 				"T-Shirt Logo Slim XL",
@@ -3254,7 +3254,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p168);
-		inventory.save(new ReorderableInventoryItem(botManager,p168, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p168,  Quantity.of(0, Metric.UNIT)));
 
 		Part p169 = new Part(
 				"T-Shirt Logo Slim XXL",
@@ -3265,7 +3265,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p169);
-		inventory.save(new ReorderableInventoryItem(botManager,p169, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p169,  Quantity.of(0, Metric.UNIT)));
 
 		Part p170 = new Part(
 				"T-Shirt Fishy S",
@@ -3276,7 +3276,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p170);
-		inventory.save(new ReorderableInventoryItem(botManager,p170, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p170,  Quantity.of(0, Metric.UNIT)));
 
 		Part p171 = new Part(
 				"T-Shirt Fishy M",
@@ -3287,7 +3287,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p171);
-		inventory.save(new ReorderableInventoryItem(botManager,p171, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p171,  Quantity.of(0, Metric.UNIT)));
 
 		Part p172 = new Part(
 				"T-Shirt Fishy L",
@@ -3298,7 +3298,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p172);
-		inventory.save(new ReorderableInventoryItem(botManager,p172, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p172,  Quantity.of(0, Metric.UNIT)));
 
 		Part p173 = new Part(
 				"T-Shirt Fishy XL",
@@ -3309,7 +3309,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p173);
-		inventory.save(new ReorderableInventoryItem(botManager,p173, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p173,  Quantity.of(0, Metric.UNIT)));
 
 		Part p174 = new Part(
 				"T-Shirt Fishy XXL",
@@ -3320,7 +3320,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p174);
-		inventory.save(new ReorderableInventoryItem(botManager,p174, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p174,  Quantity.of(0, Metric.UNIT)));
 
 		Part p175 = new Part(
 				"T-Shirt Fishy Slim S",
@@ -3331,7 +3331,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p175);
-		inventory.save(new ReorderableInventoryItem(botManager,p175, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p175,  Quantity.of(0, Metric.UNIT)));
 
 		Part p176 = new Part(
 				"T-Shirt Fishy Slim M",
@@ -3342,7 +3342,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p176);
-		inventory.save(new ReorderableInventoryItem(botManager,p176, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p176,  Quantity.of(0, Metric.UNIT)));
 
 		Part p177 = new Part(
 				"T-Shirt Fishy Slim L",
@@ -3353,7 +3353,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p177);
-		inventory.save(new ReorderableInventoryItem(botManager,p177, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p177,  Quantity.of(0, Metric.UNIT)));
 
 		Part p178 = new Part(
 				"T-Shirt Fishy Slim XL",
@@ -3364,7 +3364,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p178);
-		inventory.save(new ReorderableInventoryItem(botManager,p178, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p178,  Quantity.of(0, Metric.UNIT)));
 
 		Part p179 = new Part(
 				"T-Shirt Fishy Slim XXL",
@@ -3375,7 +3375,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p179);
-		inventory.save(new ReorderableInventoryItem(botManager,p179, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p179,  Quantity.of(0, Metric.UNIT)));
 
 		Part p180 = new Part(
 				"T-Shirt Fishy S",
@@ -3386,7 +3386,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p180);
-		inventory.save(new ReorderableInventoryItem(botManager,p180, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p180,  Quantity.of(0, Metric.UNIT)));
 
 		Part p181 = new Part(
 				"T-Shirt Fishy M",
@@ -3397,7 +3397,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p181);
-		inventory.save(new ReorderableInventoryItem(botManager,p181, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p181,  Quantity.of(0, Metric.UNIT)));
 
 		Part p182 = new Part(
 				"T-Shirt Fishy L",
@@ -3408,7 +3408,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p182);
-		inventory.save(new ReorderableInventoryItem(botManager,p182, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p182,  Quantity.of(0, Metric.UNIT)));
 
 		Part p183 = new Part(
 				"T-Shirt Fishy XL",
@@ -3419,7 +3419,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p183);
-		inventory.save(new ReorderableInventoryItem(botManager,p183, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p183,  Quantity.of(0, Metric.UNIT)));
 
 		Part p184 = new Part(
 				"T-Shirt Fishy XXL",
@@ -3430,7 +3430,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p184);
-		inventory.save(new ReorderableInventoryItem(botManager,p184, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p184,  Quantity.of(0, Metric.UNIT)));
 
 		Part p185 = new Part(
 				"T-Shirt Fishy Slim S",
@@ -3441,7 +3441,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p185);
-		inventory.save(new ReorderableInventoryItem(botManager,p185, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p185,  Quantity.of(0, Metric.UNIT)));
 
 		Part p186 = new Part(
 				"T-Shirt Fishy Slim M",
@@ -3452,7 +3452,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p186);
-		inventory.save(new ReorderableInventoryItem(botManager,p186, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p186,  Quantity.of(0, Metric.UNIT)));
 
 		Part p187 = new Part(
 				"T-Shirt Fishy Slim L",
@@ -3463,7 +3463,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p187);
-		inventory.save(new ReorderableInventoryItem(botManager,p187, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p187,  Quantity.of(0, Metric.UNIT)));
 
 		Part p188 = new Part(
 				"T-Shirt Fishy Slim XL",
@@ -3474,7 +3474,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p188);
-		inventory.save(new ReorderableInventoryItem(botManager,p188, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p188,  Quantity.of(0, Metric.UNIT)));
 
 		Part p189 = new Part(
 				"T-Shirt Fishy Slim XXL",
@@ -3485,7 +3485,7 @@ public class ArticleInitializer implements DataInitializer {
 				""
 		);
 		catalog.save(p189);
-		inventory.save(new ReorderableInventoryItem(botManager,p189, Quantity.of(10, Metric.UNIT)));
+		inventory.save(new ReorderableInventoryItem(botManager,p189,  Quantity.of(0, Metric.UNIT)));
 
 
 		//</editor-fold>

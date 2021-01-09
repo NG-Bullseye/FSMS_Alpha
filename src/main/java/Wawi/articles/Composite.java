@@ -145,11 +145,10 @@ public class Order {
 	public void addId(@NotNull Article article) {
 		Set<String> ids=this.getIdsSet();
 		if (ids.size()<=0) {
-			System.out.println("NO COMPONENTS IN "+this.getName()); }
+			//System.out.println("NO COMPONENTS IN "+this.getName());
+		}
 
-		System.out.println(article.getName()+
-				" ADDED TO "+
-				this.getName());
+		//System.out.println(article.getName()+ " ADDED TO "+ this.getName());
 		if (partIds.containsKey(article.getId().getIdentifier())) {
 			this.partIds.put(article.getId().getIdentifier(), partIds.get(article.getId().getIdentifier()) + 1);
 			partIds.size();
@@ -165,7 +164,9 @@ public class Order {
 					ids) {
 				//System.out.println("  "+p+" "+partIds.get(p)+" MAL");
 			}
-		} else {System.out.println("NO COMPONENTS IN "+this.getName()+"AFTER ADDING "+article.getName()); }
+		} else {
+			//System.out.println("NO COMPONENTS IN "+this.getName()+"AFTER ADDING "+article.getName());
+		}
 
 	}
 
