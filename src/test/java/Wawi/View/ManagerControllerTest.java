@@ -274,6 +274,9 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 	@Test
 	void testCorrectRecipie(){
+		final int ITERATIONS=50;
+
+
 		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
 		for (ReorderableInventoryItem item:all) {
 			assertThat(inventoryManager.getInventory().findByProductIdentifier(item.getArticle().getId()).get().getGesamtbestand()).isEqualTo(0);
@@ -283,46 +286,48 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(0);
 
 
-		ProductIdentifier pid1=getPid("Sticker Verschluss sandy");
-		InventoryItemAction a=new InventoryItemAction(pid1,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid2=getPid("Sticker Markierung sandy");
-		a=new InventoryItemAction(pid2,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid3=getPid("Tütchen FIX farblos");
-		a=new InventoryItemAction(pid3,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid4=getPid("Tütchen SLIP farblos");
-		a=new InventoryItemAction(pid4,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid5=getPid("Papier Gebrauchsanweisung farblos");
-		a=new InventoryItemAction(pid5,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid6=getPid("Sticker #musteanhaun farblos");
-		a=new InventoryItemAction(pid6,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid7=getPid("Karton SNÄP farblos");
-		a=new InventoryItemAction(pid7,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid8=getPid("Karton Kreuz farblos");
-		a=new InventoryItemAction(pid8,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid9=getPid("Wirbel farblos");
-		a=new InventoryItemAction(pid9,  2,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid10=getPid("Tütchen klein farblos");
-		a=new InventoryItemAction(pid10,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
+		for (int i=0;i<ITERATIONS;i++) {
+			//<editor-fold desc="put one of each component in DB">
+			ProductIdentifier pid1=getPid("Sticker Verschluss sandy");
+			InventoryItemAction a=new InventoryItemAction(pid1,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid2=getPid("Sticker Markierung sandy");
+			a=new InventoryItemAction(pid2,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid3=getPid("Tütchen FIX farblos");
+			a=new InventoryItemAction(pid3,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid4=getPid("Tütchen SLIP farblos");
+			a=new InventoryItemAction(pid4,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid5=getPid("Papier Gebrauchsanweisung farblos");
+			a=new InventoryItemAction(pid5,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid6=getPid("Sticker #musteanhaun farblos");
+			a=new InventoryItemAction(pid6,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid7=getPid("Karton SNÄP farblos");
+			a=new InventoryItemAction(pid7,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid8=getPid("Karton Kreuz farblos");
+			a=new InventoryItemAction(pid8,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid9=getPid("Wirbel farblos");
+			a=new InventoryItemAction(pid9,  2,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid10=getPid("Tütchen klein farblos");
+			a=new InventoryItemAction(pid10,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
 		/*map1= new HashMap();
 		map1.put(p44 ,1L)
 		map1.put(p40 ,1L)
@@ -335,119 +340,117 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		map1.put(p20 ,2L)
 		map1.put(p28 ,1L)*/
 
-		ProductIdentifier pid11=getPid("Draht ZIP 1mmØ farblos");
+			ProductIdentifier pid11=getPid("Draht ZIP 1mmØ farblos");
 
-		a=new InventoryItemAction(pid11,  6,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid11_1=getPid("Draht 1mmØ farblos");
-		a=new InventoryItemAction(pid11_1,  20,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid12=getPid("ZIP Body sandy");
-		a=new InventoryItemAction(pid12,  2,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid12_1=getPid("PLA sandy");
-		a=new InventoryItemAction(pid12_1,  15,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid12_2=getPid("PVA Milchig farblos");
-		a=new InventoryItemAction(pid12_2,  2,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid13=getPid("FIX-Gummi S sandy");
-		a=new InventoryItemAction(pid13,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid13_1=getPid("Latex sandy");
-		a=new InventoryItemAction(pid13_1,  40*30,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid14=getPid("FIX-Gummi M sandy");
-		a=new InventoryItemAction(pid14,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid14_1=getPid("Latex sandy");
-		a=new InventoryItemAction(pid14_1,  70*60,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid15=getPid("FIX-Gummi L sandy");
+			a=new InventoryItemAction(pid11,  6,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid11_1=getPid("Draht 1mmØ farblos");
+			a=new InventoryItemAction(pid11_1,  20,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid12=getPid("ZIP Body sandy");
+			a=new InventoryItemAction(pid12,  2,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid12_1=getPid("PLA sandy");
+			a=new InventoryItemAction(pid12_1,  15,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid12_2=getPid("PVA Milchig farblos");
+			a=new InventoryItemAction(pid12_2,  2,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid13=getPid("FIX-Gummi S sandy");
+			a=new InventoryItemAction(pid13,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid13_1=getPid("Latex sandy");
+			a=new InventoryItemAction(pid13_1,  40*30,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid14=getPid("FIX-Gummi M sandy");
+			a=new InventoryItemAction(pid14,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid14_1=getPid("Latex sandy");
+			a=new InventoryItemAction(pid14_1,  70*60,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid15=getPid("FIX-Gummi L sandy");
 
-		a=new InventoryItemAction(pid15,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid15_1=getPid("Latex sandy");
-		a=new InventoryItemAction(pid15_1,  100*100,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid16=getPid("SLIP-Gummi M sandy");
+			a=new InventoryItemAction(pid15,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid15_1=getPid("Latex sandy");
+			a=new InventoryItemAction(pid15_1,  100*100,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid16=getPid("SLIP-Gummi M sandy");
 
-		a=new InventoryItemAction(pid16,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid16_1=getPid("Latex sandy");
-		a=new InventoryItemAction(pid16_1,  70*20,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid17=getPid("SLIP-Gummi L sandy");
+			a=new InventoryItemAction(pid16,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid16_1=getPid("Latex sandy");
+			a=new InventoryItemAction(pid16_1,  70*20,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid17=getPid("SLIP-Gummi L sandy");
 
-		a=new InventoryItemAction(pid17,  2,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid17_1=getPid("Latex sandy");
+			a=new InventoryItemAction(pid17,  2,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid17_1=getPid("Latex sandy");
 
-		a=new InventoryItemAction(pid17_1,  100*30,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid18=getPid("Stein S sandy");
+			a=new InventoryItemAction(pid17_1,  100*30,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid18=getPid("Stein S sandy");
 
-		a=new InventoryItemAction(pid18,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid18_1=getPid("Steine <4cm sandy");
+			a=new InventoryItemAction(pid18,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid18_1=getPid("Steine <4cm sandy");
 
-		a=new InventoryItemAction(pid18_1,  25,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid19=getPid("Stein M sandy");
+			a=new InventoryItemAction(pid18_1,  25,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid19=getPid("Stein M sandy");
 
-		a=new InventoryItemAction(pid19,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid19_1=getPid("Steine 4-6cm sandy");
+			a=new InventoryItemAction(pid19,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid19_1=getPid("Steine 4-6cm sandy");
 
-		a=new InventoryItemAction(pid19_1,  70,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid20=getPid("Stein L sandy");
+			a=new InventoryItemAction(pid19_1,  70,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid20=getPid("Stein L sandy");
 
-		a=new InventoryItemAction(pid20,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid20_1=getPid("Steine 4-6cm sandy");
+			a=new InventoryItemAction(pid20,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid20_1=getPid("Steine 4-6cm sandy");
 
-		a=new InventoryItemAction(pid20_1,  150,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid21=getPid("EAN ZIP Komplett-Kit sandy");
+			a=new InventoryItemAction(pid20_1,  150,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid21=getPid("EAN ZIP Komplett-Kit sandy");
 
-		a=new InventoryItemAction(pid21,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
-		ProductIdentifier pid21_1=getPid("Sticker EAN farblos");
+			a=new InventoryItemAction(pid21,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			ProductIdentifier pid21_1=getPid("Sticker EAN farblos");
 
-		a=new InventoryItemAction(pid21_1,  1,0,0, administrationManager);
-		administrationManager.reorder(a, Location.LOCATION_BWB);
-		administrationManager.reorder(a,Location.LOCATION_HL);
+			a=new InventoryItemAction(pid21_1,  1,0,0, administrationManager);
+			administrationManager.reorder(a, Location.LOCATION_BWB);
+			administrationManager.reorder(a,Location.LOCATION_HL);
+			//</editor-fold>
+		}
 
-		assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(1);
-		assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(1);
-
-
-
-
-		/*
+		assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(1*ITERATIONS);
+		assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(1*ITERATIONS);
+/*
 		map1.put(c54 ,6L)
 		map1.put(c28 ,2L)
 		map1.put(c12 ,1L)
@@ -460,8 +463,6 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		map1.put(c48 ,1L);
 		map1.put(c66 ,1L);
 		*/
-
-
 	}
 
 	private ProductIdentifier getPid(String s) {
@@ -538,21 +539,70 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		}
 		assertThat(administrationManager.craftbarHl(pid)).isEqualTo(0);
 
-
 		InventoryItemAction a=new InventoryItemAction(pid,  1,0,0, administrationManager);
-
 
 		Streamable<User>  userAccounts = userManagement.findAll();
 		List<User> users=userAccounts.toList();
 		User user=users.get(0);
 		assertThat(inventoryManager.getInventory().findByProductIdentifier(pid).get().getAmountHl()).isEqualTo(0);
 
-
  		System.out.println(user.getUserAccount());
 		administrationManager.reorder(a, Location.LOCATION_HL);
 		assertThat(inventoryManager.getInventory().findByProductIdentifier(pid).get().getAmountHl()).isEqualTo(1);
 	}
 
+	@Test
+	void test_Buy(){
+		int AMOUNT_TO_BUY= 1;
+		ProductIdentifier itemToBuy=getPid("Zip Komplett Kit sandy");
+		int currentAmount=inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl();
+
+		InventoryItemAction action=new InventoryItemAction(itemToBuy, AMOUNT_TO_BUY,0,0, administrationManager);
+		administrationManager.reorder(action,Location.LOCATION_HL);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl()).isEqualTo(currentAmount+AMOUNT_TO_BUY);
+	}
 
 
+	/**
+	 * delta tests dont require empty database. they test on current state
+	 * */
+	@Test
+	void test_Sell_delta(){
+		//<editor-fold desc="Check if DB is Empty">
+		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
+		for (ReorderableInventoryItem item:all) {
+			assertThat(inventoryManager.getInventory().findByProductIdentifier(item.getArticle().getId()).get().getGesamtbestand()).isEqualTo(0);
+		}
+		//</editor-fold>
+
+		ProductIdentifier itemToBuy=getPid("Zip Komplett Kit sandy");
+		int currentAmount=inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl();
+
+		final int AMOUNT_TO_BUY_AND_SELL= 1;
+
+		InventoryItemAction action=new InventoryItemAction(itemToBuy, AMOUNT_TO_BUY_AND_SELL,0,0, administrationManager);
+		administrationManager.reorder(action,Location.LOCATION_HL);
+
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl()).isEqualTo(AMOUNT_TO_BUY_AND_SELL+currentAmount);
+
+		User us=null;
+		for (User u:userManagement.findAll()) {
+			if(u.getFirstname().equals("Karsten"))
+				us=u;
+		}
+		if(us==null)fail("no useraccount with that name found");
+		InventoryItemAction sellAction=new InventoryItemAction(itemToBuy, 0,0,AMOUNT_TO_BUY_AND_SELL, administrationManager);
+		administrationManager.out(sellAction,us.getUserAccount(),Location.LOCATION_HL);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl()).isEqualTo(currentAmount);
+	}
+
+	@Test
+	void test_Send(){
+
+	}
+
+	@Test
+	void test_Recieve(){
+
+	}
 }

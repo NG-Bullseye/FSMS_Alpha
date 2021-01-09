@@ -220,6 +220,9 @@ public class CartOrderManager {
 	 */
 
 	public String addCostumer(UserAccount account) {
+		if(account==null){
+			throw new IllegalArgumentException("My Error: UserAccount cant be null");
+		}
 		this.account = account;
 		return "redirect:/cart";
 	}
@@ -242,7 +245,7 @@ public class CartOrderManager {
 		destination = "Home";
 		wight = Quantity.of(0, Metric.KILOGRAM);
 		cart.clear();
-		account = null;
+		//account = null;
 
 		// }
 		// return "redirect:/catalog";

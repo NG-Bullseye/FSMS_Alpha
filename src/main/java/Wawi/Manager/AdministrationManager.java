@@ -958,9 +958,13 @@ public class AdministrationManager {
 	}
 
 	public void out(InventoryItemAction action, UserAccount userAccount, Location materialQuelle) {
+		if(userAccount==null){
+			throw new IllegalArgumentException("My Error: UserAccount cant be null");
+		}
 		Cart cart=new Cart();
 		Article a=this.getArticle(action.getPid());
 		//int amount= inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().getQuantity().getAmount().intValue();
+		cartOrderManager.addCostumer(userAccount);
 		CustomerOrder customerOrder= cartOrderManager.newOrder(cart);
 		if(a instanceof Part){
 			cartOrderManager.addPart((Part)a, action.getAmountForOut(),cart);
@@ -968,8 +972,10 @@ public class AdministrationManager {
 		if(a instanceof Composite){
 			cartOrderManager.addComposite((Composite) a, action.getAmountForOut(),cart);
 		}
+		if(userAccount==null){
+			throw new IllegalArgumentException("My Error: UserAccount cant be null");
+		}
 
-		cartOrderManager.addCostumer(userAccount);
 		cartOrderManager.cancelorpayOrder(customerOrder,"bezahlen");
 
 		cartOrderManager.getOrderManager().completeOrder(customerOrder);
