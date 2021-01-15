@@ -23,7 +23,6 @@ import Wawi.order.CartOrderManager;
 import Wawi.user.User;
 import Wawi.user.UserManagement;
 
-import Wawi.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +31,6 @@ import org.salespointframework.catalog.ProductIdentifier;
 
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
-import org.salespointframework.useraccount.Role;
-import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -73,7 +70,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 
 
-	final List<String> NOT_THIS_ARTICLE_NAMES= Arrays.asList("Sticker Markierung muddy","Sticker Markierung sandy","Sticker Markierung rocky","Sticker Markierung veggie");
+	final List<String> ARCITCLE_WHICH_IS_IN_EVERY_KIT= Arrays.asList("Sticker Markierung muddy","Sticker Markierung sandy","Sticker Markierung rocky","Sticker Markierung veggie");
 	final int AMOUNT_OF_ALL_ITEMS=100;
 	List<ProductIdentifier> result;
 
@@ -122,14 +119,14 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	void test_initialization() {
+	void test_DB_isEmpty() {
 
 		ReorderableInventoryItem notThisItem=null;
 		ProductIdentifier pid=null;
 
 		Streamable<Article> as2= null;
 		result=new ArrayList<>();
-		for (String NOT_THIS_ARTICLE_NAME: NOT_THIS_ARTICLE_NAMES) {
+		for (String NOT_THIS_ARTICLE_NAME: ARCITCLE_WHICH_IS_IN_EVERY_KIT) {
 			as2 = catalog.findByName(NOT_THIS_ARTICLE_NAME);
 			for(Article a:as2){
 				result.add(a.getId());
@@ -179,6 +176,15 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 	@Test
 	void test_no_Kit_Craftbar() {
+
+		Streamable<Article> as2= null;
+		result=new ArrayList<>();
+		for (String NOT_THIS_ARTICLE_NAME: ARCITCLE_WHICH_IS_IN_EVERY_KIT) {
+			as2 = catalog.findByName(NOT_THIS_ARTICLE_NAME);
+			for(Article a:as2){
+				result.add(a.getId());
+			}
+		}
 		for (ReorderableInventoryItem item:
 				inventoryManager.getInventory().findAll()) {
 
@@ -212,7 +218,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 		Streamable<Article> as2= null;
 		result=new ArrayList<>();
-		for (String NOT_THIS_ARTICLE_NAME: NOT_THIS_ARTICLE_NAMES) {
+		for (String NOT_THIS_ARTICLE_NAME: ARCITCLE_WHICH_IS_IN_EVERY_KIT) {
 			as2 = catalog.findByName(NOT_THIS_ARTICLE_NAME);
 			for(Article a:as2){
 				result.add(a.getId());
@@ -567,42 +573,89 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 	 * delta tests dont require empty database. they test on current state
 	 * */
 	@Test
-	void test_Sell_delta(){
-		//<editor-fold desc="Check if DB is Empty">
-		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
-		for (ReorderableInventoryItem item:all) {
-			assertThat(inventoryManager.getInventory().findByProductIdentifier(item.getArticle().getId()).get().getGesamtbestand()).isEqualTo(0);
-		}
-		//</editor-fold>
+	void test_BuyOneSellOne_delta(){
+		ProductIdentifier itemToTest=getPid("Zip Komplett Kit sandy");
+		int amountBefore=inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl();
+		System.out.println("Amount Before : "+amountBefore);
 
-		ProductIdentifier itemToBuy=getPid("Zip Komplett Kit sandy");
-		int currentAmount=inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl();
+		final int AMOUNT= 1;
 
-		final int AMOUNT_TO_BUY_AND_SELL= 1;
+		InventoryItemAction buyAction=new InventoryItemAction(itemToTest, AMOUNT,0,0, administrationManager);
+		administrationManager.reorder(buyAction,Location.LOCATION_HL);
 
-		InventoryItemAction action=new InventoryItemAction(itemToBuy, AMOUNT_TO_BUY_AND_SELL,0,0, administrationManager);
-		administrationManager.reorder(action,Location.LOCATION_HL);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl()).isEqualTo(AMOUNT+amountBefore);
+		System.out.println("Amount after : "+AMOUNT+amountBefore);
 
-		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl()).isEqualTo(AMOUNT_TO_BUY_AND_SELL+currentAmount);
-
+		//<editor-fold desc="fetch User">
 		User us=null;
 		for (User u:userManagement.findAll()) {
 			if(u.getFirstname().equals("Karsten"))
 				us=u;
 		}
 		if(us==null)fail("no useraccount with that name found");
-		InventoryItemAction sellAction=new InventoryItemAction(itemToBuy, 0,0,AMOUNT_TO_BUY_AND_SELL, administrationManager);
+		//</editor-fold>
+
+		InventoryItemAction sellAction=new InventoryItemAction(itemToTest, 0,0,AMOUNT, administrationManager);
 		administrationManager.out(sellAction,us.getUserAccount(),Location.LOCATION_HL);
-		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl()).isEqualTo(currentAmount);
-	}
-
-	@Test
-	void test_Send(){
-
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl()).isEqualTo(amountBefore);
 	}
 
 	@Test
 	void test_Recieve(){
+		//<editor-fold desc="Setup Hl bestand for recieve">
+		int AMOUNT_TO_BUY= 1;
+		ProductIdentifier itemToBuy=getPid("Zip Komplett Kit sandy");
+		int currentAmountHL=inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl();
 
+		InventoryItemAction buyAction=new InventoryItemAction(itemToBuy, AMOUNT_TO_BUY,0,0, administrationManager);
+		administrationManager.reorder(buyAction,Location.LOCATION_HL);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToBuy).get().getAmountHl()).isEqualTo(currentAmountHL+AMOUNT_TO_BUY);
+		//</editor-fold>
+
+		ProductIdentifier itemToTest=getPid("Zip Komplett Kit sandy");
+		int currentAmount=inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountBwB();
+
+		final int AMOUNT_TO_BUY_AND_SELL= 1;
+
+		InventoryItemAction action=new InventoryItemAction(itemToTest, AMOUNT_TO_BUY_AND_SELL,0,0, administrationManager);
+		administrationManager.receiveFromHl(action);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountBwB()).isEqualTo(AMOUNT_TO_BUY_AND_SELL+currentAmount);
+		System.out.println("Amount: "+AMOUNT_TO_BUY_AND_SELL+currentAmount);
 	}
+
+	@Test
+	void test_Send_delta(){
+		//<editor-fold desc="Buy Hl bestand for recieve">
+		int AMOUNT_TO_BUY= 1;
+		ProductIdentifier itemToTest=getPid("Zip Komplett Kit sandy");
+
+		int currentAmountHL=inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl();
+
+		InventoryItemAction buyAction=new InventoryItemAction(itemToTest, AMOUNT_TO_BUY,0,0, administrationManager);
+		administrationManager.reorder(buyAction,Location.LOCATION_HL);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl()).isEqualTo(currentAmountHL+AMOUNT_TO_BUY);
+		System.out.println("Buy in Hl Amount before: "+currentAmountHL);
+		System.out.println("Buy in Hl Amount after: "+currentAmountHL+AMOUNT_TO_BUY);
+		//</editor-fold>
+
+		//<editor-fold desc="receive">
+		int amountBeforeReceive=inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountBwB();
+
+		InventoryItemAction receiveAction=new InventoryItemAction(itemToTest, AMOUNT_TO_BUY,0,0, administrationManager);
+		administrationManager.receiveFromHl(receiveAction);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountBwB()).isGreaterThan(0);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountBwB()).isEqualTo(AMOUNT_TO_BUY+amountBeforeReceive);
+		System.out.println("Receive from Hl Amount before: "+AMOUNT_TO_BUY+amountBeforeReceive);
+
+		//</editor-fold>
+
+		//<editor-fold desc="send">
+		InventoryItemAction sellAction=new InventoryItemAction(itemToTest, 0,0,AMOUNT_TO_BUY, administrationManager);
+		administrationManager.sendToHl(sellAction);
+		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountBwB()).isEqualTo(amountBeforeReceive);
+		System.out.println("Receive from Hl Amount after: "+amountBeforeReceive);
+		//</editor-fold>
+	}
+
+
 }
