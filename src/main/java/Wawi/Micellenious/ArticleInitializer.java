@@ -3534,7 +3534,7 @@ public class ArticleInitializer implements DataInitializer {
 }
 
 	void print(Product s){
-		//System.out.println( s.getId()+" ID of "+s.getName() );
+		//Fcopm.out.println( s.getId()+" ID of "+s.getName() );
 
 
 	}

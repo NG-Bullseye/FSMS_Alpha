@@ -9,6 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @ContextConfiguration(classes = {Application.class, WebSecurityConfiguration.class}) // With necessary imports
 @SpringBootTest()
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RunWith( SpringRunner.class )
 public class AbstractIntegrationTest {}

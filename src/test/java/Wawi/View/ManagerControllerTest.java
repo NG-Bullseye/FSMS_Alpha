@@ -22,7 +22,6 @@ import Wawi.articles.Composite;
 import Wawi.order.CartOrderManager;
 import Wawi.user.User;
 import Wawi.user.UserManagement;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,11 +30,14 @@ import org.salespointframework.catalog.ProductIdentifier;
 
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
+import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.util.Streamable;
+import org.springframework.security.core.parameters.P;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 
@@ -132,7 +134,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 				result.add(a.getId());
 			}
 		}
-		System.out.println(as2.get().count());
+		//System.out.println(as2.get().count());
 		if (as2.isEmpty())throw new IllegalArgumentException("No Item with that name found");
 		for (Article a:as2) {
 			pid=a.getId();
@@ -224,7 +226,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 				result.add(a.getId());
 			}
 		}
-		System.out.println(as2.get().count());
+		//System.out.println(as2.get().count());
 		if (as2.isEmpty())throw new IllegalArgumentException("No Item with that name found");
 		for (Article a:as2) {
 			pid=a.getId();
@@ -279,18 +281,13 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	void testCorrectRecipie(){
+	void test_CorrectRecipie_Delta(){
 		final int ITERATIONS=50;
 
-
-		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
-		for (ReorderableInventoryItem item:all) {
-			assertThat(inventoryManager.getInventory().findByProductIdentifier(item.getArticle().getId()).get().getGesamtbestand()).isEqualTo(0);
-		}
-
 		ProductIdentifier itemToCraftPid=getPid("Zip Komplett Kit sandy");
-		assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(0);
 
+		int craftbarHlBeforInit=administrationManager.craftbarHl(itemToCraftPid);
+		int craftbarBwbBeforInit=administrationManager.craftbarBwB(itemToCraftPid);
 
 		for (int i=0;i<ITERATIONS;i++) {
 			//<editor-fold desc="put one of each component in DB">
@@ -454,8 +451,9 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 			//</editor-fold>
 		}
 
-		assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(1*ITERATIONS);
-		assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(1*ITERATIONS);
+
+		assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforInit+ITERATIONS);
+		assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforInit+ITERATIONS);
 /*
 		map1.put(c54 ,6L)
 		map1.put(c28 ,2L)
@@ -471,8 +469,340 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		*/
 	}
 
+	@Test
+	void test_Craft_OneEachTime_TimesIteration_AllComposite_Delta() {
+
+		//<editor-fold desc="Methas">
+		final boolean SINGLE=true;
+		final int ITERATIONS=50;
+		final String NAME_OF_ITEM= "Draht LOOP 1mmØ farblos";
+		final String NAME_OF_ITEM2="SNÄP Body Pfanne muddy";
+		final String NAME_OF_ITEM3="Zip Komplett Kit sandy";
+		//</editor-fold>
+		//<editor-fold desc="Locals">
+
+		List<ProductIdentifier> compositelist= new ArrayList();
+		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
+
+		if (!SINGLE) {
+			for (ReorderableInventoryItem item:all) {
+				if (item.getArticle() instanceof Composite) {
+					compositelist.add(item.getArticle().getId());
+				}
+			}
+			if(compositelist==null){
+				throw new NullPointerException();
+			}
+		}
+		else{
+			compositelist.add(getPid(NAME_OF_ITEM));
+		}
+		//</editor-fold>
+
+
+		for (ProductIdentifier itemToCraftPid:compositelist) {
+			int craftbarHlBeforeTesting= administrationManager.craftbarHl(itemToCraftPid);
+			print("craftbarHlBeforeTesting",craftbarHlBeforeTesting);
+			int craftbarBwbBeforeTesting= administrationManager.craftbarBwB(itemToCraftPid);
+			print("craftbarBwbBeforeTesting",craftbarBwbBeforeTesting);
+
+			//<editor-fold desc="Initilize DB with Components">
+
+			//<editor-fold desc="fetch reorderableInventory Item">
+			ReorderableInventoryItem reorderableInventoryItem=null;
+			if (inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).isPresent()){
+				reorderableInventoryItem= inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).get();
+			}
+			if (reorderableInventoryItem==null) {
+				throw new IllegalArgumentException("item name not found");
+			}
+			//</editor-fold>
+
+			//<editor-fold desc="get recipe">
+			Set<ProductIdentifier> parts=null;
+			Map<ProductIdentifier,Integer> recipePidInt =null;
+			if (reorderableInventoryItem.getArticle() instanceof Composite){
+				Composite c = (Composite)reorderableInventoryItem.getArticle();
+				if(c.getPartIds()==null){
+					throw new NullPointerException();
+				}
+				recipePidInt= administrationManager.convertPartStringIntegerMapToPartProductIdIntegerMap(c.getPartIds());
+			}
+			//else continue;
+			if(recipePidInt==null){
+				throw new NullPointerException();
+			}
+			//</editor-fold>
+
+			//<editor-fold desc="Buy parts of Composite">
+			parts =recipePidInt.keySet() ;
+			if (parts!=null) {
+				for (ProductIdentifier p: parts) {
+					InventoryItemAction a=new InventoryItemAction(p,  recipePidInt.get(p)*ITERATIONS,0,0, administrationManager);
+					print("recipePidInt.get(p.getId())",recipePidInt.get(p));
+					administrationManager.reorder(a, Location.LOCATION_BWB);
+					administrationManager.reorder(a,Location.LOCATION_HL);
+				}
+			}
+			else throw new IllegalArgumentException();
+			//</editor-fold>
+
+
+			//</editor-fold>
+
+			//<editor-fold desc="check for correct init">
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting+ITERATIONS);
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting+ITERATIONS);
+			//</editor-fold>
+
+			//<editor-fold desc="craft itemToCraftPid">
+			InventoryItemAction a=new InventoryItemAction(itemToCraftPid,  0,1,0, administrationManager);
+			int craftbarHlAfterInit= administrationManager.craftbarHl(itemToCraftPid);
+			print("craftbarHlAfterInit", craftbarHlAfterInit);
+			int craftbarBwbAfterInit= administrationManager.craftbarBwB(itemToCraftPid);
+			print("craftbarBwBAfterInit",craftbarBwbAfterInit);
+			print("Successful Iterations",0);
+			for (int i=1;i<=ITERATIONS;i++) {
+				if(!administrationManager.craftHl(a,getUserChef(),"Test Notiz Hl")) fail("couldn't craft in Hl internal error");
+				if(!administrationManager.craftBwB(a,getUserChef(),"Test Noitz BwB"))fail("couldn't craft in Bwb internal error");
+				assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlAfterInit-i);
+				assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbAfterInit-i);
+				print("Successful Iterations",i);
+			}
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting);
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting);
+			//</editor-fold>
+			System.out.println("Successful Single Crating");
+		}
+	}
+
+	/**
+	 * zuerst werden alle nötigen componenten in die datenbank gebracht
+	 * dann wird k = 1 gesetzt was bedeutet das ein teil gecraftet wird und das so lange bis keines k=ITERATIONS
+	 * für k=1 macht das 50 craft aktionen
+	 * für k=2 macht das 25 craft aktionen mit je 2 auf einmal
+	 * bis k=50 und somit alle auf einmal gecraftet
+	 * nach jeder iteration ist die menge wieder die grundmenge vor dem test
+	 * und es werden wieder alle nötigen bestandteile zum craften von ITERATIONS gegenstängen hinzugefügt
+	 * */
+	@Test
+	void test_Craft_Multiple_Zip_ComplettKit_Sandy_Delta() {
+		final int ITERATIONS=50;
+		//<editor-fold desc="Single Test">
+		//<editor-fold desc="Initilize DB with Components">
+
+		ProductIdentifier itemToCraftPid=getPid("Zip Komplett Kit sandy");
+		int craftbarHlBeforeTesting= administrationManager.craftbarHl(itemToCraftPid);
+		print("craftbarHlBeforeTesting",craftbarHlBeforeTesting);
+		int craftbarBwbBeforeTesting= administrationManager.craftbarBwB(itemToCraftPid);
+		print("craftbarBwbBeforeTesting",craftbarBwbBeforeTesting);
+
+
+		for (int k=1;k<=ITERATIONS;k++) {
+			for (int i=0;i<ITERATIONS;i++) {
+				//<editor-fold desc="put one of each component in DB">
+				ProductIdentifier pid1=getPid("Sticker Verschluss sandy");
+				InventoryItemAction a=new InventoryItemAction(pid1,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid2=getPid("Sticker Markierung sandy");
+				a=new InventoryItemAction(pid2,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid3=getPid("Tütchen FIX farblos");
+				a=new InventoryItemAction(pid3,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid4=getPid("Tütchen SLIP farblos");
+				a=new InventoryItemAction(pid4,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid5=getPid("Papier Gebrauchsanweisung farblos");
+				a=new InventoryItemAction(pid5,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid6=getPid("Sticker #musteanhaun farblos");
+				a=new InventoryItemAction(pid6,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid7=getPid("Karton SNÄP farblos");
+				a=new InventoryItemAction(pid7,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid8=getPid("Karton Kreuz farblos");
+				a=new InventoryItemAction(pid8,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid9=getPid("Wirbel farblos");
+				a=new InventoryItemAction(pid9,  2,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid10=getPid("Tütchen klein farblos");
+				a=new InventoryItemAction(pid10,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+			/*map1= new HashMap();
+			map1.put(p44 ,1L)
+			map1.put(p40 ,1L)
+			map1.put(p46 ,1L)
+			map1.put(p29 ,1L)
+			map1.put(p26 ,1L)
+			map1.put(p27 ,1L)
+			map1.put(p35 ,1L)
+			map1.put(p47 ,1L)
+			map1.put(p20 ,2L)
+			map1.put(p28 ,1L)*/
+
+				ProductIdentifier pid11=getPid("Draht ZIP 1mmØ farblos");
+
+				a=new InventoryItemAction(pid11,  6,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid11_1=getPid("Draht 1mmØ farblos");
+				a=new InventoryItemAction(pid11_1,  20,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid12=getPid("ZIP Body sandy");
+				a=new InventoryItemAction(pid12,  2,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid12_1=getPid("PLA sandy");
+				a=new InventoryItemAction(pid12_1,  15,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid12_2=getPid("PVA Milchig farblos");
+				a=new InventoryItemAction(pid12_2,  2,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid13=getPid("FIX-Gummi S sandy");
+				a=new InventoryItemAction(pid13,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid13_1=getPid("Latex sandy");
+				a=new InventoryItemAction(pid13_1,  40*30,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid14=getPid("FIX-Gummi M sandy");
+				a=new InventoryItemAction(pid14,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid14_1=getPid("Latex sandy");
+				a=new InventoryItemAction(pid14_1,  70*60,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid15=getPid("FIX-Gummi L sandy");
+
+				a=new InventoryItemAction(pid15,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid15_1=getPid("Latex sandy");
+				a=new InventoryItemAction(pid15_1,  100*100,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid16=getPid("SLIP-Gummi M sandy");
+
+				a=new InventoryItemAction(pid16,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid16_1=getPid("Latex sandy");
+				a=new InventoryItemAction(pid16_1,  70*20,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid17=getPid("SLIP-Gummi L sandy");
+
+				a=new InventoryItemAction(pid17,  2,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid17_1=getPid("Latex sandy");
+
+				a=new InventoryItemAction(pid17_1,  100*30,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid18=getPid("Stein S sandy");
+
+				a=new InventoryItemAction(pid18,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid18_1=getPid("Steine <4cm sandy");
+
+				a=new InventoryItemAction(pid18_1,  25,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid19=getPid("Stein M sandy");
+
+				a=new InventoryItemAction(pid19,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid19_1=getPid("Steine 4-6cm sandy");
+
+				a=new InventoryItemAction(pid19_1,  70,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid20=getPid("Stein L sandy");
+
+				a=new InventoryItemAction(pid20,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid20_1=getPid("Steine 4-6cm sandy");
+
+				a=new InventoryItemAction(pid20_1,  150,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid21=getPid("EAN ZIP Komplett-Kit sandy");
+
+				a=new InventoryItemAction(pid21,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				ProductIdentifier pid21_1=getPid("Sticker EAN farblos");
+
+				a=new InventoryItemAction(pid21_1,  1,0,0, administrationManager);
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+				//</editor-fold>
+			}
+
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting+ITERATIONS);
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting+ITERATIONS);
+			//</editor-fold>
+
+			//<editor-fold desc="check for correct init">
+			InventoryItemAction a=new InventoryItemAction(itemToCraftPid,  0,k,0, administrationManager);
+			int craftbarHlAfterInit= administrationManager.craftbarHl(itemToCraftPid);
+			print("craftbarHlAfterInit", craftbarHlAfterInit);
+			int craftbarBwbAfterInit= administrationManager.craftbarBwB(itemToCraftPid);
+			print("craftbarBwBAfterInit",craftbarBwbAfterInit);
+			print("Successful Iterations",0);
+			//</editor-fold>
+
+			//i*k damit bei k=2 und ITETATIONS 50, 25 schritte druchgeführt werden eqivalent zu i<=ITERATIONS/k
+			for (int i=1;i*k<=ITERATIONS;i++) {
+				if(!administrationManager.craftHl(a,getUserChef(),"Test Notiz Hl")) fail("couldn't craft in Hl internal error");
+				if(!administrationManager.craftBwB(a,getUserChef(),"Test Noitz BwB"))fail("couldn't craft in Bwb internal error");
+				assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlAfterInit-i*k);
+				assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbAfterInit-i*k);
+				print("Successful Iterations",i);
+			}
+
+			//<editor-fold desc="prüfe ob wieder die grundmenge erreicht ist">
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting);
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting);
+			//</editor-fold>
+			System.out.println("Successful Single Crating");
+		}
+		//</editor-fold>
+	}
+
+	private void print(String message,Object o){
+		System.out.println(message+": "+o.toString());
+
+	}
+
+	private void print(String message){
+		System.out.println(message);
+
+	}
 	private ProductIdentifier getPid(String s) {
-		System.out.println(s);
+		//System.out.println(s);
 		List<ProductIdentifier> result=new ArrayList<>();
 		Streamable<Article> as2= null;
 		as2 = catalog.findByName(s);
@@ -534,12 +864,21 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 *
 * */
 
+	private UserAccount getUserChef(){
+	 Streamable<User>  userAccounts = userManagement.findAll();
+		List<User> users=userAccounts.toList();
+		UserAccount us=users.get(0).getUserAccount();
+		if(us==null) throw new IllegalArgumentException ("no useraccount with that name found");
+
+		return us;
+	}
+
 	@Test
 	void testBuyOneLoopBodyKitMuddy() {
 		final String ARTICLE_TO_TEST="Loop Body Kit muddy";
 		ProductIdentifier pid=null;
 		Streamable<Article> as2= catalog.findByName(ARTICLE_TO_TEST);
-		System.out.println(as2.get().count());
+		//System.out.println(as2.get().count());
 		for (Article a:as2) {
 			pid=a.getId();
 		}
@@ -547,12 +886,8 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 		InventoryItemAction a=new InventoryItemAction(pid,  1,0,0, administrationManager);
 
-		Streamable<User>  userAccounts = userManagement.findAll();
-		List<User> users=userAccounts.toList();
-		User user=users.get(0);
 		assertThat(inventoryManager.getInventory().findByProductIdentifier(pid).get().getAmountHl()).isEqualTo(0);
 
- 		System.out.println(user.getUserAccount());
 		administrationManager.reorder(a, Location.LOCATION_HL);
 		assertThat(inventoryManager.getInventory().findByProductIdentifier(pid).get().getAmountHl()).isEqualTo(1);
 	}
@@ -584,19 +919,13 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		administrationManager.reorder(buyAction,Location.LOCATION_HL);
 
 		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl()).isEqualTo(AMOUNT+amountBefore);
-		System.out.println("Amount after : "+AMOUNT+amountBefore);
 
-		//<editor-fold desc="fetch User">
-		User us=null;
-		for (User u:userManagement.findAll()) {
-			if(u.getFirstname().equals("Karsten"))
-				us=u;
-		}
-		if(us==null)fail("no useraccount with that name found");
-		//</editor-fold>
+		print("inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl()",inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl());
+		print("AMOUNT+amountBefore",AMOUNT+amountBefore);
+
 
 		InventoryItemAction sellAction=new InventoryItemAction(itemToTest, 0,0,AMOUNT, administrationManager);
-		administrationManager.out(sellAction,us.getUserAccount(),Location.LOCATION_HL);
+		administrationManager.out(sellAction,getUserChef(),Location.LOCATION_HL);
 		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountHl()).isEqualTo(amountBefore);
 	}
 

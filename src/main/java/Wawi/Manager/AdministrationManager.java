@@ -349,7 +349,7 @@ public class AdministrationManager {
 				if(c.getPartIds()==null){
 					throw new NullPointerException();
 				}
-				parts = getArticleFrom_IdIntMapping(convertPartStringIntegerMapToPartProductIdIntegerMap(c.getPartIds()) );
+				parts = getArticleFrom_IdIntMappingWhichContainAsManyDuplicatesAsNeedToCraftComposite(convertPartStringIntegerMapToPartProductIdIntegerMap(c.getPartIds()) );
 			}
 
 			// Update was successful. Remove it from the list and save the changes
@@ -399,8 +399,19 @@ public class AdministrationManager {
 	 * @return All articles that there mapped.
 	 *
 	 */
-	public List<Article> getArticleFrom_IdIntMapping(Map<ProductIdentifier, Integer> map) {
+	public List<Article> getArticleFrom_IdIntMappingWhichContainAsManyDuplicatesAsNeedToCraftComposite(Map<ProductIdentifier, Integer> map) {
+
+
+		/*
+		*
+		* map.
+		*
+		* */
+
+
 		List<Article> articles = new ArrayList<>();
+
+
 
 		for (ProductIdentifier id : map.keySet()) {
 			Optional<Article> a = this.catalog.findById(id);

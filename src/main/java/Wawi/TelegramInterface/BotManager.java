@@ -158,7 +158,7 @@ public class  BotManager {
                             urlConnection.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
+                //System.out.println(inputLine);
             in.close();
         }catch (Exception e){
             System.out.println("Error While printing in console");
