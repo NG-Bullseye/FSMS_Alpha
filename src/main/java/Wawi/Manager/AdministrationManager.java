@@ -23,6 +23,7 @@ import org.salespointframework.quantity.Metric;
 import org.salespointframework.quantity.Quantity;
 import org.salespointframework.useraccount.UserAccount;
 import org.springframework.beans.PropertyEditorRegistry;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
 
 import Wawi.articles.Article;
@@ -59,6 +60,9 @@ public class AdministrationManager {
 
 	private AdministrationManager administrationManager=this;
 
+	public WebshopCatalog getCatalog() {
+		return catalog;
+	}
 
 	private final WebshopCatalog catalog;
 	private Set<Article> hiddenArticles;
@@ -84,6 +88,18 @@ public class AdministrationManager {
 		this.accountancy = accountancy;
 		this.inventoryManager=inventoryManager;
 		this.botManager=botManager;
+	}
+
+
+	public ProductIdentifier getPidFromName(String s) {
+		//System.out.println(s);
+		List<ProductIdentifier> result=new ArrayList<>();
+		Streamable<Article> as2= null;
+		as2 = catalog.findByName(s);
+		for(Article a:as2){
+			result.add(a.getId());
+		}
+		return result.get(0);
 	}
 
 	/**
@@ -777,6 +793,40 @@ public class AdministrationManager {
 		}
 	}
 
+	public boolean in(@NotNull InventoryItemAction action, Location location) {
+
+		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
+
+
+
+		if (item.isPresent()) {
+			int hlb=item.get().getAmountHl();
+			int bwbb=item.get().getAmountBwB();
+			item.get().addReorder(
+					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
+					LocalDateTime.now(),
+					Quantity.of(action.getAmountForIn(), Metric.UNIT),location);
+
+			boolean changed = item.get().update(LocalDateTime.now());
+
+			inventory.save(item.get());
+
+			 if (hlb==item.get().getAmountHl()+1||hlb==item.get().getAmountHl()+1){
+			 	 return true;
+			 }
+			 else return false;
+
+			/*
+			accountancy.addEntry(
+					item.get().getProduct().getPrice()
+							.multiply(item.get().getQuantity().getAmount().multiply(BigDecimal.valueOf(-1))),
+					LocalDateTime.now(), "Reordered " + item.get().getProduct().getName() + " "
+							+ item.get().getQuantity().toString() + " " + "times");
+			 */
+
+		}
+		else return false;
+	}
 
 	public boolean receiveFromHl(@NotNull InventoryItemAction action) {
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
@@ -995,8 +1045,13 @@ public class AdministrationManager {
 		Inventory inv= inventoryManager.getInventory();
 		if (inv.findByProduct(a).get() instanceof ReorderableInventoryItem){
 			ReorderableInventoryItem item=(ReorderableInventoryItem) inv.findByProduct(a).get();
+			int i;
+			i=inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().getAmountHl();
 			inventoryManager.decreaseBestand(a,Quantity.of(action.getAmountForOut()),materialQuelle );//decrease amount of Gesamtbestand
-			inv.save(item);
+			i=inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().getAmountHl();
+			//inv.save(item);
+			i=inventoryManager.getInventory().findByProductIdentifier(a.getId()).get().getAmountHl();
+			return;
 			//boolean changed = item.update(LocalDateTime.now());
 			//int i =item.getQuantity().getAmount().intValue();
 			//System.out.println(item.getProduct().getName()+" updated? "+changed+".");

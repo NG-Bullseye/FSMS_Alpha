@@ -196,8 +196,8 @@ public class InventoryManager {
 	}
 
 	public void decreaseAmountInHL(@NotNull Article article, @NotNull Quantity quantity)throws IllegalArgumentException{
-		if (inventory.findByProduct(article).isPresent() == false) {
-			return;
+		if (!inventory.findByProduct(article).isPresent()) {
+			throw new IllegalArgumentException();
 		}
 		if (!quantity.isCompatibleWith(Metric.UNIT)) {
 			throw new IllegalArgumentException();
@@ -208,8 +208,13 @@ public class InventoryManager {
 
 		ReorderableInventoryItem item = inventory.findByProduct(article).get();
 		item.decreaseQuantity(quantity);
+		int i;
+		i=getInventory().findByProductIdentifier(article.getId()).get().getAmountHl();
 		item.setAmountHl(item.getAmountHl()-quantity.getAmount().intValue());
+		i=getInventory().findByProductIdentifier(article.getId()).get().getAmountHl();
 		inventory.save(item);
+		i=getInventory().findByProductIdentifier(article.getId()).get().getAmountHl();
+		return;
 	}
 
 	public void decreaseAmountInBwB(@NotNull Article article, @NotNull Quantity quantity)throws IllegalArgumentException{

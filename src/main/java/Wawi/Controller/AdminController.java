@@ -28,6 +28,7 @@ import Wawi.Micellenious.WebshopCatalog;
 import Wawi.articles.Article;
 import Wawi.Manager.InventoryManager;
 import Wawi.Micellenious.ReorderableInventoryItem;
+import Wawi.articles.Composite;
 import Wawi.order.CartOrderManager;
 import Wawi.user.UserManagement;
 import org.salespointframework.catalog.ProductIdentifier;
@@ -35,16 +36,22 @@ import org.salespointframework.inventory.Inventory;
 import org.salespointframework.order.OrderManager;
 import org.salespointframework.time.BusinessTime;
 import org.salespointframework.useraccount.UserAccountManager;
+import org.springframework.data.util.Streamable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class AdminController {
 
+	private static final Integer AMOUNT = 100;
 	private  LogRepository logRepository;
 	private AdministrationManager administrationManager;
 	private final BusinessTime businessTime;
@@ -121,6 +128,70 @@ public class AdminController {
 
 		return"redirect:/";
 	}
+
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping("/fetch")
+
+	String cheat_Fetch_all_Components(){
+		//<editor-fold desc="Metha">
+		final String NAME= "FIX-Gummi L muddy";
+		//</editor-fold>
+
+		//<editor-fold desc="fetch Id from name">
+
+		ProductIdentifier itemToFetchComponents  = administrationManager.getPidFromName(NAME);
+		//</editor-fold>
+
+		//<editor-fold desc="Initilize DB with Components">
+
+		//<editor-fold desc="fetch reorderableInventory Item">
+		ReorderableInventoryItem reorderableInventoryItem=null;
+		if (inventoryManager.getInventory().findByProductIdentifier(itemToFetchComponents).isPresent()){
+			reorderableInventoryItem= inventoryManager.getInventory().findByProductIdentifier(itemToFetchComponents).get();
+		}
+		if (reorderableInventoryItem==null) {
+			throw new IllegalArgumentException("item name not found");
+		}
+		//</editor-fold>
+
+		//<editor-fold desc="get recipe">
+		Set<ProductIdentifier> parts=null;
+		Map<ProductIdentifier,Integer> recipePidInt =null;
+		if (reorderableInventoryItem.getArticle() instanceof Composite){
+			Composite c = (Composite)reorderableInventoryItem.getArticle();
+			if(c.getPartIds()==null){
+				throw new NullPointerException();
+			}
+			recipePidInt= administrationManager.convertPartStringIntegerMapToPartProductIdIntegerMap(c.getPartIds());
+		}
+		//else continue;
+		if(recipePidInt==null){
+			throw new NullPointerException();
+		}
+		//</editor-fold>
+
+		//<editor-fold desc="Buy parts of Composite">
+		parts =recipePidInt.keySet() ;
+		if (parts!=null) {
+			for (ProductIdentifier p: parts) {
+
+				InventoryItemAction a=new InventoryItemAction(p,  recipePidInt.get(p)*AMOUNT,0,0, administrationManager);
+				System.out.println(inventoryManager.getInventory().findByProductIdentifier(p).get().getProduktName()+" recipePidInt.get(p): "+recipePidInt.get(p));
+				administrationManager.reorder(a, Location.LOCATION_BWB);
+				administrationManager.reorder(a,Location.LOCATION_HL);
+			}
+		}
+		else throw new IllegalArgumentException();
+		//</editor-fold>
+
+
+		//</editor-fold>
+
+		return"redirect:/";
+	}
+
+
 
 	//<editor-fold desc="Article">
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

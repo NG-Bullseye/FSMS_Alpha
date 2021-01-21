@@ -473,8 +473,8 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 	void test_Craft_OneEachTime_TimesIteration_AllComposite_Delta() {
 
 		//<editor-fold desc="Methas">
-		final boolean SINGLE=true;
-		final int ITERATIONS=50;
+		final boolean SINGLE=false;
+		final int ITERATIONS=100;
 		final String NAME_OF_ITEM= "Draht LOOP 1mmØ farblos";
 		final String NAME_OF_ITEM2="SNÄP Body Pfanne muddy";
 		final String NAME_OF_ITEM3="Zip Komplett Kit sandy";
@@ -501,6 +501,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 
 		for (ProductIdentifier itemToCraftPid:compositelist) {
+			print("Name: "+inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).get().getProduktName());
 			int craftbarHlBeforeTesting= administrationManager.craftbarHl(itemToCraftPid);
 			print("craftbarHlBeforeTesting",craftbarHlBeforeTesting);
 			int craftbarBwbBeforeTesting= administrationManager.craftbarBwB(itemToCraftPid);
@@ -562,13 +563,50 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 			int craftbarBwbAfterInit= administrationManager.craftbarBwB(itemToCraftPid);
 			print("craftbarBwBAfterInit",craftbarBwbAfterInit);
 			print("Successful Iterations",0);
-			for (int i=1;i<=ITERATIONS;i++) {
+
+			int i=0;
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(administrationManager.craftbarBwB(itemToCraftPid)-i);
+			int craftbarPrevItBwB=craftbarBwbAfterInit;
+			System.out.println("Start: craftbarBwB("+administrationManager.craftbarBwB(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItBwB+")-i("+i+")");
+			while (i<ITERATIONS) {
+
+				if(!administrationManager.craftBwB(a,getUserChef(),"Test Noitz BwB"))fail("couldn't craft in Bwb internal error");
+				System.out.println("assert That: craftbarBwB("+administrationManager.craftbarBwB(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItBwB+")-1");
+				assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarPrevItBwB-1);
+				craftbarPrevItBwB=administrationManager.craftbarBwB(itemToCraftPid);
+
+				//assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbAfterInit-i);
+				i++;
+
+			}
+
+			i=0;
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(administrationManager.craftbarHl(itemToCraftPid)-i);
+			int craftbarPrevItHl=craftbarHlAfterInit;
+			System.out.println("Start: craftbarHl("+administrationManager.craftbarHl(itemToCraftPid)+")=craftbarPrevItHl("+craftbarPrevItHl+")-i("+i+")");
+			while (i<ITERATIONS) {
+
+				if(!administrationManager.craftHl(a,getUserChef(),"Test Noitz Hl"))fail("couldn't craft in Hl internal error");
+				System.out.println("assert That: craftbarHl("+administrationManager.craftbarHl(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItHl+")-1");
+				assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarPrevItHl-1);
+				craftbarPrevItHl=administrationManager.craftbarHl(itemToCraftPid);
+				i++;
+
+			}
+			//<editor-fold desc="classic">
+			/*
+			while (i<=ITERATIONS) {
+
 				if(!administrationManager.craftHl(a,getUserChef(),"Test Notiz Hl")) fail("couldn't craft in Hl internal error");
 				if(!administrationManager.craftBwB(a,getUserChef(),"Test Noitz BwB"))fail("couldn't craft in Bwb internal error");
+				int hilf=craftbarBwbAfterInit-i;
+				System.out.println("assert That: craftbarBwB("+administrationManager.craftbarHl(itemToCraftPid)+")=craftbarBwbAfterInit("+craftbarBwbAfterInit+")-i("+i+")"+" hilf="+hilf);
 				assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlAfterInit-i);
 				assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbAfterInit-i);
-				print("Successful Iterations",i);
-			}
+				i++;
+
+			}*/
+			//</editor-fold>
 			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting);
 			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting);
 			//</editor-fold>
@@ -775,7 +813,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 			//</editor-fold>
 
 			//i*k damit bei k=2 und ITETATIONS 50, 25 schritte druchgeführt werden eqivalent zu i<=ITERATIONS/k
-			for (int i=1;i*k<=ITERATIONS;i++) {
+			for (int i=1;i<=ITERATIONS/k;i++) {
 				if(!administrationManager.craftHl(a,getUserChef(),"Test Notiz Hl")) fail("couldn't craft in Hl internal error");
 				if(!administrationManager.craftBwB(a,getUserChef(),"Test Noitz BwB"))fail("couldn't craft in Bwb internal error");
 				assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlAfterInit-i*k);
