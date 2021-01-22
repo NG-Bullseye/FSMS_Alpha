@@ -776,9 +776,9 @@ public class AdministrationManager {
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
 
-
-
 		if (item.isPresent()) {
+			int hlb=item.get().getAmountHl();
+			int bwbb=item.get().getAmountBwB();
 			item.get().addReorder(
 					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
 					LocalDateTime.now(),
@@ -787,6 +787,16 @@ public class AdministrationManager {
 				boolean changed = item.get().update(LocalDateTime.now());
 
 			inventory.save(item.get());
+
+			if (hlb!=item.get().getAmountHl()-action.getAmountForIn()&&location==Location.LOCATION_HL){
+				throw new IllegalStateException("reorder didnt work in Hauptlager. Q(k-1)="+hlb+" --in("+action.getAmountForIn()+")--> Q(k)="+item.get().getAmountHl());
+			}
+
+
+			if (bwbb!=item.get().getAmountBwB()-action.getAmountForIn()&&location==Location.LOCATION_BWB) {
+				throw new IllegalStateException("reorder didnt work in Bwb. Q(k-1)="+bwbb+" --in("+action.getAmountForIn()+")--> Q(k)="+item.get().getAmountBwB());
+			}
+
 
 			/*
 			accountancy.addEntry(
@@ -817,7 +827,7 @@ public class AdministrationManager {
 
 			inventory.save(item.get());
 
-			 if (hlb==item.get().getAmountHl()+1||hlb==item.get().getAmountHl()+1){
+			 if (hlb==item.get().getAmountHl()+action.getAmountForIn()||bwbb==item.get().getAmountBwB()+action.getAmountForIn()){
 			 	 return true;
 			 }
 			 else return false;
