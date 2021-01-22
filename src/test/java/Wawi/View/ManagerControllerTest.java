@@ -474,7 +474,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 		//<editor-fold desc="Methas">
 		final boolean SINGLE=false;
-		final int ITERATIONS=10;
+		final int ITERATIONS=100;
 		final String NAME_OF_ITEM= "Draht LOOP 1mmØ farblos";
 		final String NAME_OF_ITEM2="SNÄP Body Pfanne muddy";
 		final String NAME_OF_ITEM3="Zip Komplett Kit sandy";

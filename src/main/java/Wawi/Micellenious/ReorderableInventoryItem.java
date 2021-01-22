@@ -86,26 +86,11 @@ public class ReorderableInventoryItem extends InventoryItem {
 		if (location==null) {
 			throw new IllegalArgumentException();
 		}
-		int qminusEinsHl=this.amountHl;
-		int qminusEinsBwb=this.amountBwB;
-		if (location.equals(Location.LOCATION_BWB))
-			this.amountBwB=this.amountBwB+quantity.getAmount().intValue();
-		else{
-			if (location.equals(Location.LOCATION_HL))
-				this.amountHl=this.amountHl+quantity.getAmount().intValue();
-			else return false;
-		}
 
-		//reorders.put(time, quantity);
-		//update(time);
-		if (qminusEinsHl!=this.amountHl-quantity.getAmount().intValue()&&location==Location.LOCATION_HL){
-			throw new RuntimeException("reorder didnt work in Hauptlager. Q(k-1)="+qminusEinsHl+" --in("+quantity.getAmount().intValue()+")--> Q(k)="+this.amountHl);
-		}
-		if (qminusEinsBwb!=this.amountBwB-quantity.getAmount().intValue()&&location==Location.LOCATION_BWB){
-			throw new RuntimeException("reorder didnt work in Hauptlager. Q(k-1)="+qminusEinsBwb+" --in("+quantity.getAmount().intValue()+")--> Q(k)="+this.amountBwB);
-		}
-
-
+		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+quantity.getAmount().intValue();
+		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+quantity.getAmount().intValue();
+		else return false;
+		reorders.put(time, quantity);
 		return true;
 	}
 
@@ -118,22 +103,10 @@ public class ReorderableInventoryItem extends InventoryItem {
 			throw new IllegalArgumentException();
 		}
 
-		int qminusEinsHl=this.amountBwB;
-		int qminusEinsBwb=this.amountHl;
-		update(time);
 		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+amount;
-		else{
-			if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+amount;
-			else return false;
-		}
-
+		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+amount;
+		else return false;
 		reorders.put(time, Quantity.of(amount));
-		update(time);
-		if (qminusEinsHl!=this.amountHl-amount&&location==Location.LOCATION_HL)
-			throw new RuntimeException("reorder didnt work in Hauptlager. Q(k-1)="+qminusEinsHl+" --in("+amount+")--> Q(k)="+this.amountHl);
-		if (qminusEinsBwb!=this.amountBwB-amount&&location==Location.LOCATION_BWB)
-			throw new RuntimeException("reorder didnt work in Hauptlager. Q(k-1)="+qminusEinsBwb+" --in("+amount+")--> Q(k)="+this.amountBwB);
-
 		return true;
 	}
 
