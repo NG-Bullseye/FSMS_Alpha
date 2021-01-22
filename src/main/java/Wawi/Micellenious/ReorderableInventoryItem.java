@@ -89,7 +89,6 @@ public class ReorderableInventoryItem extends InventoryItem {
 
 		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+quantity.getAmount().intValue();
 		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+quantity.getAmount().intValue();
-		else return false;
 		reorders.put(time, quantity);
 		return true;
 	}
@@ -104,8 +103,10 @@ public class ReorderableInventoryItem extends InventoryItem {
 		}
 
 		if (location.equals(Location.LOCATION_BWB)) this.amountBwB=this.amountBwB+amount;
-		if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+amount;
-		else return false;
+		else{
+			if (location.equals(Location.LOCATION_HL))  this.amountHl=this.amountHl+amount;
+			else return false;
+		}
 		reorders.put(time, Quantity.of(amount));
 		return true;
 	}

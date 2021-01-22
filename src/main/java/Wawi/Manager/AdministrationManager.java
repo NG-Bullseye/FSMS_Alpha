@@ -779,12 +779,12 @@ public class AdministrationManager {
 		if (item.isPresent()) {
 			int hlb=item.get().getAmountHl();
 			int bwbb=item.get().getAmountBwB();
-			item.get().addReorder(
+			if(!item.get().addReorder(
 					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
 					LocalDateTime.now(),
-					Quantity.of(action.getAmountForIn(), Metric.UNIT),location);
+					Quantity.of(action.getAmountForIn(), Metric.UNIT),location)) throw new IllegalStateException("addReorder didnt work");
 
-				boolean changed = item.get().update(LocalDateTime.now());
+			boolean changed = item.get().update(LocalDateTime.now());
 
 			inventory.save(item.get());
 
