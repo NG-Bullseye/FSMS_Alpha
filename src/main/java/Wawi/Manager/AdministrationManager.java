@@ -762,7 +762,12 @@ public class AdministrationManager {
 	public void loggedReorder(@NotNull InventoryItemAction action, UserAccount user, Location location, String notiz){
 		logManager.addLog(user,
 				this.getArticle(action.getPid()).getName()+" in "+location.toString()+" "+ action.getAmountForIn()+"x mal hinzugefügt",notiz);
-		if(!in(action,location))throw new IllegalStateException("My Error: numbers dont add up method in() returnde false");
+		ReorderableInventoryItem item= inventoryManager.getInventory().findByProductIdentifier(action.getPid()).get();
+		int pre=item.getGesamtbestand();
+		reorder(action,location);
+		int post=item.getGesamtbestand();
+		if(post!=action.getAmountForCraft()+pre)throw new IllegalStateException("check failed");
+
 		//reorder(action,location);
 	}
 
@@ -1181,12 +1186,11 @@ public class AdministrationManager {
 	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {
 		if(direktCraftbar(action,materialQuelle)){
 			//erstellt Log Eintrag und fügt Teil hinzu
+			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),action.getAmountForCraft(),0,0, administrationManager);
 			InventoryItemAction onlyCraftAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0, administrationManager);
-			this.loggedReorder(onlyCraftAction,user,materialQuelle,notiz);
 
 			//fügt Produkt hinzu
-			InventoryItemAction inAction=new InventoryItemAction(action.getPid(),action.getAmountForCraft(),0,0, administrationManager);
-			this.reorder(inAction,materialQuelle);
+			this.loggedReorder(inAction,user,materialQuelle,notiz);
 
 			//zieht Material ab
 			Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(action.getPid()).get().getPartIds());
