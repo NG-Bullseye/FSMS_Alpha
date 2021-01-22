@@ -762,7 +762,8 @@ public class AdministrationManager {
 	public void loggedReorder(@NotNull InventoryItemAction action, UserAccount user, Location location, String notiz){
 		logManager.addLog(user,
 				this.getArticle(action.getPid()).getName()+" in "+location.toString()+" "+ action.getAmountForIn()+"x mal hinzugefügt",notiz);
-		reorder(action,location);
+		if(!in(action,location))throw new IllegalStateException("My Error: numbers dont add up method in() returnde false");
+		//reorder(action,location);
 	}
 
 	//insert Items into Hauptlager
@@ -770,17 +771,26 @@ public class AdministrationManager {
 
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
 
-
-
 		if (item.isPresent()) {
-			item.get().addReorder(
+			int hlb=item.get().getAmountHl();
+			int bwbb=item.get().getAmountBwB();
+			if(!item.get().addReorder(
 					//Interval.from(accountancy.getTime()).to(accountancy.getTime().plusDays(reorderTime)).getEnd(),
 					LocalDateTime.now(),
-					Quantity.of(action.getAmountForIn(), Metric.UNIT),location);
+					Quantity.of(action.getAmountForIn(), Metric.UNIT),location)) throw new IllegalStateException("addReorder didnt work");
 
-				boolean changed = item.get().update(LocalDateTime.now());
 
 			inventory.save(item.get());
+
+			if (hlb!=item.get().getAmountHl()-action.getAmountForIn()&&location==Location.LOCATION_HL){
+				throw new IllegalStateException("reorder didnt work in Hauptlager. Q(k-1)="+hlb+" --in("+action.getAmountForIn()+")--> Q(k)="+item.get().getAmountHl());
+			}
+
+
+			if (bwbb!=item.get().getAmountBwB()-action.getAmountForIn()&&location==Location.LOCATION_BWB) {
+				throw new IllegalStateException("reorder didnt work in Bwb. Q(k-1)="+bwbb+" --in("+action.getAmountForIn()+")--> Q(k)="+item.get().getAmountBwB());
+			}
+
 
 			/*
 			accountancy.addEntry(
@@ -811,7 +821,7 @@ public class AdministrationManager {
 
 			inventory.save(item.get());
 
-			 if (hlb==item.get().getAmountHl()+1||hlb==item.get().getAmountHl()+1){
+			 if (hlb==item.get().getAmountHl()+action.getAmountForIn()||bwbb==item.get().getAmountBwB()+action.getAmountForIn()){
 			 	 return true;
 			 }
 			 else return false;
@@ -1170,7 +1180,7 @@ public class AdministrationManager {
 	 */
 	private boolean craft(InventoryItemAction action, UserAccount user, Location materialQuelle, String notiz) {
 		if(direktCraftbar(action,materialQuelle)){
-			//erstellt Log Eintrag
+			//erstellt Log Eintrag und fügt Teil hinzu
 			InventoryItemAction onlyCraftAction=new InventoryItemAction(action.getPid(),0,action.getAmountForCraft(),0, administrationManager);
 			this.loggedReorder(onlyCraftAction,user,materialQuelle,notiz);
 

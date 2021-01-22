@@ -474,7 +474,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 		//<editor-fold desc="Methas">
 		final boolean SINGLE=false;
-		final int ITERATIONS=100;
+		final int ITERATIONS=10;
 		final String NAME_OF_ITEM= "Draht LOOP 1mmØ farblos";
 		final String NAME_OF_ITEM2="SNÄP Body Pfanne muddy";
 		final String NAME_OF_ITEM3="Zip Komplett Kit sandy";
@@ -540,7 +540,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 			if (parts!=null) {
 				for (ProductIdentifier p: parts) {
 					InventoryItemAction a=new InventoryItemAction(p,  recipePidInt.get(p)*ITERATIONS,0,0, administrationManager);
-					print("recipePidInt.get(p.getId())",recipePidInt.get(p));
+					print("Menge von "+inventoryManager.getInventory().findByProductIdentifier(p).get().getArticle().getName()+" ist: ",recipePidInt.get(p));
 					administrationManager.reorder(a, Location.LOCATION_BWB);
 					administrationManager.reorder(a,Location.LOCATION_HL);
 				}
