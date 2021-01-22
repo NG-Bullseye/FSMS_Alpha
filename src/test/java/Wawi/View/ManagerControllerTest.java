@@ -540,7 +540,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 			if (parts!=null) {
 				for (ProductIdentifier p: parts) {
 					InventoryItemAction a=new InventoryItemAction(p,  recipePidInt.get(p)*ITERATIONS,0,0, administrationManager);
-					print("Menge von "+inventoryManager.getInventory().findByProductIdentifier(p).get().getArticle().getName()+" ist: ",recipePidInt.get(p));
+					print("recipePidInt.get(p.getId())",recipePidInt.get(p));
 					administrationManager.reorder(a, Location.LOCATION_BWB);
 					administrationManager.reorder(a,Location.LOCATION_HL);
 				}
