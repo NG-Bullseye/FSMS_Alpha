@@ -44,7 +44,7 @@ import java.util.*;
 class ManagerControllerTest extends AbstractIntegrationTest {
 
 	final boolean SINGLE=false;
-	final int ITERATIONS=10;
+	final int ITERATIONS=2;
 	final int AMOUNT= 3;
 
 	//<editor-fold desc="Locals">
@@ -474,139 +474,6 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		*/
 	}
 
-	@Test
-	void test_Craft_OneEachTime_TimesIteration_AllComposite_Delta() {
-
-		//<editor-fold desc="Methas">
-
-
-		final String NAME_OF_ITEM= "Draht LOOP 1mmØ farblos";
-		final String NAME_OF_ITEM2="SNÄP Body Pfanne muddy";
-		final String NAME_OF_ITEM3="Zip Komplett Kit sandy";
-		//</editor-fold>
-		//<editor-fold desc="Locals">
-
-		List<ProductIdentifier> compositelist= new ArrayList();
-		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
-
-		if (!SINGLE) {
-			for (ReorderableInventoryItem item:all) {
-				if (item.getArticle() instanceof Composite) {
-					compositelist.add(item.getArticle().getId());
-				}
-			}
-			if(compositelist==null){
-				throw new NullPointerException();
-			}
-		}
-		else{
-			compositelist.add(getPid(NAME_OF_ITEM));
-		}
-		//</editor-fold>
-
-
-		for (ProductIdentifier itemToCraftPid:compositelist) {
-			print("Name: "+inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).get().getProduktName());
-			int craftbarHlBeforeTesting= administrationManager.craftbarHl(itemToCraftPid);
-			print("craftbarHlBeforeTesting",craftbarHlBeforeTesting);
-			int craftbarBwbBeforeTesting= administrationManager.craftbarBwB(itemToCraftPid);
-			print("craftbarBwbBeforeTesting",craftbarBwbBeforeTesting);
-
-			//<editor-fold desc="Initilize DB with Components">
-
-			//<editor-fold desc="fetch reorderableInventory Item">
-			ReorderableInventoryItem reorderableInventoryItem=null;
-			if (inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).isPresent()){
-				reorderableInventoryItem= inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).get();
-			}
-			if (reorderableInventoryItem==null) {
-				throw new IllegalArgumentException("item name not found");
-			}
-			//</editor-fold>
-
-			//<editor-fold desc="get recipe">
-			Set<ProductIdentifier> parts=null;
-			Map<ProductIdentifier,Integer> recipePidInt =null;
-			if (reorderableInventoryItem.getArticle() instanceof Composite){
-				Composite c = (Composite)reorderableInventoryItem.getArticle();
-				if(c.getPartIds()==null){
-					throw new NullPointerException();
-				}
-				recipePidInt= administrationManager.convertPartStringIntegerMapToPartProductIdIntegerMap(c.getPartIds());
-			}
-			//else continue;
-			if(recipePidInt==null){
-				throw new NullPointerException();
-			}
-			//</editor-fold>
-
-			//<editor-fold desc="Buy parts of Composite">
-			parts =recipePidInt.keySet() ;
-			if (parts!=null) {
-				for (ProductIdentifier p: parts) {
-					InventoryItemAction a=new InventoryItemAction(p,  recipePidInt.get(p)*ITERATIONS,0,0, administrationManager);
-					print("recipePidInt.get(p.getId())",recipePidInt.get(p));
-					administrationManager.reorder(a, Location.LOCATION_BWB);
-					administrationManager.reorder(a,Location.LOCATION_HL);
-				}
-			}
-			else throw new IllegalArgumentException();
-			//</editor-fold>
-
-
-			//</editor-fold>
-
-			//<editor-fold desc="check for correct init">
-			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting+ITERATIONS);
-			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting+ITERATIONS);
-			//</editor-fold>
-
-			//<editor-fold desc="craft itemToCraftPid">
-			InventoryItemAction a=new InventoryItemAction(itemToCraftPid,  0,1,0, administrationManager);
-			int craftbarHlAfterInit= administrationManager.craftbarHl(itemToCraftPid);
-			print("craftbarHlAfterInit", craftbarHlAfterInit);
-			int craftbarBwbAfterInit= administrationManager.craftbarBwB(itemToCraftPid);
-			print("craftbarBwBAfterInit",craftbarBwbAfterInit);
-			print("Successful Iterations",0);
-
-			int i=0;
-			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(administrationManager.craftbarBwB(itemToCraftPid)-i);
-			int craftbarPrevItBwB=craftbarBwbAfterInit;
-			//System.out.println("Start: craftbarBwB("+administrationManager.craftbarBwB(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItBwB+")-i("+i+")");
-			while (i<ITERATIONS) {
-
-				if(!administrationManager.craftBwB(a,getUserChef(),"Test Noitz BwB"))fail("couldn't craft in Bwb internal error");
-				//System.out.println("assert That: craftbarBwB("+administrationManager.craftbarBwB(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItBwB+")-1");
-				assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarPrevItBwB-1);
-				craftbarPrevItBwB=administrationManager.craftbarBwB(itemToCraftPid);
-
-				//assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbAfterInit-i);
-				i++;
-
-			}
-
-			i=0;
-			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(administrationManager.craftbarHl(itemToCraftPid)-i);
-			int craftbarPrevItHl=craftbarHlAfterInit;
-			//System.out.println("Start: craftbarHl("+administrationManager.craftbarHl(itemToCraftPid)+")=craftbarPrevItHl("+craftbarPrevItHl+")-i("+i+")");
-			while (i<ITERATIONS) {
-				if(!administrationManager.craftHl(a,getUserChef(),"Test Noitz Hl"))fail("couldn't craft in Hl internal error");
-				//System.out.println("assert That: craftbarHl("+administrationManager.craftbarHl(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItHl+")-1");
-				assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarPrevItHl-1);
-				craftbarPrevItHl=administrationManager.craftbarHl(itemToCraftPid);
-				i++;
-
-			}
-			//<editor-fold desc="classic">
-
-			//</editor-fold>
-			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting);
-			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting);
-			//</editor-fold>
-			System.out.println("Successful Single Crating");
-		}
-	}
-
 	/**
 	 * zuerst werden alle nötigen componenten in die datenbank gebracht
 	 * dann wird k = 1 gesetzt was bedeutet das ein teil gecraftet wird und das so lange bis keines k=ITERATIONS
@@ -840,6 +707,139 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		assertThat(inventoryManager.getInventory().findByProductIdentifier(itemToTest).get().getAmountBwB()).isEqualTo(amountBeforeReceive);
 		System.out.println("Receive from Hl Amount after: "+amountBeforeReceive);
 		//</editor-fold>
+	}
+
+	@Test
+	void test_Craft_OneEachTime_TimesIteration_AllComposite_Delta() {
+
+		//<editor-fold desc="Methas">
+
+
+		final String NAME_OF_ITEM= "Draht LOOP 1mmØ farblos";
+		final String NAME_OF_ITEM2="SNÄP Body Pfanne muddy";
+		final String NAME_OF_ITEM3="Zip Komplett Kit sandy";
+		//</editor-fold>
+		//<editor-fold desc="Locals">
+
+		List<ProductIdentifier> compositelist= new ArrayList();
+		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
+
+		if (!SINGLE) {
+			for (ReorderableInventoryItem item:all) {
+				if (item.getArticle() instanceof Composite) {
+					compositelist.add(item.getArticle().getId());
+				}
+			}
+			if(compositelist==null){
+				throw new NullPointerException();
+			}
+		}
+		else{
+			compositelist.add(getPid(NAME_OF_ITEM));
+		}
+		//</editor-fold>
+
+
+		for (ProductIdentifier itemToCraftPid:compositelist) {
+			print("Name: "+inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).get().getProduktName());
+			int craftbarHlBeforeTesting= administrationManager.craftbarHl(itemToCraftPid);
+			print("craftbarHlBeforeTesting",craftbarHlBeforeTesting);
+			int craftbarBwbBeforeTesting= administrationManager.craftbarBwB(itemToCraftPid);
+			print("craftbarBwbBeforeTesting",craftbarBwbBeforeTesting);
+
+			//<editor-fold desc="Initilize DB with Components">
+
+			//<editor-fold desc="fetch reorderableInventory Item">
+			ReorderableInventoryItem reorderableInventoryItem=null;
+			if (inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).isPresent()){
+				reorderableInventoryItem= inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).get();
+			}
+			if (reorderableInventoryItem==null) {
+				throw new IllegalArgumentException("item name not found");
+			}
+			//</editor-fold>
+
+			//<editor-fold desc="get recipe">
+			Set<ProductIdentifier> parts=null;
+			Map<ProductIdentifier,Integer> recipePidInt =null;
+			if (reorderableInventoryItem.getArticle() instanceof Composite){
+				Composite c = (Composite)reorderableInventoryItem.getArticle();
+				if(c.getPartIds()==null){
+					throw new NullPointerException();
+				}
+				recipePidInt= administrationManager.convertPartStringIntegerMapToPartProductIdIntegerMap(c.getPartIds());
+			}
+			//else continue;
+			if(recipePidInt==null){
+				throw new NullPointerException();
+			}
+			//</editor-fold>
+
+			//<editor-fold desc="Buy parts of Composite">
+			parts =recipePidInt.keySet() ;
+			if (parts!=null) {
+				for (ProductIdentifier p: parts) {
+					InventoryItemAction a=new InventoryItemAction(p,  recipePidInt.get(p)*ITERATIONS,0,0, administrationManager);
+					print("recipePidInt.get(p.getId())",recipePidInt.get(p));
+					administrationManager.reorder(a, Location.LOCATION_BWB);
+					administrationManager.reorder(a,Location.LOCATION_HL);
+				}
+			}
+			else throw new IllegalArgumentException();
+			//</editor-fold>
+
+
+			//</editor-fold>
+
+			//<editor-fold desc="check for correct init">
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting+ITERATIONS);
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting+ITERATIONS);
+			//</editor-fold>
+
+			//<editor-fold desc="craft itemToCraftPid">
+			InventoryItemAction a=new InventoryItemAction(itemToCraftPid,  0,1,0, administrationManager);
+			int craftbarHlAfterInit= administrationManager.craftbarHl(itemToCraftPid);
+			print("craftbarHlAfterInit", craftbarHlAfterInit);
+			int craftbarBwbAfterInit= administrationManager.craftbarBwB(itemToCraftPid);
+			print("craftbarBwBAfterInit",craftbarBwbAfterInit);
+			print("Successful Iterations",0);
+
+			int i=0;
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(administrationManager.craftbarBwB(itemToCraftPid)-i);
+			int craftbarPrevItBwB=craftbarBwbAfterInit;
+			//System.out.println("Start: craftbarBwB("+administrationManager.craftbarBwB(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItBwB+")-i("+i+")");
+			while (i<ITERATIONS) {
+
+				if(!administrationManager.craftBwB(a,getUserChef(),"Test Noitz BwB"))fail("couldn't craft in Bwb internal error");
+				//System.out.println("assert That: craftbarBwB("+administrationManager.craftbarBwB(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItBwB+")-1");
+				assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarPrevItBwB-1);
+				craftbarPrevItBwB=administrationManager.craftbarBwB(itemToCraftPid);
+
+				//assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbAfterInit-i);
+				i++;
+
+			}
+
+			i=0;
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(administrationManager.craftbarHl(itemToCraftPid)-i);
+			int craftbarPrevItHl=craftbarHlAfterInit;
+			//System.out.println("Start: craftbarHl("+administrationManager.craftbarHl(itemToCraftPid)+")=craftbarPrevItHl("+craftbarPrevItHl+")-i("+i+")");
+			while (i<ITERATIONS) {
+				if(!administrationManager.craftHl(a,getUserChef(),"Test Noitz Hl"))fail("couldn't craft in Hl internal error");
+				//System.out.println("assert That: craftbarHl("+administrationManager.craftbarHl(itemToCraftPid)+")=craftbarPrevItBwB("+craftbarPrevItHl+")-1");
+				assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarPrevItHl-1);
+				craftbarPrevItHl=administrationManager.craftbarHl(itemToCraftPid);
+				i++;
+
+			}
+			//<editor-fold desc="classic">
+
+			//</editor-fold>
+			assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarHlBeforeTesting);
+			assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbBeforeTesting);
+			//</editor-fold>
+			System.out.println("Successful Single Crating");
+		}
 	}
 
 	@Test

@@ -213,6 +213,18 @@ public class EmployeeController {
 				}
 			}
 
+			/*nachbearbeiten*/
+			if (i.getAmountForNachbearbeiten()>0) {
+				System.out.println("YESSS0");
+				if (administrationManager.nachbearbeiten(i,account,Location.LOCATION_BWB)) {
+					logRepository.save(new Log(
+							LocalDateTime.now(),
+							account,
+							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x maliges nachbearbeiten",notiz));
+				}
+			}
+			System.out.println("YESSS");
+
 		}
 		if(!undoMode&&inventoryItemActions.size()!=0) undoManager.push(inventoryItemActions);
 		if(undoMode){

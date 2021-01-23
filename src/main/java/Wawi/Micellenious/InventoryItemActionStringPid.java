@@ -20,6 +20,9 @@ public class InventoryItemActionStringPid {
 	@Setter
 	@Getter
 	private int amountForZerlegen;
+	@Setter
+	@Getter
+	private int amountForNachbearbeiten;
 	private AdministrationManager administrationManager;
 
 	public InventoryItemActionStringPid() {

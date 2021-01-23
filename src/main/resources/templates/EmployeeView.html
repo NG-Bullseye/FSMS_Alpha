@@ -138,6 +138,10 @@
 							<th sec:authorize="hasRole('ROLE_EMPLOYEE')"  	style="text-align: center">Hergestellt</th>
 							<!--</editor-fold>-->
 
+							<!--11.5--> <!--<editor-fold desc="Herstellen BwB View:E">-->
+							<th sec:authorize="hasRole('ROLE_EMPLOYEE')"  	style="text-align: center">Nachbearbeitet</th>
+							<!--</editor-fold>-->
+
 							<!--13--> <!--<editor-fold desc="Bestandteile View:P">-->
 							<th sec:authorize="hasRole('ROLE_EMPLOYEE')" 	style="text-align: center">Bestandteile</th>
 							<!--</editor-fold>-->
@@ -228,6 +232,16 @@
 								<div class="inline field" th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
 									<div th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}">
 										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForCraft}" />
+									</div>
+								</div>
+							</td>
+							<!--</editor-fold>-->
+
+							<!--11.5--> <!--<editor-fold desc="Nachbearbeiten BwB View:E">-->
+							<td sec:authorize="hasRole('ROLE_EMPLOYEE')" width="100px">
+								<div class="inline field" th:switch="${administrationManager.getArticle(itemAction.getPid()).getType()}">
+									<div th:case="${T(Wawi.articles.Article.ArticleType).COMPOSITE}">
+										<input  style="width: 70px;display:block;text-align: center;" autofocus type="number" th:field="*{postInventoryItemActions[__${itemStat.index}__].amountForNachbearbeiten}" />
 									</div>
 								</div>
 							</td>

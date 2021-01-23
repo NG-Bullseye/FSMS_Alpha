@@ -1615,6 +1615,12 @@ public class AdministrationManager {
 		return sortedReordInvItemList;
 	}
 
+	public boolean nachbearbeiten(InventoryItemAction i, UserAccount account, Location locationBwb) {
+
+		System.out.println("YESSS1");
+		return true;
+	}
+
 
 
 

@@ -21,6 +21,9 @@ public class InventoryItemAction {
 	@Setter
 	@Getter
 	private int amountForZerlegen;
+	@Setter
+	@Getter
+	private int amountForNachbearbeiten;
 	private AdministrationManager administrationManager;
 
 	public InventoryItemAction() {
