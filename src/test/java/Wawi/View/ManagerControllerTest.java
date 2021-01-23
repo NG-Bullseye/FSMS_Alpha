@@ -627,38 +627,54 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		final String NAME_OF_ITEM3="Zip Komplett Kit sandy";
 		//</editor-fold>
 		//<editor-fold desc="Locals">
-
+		Map<ProductIdentifier,Integer> map=new HashMap<>();
 		List<ProductIdentifier> compositelist= new ArrayList();
 		Iterable<ReorderableInventoryItem> all=inventoryManager.getInventory().findAll();
+		if (!SINGLE) {
+			int j=1;
+			for (ReorderableInventoryItem item:all) {
+				if (item.getArticle() instanceof Composite) {
+					compositelist.add(item.getArticle().getId());
+					map.put(item.getArticle().getId(),j);
+				}
+			}
+			if(compositelist==null){
+				throw new NullPointerException();
+			}
+		}
+		else{
+			compositelist.add(getPid(NAME_OF_ITEM));
+		}
 
-
+		int countItems=compositelist.size();
+		double t=1;
+		double result=0;
+		while(t<ITERATIONS){
+			result=result+Math.floor(ITERATIONS/t);
+			t++;
+		}
+		double amountOfIterations=countItems*2*result;
+		double countIteration=0;
+		double fortschtitt=0;
 			//</editor-fold>
 
 
 			for (int k=1;k<=ITERATIONS;k++) {
-				System.out.println("k("+k+")");
-				if (!SINGLE) {
-					for (ReorderableInventoryItem item:all) {
-						if (item.getArticle() instanceof Composite) {
-							compositelist.add(item.getArticle().getId());
-						}
-					}
-					if(compositelist==null){
-						throw new NullPointerException();
-					}
-				}
-				else{
-					compositelist.add(getPid(NAME_OF_ITEM));
-				}
+
+
 				//</editor-fold>
 
 
 				for (ProductIdentifier itemToCraftPid:compositelist) {
+					fortschtitt=Math.round((countIteration/amountOfIterations)*10000);
+					System.out.println("Fortschritt:  "+fortschtitt/100+"%");
+					System.out.println("k("+k+")");
+					System.out.println("Item "+map.get(itemToCraftPid)+"of "+countItems);
 					print("Name: " + inventoryManager.getInventory().findByProductIdentifier(itemToCraftPid).get().getProduktName());
 					int craftbarHlBeforeTesting = administrationManager.craftbarHl(itemToCraftPid);
-					print("craftbarHlBeforeTesting", craftbarHlBeforeTesting);
+					//print("craftbarHlBeforeTesting", craftbarHlBeforeTesting);
 					int craftbarBwbBeforeTesting = administrationManager.craftbarBwB(itemToCraftPid);
-					print("craftbarBwbBeforeTesting", craftbarBwbBeforeTesting);
+					//print("craftbarBwbBeforeTesting", craftbarBwbBeforeTesting);
 
 					//<editor-fold desc="Initilize DB with Components">
 
@@ -712,7 +728,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 				print("craftbarHlAfterInit", craftbarHlAfterInit);
 				int craftbarBwbAfterInit = administrationManager.craftbarBwB(itemToCraftPid);
 				print("craftbarBwBAfterInit", craftbarBwbAfterInit);
-				print("Successful Iterations", 0);
+
 
 				int i = 0;
 				assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(administrationManager.craftbarBwB(itemToCraftPid) - i);
@@ -729,6 +745,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 
 					//assertThat(administrationManager.craftbarBwB(itemToCraftPid)).isEqualTo(craftbarBwbAfterInit-i);
 					i++;
+					countIteration++;
 
 				}
 
@@ -743,6 +760,7 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 					assertThat(administrationManager.craftbarHl(itemToCraftPid)).isEqualTo(craftbarPrevItHl - k);
 					craftbarPrevItHl = administrationManager.craftbarHl(itemToCraftPid);
 					i++;
+					countIteration++;
 
 				}
 				//<editor-fold desc="classic">
@@ -757,6 +775,34 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		}
 	}
 
+	@Test
+	void test_Gesamtbestand(){
+
+		//<editor-fold desc="Initilize DB with Components">
+
+
+		Random random=new Random();
+		//<editor-fold desc="Buy parts of Composite">
+		for (ReorderableInventoryItem r : inventoryManager.getInventory().findAll()) {
+			int rBwB=random.nextInt()+1;
+			int rHl=random.nextInt()+1;
+			print("bwb: "+rBwB);
+			print("rHl: "+rHl);
+			InventoryItemAction bwb = new InventoryItemAction(r.getArticle().getId(),random.nextInt(99999999)+1 , 0, 0, administrationManager);
+			InventoryItemAction hl = new InventoryItemAction(r.getArticle().getId(),random.nextInt(99999999)+1 , 0, 0, administrationManager);
+			administrationManager.reorder(bwb, Location.LOCATION_BWB);
+			administrationManager.reorder(hl, Location.LOCATION_HL);
+		}
+		//</editor-fold>
+		for (ReorderableInventoryItem r : inventoryManager.getInventory().findAll()) {
+			assertThat(r.getGesamtbestand()).isEqualTo(r.getAmountBwB()+r.getAmountHl());
+		}
+
+
+
+			//</editor-fold>
+
+	}
 
 	private void print(String message,Object o){
 		System.out.println(message+": "+o.toString());
@@ -951,6 +997,8 @@ class ManagerControllerTest extends AbstractIntegrationTest {
 		System.out.println("Receive from Hl Amount after: "+amountBeforeReceive);
 		//</editor-fold>
 	}
+
+
 
 
 }
