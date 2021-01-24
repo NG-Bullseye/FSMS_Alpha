@@ -131,10 +131,10 @@ public class EmployeeController {
 		InventoryItemAction action;
 		ArrayList<InventoryItemAction> inventoryItemActions=new ArrayList<>();
 		for (InventoryItemActionStringPid i: postUniForm.getPostInventoryItemActions()) {
-			if (i.getAmountForCraft() == 0 && i.getAmountForIn() == 0 && i.getAmountForOut() == 0 && i.getAmountForZerlegen() == 0)
+			if (i.getAmountForCraft() == 0 && i.getAmountForIn() == 0 && i.getAmountForOut() == 0 && i.getAmountForZerlegen() == 0 && i.getAmountForNachbearbeiten()==0)
 				continue;
 			System.out.println("This Id wasnt found: " + administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString())).getName());
-			//article = administrationManager.getArticle(administrationManager.getProduktIdFromString(i.getPidString()));
+			/**hier werden bei neuen Tabbelen einträgern die werte eingetragen*/
 			action = new InventoryItemAction(
 					administrationManager.getProduktIdFromString(
 							i.getPidString()),
@@ -142,8 +142,12 @@ public class EmployeeController {
 					i.getAmountForCraft(),
 					i.getAmountForOut(),
 					administrationManager);
+
+			//<editor-fold desc="Füge Extra tabellen Einträge hinzu">
 			action.setAmountForZerlegen(i.getAmountForZerlegen());
+			action.setAmountForNachbearbeiten(i.getAmountForNachbearbeiten());
 			inventoryItemActions.add(action);
+			//</editor-fold>
 		}
 		for(InventoryItemAction i:inventoryItemActions)	{
 			/*resive*/
@@ -215,16 +219,14 @@ public class EmployeeController {
 
 			/*nachbearbeiten*/
 			if (i.getAmountForNachbearbeiten()>0) {
-				System.out.println("YESSS0");
-				if (administrationManager.nachbearbeiten(i,account,Location.LOCATION_BWB)) {
+				System.out.println("Hello nachbearbeiten");
+				if (administrationManager.nachbearbeiten(i,account)) {
 					logRepository.save(new Log(
 							LocalDateTime.now(),
 							account,
 							administrationManager.getArticle(i.getPid()).getName()+" "+ i.getAmountForCraft()+"x maliges nachbearbeiten",notiz));
 				}
 			}
-			System.out.println("YESSS");
-
 		}
 		if(!undoMode&&inventoryItemActions.size()!=0) undoManager.push(inventoryItemActions);
 		if(undoMode){

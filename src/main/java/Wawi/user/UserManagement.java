@@ -3,6 +3,9 @@ package Wawi.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import Wawi.user.EditForm;
+import Wawi.user.RegistrationForm;
+import Wawi.user.UserRepository;
 import org.salespointframework.useraccount.Role;
 import org.salespointframework.useraccount.UserAccount;
 import org.salespointframework.useraccount.UserAccountIdentifier;

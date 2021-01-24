@@ -43,10 +43,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class AdminController {
@@ -116,9 +113,8 @@ public class AdminController {
 
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/cheat/{amount}")
+	@GetMapping("/cheat_all/{amount}")
 	String cheatCode1(@PathVariable Integer amount){
-
 		for (ReorderableInventoryItem item:
 				inventoryManager.getInventory().findAll()) {
 			InventoryItemAction a=new InventoryItemAction(item.getProduct().getId(), amount,0,0, administrationManager);
@@ -131,8 +127,7 @@ public class AdminController {
 
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/fetch")
-
+	@GetMapping("/cheat_fetch")
 	String cheat_Fetch_all_Components(){
 		//<editor-fold desc="Metha">
 		final String NAME= "FIX-Gummi L muddy";
@@ -191,6 +186,27 @@ public class AdminController {
 		return"redirect:/";
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping("/cheat_random")
+	String cheat_randomInit(){
+		//<editor-fold desc="Random Init">
+		Random random=new Random();
+		for (ReorderableInventoryItem r : inventoryManager.getInventory().findAll()) {
+			int rBwB=random.nextInt()+1;
+			int rHl=random.nextInt()+1;
+			if(rBwB<0)rBwB=Math.multiplyExact(rBwB,-1);
+			if(rHl<0)rHl=Math.multiplyExact(rHl,-1);
+			//print("Item: ",r.getArticle().getName());
+			//print("bwb: "+rBwB);
+			//print("rHl: "+rHl);
+			InventoryItemAction bwb = new InventoryItemAction(r.getArticle().getId(),random.nextInt(999999)+1 , 0, 0, administrationManager);
+			InventoryItemAction hl = new InventoryItemAction(r.getArticle().getId(),random.nextInt(999999)+1 , 0, 0, administrationManager);
+			administrationManager.reorder(bwb, Location.LOCATION_BWB);
+			administrationManager.reorder(hl, Location.LOCATION_HL);
+		}
+		//</editor-fold>
+		return"redirect:/";
+	}
 
 
 	//<editor-fold desc="Article">

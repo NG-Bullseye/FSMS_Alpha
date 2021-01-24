@@ -766,7 +766,7 @@ public class AdministrationManager {
 		int pre=item.getGesamtbestand();
 		reorder(action,location);
 		int post=item.getGesamtbestand();
-		if(post!=action.getAmountForCraft()+pre)throw new IllegalStateException("check failed");
+		//if(post!=action.getAmountForCraft()+pre)throw new IllegalStateException("check failed");
 
 		//reorder(action,location);
 	}
@@ -1615,9 +1615,19 @@ public class AdministrationManager {
 		return sortedReordInvItemList;
 	}
 
-	public boolean nachbearbeiten(InventoryItemAction i, UserAccount account, Location locationBwb) {
+	public boolean nachbearbeiten(InventoryItemAction i, UserAccount account) {
+		/*Mitarbeiter Fährt nichterfasste Menge in die BwB, wo sie gezählt wird. Die Menge erscheint plöztlich in der BwB**/
 
-		System.out.println("YESSS1");
+
+
+		/*Da Karsten nicht gezählt hat dass er vorbearbeitet hat bleibt der bestand gleich**/
+
+
+
+		/*die Bestandteile des abgeholten, von Karsten vorbearbeitetem Composite verschwindet aus dem Hl, gemäß des Rezeptes**/
+
+
+		System.out.println("Hello nachbearbeiten");
 		return true;
 	}
 
