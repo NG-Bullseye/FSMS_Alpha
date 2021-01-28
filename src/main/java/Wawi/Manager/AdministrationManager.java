@@ -810,10 +810,7 @@ public class AdministrationManager {
 	}
 
 	public boolean in(@NotNull InventoryItemAction action, Location location) {
-
 		Optional<ReorderableInventoryItem> item = inventory.findByProductIdentifier(action.getPid());
-
-
 
 		if (item.isPresent()) {
 			int hlb=item.get().getAmountHl();
@@ -1615,40 +1612,50 @@ public class AdministrationManager {
 		return sortedReordInvItemList;
 	}
 
+	public Map<ProductIdentifier,Integer> getRecipe(ProductIdentifier pid){
+		 return convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(pid).get().getPartIds());
+	}
+
+	public Map<ProductIdentifier,Integer> getRecipe(Article article){
+		return convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(article.getId()).get().getPartIds());
+	}
+
+	public Map<ProductIdentifier,Integer> getRecipe(InventoryItemAction inventoryItemAction){
+		return convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(inventoryItemAction.getPid()).get().getPartIds());
+	}
+
 	public boolean nachbearbeiten(InventoryItemAction i, UserAccount account) {
 		/*Mitarbeiter Fährt nichterfasste Menge in die BwB, wo sie gezählt wird. Die Menge erscheint plöztlich in der BwB**/
 		InventoryItemAction nachbearbeitenAction= new InventoryItemAction(i.getPid(),i.getAmountForNachbearbeiten(),0,0,administrationManager);
-			in(nachbearbeitenAction,Location.LOCATION_BWB);
+		in(nachbearbeitenAction,Location.LOCATION_BWB);
 
-
-		/*Da Karsten nicht gezählt hat dass er vorbearbeitet hat bleibt der bestand gleich**/
-
-
+		/*Da Karsten nicht gezählt hat dass er vorbearbeitet hat bleibt der Hl bestand des TestItems gleich**/
 
 		/*die Bestandteile des abgeholten, von Karsten vorbearbeitetem Composite verschwindet aus dem Hl, gemäß des Rezeptes**/
 		boolean flag=false;
-		if (craftbarHl(i.getPid())>=i.getAmountForCraft()) {
+		if (craftbarHl(i.getPid())>=i.getAmountForNachbearbeiten()) {
 			if(direktCraftbar(i,Location.LOCATION_HL)){
-				//erstellt Log Eintrag und fügt Teil hinzu
 				InventoryItemAction inAction=new InventoryItemAction(i.getPid(),i.getAmountForCraft(),0,0, administrationManager);
-				InventoryItemAction onlyCraftAction=new InventoryItemAction(i.getPid(),0,i.getAmountForCraft(),0, administrationManager);
 
 				//fügt Produkt hinzu
-				this.reorder(i,Location.LOCATION_BWB);
+				this.reorder(inAction,Location.LOCATION_BWB);
 
 				//zieht Material ab
-				Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(i.getPid()).get().getPartIds());
+				Map<ProductIdentifier,Integer> map= getRecipe(i);
 				for (ProductIdentifier p:map.keySet()){
-					int requiredAmount = i.getAmountForCraft()*map.get(p);
+					int requiredAmount = i.getAmountForNachbearbeiten()*map.get(p);
 					InventoryItemAction outAction=new InventoryItemAction(p,0,0,requiredAmount, administrationManager);
 					this.out(outAction,account,Location.LOCATION_HL);
 				}
 
 				flag= true;
 			}
-			System.out.println("Es sind jetzt nicht genügend Teile vorhanden um die Aktion derzeit durch zuführen.");
-			System.out.println("Das ist ein Problem. Sie können die Aktion erst durch führen wenn genug Teile vorhanden sind um einen geordneten Ablauf zu garantieren");
-			flag= false;
+			else {
+				System.out.println("Es sind jetzt nicht genügend Teile vorhanden um die Aktion derzeit durch zuführen.");
+				System.out.println("Das ist ein Problem. Sie können die Aktion erst durch führen wenn genug Teile vorhanden sind um einen geordneten Ablauf zu garantieren");
+				flag= false;
+			}
+
 
 		} else {
 			System.out.println("nicht mit Zwischenschritten herstellbar");

@@ -37,7 +37,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 
 class AdministrationManager_LowComplexity extends Abstract_UnitTest {
@@ -663,62 +662,64 @@ class AdministrationManager_LowComplexity extends Abstract_UnitTest {
 	void test_nachbearbeiten_delta(){
 
 
-		int hlBestandOld;
-		int bwbBestandOld;
+		int oldHlBestandOfTestItem;
+		int oldBwbBestandOfTestItem;
 		int abgeholteMenge=AMOUNT_TO_BUY_AND_SELL;
 
 
 		//<editor-fold desc="All Items that can be nachbearbeitet müsssen composites als part haben">
-		List<ReorderableInventoryItem> list= new ArrayList();
+		List<ReorderableInventoryItem> listOfallItemsToTest= new ArrayList();
 		for (ReorderableInventoryItem item:getAllItems()) {
 			if(item.getArticle() instanceof Composite){
-				list.add(item);
+				listOfallItemsToTest.add(item);
 			}
 		}
 		//</editor-fold>
-
+		Map<ProductIdentifier,Integer> rezept;
 		InventoryItemAction a;
-		for (ReorderableInventoryItem item:list) {
-			print(item.getProduktName());
-			hlBestandOld=getBestandBwB(item);
-			bwbBestandOld=getBestandBwB(item);
-			print("hlBestandOld "+hlBestandOld);
-			print("bwbBestandOld "+bwbBestandOld);
-			Map<Article, Integer> rezept;
-			rezept=administrationManager.getArticlesForCompositeEdit(item.getArticle().getId());
-			Set<Article> componentListe = rezept.keySet();
+		for (ReorderableInventoryItem testItem:listOfallItemsToTest) {
+			print(testItem.getProduktName());
+			oldHlBestandOfTestItem=getBestandHl(testItem);
+			oldBwbBestandOfTestItem=getBestandBwB(testItem);
 
-			Map<Article, Integer> componentHlBestandMapOld=new HashMap<>();
-			for(Article article:componentListe){
-				componentHlBestandMapOld.put(article,getBestandHl(administrationManager.getReordInventoryItemFromPid(article.getId())));
+			print("oldHlBestandOfTestItem "+oldHlBestandOfTestItem);
+			print("oldBwbBestandOfTestItem "+oldBwbBestandOfTestItem);
+
+			rezept= administrationManager.convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(testItem.getProduct().getId()).get().getPartIds());
+
+			Set<ProductIdentifier> componentListe = rezept.keySet();
+			Map<ProductIdentifier, Integer> componentHlBestandMapOld=new HashMap<>();
+			for(ProductIdentifier pidOfComponent :componentListe){
+				componentHlBestandMapOld.put(pidOfComponent,getBestandHl(administrationManager.getReordInventoryItemFromPid(pidOfComponent)));
 			}
-
-			a=new InventoryItemAction(item.getArticle().getId(),0,0,0,administrationManager);
+			a=new InventoryItemAction(testItem.getArticle().getId(),0,0,0,administrationManager);
 			a.setAmountForNachbearbeiten(1);
+
 			administrationManager.nachbearbeiten(a,getUserChef());
 
+
 			/**Mitarbeiter Fährt nichterfasste Menge in die BwB, wo sie gezählt wird. Die Menge erscheint plöztlich in der BwB">*/
-			print("getBestandBwB(item): "+getBestandBwB(item));
-			print("bwbBestandOld; "+bwbBestandOld);
+			print("getBestandBwB(item): "+getBestandBwB(testItem));
+			print("bwbBestandOld; "+oldBwbBestandOfTestItem);
 			print("abgeholteMenge; "+abgeholteMenge);
-			assertThat(getBestandBwB(item)).isEqualTo(bwbBestandOld+abgeholteMenge);
+			assertThat(getBestandBwB(testItem)).isEqualTo(oldBwbBestandOfTestItem+abgeholteMenge);
 
 
 			/**die Bestandteile des abgeholten, von Karsten vorbearbeitetem Composite verschwindet aus dem Hl, gemäß des Rezeptes*/
-			for (Article component:componentListe) {
-				print("Component: "+component.getName());
-				print("aktueller Bestand:"+getBestandHl(administrationManager.getReordInventoryItemFromPid(component.getId()))
-						+" alter Bestand "+componentHlBestandMapOld.get(component)
-						+"rezept menge "+rezept.get(component));
+			for (ProductIdentifier productIdentifier:componentListe) {
+				print("Component: "+inventoryManager.getInventory().findByProductIdentifier(productIdentifier).get().getProduktName());
+				print("aktueller Bestand:"+getBestandHl(administrationManager.getReordInventoryItemFromPid(productIdentifier))
+						+" alter Bestand "+componentHlBestandMapOld.get(productIdentifier)
+						+"rezept menge "+rezept.get(productIdentifier));
 				print("");
 				/*assertThat(neu).isEqualTo(alt-delta);**/
-				assertThat(getBestandHl(administrationManager.getReordInventoryItemFromPid(component.getId())))
-						.isEqualTo(componentHlBestandMapOld.get(component)-rezept.get(component));
+				assertThat(getBestandHl(administrationManager.getReordInventoryItemFromPid(productIdentifier)))
+						.isEqualTo(componentHlBestandMapOld.get(productIdentifier)-rezept.get(productIdentifier));
 			}
 
 
 			/**Da Karsten nicht gezählt hat dass er vorbearbeitet hat bleibt der bestand gleich">*/
-			assertThat(getBestandHl(item)).isEqualTo(hlBestandOld);
+			assertThat(getBestandHl(testItem)).isEqualTo(oldHlBestandOfTestItem);
 
 		}
 	}
