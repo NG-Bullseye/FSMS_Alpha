@@ -1617,7 +1617,8 @@ public class AdministrationManager {
 
 	public boolean nachbearbeiten(InventoryItemAction i, UserAccount account) {
 		/*Mitarbeiter Fährt nichterfasste Menge in die BwB, wo sie gezählt wird. Die Menge erscheint plöztlich in der BwB**/
-
+		InventoryItemAction nachbearbeitenAction= new InventoryItemAction(i.getPid(),i.getAmountForNachbearbeiten(),0,0,administrationManager);
+			in(nachbearbeitenAction,Location.LOCATION_BWB);
 
 
 		/*Da Karsten nicht gezählt hat dass er vorbearbeitet hat bleibt der bestand gleich**/
@@ -1625,10 +1626,36 @@ public class AdministrationManager {
 
 
 		/*die Bestandteile des abgeholten, von Karsten vorbearbeitetem Composite verschwindet aus dem Hl, gemäß des Rezeptes**/
+		boolean flag=false;
+		if (craftbarHl(i.getPid())>=i.getAmountForCraft()) {
+			if(direktCraftbar(i,Location.LOCATION_HL)){
+				//erstellt Log Eintrag und fügt Teil hinzu
+				InventoryItemAction inAction=new InventoryItemAction(i.getPid(),i.getAmountForCraft(),0,0, administrationManager);
+				InventoryItemAction onlyCraftAction=new InventoryItemAction(i.getPid(),0,i.getAmountForCraft(),0, administrationManager);
 
+				//fügt Produkt hinzu
+				this.reorder(i,Location.LOCATION_BWB);
 
-		System.out.println("Hello nachbearbeiten");
-		return true;
+				//zieht Material ab
+				Map<ProductIdentifier,Integer> map= convertPartStringIntegerMapToPartProductIdIntegerMap(catalog.findById(i.getPid()).get().getPartIds());
+				for (ProductIdentifier p:map.keySet()){
+					int requiredAmount = i.getAmountForCraft()*map.get(p);
+					InventoryItemAction outAction=new InventoryItemAction(p,0,0,requiredAmount, administrationManager);
+					this.out(outAction,account,Location.LOCATION_HL);
+				}
+
+				flag= true;
+			}
+			System.out.println("Es sind jetzt nicht genügend Teile vorhanden um die Aktion derzeit durch zuführen.");
+			System.out.println("Das ist ein Problem. Sie können die Aktion erst durch führen wenn genug Teile vorhanden sind um einen geordneten Ablauf zu garantieren");
+			flag= false;
+
+		} else {
+			System.out.println("nicht mit Zwischenschritten herstellbar");
+			flag= false;
+		}
+		return flag;
+
 	}
 
 

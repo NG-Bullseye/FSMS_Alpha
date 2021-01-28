@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 
 class AdministrationManager_LowComplexity extends Abstract_UnitTest {
 	/**Methas*/
-	final boolean PRINT_ON =false;
+	final boolean PRINT_ON =true;
 	final boolean INIT_RANDOM_BEFORE_EACH=true;
 
 	final int ITERATIONS=2;
@@ -694,6 +694,7 @@ class AdministrationManager_LowComplexity extends Abstract_UnitTest {
 			}
 
 			a=new InventoryItemAction(item.getArticle().getId(),0,0,0,administrationManager);
+			a.setAmountForNachbearbeiten(1);
 			administrationManager.nachbearbeiten(a,getUserChef());
 
 			/**Mitarbeiter Fährt nichterfasste Menge in die BwB, wo sie gezählt wird. Die Menge erscheint plöztlich in der BwB">*/
