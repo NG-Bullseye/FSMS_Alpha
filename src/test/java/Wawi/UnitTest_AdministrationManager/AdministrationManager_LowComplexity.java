@@ -660,8 +660,6 @@ class AdministrationManager_LowComplexity extends Abstract_UnitTest {
 
 	@Test
 	void test_nachbearbeiten_delta(){
-
-
 		int oldHlBestandOfTestItem;
 		int oldBwbBestandOfTestItem;
 		int abgeholteMenge=AMOUNT_TO_BUY_AND_SELL;
