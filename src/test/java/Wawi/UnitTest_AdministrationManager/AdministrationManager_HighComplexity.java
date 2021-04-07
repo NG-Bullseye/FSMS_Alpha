@@ -1,6 +1,6 @@
 package Wawi.UnitTest_AdministrationManager;
 
-import Wawi.Abstract_UnitTest;
+import Wawi.Abstract_Unit;
 import Wawi.Manager.AdministrationManager;
 import Wawi.Manager.InventoryManager;
 import Wawi.Manager.UndoManager;
@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 
-class AdministrationManager_HighComplexity extends Abstract_UnitTest {
+class AdministrationManager_HighComplexity extends Abstract_Unit {
 	private static final boolean 	PRINT_PRIORITY_ON = true;
 	private static final boolean 	PRINT_ON=false;
 	private static final boolean 	SINGLE=false;

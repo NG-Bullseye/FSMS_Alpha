@@ -11,4 +11,4 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest()
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RunWith( SpringRunner.class )
-public class Abstract_UnitTest {}
+public class Abstract_Unit {}

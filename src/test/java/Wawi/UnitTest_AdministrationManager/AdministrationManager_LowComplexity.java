@@ -3,7 +3,7 @@ package Wawi.UnitTest_AdministrationManager;
 import static org.assertj.core.api.Assertions.*;
 
 
-import Wawi.Abstract_UnitTest;
+import Wawi.Abstract_Unit;
 import Wawi.Micellenious.InventoryItemAction;
 import Wawi.Micellenious.Location;
 import Wawi.articles.Article;
@@ -39,7 +39,7 @@ import org.springframework.data.util.Streamable;
 import java.util.*;
 
 
-class AdministrationManager_LowComplexity extends Abstract_UnitTest {
+class AdministrationManager_LowComplexity extends Abstract_Unit {
 	/**Methas*/
 	final boolean PRINT_ON =true;
 	final boolean INIT_RANDOM_BEFORE_EACH=true;
